@@ -22,6 +22,8 @@ BOOL InitInstance( HINSTANCE, int );
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 INT_PTR CALLBACK About( HWND, UINT, WPARAM, LPARAM );
 
+void RenderFrame();
+
 
 //---------------------------------------------------------------------------------------------------------------------
 /// wWinMain
@@ -50,9 +52,20 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
     
 			if( msg.message == WM_QUIT ) break;
 		}
+
+		RenderFrame();
 	}
 
 	return (int)msg.wParam;
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// RenderFrame
+//---------------------------------------------------------------------------------------------------------------------
+void RenderFrame()
+{
+	RenderFrameRHI();
 }
 
 
@@ -85,11 +98,14 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
 	hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
-	
-	HWND hWnd = CreateWindowW( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr );
+
+	constexpr int width  = 1400;
+	constexpr int height = 900;
+
+	HWND hWnd = CreateWindowW( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, width, height, nullptr, nullptr, hInstance, nullptr );
 	if ( !hWnd ) return false;
 
-	InitializeRHI( hWnd );
+	InitializeRHI( hWnd, width,height );
 
 	ShowWindow( hWnd, nCmdShow );
 	UpdateWindow( hWnd );
