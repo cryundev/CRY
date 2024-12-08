@@ -19,4 +19,8 @@ void CRD11VertexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const
 	sd.SysMemPitch = Stride;
   
 	HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &BufferPtr );
+	if ( FAILED( hr ) )
+	{
+		return;
+	}
 }

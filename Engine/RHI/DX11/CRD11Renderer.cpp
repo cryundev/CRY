@@ -2,6 +2,10 @@
 #include "CRD11.h"
 #include "CRD11Device.h"
 #include "CRD11Include.h"
+#include "CRD11PixelShader.h"
+#include "CRD11VertexBuffer.h"
+#include "CRD11VertexShader.h"
+#include "../../Core/CRVertex.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -14,20 +18,60 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Draw.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::Draw() const
+{
+    GD11.GetDeviceContext()->Draw( 3, 0 );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Clear render target.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::ClearRenderTarget() const
 {
-    float color[ 4 ] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float color[ 4 ] = { 0.0f, 0.4f, 0.7f, 1.0f };
     GD11.GetDeviceContext()->ClearRenderTargetView( RenderTargetView, color );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Present.
-//---------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------%
 void CRD11Renderer::Present() const
 {
     GD11.GetSwapChain()->Present( 0, 0 );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// SetVertexBuffer.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* VertexBuffer, unsigned int Slot )
+{
+    if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
+
+    VertexBuffers[ Slot ] = VertexBuffer->GetBufferPtr();
+
+    unsigned int stride = sizeof( CRVertex );
+    unsigned int offset = 0;
+
+    GD11.GetDeviceContext()->IASetVertexBuffers( Slot, 1, &VertexBuffers[ Slot ], &stride, &offset );
+    GD11.GetDeviceContext()->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set vertex shader.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetVertexShader( CRD11VertexShader* VertexShader ) const
+{
+    GD11.GetDeviceContext()->VSSetShader( VertexShader->GetShaderPtr(), nullptr, 0 );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set pixel shader.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetPixelShader( CRD11PixelShader* PixelShader ) const
+{
+    GD11.GetDeviceContext()->PSSetShader( PixelShader->GetShaderPtr(), nullptr, 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

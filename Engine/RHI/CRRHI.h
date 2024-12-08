@@ -4,8 +4,11 @@
 #include <windows.h>
 
 
-/// Initialize RHI.
-void InitializeRHI( HWND hWnd, unsigned int Width, unsigned int Height );
+namespace CRRHI
+{
+    /// Initialize RHI.
+    void Initialize( HWND hWnd, unsigned int Width, unsigned int Height );
 
-// Render frame RHI.
-void RenderFrameRHI();
+    // Render frame RHI.
+    void RenderFrame();    
+}

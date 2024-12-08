@@ -131,7 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Core\CRVertexBlob.h" />
+    <ClInclude Include="Core\CRVertex.h" />
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="framework.h" />
@@ -140,12 +140,16 @@
     <ClInclude Include="RHI\DX11\CRD11.h" />
     <ClInclude Include="RHI\DX11\CRD11Device.h" />
     <ClInclude Include="RHI\DX11\CRD11Include.h" />
+    <ClInclude Include="RHI\DX11\CRD11InputLayout.h" />
+    <ClInclude Include="RHI\DX11\CRD11PixelShader.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
     <ClInclude Include="RHI\DX11\CRD11VertexBuffer.h" />
+    <ClInclude Include="RHI\DX11\CRD11VertexShader.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Utility\CRLog.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\CRVertexBlob.cpp" />
+    <ClCompile Include="Core\CRVertex.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="RHI\CRRHI.cpp" />
     <ClCompile Include="RHI\DX11\CRD11.cpp" />
@@ -223,8 +227,13 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="RHI\DX11\CRD11InputLayout.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11PixelShader.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Renderer.cpp" />
     <ClCompile Include="RHI\DX11\CRD11VertexBuffer.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11VertexShader.cpp" />
+    <None Include="RHI\DX11\HLSL\shader.hlsl" />
+    <ClCompile Include="Utility\CRLog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Engine.rc" />
@@ -232,9 +241,6 @@
   <ItemGroup>
     <Image Include="Engine.ico" />
     <Image Include="small.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Utility\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

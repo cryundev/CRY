@@ -18,9 +18,11 @@ WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니�
 /// function forward declaration
 //---------------------------------------------------------------------------------------------------------------------
 ATOM MyRegisterClass( HINSTANCE hInstance );
-BOOL InitInstance( HINSTANCE, int );
+BOOL InitInstance   ( HINSTANCE, int );
+
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
-INT_PTR CALLBACK About( HWND, UINT, WPARAM, LPARAM );
+INT_PTR CALLBACK About  ( HWND, UINT, WPARAM, LPARAM );
+
 
 void RenderFrame();
 
@@ -33,8 +35,8 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	UNREFERENCED_PARAMETER( hPrevInstance );
 	UNREFERENCED_PARAMETER( lpCmdLine );
 	
-	LoadStringW( hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING );
-	LoadStringW( hInstance, IDC_ENGINE, szWindowClass, MAX_LOADSTRING );
+	LoadStringW( hInstance, IDS_APP_TITLE, szTitle,       MAX_LOADSTRING );
+	LoadStringW( hInstance, IDC_ENGINE,    szWindowClass, MAX_LOADSTRING );
 	
 	MyRegisterClass( hInstance );
 
@@ -65,7 +67,7 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 //---------------------------------------------------------------------------------------------------------------------
 void RenderFrame()
 {
-	RenderFrameRHI();
+	CRRHI::RenderFrame();
 }
 
 
@@ -105,7 +107,7 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 	HWND hWnd = CreateWindowW( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, width, height, nullptr, nullptr, hInstance, nullptr );
 	if ( !hWnd ) return false;
 
-	InitializeRHI( hWnd, width,height );
+	CRRHI::Initialize( hWnd, width,height );
 
 	ShowWindow( hWnd, nCmdShow );
 	UpdateWindow( hWnd );
