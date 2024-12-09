@@ -17,8 +17,8 @@ class CRD11Renderer
 {
 private:
     ID3D11Buffer*           VertexBuffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
+    ID3D11InputLayout*      InputLayout  [ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
     ID3D11VertexShader*     VertexShader     = nullptr;
-    ID3D11InputLayout*      InputLayout      = nullptr;
     ID3D11PixelShader*      PixelShader      = nullptr;
     ID3D11RenderTargetView* RenderTargetView = nullptr;
     
@@ -33,13 +33,13 @@ public:
     void SetVertexShader( const CRD11VertexShader* CRVertexShader );
 
     /// Set input layout.
-    void SetInputLayout( const CRD11InputLayout* CRInputLayout );
+    void SetInputLayout( const CRD11InputLayout* CRInputLayout, unsigned int Slot );
 
     /// Set pixel shader.
     void SetPixelShader( const CRD11PixelShader* CRPixelShader );
 
     /// Draw.
-    void Draw() const;
+    void Draw( unsigned int Slot ) const;
 
     /// Clear render target.
     void ClearRenderTarget() const;

@@ -15,3 +15,4 @@ struct CRVertex
 
 
 extern CRVertex GCRVTriangle[ 3 ];
+extern CRVertex GCRVTriangle2[ 3 ];

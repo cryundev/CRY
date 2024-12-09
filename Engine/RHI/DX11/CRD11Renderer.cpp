@@ -9,6 +9,7 @@
 #include "../../Core/CRVertex.h"
 #include "../../Utility/CRLog.h"
 
+
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize renderer.
 //---------------------------------------------------------------------------------------------------------------------
@@ -21,8 +22,12 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 //---------------------------------------------------------------------------------------------------------------------
 /// Draw.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::Draw() const
+void CRD11Renderer::Draw( unsigned int Slot ) const
 {
+    if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
+    if ( !InputLayout[ Slot ] ) return;
+    
+    GD11.GetDeviceContext()->IASetInputLayout( InputLayout[ Slot ] );
     GD11.GetDeviceContext()->Draw( 3, 0 );
 }
 
@@ -49,6 +54,7 @@ void CRD11Renderer::Present() const
 void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, unsigned int Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
+    if ( !CRVertexBuffer ) return;
 
     VertexBuffers[ Slot ] = CRVertexBuffer->GetBufferPtr();
 
@@ -74,13 +80,12 @@ void CRD11Renderer::SetVertexShader( const CRD11VertexShader* CRVertexShader )
 //---------------------------------------------------------------------------------------------------------------------
 /// Set input layout.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetInputLayout( const CRD11InputLayout* CRInputLayout )
+void CRD11Renderer::SetInputLayout( const CRD11InputLayout* CRInputLayout, unsigned int Slot )
 {
+    if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !CRInputLayout ) return;
 
-    InputLayout = CRInputLayout->GetInputLayoutPtr();
-    
-    GD11.GetDeviceContext()->IASetInputLayout( CRInputLayout->GetInputLayoutPtr() );
+    InputLayout[ Slot ] = CRInputLayout->GetInputLayoutPtr();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
