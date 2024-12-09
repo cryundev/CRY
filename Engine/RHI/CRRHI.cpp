@@ -1,9 +1,14 @@
 ﻿#include "CRRHI.h"
 #include "../Core/CRVertex.h"
 #include "DX11/CRD11.h"
+#include "DX11/CRD11CompiledShader.h"
 #include "DX11/CRD11Device.h"
+#include "DX11/CRD11InputLayout.h"
+#include "DX11/CRD11PixelShader.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/CRD11VertexBuffer.h"
+#include "DX11/CRD11VertexShader.h"
+
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize RHI.
@@ -17,6 +22,33 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	triangle.Create( D3D11_USAGE_DEFAULT, 0, GCRVTriangle, sizeof( CRVertex ), 3 );
 
 	GD11Renderer.SetVertexBuffer( &triangle, 0 );
+
+	CRD11CompiledShader compiledVS;
+	compiledVS.Create( L"RHI/DX11/HLSL/shader.hlsl", "VS", "vs_5_0" );
+	
+	CRD11VertexShader vertexShader;
+	vertexShader.Create( compiledVS.GetCompiledShader() );
+
+	GD11Renderer.SetVertexShader( &vertexShader );
+
+	D3D11_INPUT_ELEMENT_DESC elements[] =
+	{
+		{ "SV_POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                            D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR",       0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	CRD11InputLayout inputLayout;
+	inputLayout.Create( elements, ARRAYSIZE( elements ), compiledVS.GetCompiledShader() );
+
+	GD11Renderer.SetInputLayout( &inputLayout );
+
+	CRD11CompiledShader compiledPS;
+	compiledPS.Create( L"RHI/DX11/HLSL/shader.hlsl", "PS", "ps_5_0" );
+
+	CRD11PixelShader pixelShader;
+	pixelShader.Create( compiledPS.GetCompiledShader() );
+
+	GD11Renderer.SetPixelShader( &pixelShader );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

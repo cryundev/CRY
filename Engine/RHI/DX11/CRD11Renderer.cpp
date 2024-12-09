@@ -2,11 +2,12 @@
 #include "CRD11.h"
 #include "CRD11Device.h"
 #include "CRD11Include.h"
+#include "CRD11InputLayout.h"
 #include "CRD11PixelShader.h"
 #include "CRD11VertexBuffer.h"
 #include "CRD11VertexShader.h"
 #include "../../Core/CRVertex.h"
-
+#include "../../Utility/CRLog.h"
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize renderer.
@@ -45,11 +46,11 @@ void CRD11Renderer::Present() const
 //---------------------------------------------------------------------------------------------------------------------
 /// SetVertexBuffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* VertexBuffer, unsigned int Slot )
+void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, unsigned int Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
 
-    VertexBuffers[ Slot ] = VertexBuffer->GetBufferPtr();
+    VertexBuffers[ Slot ] = CRVertexBuffer->GetBufferPtr();
 
     unsigned int stride = sizeof( CRVertex );
     unsigned int offset = 0;
@@ -61,17 +62,37 @@ void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* VertexBuffer, unsi
 //---------------------------------------------------------------------------------------------------------------------
 /// Set vertex shader.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetVertexShader( CRD11VertexShader* VertexShader ) const
+void CRD11Renderer::SetVertexShader( const CRD11VertexShader* CRVertexShader )
 {
-    GD11.GetDeviceContext()->VSSetShader( VertexShader->GetShaderPtr(), nullptr, 0 );
+    if ( !CRVertexShader ) return;
+
+    VertexShader = CRVertexShader->GetShaderPtr();
+    
+    GD11.GetDeviceContext()->VSSetShader( CRVertexShader->GetShaderPtr(), nullptr, 0 );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set input layout.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetInputLayout( const CRD11InputLayout* CRInputLayout )
+{
+    if ( !CRInputLayout ) return;
+
+    InputLayout = CRInputLayout->GetInputLayoutPtr();
+    
+    GD11.GetDeviceContext()->IASetInputLayout( CRInputLayout->GetInputLayoutPtr() );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Set pixel shader.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetPixelShader( CRD11PixelShader* PixelShader ) const
+void CRD11Renderer::SetPixelShader( const CRD11PixelShader* CRPixelShader )
 {
-    GD11.GetDeviceContext()->PSSetShader( PixelShader->GetShaderPtr(), nullptr, 0 );
+    if ( !CRPixelShader ) return;
+
+    PixelShader = CRPixelShader->GetShaderPtr();
+    
+    GD11.GetDeviceContext()->PSSetShader( CRPixelShader->GetShaderPtr(), nullptr, 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -84,9 +105,12 @@ void CRD11Renderer::_InitializeRenderTarget()
 
     if ( !texture ) return;
 
-    GD11.GetDevice()->CreateRenderTargetView( texture, nullptr, &RenderTargetView );
-
-    if ( !RenderTargetView ) return;
+    HRESULT hr = GD11.GetDevice()->CreateRenderTargetView( texture, nullptr, &RenderTargetView );
+    if ( FAILED( hr ) )
+    {
+        GLog.AddErrorLog( hr );
+        return;
+    }
 
     GD11.GetDeviceContext()->OMSetRenderTargets( 1, &RenderTargetView, nullptr );
 

@@ -1,9 +1,12 @@
 ﻿#pragma once
 
+
 #include "CRD11Include.h"
-#include "../../CRTypes.h"
 
 
+//---------------------------------------------------------------------------------------------------------------------
+/// CRD11InputLayout
+//---------------------------------------------------------------------------------------------------------------------
 class CRD11InputLayout
 {
 public:
@@ -11,5 +14,8 @@ public:
 
 public:
 	/// Create input layout.
-	void CreateInputLayout();
+	void Create( D3D11_INPUT_ELEMENT_DESC* Elments, unsigned int Count, ID3DBlob* CompiledShader );
+
+	/// Get input layout.
+	ID3D11InputLayout* GetInputLayoutPtr() const { return InputLayoutPtr; }
 };

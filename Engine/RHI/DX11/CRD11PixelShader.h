@@ -15,7 +15,7 @@ private:
 	
 public:
 	/// Create shader.
-	void CreateShader( const CWRString& Path, const CRString& EntryPoint, const CRString& ShaderModel );
+	void Create( ID3DBlob* CompiledShader );
 
 	/// Get shader pointer.
 	ID3D11PixelShader* GetShaderPtr() const { return PixelShaderPtr; }

@@ -12,3 +12,8 @@ PixelIn VS( float4 position : SV_POSITION, float4 color : COLOR )
 
 	return output;
 }
+
+float4 PS( PixelIn input ) : SV_TARGET
+{
+	return input.color;
+}
