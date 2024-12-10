@@ -11,6 +11,7 @@ CRD11CompiledShader::~CRD11CompiledShader()
     if ( CompiledShader )
     {
         CompiledShader->Release();
+        CompiledShader = nullptr;
     }
 }
 
