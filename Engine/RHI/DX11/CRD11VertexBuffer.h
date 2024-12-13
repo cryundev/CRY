@@ -11,6 +11,7 @@ class CRD11VertexBuffer
 {
 private:
 	ID3D11Buffer* BufferPtr = nullptr;
+	unsigned int  Count     = 0;
 
 public:
 	/// Create vertex buffer.
@@ -18,4 +19,7 @@ public:
 
 	/// Get BufferPtr.
 	ID3D11Buffer* GetBufferPtr() const { return BufferPtr; }
+
+	/// Get count.
+	unsigned int GetCount() const { return Count; }
 };

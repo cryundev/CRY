@@ -4,6 +4,7 @@
 #include "CRD11Include.h"
 
 
+class CRD11IndexBuffer;
 class CRD11InputLayout;
 class CRD11PixelShader;
 class CRD11VertexShader;
@@ -16,10 +17,12 @@ class CRD11VertexBuffer;
 class CRD11Renderer
 {
 private:
-    ID3D11Buffer*           VertexBuffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
-    ID3D11InputLayout*      InputLayout  [ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
-    ID3D11VertexShader*     VertexShader     = nullptr;
-    ID3D11PixelShader*      PixelShader      = nullptr;
+    const CRD11VertexBuffer* VertexBuffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
+    const CRD11InputLayout*  InputLayout  [ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
+    const CRD11IndexBuffer*  IndexBuffer  = nullptr;
+    const CRD11VertexShader* VertexShader = nullptr;
+    const CRD11PixelShader*  PixelShader  = nullptr;
+
     ID3D11RenderTargetView* RenderTargetView = nullptr;
     
 public:
@@ -28,6 +31,9 @@ public:
 
     /// Set vertex buffer.
     void SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, unsigned int Slot );
+
+    /// Set index buffer.
+    void SetIndexBuffer( const CRD11IndexBuffer* CRIndexBuffer );
 
     /// Set vertex shader.
     void SetVertexShader( const CRD11VertexShader* CRVertexShader );

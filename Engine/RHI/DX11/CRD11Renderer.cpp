@@ -2,6 +2,7 @@
 #include "CRD11.h"
 #include "CRD11Device.h"
 #include "CRD11Include.h"
+#include "CRD11IndexBuffer.h"
 #include "CRD11InputLayout.h"
 #include "CRD11PixelShader.h"
 #include "CRD11VertexBuffer.h"
@@ -26,9 +27,15 @@ void CRD11Renderer::Draw( unsigned int Slot ) const
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !InputLayout[ Slot ] ) return;
-    
-    GD11.GetDeviceContext()->IASetInputLayout( InputLayout[ Slot ] );
-    GD11.GetDeviceContext()->Draw( 3, 0 );
+
+    if ( !IndexBuffer )
+    {
+        GD11.GetDeviceContext()->Draw( VertexBuffers[ Slot ]->GetCount(), 0 );    
+    }
+    else
+    {
+        GD11.GetDeviceContext()->DrawIndexed( IndexBuffer->GetCount(), 0, 0 );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -56,13 +63,25 @@ void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, un
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !CRVertexBuffer ) return;
 
-    VertexBuffers[ Slot ] = CRVertexBuffer->GetBufferPtr();
+    VertexBuffers[ Slot ] = CRVertexBuffer;
 
     unsigned int stride = sizeof( CRVertex );
     unsigned int offset = 0;
 
-    GD11.GetDeviceContext()->IASetVertexBuffers( Slot, 1, &VertexBuffers[ Slot ], &stride, &offset );
+    ID3D11Buffer* bufferPtr = VertexBuffers[ Slot ]->GetBufferPtr();
+
+    GD11.GetDeviceContext()->IASetVertexBuffers( Slot, 1, &bufferPtr, &stride, &offset );
     GD11.GetDeviceContext()->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set index buffer.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetIndexBuffer( const CRD11IndexBuffer* CRIndexBuffer )
+{
+    IndexBuffer = CRIndexBuffer;
+    
+    GD11.GetDeviceContext()->IASetIndexBuffer( CRIndexBuffer->GetBufferPtr(), DXGI_FORMAT_R32_UINT, 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -72,7 +91,7 @@ void CRD11Renderer::SetVertexShader( const CRD11VertexShader* CRVertexShader )
 {
     if ( !CRVertexShader ) return;
 
-    VertexShader = CRVertexShader->GetShaderPtr();
+    VertexShader = CRVertexShader;
     
     GD11.GetDeviceContext()->VSSetShader( CRVertexShader->GetShaderPtr(), nullptr, 0 );
 }
@@ -85,7 +104,9 @@ void CRD11Renderer::SetInputLayout( const CRD11InputLayout* CRInputLayout, unsig
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !CRInputLayout ) return;
 
-    InputLayout[ Slot ] = CRInputLayout->GetInputLayoutPtr();
+    InputLayout[ Slot ] = CRInputLayout;
+    
+    GD11.GetDeviceContext()->IASetInputLayout( InputLayout[ Slot ]->GetInputLayoutPtr() );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -95,7 +116,7 @@ void CRD11Renderer::SetPixelShader( const CRD11PixelShader* CRPixelShader )
 {
     if ( !CRPixelShader ) return;
 
-    PixelShader = CRPixelShader->GetShaderPtr();
+    PixelShader = CRPixelShader;
     
     GD11.GetDeviceContext()->PSSetShader( CRPixelShader->GetShaderPtr(), nullptr, 0 );
 }

@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Container\CRArray.h" />
     <ClInclude Include="Core\CRVertex.h" />
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />
@@ -141,6 +142,7 @@
     <ClInclude Include="RHI\DX11\CRD11CompiledShader.h" />
     <ClInclude Include="RHI\DX11\CRD11Device.h" />
     <ClInclude Include="RHI\DX11\CRD11Include.h" />
+    <ClInclude Include="RHI\DX11\CRD11IndexBuffer.h" />
     <ClInclude Include="RHI\DX11\CRD11InputLayout.h" />
     <ClInclude Include="RHI\DX11\CRD11PixelShader.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
@@ -150,6 +152,7 @@
     <ClInclude Include="Utility\CRLog.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Container\CRArray.cpp" />
     <ClCompile Include="Core\CRVertex.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="RHI\CRRHI.cpp" />
@@ -229,6 +232,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="RHI\DX11\CRD11IndexBuffer.cpp" />
     <ClCompile Include="RHI\DX11\CRD11InputLayout.cpp" />
     <ClCompile Include="RHI\DX11\CRD11PixelShader.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Renderer.cpp" />
