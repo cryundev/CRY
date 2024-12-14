@@ -14,6 +14,12 @@ private:
 	unsigned int  Count     = 0;
 
 public:
+	/// Constructor
+	CRD11VertexBuffer() = default;
+
+	/// Destructor
+	virtual ~CRD11VertexBuffer();
+	
 	/// Create vertex buffer.
 	void Create( D3D11_USAGE Usage, unsigned int CpuAccess, const void* BlobPtr, unsigned int Stride, unsigned int Count );
 

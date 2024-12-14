@@ -2,7 +2,7 @@
 
 
 #include "CRD11Include.h"
-
+#include "../../CRTypes.h"
 
 class CRD11IndexBuffer;
 class CRD11InputLayout;
@@ -17,11 +17,11 @@ class CRD11VertexBuffer;
 class CRD11Renderer
 {
 private:
-    const CRD11VertexBuffer* VertexBuffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
-    const CRD11InputLayout*  InputLayout  [ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ] = { nullptr, };
-    const CRD11IndexBuffer*  IndexBuffer  = nullptr;
-    const CRD11VertexShader* VertexShader = nullptr;
-    const CRD11PixelShader*  PixelShader  = nullptr;
+    CRD11VertexBufferWPtr VertexBuffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ];
+    CRD11InputLayoutWPtr  InputLayout  [ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ];
+    CRD11IndexBufferWPtr  IndexBuffer;
+    CRD11VertexShaderWPtr VertexShader;
+    CRD11PixelShaderWPtr  PixelShader;
 
     ID3D11RenderTargetView* RenderTargetView = nullptr;
     
@@ -30,19 +30,19 @@ public:
     void Initialize( unsigned int Width, unsigned int Height );
 
     /// Set vertex buffer.
-    void SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, unsigned int Slot );
+    void SetVertexBuffer( const CRD11VertexBufferSPtr& CRVertexBuffer, unsigned int Slot );
 
     /// Set index buffer.
-    void SetIndexBuffer( const CRD11IndexBuffer* CRIndexBuffer );
+    void SetIndexBuffer( const CRD11IndexBufferSPtr& CRIndexBuffer );
 
     /// Set vertex shader.
-    void SetVertexShader( const CRD11VertexShader* CRVertexShader );
+    void SetVertexShader( const CRD11VertexShaderSPtr& CRVertexShader );
 
     /// Set input layout.
-    void SetInputLayout( const CRD11InputLayout* CRInputLayout, unsigned int Slot );
+    void SetInputLayout( const CRD11InputLayoutSPtr& CRInputLayout, unsigned int Slot );
 
     /// Set pixel shader.
-    void SetPixelShader( const CRD11PixelShader* CRPixelShader );
+    void SetPixelShader( const CRD11PixelShaderSPtr& CRPixelShader );
 
     /// Draw.
     void Draw( unsigned int Slot ) const;

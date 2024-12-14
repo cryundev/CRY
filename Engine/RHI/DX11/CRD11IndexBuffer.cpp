@@ -5,11 +5,23 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Destructor
+//---------------------------------------------------------------------------------------------------------------------
+CRD11IndexBuffer::~CRD11IndexBuffer()
+{
+	if ( BufferPtr )
+	{
+		BufferPtr->Release();
+		BufferPtr = nullptr;
+	}
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Create index buffer.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11IndexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const CRArray< int >& Indice )
 {
-    Count = Indice.Num();
+    Count = (unsigned int)( Indice.size() );
     
     D3D11_BUFFER_DESC bd;
     ZeroMemory( &bd, sizeof( D3D11_BUFFER_DESC ) );
@@ -22,7 +34,7 @@ void CRD11IndexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const 
     D3D11_SUBRESOURCE_DATA sd;
     ZeroMemory( &sd, sizeof( D3D11_SUBRESOURCE_DATA ) );
 	
-    sd.pSysMem = Indice.Data();
+    sd.pSysMem = Indice.data();
   
     HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &BufferPtr );
 

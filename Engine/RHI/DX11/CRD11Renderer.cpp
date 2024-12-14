@@ -26,15 +26,18 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 void CRD11Renderer::Draw( unsigned int Slot ) const
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
-    if ( !InputLayout[ Slot ] ) return;
+    if ( InputLayout[ Slot ].expired() ) return;
 
-    if ( !IndexBuffer )
+    if ( IndexBuffer.expired() )
     {
-        GD11.GetDeviceContext()->Draw( VertexBuffers[ Slot ]->GetCount(), 0 );    
+        if ( !VertexBuffers[ Slot ].expired() )
+        {
+            GD11.GetDeviceContext()->Draw( VertexBuffers[ Slot ].lock()->GetCount(), 0 );
+        }
     }
     else
     {
-        GD11.GetDeviceContext()->DrawIndexed( IndexBuffer->GetCount(), 0, 0 );
+        GD11.GetDeviceContext()->DrawIndexed( IndexBuffer.lock()->GetCount(), 0, 0 );
     }
 }
 
@@ -58,7 +61,7 @@ void CRD11Renderer::Present() const
 //---------------------------------------------------------------------------------------------------------------------
 /// SetVertexBuffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, unsigned int Slot )
+void CRD11Renderer::SetVertexBuffer( const CRD11VertexBufferSPtr& CRVertexBuffer, unsigned int Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !CRVertexBuffer ) return;
@@ -68,7 +71,7 @@ void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, un
     unsigned int stride = sizeof( CRVertex );
     unsigned int offset = 0;
 
-    ID3D11Buffer* bufferPtr = VertexBuffers[ Slot ]->GetBufferPtr();
+    ID3D11Buffer* bufferPtr = CRVertexBuffer->GetBufferPtr();
 
     GD11.GetDeviceContext()->IASetVertexBuffers( Slot, 1, &bufferPtr, &stride, &offset );
     GD11.GetDeviceContext()->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
@@ -77,7 +80,7 @@ void CRD11Renderer::SetVertexBuffer( const CRD11VertexBuffer* CRVertexBuffer, un
 //---------------------------------------------------------------------------------------------------------------------
 /// Set index buffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetIndexBuffer( const CRD11IndexBuffer* CRIndexBuffer )
+void CRD11Renderer::SetIndexBuffer( const CRD11IndexBufferSPtr& CRIndexBuffer )
 {
     IndexBuffer = CRIndexBuffer;
     
@@ -87,7 +90,7 @@ void CRD11Renderer::SetIndexBuffer( const CRD11IndexBuffer* CRIndexBuffer )
 //---------------------------------------------------------------------------------------------------------------------
 /// Set vertex shader.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetVertexShader( const CRD11VertexShader* CRVertexShader )
+void CRD11Renderer::SetVertexShader( const CRD11VertexShaderSPtr& CRVertexShader )
 {
     if ( !CRVertexShader ) return;
 
@@ -99,20 +102,20 @@ void CRD11Renderer::SetVertexShader( const CRD11VertexShader* CRVertexShader )
 //---------------------------------------------------------------------------------------------------------------------
 /// Set input layout.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetInputLayout( const CRD11InputLayout* CRInputLayout, unsigned int Slot )
+void CRD11Renderer::SetInputLayout( const CRD11InputLayoutSPtr& CRInputLayout, unsigned int Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !CRInputLayout ) return;
 
     InputLayout[ Slot ] = CRInputLayout;
     
-    GD11.GetDeviceContext()->IASetInputLayout( InputLayout[ Slot ]->GetInputLayoutPtr() );
+    GD11.GetDeviceContext()->IASetInputLayout( CRInputLayout->GetInputLayoutPtr() );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Set pixel shader.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::SetPixelShader( const CRD11PixelShader* CRPixelShader )
+void CRD11Renderer::SetPixelShader( const CRD11PixelShaderSPtr& CRPixelShader )
 {
     if ( !CRPixelShader ) return;
 

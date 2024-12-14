@@ -2,7 +2,7 @@
 
 
 #include "CRD11Include.h"
-#include "../Core/Container/CRArray.h"
+#include "../CRTypes.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -15,6 +15,12 @@ private:
     unsigned int  Count     = 0;
 
 public:
+    /// Constructor
+    CRD11IndexBuffer() = default;
+
+    /// Destructor
+    virtual ~CRD11IndexBuffer();
+    
     /// Create index buffer.
     void Create( D3D11_USAGE Usage, unsigned int CpuAccess, const CRArray< int >& Indice );
 

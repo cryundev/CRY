@@ -13,6 +13,12 @@ public:
 	ID3D11InputLayout* InputLayoutPtr = nullptr;
 
 public:
+	/// Constructor
+	CRD11InputLayout() = default;
+
+	/// Destructor
+	virtual ~CRD11InputLayout();
+	
 	/// Create input layout.
 	void Create( D3D11_INPUT_ELEMENT_DESC* Elments, unsigned int Count, ID3DBlob* CompiledShader );
 

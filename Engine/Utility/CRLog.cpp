@@ -1,6 +1,7 @@
 ﻿#include "CRLog.h"
 #include <comdef.h>
 
+
 CRLog GLog;
 
 
@@ -9,7 +10,7 @@ CRLog GLog;
 //---------------------------------------------------------------------------------------------------------------------
 void CRLog::AddLog( const CRString& Log )
 {
-	Logs.Add( Log );
+	Logs.push_back( Log );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -19,5 +20,5 @@ void CRLog::AddErrorLog( HRESULT HR )
 {
 	_com_error comError( HR );
 
-	ErrorLogs.Add( comError.ErrorMessage() );
+	ErrorLogs.push_back( comError.ErrorMessage() );
 }

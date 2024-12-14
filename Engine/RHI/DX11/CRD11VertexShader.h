@@ -14,6 +14,12 @@ private:
 	ID3D11VertexShader* VertexShaderPtr = nullptr;
 
 public:
+	/// Constructor
+	CRD11VertexShader() = default;
+
+	/// Destructor
+	virtual ~CRD11VertexShader();
+	
 	/// Create shader.
 	void Create( ID3DBlob* CompiledShader );
 

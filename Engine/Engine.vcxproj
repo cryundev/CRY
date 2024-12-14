@@ -131,7 +131,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Core\Container\CRArray.h" />
     <ClInclude Include="Core\CRVertex.h" />
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />
@@ -146,13 +145,14 @@
     <ClInclude Include="RHI\DX11\CRD11InputLayout.h" />
     <ClInclude Include="RHI\DX11\CRD11PixelShader.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
+    <ClInclude Include="RHI\DX11\CRD11ResourceManager.h" />
     <ClInclude Include="RHI\DX11\CRD11VertexBuffer.h" />
     <ClInclude Include="RHI\DX11\CRD11VertexShader.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Utility\CRGeneric.h" />
     <ClInclude Include="Utility\CRLog.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Container\CRArray.cpp" />
     <ClCompile Include="Core\CRVertex.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="RHI\CRRHI.cpp" />
@@ -236,9 +236,11 @@
     <ClCompile Include="RHI\DX11\CRD11InputLayout.cpp" />
     <ClCompile Include="RHI\DX11\CRD11PixelShader.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Renderer.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11ResourceManager.cpp" />
     <ClCompile Include="RHI\DX11\CRD11VertexBuffer.cpp" />
     <ClCompile Include="RHI\DX11\CRD11VertexShader.cpp" />
     <None Include="RHI\DX11\HLSL\shader.hlsl" />
+    <ClCompile Include="Utility\CRGeneric.cpp" />
     <ClCompile Include="Utility\CRLog.cpp" />
   </ItemGroup>
   <ItemGroup>

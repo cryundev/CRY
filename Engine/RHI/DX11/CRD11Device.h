@@ -17,6 +17,9 @@ private:
 public:
 	/// Constructor
 	CRD11Device() = default;
+
+	/// Destructor
+	virtual ~CRD11Device();
 	
 	/// Create Dx11 device ojects.
 	bool Create( HWND hWnd );

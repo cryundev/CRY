@@ -14,6 +14,12 @@ private:
 	ID3D11PixelShader* PixelShaderPtr = nullptr;
 	
 public:
+	/// Constructor
+	CRD11PixelShader() = default;
+
+	/// Destructor
+	virtual ~CRD11PixelShader();
+	
 	/// Create shader.
 	void Create( ID3DBlob* CompiledShader );
 
