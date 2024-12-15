@@ -5,6 +5,7 @@
 #include "CRD11IndexBuffer.h"
 #include "CRD11InputLayout.h"
 #include "CRD11PixelShader.h"
+#include "CRD11ShaderResourceView.h"
 #include "CRD11VertexBuffer.h"
 #include "CRD11VertexShader.h"
 #include "../../Core/CRVertex.h"
@@ -64,14 +65,14 @@ void CRD11Renderer::Present() const
 void CRD11Renderer::SetVertexBuffer( const CRD11VertexBufferSPtr& CRVertexBuffer, unsigned int Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
-    if ( !CRVertexBuffer ) return;
+    if ( !CRVertexBuffer.get() ) return;
 
     VertexBuffers[ Slot ] = CRVertexBuffer;
 
     unsigned int stride = sizeof( CRVertex );
     unsigned int offset = 0;
 
-    ID3D11Buffer* bufferPtr = CRVertexBuffer->GetBufferPtr();
+    ID3D11Buffer* bufferPtr = CRVertexBuffer->GetObjectPtr();
 
     GD11.GetDeviceContext()->IASetVertexBuffers( Slot, 1, &bufferPtr, &stride, &offset );
     GD11.GetDeviceContext()->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
@@ -82,9 +83,11 @@ void CRD11Renderer::SetVertexBuffer( const CRD11VertexBufferSPtr& CRVertexBuffer
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::SetIndexBuffer( const CRD11IndexBufferSPtr& CRIndexBuffer )
 {
+    if ( !CRIndexBuffer.get() ) return;
+    
     IndexBuffer = CRIndexBuffer;
     
-    GD11.GetDeviceContext()->IASetIndexBuffer( CRIndexBuffer->GetBufferPtr(), DXGI_FORMAT_R32_UINT, 0 );
+    GD11.GetDeviceContext()->IASetIndexBuffer( CRIndexBuffer->GetObjectPtr(), DXGI_FORMAT_R32_UINT, 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -92,11 +95,11 @@ void CRD11Renderer::SetIndexBuffer( const CRD11IndexBufferSPtr& CRIndexBuffer )
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::SetVertexShader( const CRD11VertexShaderSPtr& CRVertexShader )
 {
-    if ( !CRVertexShader ) return;
+    if ( !CRVertexShader.get() ) return;
 
     VertexShader = CRVertexShader;
     
-    GD11.GetDeviceContext()->VSSetShader( CRVertexShader->GetShaderPtr(), nullptr, 0 );
+    GD11.GetDeviceContext()->VSSetShader( CRVertexShader->GetObjectPtr(), nullptr, 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -105,11 +108,11 @@ void CRD11Renderer::SetVertexShader( const CRD11VertexShaderSPtr& CRVertexShader
 void CRD11Renderer::SetInputLayout( const CRD11InputLayoutSPtr& CRInputLayout, unsigned int Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
-    if ( !CRInputLayout ) return;
+    if ( !CRInputLayout.get() ) return;
 
     InputLayout[ Slot ] = CRInputLayout;
     
-    GD11.GetDeviceContext()->IASetInputLayout( CRInputLayout->GetInputLayoutPtr() );
+    GD11.GetDeviceContext()->IASetInputLayout( CRInputLayout->GetObjectPtr() );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -117,11 +120,25 @@ void CRD11Renderer::SetInputLayout( const CRD11InputLayoutSPtr& CRInputLayout, u
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::SetPixelShader( const CRD11PixelShaderSPtr& CRPixelShader )
 {
-    if ( !CRPixelShader ) return;
+    if ( !CRPixelShader.get() ) return;
 
     PixelShader = CRPixelShader;
     
-    GD11.GetDeviceContext()->PSSetShader( CRPixelShader->GetShaderPtr(), nullptr, 0 );
+    GD11.GetDeviceContext()->PSSetShader( CRPixelShader->GetObjectPtr(), nullptr, 0 );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set shader resource.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetShaderResource( const CRD11ShaderResourceViewSPtr& CRShaderResourceView, unsigned int Slot )
+{
+    if ( Slot >= D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ) return;
+    if ( !CRShaderResourceView.get() ) return;
+
+    ShaderResourceViews[ Slot ] = CRShaderResourceView;
+
+    ID3D11ShaderResourceView* srv = CRShaderResourceView->GetObjectPtr();
+    GD11.GetDeviceContext()->PSSetShaderResources( Slot, 1, &srv );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

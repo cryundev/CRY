@@ -5,11 +5,8 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRD11CompiledShader
+/// CRD11SamplerState
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11CompiledShader : public CRD11Object< ID3DBlob >
+class CRD11SamplerState : public CRD11Object< ID3D11SamplerState >
 {
-public:
-	/// Create compiled shader.
-    void Create( const CWRString& Path, const CRString& EntryPoint, const CRString& ShaderModel );
 };

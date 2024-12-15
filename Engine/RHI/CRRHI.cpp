@@ -8,6 +8,7 @@
 #include "DX11/CRD11PixelShader.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/CRD11ResourceManager.h"
+#include "DX11/CRD11Texture2DSampler.h"
 #include "DX11/CRD11VertexBuffer.h"
 #include "DX11/CRD11VertexShader.h"
 
@@ -35,7 +36,7 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	compiledVS.Create( L"RHI/DX11/HLSL/shader.hlsl", "VS", "vs_5_0" );
 	
 	CRD11VertexShaderSPtr vertexShader = GD11RM.GetVertexShader( "Diffuse" );
-	vertexShader->Create( compiledVS.GetCompiledShader() );
+	vertexShader->Create( compiledVS.GetObjectPtr() );
 
 	GD11Renderer.SetVertexShader( vertexShader );
 
@@ -46,7 +47,7 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	};
 
 	CRD11InputLayoutSPtr inputLayout = GD11RM.GetInputLayout( "Diffuse" );
-	inputLayout->Create( elements, ARRAYSIZE( elements ), compiledVS.GetCompiledShader() );
+	inputLayout->Create( elements, ARRAYSIZE( elements ), compiledVS.GetObjectPtr() );
 
 	GD11Renderer.SetInputLayout( inputLayout, 0 );
 
@@ -54,9 +55,14 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	compiledPS.Create( L"RHI/DX11/HLSL/shader.hlsl", "PS", "ps_5_0" );
 
 	CRD11PixelShaderSPtr pixelShader = CRMakeShared( new CRD11PixelShader() );
-	pixelShader->Create( compiledPS.GetCompiledShader() );
+	pixelShader->Create( compiledPS.GetObjectPtr() );
 
 	GD11Renderer.SetPixelShader( pixelShader );
+
+	CRD11Texture2DSampler textureSampler;
+	textureSampler.Create( "" );
+
+	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( textureSampler.GetShaderResourceView() ), 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -7,18 +7,6 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create vertex buffer
 //---------------------------------------------------------------------------------------------------------------------
-CRD11VertexBuffer::~CRD11VertexBuffer()
-{
-	if ( BufferPtr )
-	{
-		BufferPtr->Release();
-		BufferPtr = nullptr;
-	}
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Create vertex buffer
-//---------------------------------------------------------------------------------------------------------------------
 void CRD11VertexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const void* BlobPtr, unsigned int Stride, unsigned int InCount )
 {
 	Count = InCount;
@@ -36,7 +24,7 @@ void CRD11VertexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const
 	
 	sd.pSysMem = BlobPtr;
   
-	HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &BufferPtr );
+	HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &ObjectPtr );
 
 	if ( FAILED( hr ) )
 	{

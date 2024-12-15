@@ -1,23 +1,18 @@
-﻿#include "CRD11VertexShader.h"
+﻿#include "CRD11Texture2D.h"
 #include "CRD11.h"
 #include "CRD11Device.h"
 #include "../../Utility/CRLog.h"
-#include <d3dcompiler.h>
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Create shader.
+/// Create texture.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11VertexShader::Create( ID3DBlob* CompiledShader )
+void CRD11Texture2D::Create( const D3D11_TEXTURE2D_DESC& Description )
 {
-	if ( !CompiledShader ) return;
-
-	HRESULT hr = GD11.GetDevice()->CreateVertexShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &ObjectPtr );
-	
+	HRESULT hr = GD11.GetDevice()->CreateTexture2D( &Description, nullptr, &ObjectPtr );
 	if ( FAILED( hr ) )
 	{
 		GLog.AddErrorLog( hr );
-		
 		return;
 	}
 }

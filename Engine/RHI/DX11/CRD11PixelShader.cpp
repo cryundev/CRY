@@ -6,25 +6,13 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Destructor
-//---------------------------------------------------------------------------------------------------------------------
-CRD11PixelShader::~CRD11PixelShader()
-{
-	if ( PixelShaderPtr )
-	{
-		PixelShaderPtr->Release();
-		PixelShaderPtr = nullptr;
-	}
-}
-
-//---------------------------------------------------------------------------------------------------------------------
 /// Create shader.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11PixelShader::Create( ID3DBlob* CompiledShader )
 {
 	if ( !CompiledShader ) return;
 	
-	HRESULT hr = GD11.GetDevice()->CreatePixelShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &PixelShaderPtr );
+	HRESULT hr = GD11.GetDevice()->CreatePixelShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &ObjectPtr );
 	
 	if ( FAILED( hr ) )
 	{

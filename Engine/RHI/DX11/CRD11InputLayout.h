@@ -1,27 +1,15 @@
 ﻿#pragma once
 
 
-#include "CRD11Include.h"
+#include "CRD11Object.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
 /// CRD11InputLayout
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11InputLayout
+class CRD11InputLayout : public CRD11Object< ID3D11InputLayout >
 {
 public:
-	ID3D11InputLayout* InputLayoutPtr = nullptr;
-
-public:
-	/// Constructor
-	CRD11InputLayout() = default;
-
-	/// Destructor
-	virtual ~CRD11InputLayout();
-	
 	/// Create input layout.
 	void Create( D3D11_INPUT_ELEMENT_DESC* Elments, unsigned int Count, ID3DBlob* CompiledShader );
-
-	/// Get input layout.
-	ID3D11InputLayout* GetInputLayoutPtr() const { return InputLayoutPtr; }
 };

@@ -5,11 +5,11 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRD11CompiledShader
+/// CRD11Texture2D
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11CompiledShader : public CRD11Object< ID3DBlob >
+class CRD11Texture2D : public CRD11Object< ID3D11Texture2D >
 {
 public:
-	/// Create compiled shader.
-    void Create( const CWRString& Path, const CRString& EntryPoint, const CRString& ShaderModel );
+	/// Create texture.
+	void Create( const D3D11_TEXTURE2D_DESC& Description );
 };

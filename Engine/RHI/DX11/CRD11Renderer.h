@@ -19,9 +19,12 @@ class CRD11Renderer
 private:
     CRD11VertexBufferWPtr VertexBuffers[ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ];
     CRD11InputLayoutWPtr  InputLayout  [ D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ];
+
     CRD11IndexBufferWPtr  IndexBuffer;
     CRD11VertexShaderWPtr VertexShader;
     CRD11PixelShaderWPtr  PixelShader;
+
+    CRD11ShaderResourceViewWPtr ShaderResourceViews[ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
 
     ID3D11RenderTargetView* RenderTargetView = nullptr;
     
@@ -43,6 +46,9 @@ public:
 
     /// Set pixel shader.
     void SetPixelShader( const CRD11PixelShaderSPtr& CRPixelShader );
+
+    /// Set shader resource.
+    void SetShaderResource( const CRD11ShaderResourceViewSPtr& CRShaderResourceView, unsigned int Slot );
 
     /// Draw.
     void Draw( unsigned int Slot ) const;
