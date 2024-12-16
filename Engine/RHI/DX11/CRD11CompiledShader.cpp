@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create compiled shader.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11CompiledShader::Create( const CWRString& Path, const CRString& EntryPoint, const CRString& ShaderModel )
+void CRD11CompiledShader::Create( const CRWString& Path, const CRString& EntryPoint, const CRString& ShaderModel )
 {
     ID3DBlob* error = nullptr;
 	

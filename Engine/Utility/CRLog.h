@@ -1,7 +1,9 @@
 ﻿#pragma once
 
 
-#include "../CRTypes.h"
+#include "../Core/Strings/CRStringInc.h"
+#include "../Core/Containers/CRContainerInc.h"
+#include <intsafe.h>
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -11,7 +13,7 @@ class CRLog
 {
 private:
 	CRArray< CRString  > Logs;
-	CRArray< CWRString > ErrorLogs;
+	CRArray< CRWString > ErrorLogs;
 
 public:
 	/// Add log.

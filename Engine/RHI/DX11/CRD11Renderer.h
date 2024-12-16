@@ -2,13 +2,7 @@
 
 
 #include "CRD11Include.h"
-#include "../../CRTypes.h"
-
-class CRD11IndexBuffer;
-class CRD11InputLayout;
-class CRD11PixelShader;
-class CRD11VertexShader;
-class CRD11VertexBuffer;
+#include "CRD11Types.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------

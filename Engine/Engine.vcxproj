@@ -131,7 +131,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Core\Containers\CRContainerInc.h" />
     <ClInclude Include="Core\CRVertex.h" />
+    <ClInclude Include="Core\Strings\CRStringInc.h" />
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="framework.h" />
@@ -151,6 +153,7 @@
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceView.h" />
     <ClInclude Include="RHI\DX11\CRD11Texture2D.h" />
     <ClInclude Include="RHI\DX11\CRD11Texture2DSampler.h" />
+    <ClInclude Include="RHI\DX11\CRD11Types.h" />
     <ClInclude Include="RHI\DX11\CRD11VertexBuffer.h" />
     <ClInclude Include="RHI\DX11\CRD11VertexShader.h" />
     <ClInclude Include="targetver.h" />

@@ -1,16 +1,9 @@
 ﻿#pragma once
 
 
-#include "CRD11CompiledShader.h"
-#include "CRD11Include.h"
-#include "CRD11IndexBuffer.h"
-#include "CRD11InputLayout.h"
-#include "CRD11PixelShader.h"
-#include "CRD11ShaderResourceView.h"
-#include "CRD11Texture2D.h"
-#include "CRD11VertexBuffer.h"
-#include "CRD11VertexShader.h"
-#include "../../CRTypes.h"
+#include "CRD11Types.h"
+#include "../../Core/Strings/CRStringInc.h"
+#include "../../Core/Containers/CRContainerInc.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -46,28 +39,28 @@ public:
 	void Clear();
 	
 	/// Add vertex buffer.
-	CRD11VertexBufferSPtr GetVertexBuffer( const CRName& Name ) { return _GetResource< CRD11VertexBuffer >( Name, VertexBuffers ); }
+	CRD11VertexBufferSPtr GetVertexBuffer( const CRName& Name );
 
 	/// Add index buffer.
-	CRD11IndexBufferSPtr GetIndexBuffer( const CRName& Name ) { return _GetResource< CRD11IndexBuffer >( Name, IndexBuffers ); }
+	CRD11IndexBufferSPtr GetIndexBuffer( const CRName& Name );
 
 	/// Add input layout.
-	CRD11InputLayoutSPtr GetInputLayout( const CRName& Name ) { return _GetResource< CRD11InputLayout >( Name, InputLayouts ); }
+	CRD11InputLayoutSPtr GetInputLayout( const CRName& Name );
 
 	/// Add compiled shader.
-	CRD11CompiledShaderSPtr GetCompiledShader( const CRName& Name ) { return _GetResource< CRD11CompiledShader >( Name, CompiledShaders ); }
+	CRD11CompiledShaderSPtr GetCompiledShader( const CRName& Name );
 
 	/// Add vertex shader.
-	CRD11VertexShaderSPtr GetVertexShader( const CRName& Name ) { return _GetResource< CRD11VertexShader >( Name, VertexShaders ); }
+	CRD11VertexShaderSPtr GetVertexShader( const CRName& Name );
 
 	/// Add pixel shader.
-	CRD11PixelShaderSPtr GetPixelShader( const CRName& Name ) { return _GetResource< CRD11PixelShader >( Name, PixelShaders ); }
+	CRD11PixelShaderSPtr GetPixelShader( const CRName& Name );
 
 	/// Add texture2D.
-	CRD11Texture2DSPtr GetTexture2D( const CRName& Name ) { return _GetResource< CRD11Texture2D >( Name, Texture2Ds ); }
+	CRD11Texture2DSPtr GetTexture2D( const CRName& Name );
 
 	/// Add shader resource view.
-	CRD11ShaderResourceViewSPtr GetShaderResourceView( const CRName& Name ) { return _GetResource< CRD11ShaderResourceView >( Name, ShaderResourceViews ); }
+	CRD11ShaderResourceViewSPtr GetShaderResourceView( const CRName& Name );
 
 private:
 	/// Get resource.

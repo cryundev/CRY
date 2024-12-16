@@ -1,7 +1,8 @@
 ﻿#pragma once
 
 
-#include "CRD11Include.h"
+#include "CRD11Types.h"
+#include "../../Core/Strings/CRStringInc.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
