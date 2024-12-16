@@ -20,5 +20,5 @@ void CRLog::AddErrorLog( HRESULT HR )
 {
 	_com_error comError( HR );
 
-	ErrorLogs.push_back( comError.ErrorMessage() );
+	ErrorLogs.emplace_back( comError.ErrorMessage() );
 }

@@ -9,8 +9,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 struct CRVertex
 {
-    CRVector Position;
-    CRVector Color;
+    CRVector   Position;
+    CRVector2D TexCoord;
 };
 
 

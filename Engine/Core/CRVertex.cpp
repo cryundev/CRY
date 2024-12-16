@@ -3,16 +3,16 @@
 
 CRVertex GCRVTriangle[ 3 ] =
 {
-    { .Position = CRVector(  0.0f, 0.5f, 0.0f ), .Color = CRVector( 1.0f, 0.0f, 0.0f ) },
-    { .Position = CRVector(  0.5f, 0.0f, 0.0f ), .Color = CRVector( 0.0f, 1.0f, 0.0f ) },
-    { .Position = CRVector( -0.5f, 0.0f, 0.0f ), .Color = CRVector( 0.0f, 0.0f, 1.0f ) },
+    { .Position = CRVector(  0.0f, 0.5f, 0.0f ), .TexCoord = CRVector2D( 0.5f, 0.5f ) },
+    { .Position = CRVector(  0.5f, 0.0f, 0.0f ), .TexCoord = CRVector2D( 0.0f, 1.0f ) },
+    { .Position = CRVector( -0.5f, 0.0f, 0.0f ), .TexCoord = CRVector2D( 1.0f, 1.0f ) },
 };
 
 
 CRVertex GCRVRect[ 4 ] =
 {
-    { .Position = CRVector( -0.5f,  0.5f, 0.0f ), .Color = CRVector( 1.0f, 1.0f, 0.0f ) },
-    { .Position = CRVector(  0.5f,  0.5f, 0.0f ), .Color = CRVector( 0.0f, 1.0f, 1.0f ) },
-    { .Position = CRVector( -0.5f, -0.5f, 0.0f ), .Color = CRVector( 1.0f, 0.0f, 1.0f ) },
-    { .Position = CRVector(  0.5f, -0.5f, 0.0f ), .Color = CRVector( 1.0f, 1.0f, 0.0f ) },
+    { .Position = CRVector( -0.5f,  0.5f, 0.0f ), .TexCoord = CRVector2D( 0.0f, 0.0f ) },
+    { .Position = CRVector(  0.5f,  0.5f, 0.0f ), .TexCoord = CRVector2D( 1.0f, 0.0f ) },
+    { .Position = CRVector( -0.5f, -0.5f, 0.0f ), .TexCoord = CRVector2D( 0.0f, 1.0f ) },
+    { .Position = CRVector(  0.5f, -0.5f, 0.0f ), .TexCoord = CRVector2D( 1.0f, 1.0f ) },
 };

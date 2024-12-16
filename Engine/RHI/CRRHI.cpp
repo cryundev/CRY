@@ -8,7 +8,7 @@
 #include "DX11/CRD11PixelShader.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/CRD11ResourceManager.h"
-//#include "DX11/CRD11Texture2DSampler.h"
+#include "DX11/CRD11Texture2DSampler.h"
 #include "DX11/CRD11VertexBuffer.h"
 #include "DX11/CRD11VertexShader.h"
 
@@ -43,7 +43,7 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	D3D11_INPUT_ELEMENT_DESC elements[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                            D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR",    0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
 	CRD11InputLayoutSPtr inputLayout = GD11RM.GetInputLayout( "Diffuse" );
@@ -59,10 +59,10 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 
 	GD11Renderer.SetPixelShader( pixelShader );
 
-	// CRD11Texture2DSampler textureSampler;
-	// textureSampler.Create( "" );
-	//
-	// GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( textureSampler.GetShaderResourceView() ), 0 );
+	CRD11Texture2DSampler textureSampler;
+	textureSampler.Create( "" );
+	
+	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( textureSampler.GetShaderResourceView() ), 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
