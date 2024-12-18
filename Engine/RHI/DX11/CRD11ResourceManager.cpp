@@ -3,6 +3,7 @@
 #include "CRD11IndexBuffer.h"
 #include "CRD11InputLayout.h"
 #include "CRD11PixelShader.h"
+#include "CRD11SamplerState.h"
 #include "CRD11ShaderResourceView.h"
 #include "CRD11Texture2D.h"
 #include "CRD11VertexBuffer.h"
@@ -59,4 +60,9 @@ CRD11Texture2DSPtr CRD11ResourceManager::GetTexture2D( const CRName& Name )
 CRD11ShaderResourceViewSPtr CRD11ResourceManager::GetShaderResourceView( const CRName& Name )
 {
 	return _GetResource< CRD11ShaderResourceView >( Name, ShaderResourceViews );
+}
+
+CRD11SamplerStateSPtr CRD11ResourceManager::GetSamplerState( const CRName& Name )
+{
+	return _GetResource< CRD11SamplerState >( Name, SamplerStates );
 }

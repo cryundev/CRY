@@ -1,7 +1,7 @@
 ﻿#include "CRD11VertexBuffer.h"
 #include "CRD11.h"
 #include "CRD11Device.h"
-#include "../../Utility/CRLog.h"
+#include "../../Utility/Log/CRLog.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------

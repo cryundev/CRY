@@ -60,3 +60,25 @@ bool CRD11Device::Create( HWND hWnd )
 		
 	return true;
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get maximum texture size.
+//---------------------------------------------------------------------------------------------------------------------
+unsigned int CRD11Device::GetMaxTextureSize() const
+{
+	if ( !DevicePtr ) return 0;
+	
+	switch( DevicePtr->GetFeatureLevel() )
+	{
+	case D3D_FEATURE_LEVEL_9_1:
+	case D3D_FEATURE_LEVEL_9_2:  return 2048;
+	case D3D_FEATURE_LEVEL_9_3:  return 4096;
+
+	case D3D_FEATURE_LEVEL_10_0:
+	case D3D_FEATURE_LEVEL_10_1: return 8192;
+
+	default: return D3D11_REQ_TEXTURE2D_U_OR_V_DIMENSION;
+	}
+
+	return 0;
+}

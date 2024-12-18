@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 
-#include "../Core/Strings/CRStringInc.h"
-#include "../Core/Containers/CRContainerInc.h"
+#include "../../Core/Strings/CRStringInc.h"
+#include "../../Core/Containers/CRContainerInc.h"
 #include <intsafe.h>
 
 

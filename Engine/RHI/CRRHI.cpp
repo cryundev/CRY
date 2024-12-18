@@ -60,9 +60,10 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	GD11Renderer.SetPixelShader( pixelShader );
 
 	CRD11Texture2DSampler textureSampler;
-	textureSampler.Create( "" );
+	textureSampler.Create( "../Asset/cryun_icon.png" );
 	
 	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( textureSampler.GetShaderResourceView() ), 0 );
+	GD11Renderer.SetSamplerState  ( CRD11SamplerStateSPtr      ( textureSampler.GetSamplerState()       ), 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

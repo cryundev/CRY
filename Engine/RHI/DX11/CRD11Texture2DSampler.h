@@ -13,6 +13,7 @@ class CRD11Texture2DSampler
 private:
 	CRD11Texture2DWPtr          Texture2D;
 	CRD11ShaderResourceViewWPtr ShaderResourceView;
+	CRD11SamplerStateWPtr       SamplerState;
 	
 public:
 	/// Constructor
@@ -26,4 +27,11 @@ public:
 
 	/// Get shader resource view.
 	const CRD11ShaderResourceViewWPtr& GetShaderResourceView() const { return ShaderResourceView; }
+
+	/// Get sampler state.
+	const CRD11SamplerStateWPtr& GetSamplerState() const { return SamplerState; }
+
+private:
+    /// Create sampler state.
+    void _CreateSamplerState() const;
 };

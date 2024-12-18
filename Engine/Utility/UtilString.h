@@ -1,15 +1,14 @@
 ﻿#pragma once
 
 
-#include "CRD11Object.h"
+#include "../Core/Strings/CRStringInc.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRD11SamplerState
+/// UtilString
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11SamplerState : public CRD11Object< ID3D11SamplerState >
+namespace UtilString
 {
-public:
-	/// Create sampler state.
-	void Create( const D3D11_SAMPLER_DESC& Description );
+	/// Convert string to wstring.
+	CRWString ToWString( const CRString& Str );
 };

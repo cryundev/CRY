@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 
-#include "CRD11Include.h"
+#include <d3d11.h>
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -23,6 +23,9 @@ public:
 	
 	/// Create Dx11 device ojects.
 	bool Create( HWND hWnd );
+
+	/// Get maximum texture size.
+	unsigned int GetMaxTextureSize() const;
 	
 	//-----------------------------------------------------------------------------------------------------------------
 	/// Getter

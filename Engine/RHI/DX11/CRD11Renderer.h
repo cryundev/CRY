@@ -19,6 +19,7 @@ private:
     CRD11PixelShaderWPtr  PixelShader;
 
     CRD11ShaderResourceViewWPtr ShaderResourceViews[ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
+	CRD11SamplerStateWPtr       SamplerStates      [ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
 
     ID3D11RenderTargetView* RenderTargetView = nullptr;
     
@@ -43,6 +44,9 @@ public:
 
     /// Set shader resource.
     void SetShaderResource( const CRD11ShaderResourceViewSPtr& CRShaderResourceView, unsigned int Slot );
+
+	/// Set sampler state.
+	void SetSamplerState( const CRD11SamplerStateSPtr& CRSamplerState, unsigned int Slot );
 
     /// Draw.
     void Draw( unsigned int Slot ) const;

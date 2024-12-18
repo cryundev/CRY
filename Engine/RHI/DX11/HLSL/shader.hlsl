@@ -20,7 +20,6 @@ float4 PS( PixelIn input ) : SV_TARGET
 {
 	float4 textureColor = float4( 1.f, 1.f, 1.f, 1.f );
 	textureColor = psTexture.Sample( SampleType, input.texCoord );
-	textureColor = pow( textureColor, 1.f/2.2f );
 
 	return textureColor;
 }

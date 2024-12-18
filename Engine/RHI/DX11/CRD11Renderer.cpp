@@ -5,11 +5,12 @@
 #include "CRD11IndexBuffer.h"
 #include "CRD11InputLayout.h"
 #include "CRD11PixelShader.h"
+#include "CRD11SamplerState.h"
 #include "CRD11ShaderResourceView.h"
 #include "CRD11VertexBuffer.h"
 #include "CRD11VertexShader.h"
 #include "../../Core/CRVertex.h"
-#include "../../Utility/CRLog.h"
+#include "../../Utility/Log/CRLog.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -139,6 +140,20 @@ void CRD11Renderer::SetShaderResource( const CRD11ShaderResourceViewSPtr& CRShad
 
     ID3D11ShaderResourceView* srv = CRShaderResourceView->GetObjectPtr();
     GD11.GetDeviceContext()->PSSetShaderResources( Slot, 1, &srv );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set sampler state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetSamplerState( const CRD11SamplerStateSPtr& CRSamplerState, unsigned int Slot )
+{
+	if ( Slot >= D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ) return;
+	if ( !CRSamplerState.get() ) return;
+
+	SamplerStates[ Slot ] = CRSamplerState;
+	
+	ID3D11SamplerState* ss = CRSamplerState->GetObjectPtr();
+	GD11.GetDeviceContext()->PSSetSamplers( Slot, 1, &ss );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

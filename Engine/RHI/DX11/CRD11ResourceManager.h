@@ -20,6 +20,7 @@ public:
 	using CRD11VertexShaderMap       = CRMap< CRName, CRD11VertexShaderSPtr       >;
 	using CRD11Texture2DMap          = CRMap< CRName, CRD11Texture2DSPtr          >;
 	using CRD11ShaderResourceViewMap = CRMap< CRName, CRD11ShaderResourceViewSPtr >;
+	using CRD11SamplerStateMap       = CRMap< CRName, CRD11SamplerStateSPtr       >;
 
 private:
 	CRD11VertexBufferMap       VertexBuffers;
@@ -30,6 +31,7 @@ private:
 	CRD11PixelShaderMap        PixelShaders;
 	CRD11Texture2DMap	       Texture2Ds;
 	CRD11ShaderResourceViewMap ShaderResourceViews;
+	CRD11SamplerStateMap       SamplerStates;
 	
 public:
 	/// Constructor
@@ -61,6 +63,9 @@ public:
 
 	/// Add shader resource view.
 	CRD11ShaderResourceViewSPtr GetShaderResourceView( const CRName& Name );
+
+	/// Add sampler state.
+	CRD11SamplerStateSPtr GetSamplerState( const CRName& Name );
 
 private:
 	/// Get resource.

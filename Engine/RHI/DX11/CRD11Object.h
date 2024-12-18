@@ -22,4 +22,7 @@ public:
 
 	/// Get object.
 	T* GetObjectPtr() const { return ObjectPtr; }
+
+	/// Set object.
+	void SetObjectPtr( T* InObjectPtr ) { if( ObjectPtr ) { ObjectPtr->Release(); } ObjectPtr = InObjectPtr; }
 };
