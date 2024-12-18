@@ -206,14 +206,14 @@ bool CRWICTextureLoader::LoadFromFile( const CRString& Path )
 
     ImagePath = UtilString::ToWString( Path );
 
-	if ( !_CreateDecoder()   ) return false;
-	if ( !_GetTextureSize()  ) return false;
+    if ( !_CreateDecoder()   ) return false;
+    if ( !_GetTextureSize()  ) return false;
     if ( !_GetFormatAndBPP() ) return false;
 
     RowPitch  = ( TextureWidth * BPP + sizeof( unsigned char ) - 1 ) / sizeof( unsigned char );
     ImageSize = RowPitch * TextureHeight;
 
-	Pixels = new unsigned char[ ImageSize ];
+    Pixels = new unsigned char[ ImageSize ];
     ZeroMemory( Pixels, ImageSize );
 
 	bool sameFormat = memcmp( &ConvertToFormat, &WicFormat, sizeof( GUID ) ) == 0;
@@ -225,8 +225,8 @@ bool CRWICTextureLoader::LoadFromFile( const CRString& Path )
 
 		if ( FAILED( hr ) )
 		{
-			GLog.AddErrorLog( hr );
-		    return false;
+            GLog.AddErrorLog( hr );
+            return false;
 		}
 	}
 	else if ( !sameSize )
