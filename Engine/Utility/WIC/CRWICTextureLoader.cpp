@@ -128,12 +128,14 @@ static WICConvert g_WICConvert[] =
 //---------------------------------------------------------------------------------------------------------------------
 /// Convert WIC to DXGI.
 //---------------------------------------------------------------------------------------------------------------------
-static DXGI_FORMAT WICToDXGI( const GUID& guid )
+static DXGI_FORMAT ConvertWICToDXGI( const GUID& WicFormat )
 {
 	for ( size_t i = 0; i < _countof( g_WICFormats ); ++i )
 	{
-		if ( memcmp( &g_WICFormats[ i ].wic, &guid, sizeof( GUID ) ) == 0 )
-			return g_WICFormats[ i ].format;
+		if ( memcmp( &g_WICFormats[ i ].wic, &WicFormat, sizeof( GUID ) ) == 0 )
+		{
+		    return g_WICFormats[ i ].format;
+		}
 	}
 
 	return DXGI_FORMAT_UNKNOWN;
@@ -284,30 +286,30 @@ bool CRWICTextureLoader::_GetTextureSize()
 		return false;
 	}
 
-	unsigned int maxsize = GD11.GetMaxTextureSize();
+	unsigned int maxSize = GD11.GetMaxTextureSize();
 
-	if ( maxsize == 0 )
+	if ( maxSize == 0 )
 	{
 		GLog.AddLog( "Invalid maxsize" );
 		return false;
 	}
 
-	if ( ImageWidth > maxsize || ImageHeight > maxsize )
+	if ( ImageWidth > maxSize || ImageHeight > maxSize )
 	{
 		float ar = (float)( ImageHeight ) / (float)( ImageWidth );
     
 		if ( ImageWidth > ImageHeight )
 		{
-			TextureWidth  = (unsigned int)( maxsize );
-			TextureHeight = (unsigned int)( (float)( maxsize ) * ar ); 
+			TextureWidth  = (unsigned int)( maxSize );
+			TextureHeight = (unsigned int)( (float)( maxSize ) * ar ); 
 		}
 		else
 		{
-			TextureHeight = (unsigned int)( maxsize ); 
-			TextureWidth  = (unsigned int)( (float)( maxsize ) / ar ); 
+			TextureHeight = (unsigned int)( maxSize ); 
+			TextureWidth  = (unsigned int)( (float)( maxSize ) / ar ); 
 		}
 
-		if ( TextureWidth > maxsize || TextureHeight > maxsize )
+		if ( TextureWidth > maxSize || TextureHeight > maxSize )
 		{
 			GLog.AddLog( "Invalid texture size" );
 			return false;
@@ -337,7 +339,7 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 
 	memcpy( &ConvertToFormat, &WicFormat, sizeof( WICPixelFormatGUID ) );
 
-	DxgiFormat = WICToDXGI( WicFormat );
+	DxgiFormat = ConvertWICToDXGI( WicFormat );
 
 	if ( DxgiFormat == DXGI_FORMAT_UNKNOWN )
 	{
@@ -347,7 +349,7 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 			{
 				memcpy( &ConvertToFormat, &g_WICConvert[ i ].target, sizeof( WICPixelFormatGUID ) );
 
-				DxgiFormat = WICToDXGI( g_WICConvert[ i ].target );
+				DxgiFormat = ConvertWICToDXGI( g_WICConvert[ i ].target );
 				break;
 			}
 		}
