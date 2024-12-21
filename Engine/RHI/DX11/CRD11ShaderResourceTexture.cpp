@@ -1,14 +1,13 @@
 ﻿#include "CRD11ShaderResourceTexture.h"
 #include "CRD11.h"
-#include "CRD11Device.h"
 #include "CRD11ResourceManager.h"
 #include "CRD11SamplerState.h"
 #include "CRD11ShaderResourceView.h"
 #include "CRD11Texture2D.h"
 #include "../../Extras/DirectXTK/Inc/WICTextureLoader.h"
 #include "../../Utility/Log/CRLog.h"
-#include "../../Utility/UtilString.h"
 #include "../../Utility/WIC/CRWICTextureLoader.h"
+
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Create from file.
