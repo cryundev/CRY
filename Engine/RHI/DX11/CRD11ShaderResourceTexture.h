@@ -6,9 +6,9 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRD11Texture2DSampler
+/// CRD11ShaderResourceTexture
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11Texture2DSampler
+class CRD11ShaderResourceTexture
 {
 private:
 	CRD11Texture2DWPtr          Texture2D;
@@ -17,10 +17,10 @@ private:
 	
 public:
 	/// Constructor
-	CRD11Texture2DSampler() = default;
+	CRD11ShaderResourceTexture() = default;
 
 	/// Destructor
-	virtual ~CRD11Texture2DSampler() {}
+	virtual ~CRD11ShaderResourceTexture() {}
 
 	/// Create from file.
 	void Create( const CRString& Path );

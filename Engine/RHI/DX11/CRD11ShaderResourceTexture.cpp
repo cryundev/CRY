@@ -1,4 +1,4 @@
-﻿#include "CRD11Texture2DSampler.h"
+﻿#include "CRD11ShaderResourceTexture.h"
 #include "CRD11.h"
 #include "CRD11Device.h"
 #include "CRD11ResourceManager.h"
@@ -13,7 +13,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create from file.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Texture2DSampler::Create( const CRString& Path )
+void CRD11ShaderResourceTexture::Create( const CRString& Path )
 {
     Texture2D          = GD11RM.GetTexture2D         ( Path );
 	ShaderResourceView = GD11RM.GetShaderResourceView( Path );
@@ -65,7 +65,7 @@ void CRD11Texture2DSampler::Create( const CRString& Path )
 //---------------------------------------------------------------------------------------------------------------------
 /// Create sampler state.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Texture2DSampler::_CreateSamplerState() const
+void CRD11ShaderResourceTexture::_CreateSamplerState() const
 {
     D3D11_SAMPLER_DESC sd;
     ZeroMemory( &sd, sizeof( D3D11_SAMPLER_DESC ) );

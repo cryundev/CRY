@@ -8,7 +8,7 @@
 #include "DX11/CRD11PixelShader.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/CRD11ResourceManager.h"
-#include "DX11/CRD11Texture2DSampler.h"
+#include "DX11/CRD11ShaderResourceTexture.h"
 #include "DX11/CRD11VertexBuffer.h"
 #include "DX11/CRD11VertexShader.h"
 
@@ -59,11 +59,11 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 
 	GD11Renderer.SetPixelShader( pixelShader );
 
-	CRD11Texture2DSampler textureSampler;
-	textureSampler.Create( "../Asset/cryun_icon.png" );
+	CRD11ShaderResourceTexture shaderResourceTexture;
+	shaderResourceTexture.Create( "../Asset/cryun_icon.png" );
 	
-	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( textureSampler.GetShaderResourceView() ), 0 );
-	GD11Renderer.SetSamplerState  ( CRD11SamplerStateSPtr      ( textureSampler.GetSamplerState()       ), 0 );
+	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( shaderResourceTexture.GetShaderResourceView() ), 0 );
+	GD11Renderer.SetSamplerState  ( CRD11SamplerStateSPtr      ( shaderResourceTexture.GetSamplerState()       ), 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
