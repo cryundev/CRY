@@ -141,6 +141,7 @@
     <ClInclude Include="RHI\CRRHI.h" />
     <ClInclude Include="RHI\DX11\CRD11.h" />
     <ClInclude Include="RHI\DX11\CRD11CompiledShader.h" />
+    <ClInclude Include="RHI\DX11\CRD11ConstantBuffer.h" />
     <ClInclude Include="RHI\DX11\CRD11Device.h" />
     <ClInclude Include="RHI\DX11\CRD11Include.h" />
     <ClInclude Include="RHI\DX11\CRD11IndexBuffer.h" />
@@ -153,7 +154,7 @@
     <ClInclude Include="RHI\DX11\CRD11SamplerState.h" />
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceView.h" />
     <ClInclude Include="RHI\DX11\CRD11Texture2D.h" />
-    <ClInclude Include="RHI\DX11\CRD11Texture2DSampler.h" />
+    <ClInclude Include="RHI\DX11\CRD11ShaderResourceTexture.h" />
     <ClInclude Include="RHI\DX11\CRD11Types.h" />
     <ClInclude Include="RHI\DX11\CRD11VertexBuffer.h" />
     <ClInclude Include="RHI\DX11\CRD11VertexShader.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="RHI\CRRHI.cpp" />
     <ClCompile Include="RHI\DX11\CRD11.cpp" />
     <ClCompile Include="RHI\DX11\CRD11CompiledShader.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11ConstantBuffer.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Device.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -252,7 +254,7 @@
     <ClCompile Include="RHI\DX11\CRD11SamplerState.cpp" />
     <ClCompile Include="RHI\DX11\CRD11ShaderResourceView.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Texture2D.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11Texture2DSampler.cpp">
+    <ClCompile Include="RHI\DX11\CRD11ShaderResourceTexture.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
