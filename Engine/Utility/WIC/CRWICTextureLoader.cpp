@@ -1,7 +1,7 @@
 ﻿#include "CRWICTextureLoader.h"
 #include "../UtilString.h"
 #include "../../RHI/DX11/CRD11.h"
-#include "../../RHI/DX11/CRD11Device.h"
+#include "../../RHI/DX11/Core/CRD11Device.h"
 #include "../Log/CRLog.h"
 
 

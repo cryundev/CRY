@@ -139,25 +139,25 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RHI\CRRHI.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11CompiledShader.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11ConstantBuffer.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11Device.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11IndexBuffer.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11InputLayout.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11Object.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11PixelShader.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11RenderTargetView.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11SamplerState.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11ShaderResourceView.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11Texture2D.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11VertexBuffer.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11VertexShader.h" />
     <ClInclude Include="RHI\DX11\CRD11.h" />
-    <ClInclude Include="RHI\DX11\CRD11CompiledShader.h" />
-    <ClInclude Include="RHI\DX11\CRD11ConstantBuffer.h" />
-    <ClInclude Include="RHI\DX11\CRD11Device.h" />
     <ClInclude Include="RHI\DX11\CRD11Include.h" />
-    <ClInclude Include="RHI\DX11\CRD11IndexBuffer.h" />
-    <ClInclude Include="RHI\DX11\CRD11InputLayout.h" />
-    <ClInclude Include="RHI\DX11\CRD11Object.h" />
-    <ClInclude Include="RHI\DX11\CRD11PixelShader.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
-    <ClInclude Include="RHI\DX11\CRD11RenderTargetView.h" />
     <ClInclude Include="RHI\DX11\CRD11ResourceManager.h" />
-    <ClInclude Include="RHI\DX11\CRD11SamplerState.h" />
-    <ClInclude Include="RHI\DX11\CRD11ShaderResourceView.h" />
-    <ClInclude Include="RHI\DX11\CRD11Texture2D.h" />
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceTexture.h" />
     <ClInclude Include="RHI\DX11\CRD11Types.h" />
-    <ClInclude Include="RHI\DX11\CRD11VertexBuffer.h" />
-    <ClInclude Include="RHI\DX11\CRD11VertexShader.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="Utility\Generic\CRGeneric.h" />
     <ClInclude Include="Utility\Log\CRLog.h" />
@@ -168,10 +168,19 @@
     <ClCompile Include="Core\CRVertex.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="RHI\CRRHI.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11CompiledShader.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11ConstantBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11Device.cpp">
+    <ClCompile Include="RHI\DX11\Core\CRD11CompiledShader.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11ConstantBuffer.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11Device.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11IndexBuffer.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11InputLayout.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11PixelShader.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11RenderTargetView.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11SamplerState.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11ShaderResourceView.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11Texture2D.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11VertexBuffer.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11VertexShader.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
@@ -200,7 +209,7 @@
       <InlineFunctionExpansion>Default</InlineFunctionExpansion>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>Default</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>Default</LanguageStandard_C>
       <MinimalRebuild>false</MinimalRebuild>
       <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
@@ -243,17 +252,159 @@
       <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="RHI\DX11\CRD11IndexBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11InputLayout.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11PixelShader.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11Renderer.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11RenderTargetView.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11ResourceManager.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11SamplerState.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11ShaderResourceView.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11Texture2D.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11Renderer.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>x64\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
+    <ClCompile Include="RHI\DX11\CRD11ResourceManager.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>x64\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
+      <LinkCompiled>true</LinkCompiled>
+    </ClCompile>
     <ClCompile Include="RHI\DX11\CRD11ShaderResourceTexture.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -329,8 +480,6 @@
       <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="RHI\DX11\CRD11VertexBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11VertexShader.cpp" />
     <ClCompile Include="Utility\Generic\CRGeneric.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>

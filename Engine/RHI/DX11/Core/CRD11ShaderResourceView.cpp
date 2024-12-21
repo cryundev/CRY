@@ -1,5 +1,5 @@
 ﻿#include "CRD11ShaderResourceView.h"
-#include "CRD11.h"
+#include "../CRD11.h"
 #include "CRD11Device.h"
 
 

@@ -1,16 +1,16 @@
 ﻿#include "CRRHI.h"
 #include "../Core/CRVertex.h"
 #include "DX11/CRD11.h"
-#include "DX11/CRD11CompiledShader.h"
-#include "DX11/CRD11Device.h"
-#include "DX11/CRD11IndexBuffer.h"
-#include "DX11/CRD11InputLayout.h"
-#include "DX11/CRD11PixelShader.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/CRD11ResourceManager.h"
 #include "DX11/CRD11ShaderResourceTexture.h"
-#include "DX11/CRD11VertexBuffer.h"
-#include "DX11/CRD11VertexShader.h"
+#include "DX11/Core/CRD11CompiledShader.h"
+#include "DX11/Core/CRD11Device.h"
+#include "DX11/Core/CRD11IndexBuffer.h"
+#include "DX11/Core/CRD11InputLayout.h"
+#include "DX11/Core/CRD11PixelShader.h"
+#include "DX11/Core/CRD11VertexBuffer.h"
+#include "DX11/Core/CRD11VertexShader.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------

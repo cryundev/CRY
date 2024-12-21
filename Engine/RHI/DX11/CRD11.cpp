@@ -1,5 +1,5 @@
 ﻿#include "CRD11.h"
-#include "CRD11Device.h"
+#include "Core/CRD11Device.h"
 #include "CRD11Renderer.h"
 #include "CRD11ResourceManager.h"
 

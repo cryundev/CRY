@@ -1,7 +1,7 @@
 ﻿#include "CRD11InputLayout.h"
-#include "CRD11.h"
+#include "../CRD11.h"
 #include "CRD11Device.h"
-#include "../../Utility/Log/CRLog.h"
+#include "../../../Utility/Log/CRLog.h"
 
 
 /// Create input layout.
