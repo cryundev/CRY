@@ -1,5 +1,6 @@
 ﻿#include "CRD11Renderer.h"
 #include "CRD11.h"
+#include "CRD11ConstantBuffer.h"
 #include "CRD11Device.h"
 #include "CRD11Include.h"
 #include "CRD11IndexBuffer.h"
@@ -91,6 +92,29 @@ void CRD11Renderer::SetIndexBuffer( const CRD11IndexBufferSPtr& CRIndexBuffer )
     IndexBuffer = CRIndexBuffer;
     
     GD11.GetDeviceContext()->IASetIndexBuffer( CRIndexBuffer->GetObjectPtr(), DXGI_FORMAT_R32_UINT, 0 );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set constant buffer.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetConstantBuffer( const CRD11ConstantBufferSPtr& CRConstantBuffer, unsigned int Slot, ED11RenderingPipelineStage Stage )
+{
+    if ( Slot >= D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT ) return;
+    if ( !CRConstantBuffer.get() ) return;
+
+    ConstantBuffers[ Slot ][ (int)( Stage ) ] = CRConstantBuffer;
+
+    ID3D11Buffer* bufferPtr = CRConstantBuffer->GetObjectPtr();
+    switch ( Stage )
+    {
+    case ED11RenderingPipelineStage::VS: GD11.GetDeviceContext()->VSSetConstantBuffers( Slot, 1, &bufferPtr ); break;
+    case ED11RenderingPipelineStage::GS: GD11.GetDeviceContext()->GSSetConstantBuffers( Slot, 1, &bufferPtr ); break;
+    case ED11RenderingPipelineStage::DS: GD11.GetDeviceContext()->DSSetConstantBuffers( Slot, 1, &bufferPtr ); break;
+    case ED11RenderingPipelineStage::HS: GD11.GetDeviceContext()->HSSetConstantBuffers( Slot, 1, &bufferPtr ); break;
+    case ED11RenderingPipelineStage::CS: GD11.GetDeviceContext()->CSSetConstantBuffers( Slot, 1, &bufferPtr ); break;
+    case ED11RenderingPipelineStage::PS: GD11.GetDeviceContext()->PSSetConstantBuffers( Slot, 1, &bufferPtr ); break;
+    default: break;
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------

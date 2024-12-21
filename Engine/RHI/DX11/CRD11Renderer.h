@@ -18,6 +18,8 @@ private:
     CRD11VertexShaderWPtr VertexShader;
     CRD11PixelShaderWPtr  PixelShader;
 
+    CRD11ConstantBufferWPtr ConstantBuffers[ D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT ][ (int)( ED11RenderingPipelineStage::Max ) ];
+
     CRD11ShaderResourceViewWPtr ShaderResourceViews[ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
 	CRD11SamplerStateWPtr       SamplerStates      [ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
 
@@ -32,6 +34,9 @@ public:
 
     /// Set index buffer.
     void SetIndexBuffer( const CRD11IndexBufferSPtr& CRIndexBuffer );
+
+    /// Set constant buffer.
+    void SetConstantBuffer( const CRD11ConstantBufferSPtr& CRConstantBuffer, unsigned int Slot, ED11RenderingPipelineStage Stage );
 
     /// Set vertex shader.
     void SetVertexShader( const CRD11VertexShaderSPtr& CRVertexShader );

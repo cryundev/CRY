@@ -19,6 +19,7 @@ class CRD11ResourceManager
 {
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( VertexBuffer       )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( CompiledShader     )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( VertexShader       )

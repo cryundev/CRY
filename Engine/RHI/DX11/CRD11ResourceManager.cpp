@@ -1,5 +1,6 @@
 ﻿#include "CRD11ResourceManager.h"
 #include "CRD11CompiledShader.h"
+#include "CRD11ConstantBuffer.h"
 #include "CRD11IndexBuffer.h"
 #include "CRD11InputLayout.h"
 #include "CRD11PixelShader.h"
@@ -29,6 +30,7 @@ void CRD11ResourceManager::Clear()
 {
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( VertexBuffer       )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
+    CLEAR_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( CompiledShader     )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( VertexShader       )
@@ -42,6 +44,7 @@ void CRD11ResourceManager::Clear()
 
 GET_CRD11_RESOURCE_MANAGE_TYPE( VertexBuffer       )
 GET_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
+GET_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
 GET_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
 GET_CRD11_RESOURCE_MANAGE_TYPE( CompiledShader     )
 GET_CRD11_RESOURCE_MANAGE_TYPE( VertexShader       )
