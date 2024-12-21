@@ -32,5 +32,6 @@ DECLARE_SMART_PTR( CRD11PixelShader        )
 DECLARE_SMART_PTR( CRD11Texture2D          )
 DECLARE_SMART_PTR( CRD11SamplerState       )
 DECLARE_SMART_PTR( CRD11ShaderResourceView )
+DECLARE_SMART_PTR( CRD11RenderTargetView   )
 
 

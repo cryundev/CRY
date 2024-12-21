@@ -148,6 +148,7 @@
     <ClInclude Include="RHI\DX11\CRD11Object.h" />
     <ClInclude Include="RHI\DX11\CRD11PixelShader.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
+    <ClInclude Include="RHI\DX11\CRD11RenderTargetView.h" />
     <ClInclude Include="RHI\DX11\CRD11ResourceManager.h" />
     <ClInclude Include="RHI\DX11\CRD11SamplerState.h" />
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceView.h" />
@@ -246,6 +247,7 @@
     <ClCompile Include="RHI\DX11\CRD11InputLayout.cpp" />
     <ClCompile Include="RHI\DX11\CRD11PixelShader.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Renderer.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11RenderTargetView.cpp" />
     <ClCompile Include="RHI\DX11\CRD11ResourceManager.cpp" />
     <ClCompile Include="RHI\DX11\CRD11SamplerState.cpp" />
     <ClCompile Include="RHI\DX11\CRD11ShaderResourceView.cpp" />
