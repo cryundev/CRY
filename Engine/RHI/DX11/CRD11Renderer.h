@@ -21,7 +21,7 @@ private:
     CRD11ShaderResourceViewWPtr ShaderResourceViews[ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
 	CRD11SamplerStateWPtr       SamplerStates      [ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
 
-    ID3D11RenderTargetView* RenderTargetView = nullptr;
+    CRD11RenderTargetViewWPtr RenderTargetView;
     
 public:
     /// Initialize renderer.

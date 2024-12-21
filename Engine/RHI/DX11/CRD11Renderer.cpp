@@ -5,6 +5,8 @@
 #include "CRD11IndexBuffer.h"
 #include "CRD11InputLayout.h"
 #include "CRD11PixelShader.h"
+#include "CRD11RenderTargetView.h"
+#include "CRD11ResourceManager.h"
 #include "CRD11SamplerState.h"
 #include "CRD11ShaderResourceView.h"
 #include "CRD11VertexBuffer.h"
@@ -49,7 +51,7 @@ void CRD11Renderer::Draw( unsigned int Slot ) const
 void CRD11Renderer::ClearRenderTarget() const
 {
     float color[ 4 ] = { 0.0f, 0.4f, 0.7f, 1.0f };
-    GD11.GetDeviceContext()->ClearRenderTargetView( RenderTargetView, color );
+    GD11.GetDeviceContext()->ClearRenderTargetView( RenderTargetView.lock()->GetObjectPtr(), color );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -166,14 +168,11 @@ void CRD11Renderer::_InitializeRenderTarget()
 
     if ( !texture ) return;
 
-    HRESULT hr = GD11.GetDevice()->CreateRenderTargetView( texture, nullptr, &RenderTargetView );
-    if ( FAILED( hr ) )
-    {
-        GLog.AddErrorLog( hr );
-        return;
-    }
+    RenderTargetView = GD11RM.GetRenderTargetView( "BackBuffer" );
+    RenderTargetView.lock()->Create( texture, nullptr );
 
-    GD11.GetDeviceContext()->OMSetRenderTargets( 1, &RenderTargetView, nullptr );
+    ID3D11RenderTargetView* rtv = RenderTargetView.lock()->GetObjectPtr();
+    GD11.GetDeviceContext()->OMSetRenderTargets( 1, &rtv, nullptr );
 
     texture->Release();
 }
