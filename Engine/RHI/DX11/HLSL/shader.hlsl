@@ -11,7 +11,6 @@ matrix transform : register( c0 );
 PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD )
 {
 	PixelIn output;
-    position.w = 1.0f;
 	output.position = mul( position, transform );
 	output.texCoord = texCoord;
 
