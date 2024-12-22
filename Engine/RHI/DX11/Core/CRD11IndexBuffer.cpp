@@ -1,6 +1,7 @@
 ﻿#include "CRD11IndexBuffer.h"
 #include "../CRD11.h"
 #include "CRD11Device.h"
+#include "../../../Utility/Generic/CRGeneric.h"
 #include "../../../Utility/Log/CRLog.h"
 
 
@@ -25,11 +26,5 @@ void CRD11IndexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const 
     sd.pSysMem = Indice.data();
 
     HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &ObjectPtr );
-
-    if ( FAILED( hr ) )
-    {
-        GLog.AddErrorLog( hr );
-	    
-        return;
-    }
+    CRGeneric::CheckError( hr );
 }

@@ -2,6 +2,7 @@
 #include "../UtilString.h"
 #include "../../RHI/DX11/CRD11.h"
 #include "../../RHI/DX11/Core/CRD11Device.h"
+#include "../Generic/CRGeneric.h"
 #include "../Log/CRLog.h"
 
 
@@ -155,13 +156,7 @@ IWICImagingFactory* CRWICTextureLoader::GetWICFactory()
 	    CoInitialize( nullptr );
 
 	    HRESULT hr = CoCreateInstance( CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, __uuidof( IWICImagingFactory ), ( LPVOID* )&sWICFactory );
-
-		if ( FAILED( hr ) )
-		{
-			GLog.AddErrorLog( hr );
-
-			return nullptr;
-		}
+        if ( CRGeneric::CheckError( hr ) ) return nullptr;
 	}
 
 	return sWICFactory;
@@ -222,12 +217,7 @@ bool CRWICTextureLoader::LoadFromFile( const CRString& Path )
 	if ( sameFormat && sameSize )
 	{
 		HRESULT hr = BitmapFrameDecode->CopyPixels( nullptr, RowPitch, ImageSize, Pixels );
-
-		if ( FAILED( hr ) )
-		{
-            GLog.AddErrorLog( hr );
-            return false;
-		}
+        if ( CRGeneric::CheckError( hr ) ) return false;
 	}
 	else if ( !sameSize )
 	{
@@ -255,20 +245,10 @@ bool CRWICTextureLoader::_CreateDecoder()
     }
     
 	HRESULT hr = wic->CreateDecoderFromFilename( ImagePath.c_str(), 0, GENERIC_READ, WICDecodeMetadataCacheOnDemand, &BitmapDecoder ); 
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		return false;
-	}
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
 	hr = BitmapDecoder->GetFrame( 0, &BitmapFrameDecode );
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-	    return false;
-	}
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
     return true;
 }
@@ -279,12 +259,7 @@ bool CRWICTextureLoader::_CreateDecoder()
 bool CRWICTextureLoader::_GetTextureSize()
 {
 	HRESULT hr = BitmapFrameDecode->GetSize( &ImageWidth, &ImageHeight );
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		return false;
-	}
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
 	unsigned int maxSize = GD11.GetMaxTextureSize();
 
@@ -330,12 +305,8 @@ bool CRWICTextureLoader::_GetTextureSize()
 bool CRWICTextureLoader::_GetFormatAndBPP()
 {
 	HRESULT hr = BitmapFrameDecode->GetPixelFormat( &WicFormat );
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		return false;
-	}
 
 	memcpy( &ConvertToFormat, &WicFormat, sizeof( WICPixelFormatGUID ) );
 
@@ -402,33 +373,22 @@ unsigned int CRWICTextureLoader::_GetBPP( REFGUID targetGUID ) const
 
 	IWICComponentInfo* info = nullptr;
 	HRESULT hr = wic->CreateComponentInfo( targetGUID, &info );
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-
-		return 0;
-	}
+    if ( CRGeneric::CheckError( hr ) ) return 0;
 
 	WICComponentType type;
 	hr = info->GetComponentType( &type );
-
-	if ( FAILED( hr ) || type != WICPixelFormat )
+    
+	if ( CRGeneric::CheckError( hr ) || type != WICPixelFormat )
 	{
-		GLog.AddErrorLog( hr );
-
-		info->Release();
+	    info->Release();
 
 		return 0;
 	}
 
 	IWICPixelFormatInfo* pixelFormat = nullptr;
 	hr = info->QueryInterface( __uuidof( IWICPixelFormatInfo ), (void**)( &pixelFormat ) );
-
-	if ( FAILED( hr ) )
+    if ( CRGeneric::CheckError( hr ) )
 	{
-		GLog.AddErrorLog( hr );
-
 		info->Release();
 
 		return 0;
@@ -436,11 +396,7 @@ unsigned int CRWICTextureLoader::_GetBPP( REFGUID targetGUID ) const
 
 	unsigned int bpp = 0;
 	hr = pixelFormat->GetBitsPerPixel( &bpp );
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-	}
+    CRGeneric::CheckError( hr );
 
 	info->Release();
 	pixelFormat->Release();
@@ -463,39 +419,19 @@ bool CRWICTextureLoader::_CopyPixelFromScaler() const
     
 	IWICBitmapScaler* scaler = nullptr;
 	HRESULT hr = wic->CreateBitmapScaler( &scaler );
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		return false;
-	}
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
 	hr = scaler->Initialize( BitmapFrameDecode, TextureWidth, TextureHeight, WICBitmapInterpolationModeFant );
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		return false;
-	}
+    if( CRGeneric::CheckError( hr ) ) return false;
 
 	WICPixelFormatGUID scaledWicFormat;
 	hr = scaler->GetPixelFormat( &scaledWicFormat );
-
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		return false;
-	}
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
 	if ( memcmp( &ConvertToFormat, &scaledWicFormat, sizeof(GUID) ) == 0 )
 	{
 		hr = scaler->CopyPixels( 0, RowPitch, ImageSize, Pixels );
-
-		if ( FAILED( hr ) )
-		{
-			GLog.AddErrorLog( hr );
-			return false;
-		}
+        if ( CRGeneric::CheckError( hr ) ) return false;
 	}
 	else
 	{
@@ -520,28 +456,13 @@ bool CRWICTextureLoader::_CopyPixelFromConverter( IWICBitmapSource* BitmapSource
     
     IWICFormatConverter* converter = nullptr;
     HRESULT hr = wic->CreateFormatConverter( &converter );
-			
-    if ( FAILED( hr ) )
-    {
-        GLog.AddErrorLog( hr );
-        return false;
-    }
+	if ( CRGeneric::CheckError( hr ) ) return false;
 
     hr = converter->Initialize( BitmapSource, ConvertToFormat, WICBitmapDitherTypeErrorDiffusion, 0, 0, WICBitmapPaletteTypeCustom );
-
-    if ( FAILED( hr ) )
-    {
-        GLog.AddErrorLog( hr );
-        return false;
-    }
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
     hr = converter->CopyPixels( nullptr, RowPitch, ImageSize, Pixels );  
-
-    if ( FAILED( hr ) )
-    {
-        GLog.AddErrorLog( hr );
-        return false;
-    }
+    if ( CRGeneric::CheckError( hr ) ) return false;
 
     return true;
 }

@@ -1,4 +1,5 @@
 ﻿#include "CRD11Device.h"
+#include "../../../Utility/Generic/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -55,8 +56,8 @@ bool CRD11Device::Create( HWND hWnd )
 	    nullptr,
 	    &DeviceContextPtr
     );
-
-    if ( FAILED( hr ) ) return false;
+    
+    if ( CRGeneric::CheckError( hr ) ) return false;
 	    
     return true;
 }

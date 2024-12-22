@@ -1,7 +1,7 @@
 ﻿#include "CRD11VertexBuffer.h"
 #include "../CRD11.h"
 #include "CRD11Device.h"
-#include "../../../Utility/Log/CRLog.h"
+#include "../../../Utility/Generic/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -25,11 +25,5 @@ void CRD11VertexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const
     sd.pSysMem = BlobPtr;
 
     HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &ObjectPtr );
-
-    if ( FAILED( hr ) )
-    {
-	    GLog.AddErrorLog( hr );
-	    
-	    return;
-    }
+    CRGeneric::CheckError( hr );
 }

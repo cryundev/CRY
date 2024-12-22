@@ -4,6 +4,8 @@
 #include "CRD11.h"
 #include "CRD11ResourceManager.h"
 #include "CRD11Types.h"
+#include "../../Utility/Generic/CRGeneric.h"
+#include "../../Utility/Log/CRLog.h"
 #include "Core/CRD11ConstantBuffer.h"
 #include "Core/CRD11Device.h"
 
@@ -72,7 +74,8 @@ void CRD11BindingConstantBuffer<T>::Update( const T& Data )
     if ( !bufferPtr ) return;
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
-    GD11.GetDeviceContext()->Map( bufferPtr, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+    HRESULT hr = GD11.GetDeviceContext()->Map( bufferPtr, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
+    CRGeneric::CheckError( hr );
     {
         memcpy_s( mappedResource.pData, sizeof( T ), &Data, sizeof( T ) );
     }

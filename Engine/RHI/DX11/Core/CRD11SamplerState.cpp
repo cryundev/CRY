@@ -1,7 +1,7 @@
 ﻿#include "CRD11SamplerState.h"
 #include "../CRD11.h"
 #include "CRD11Device.h"
-#include "../../../Utility/Log/CRLog.h"
+#include "../../../Utility/Generic/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -10,8 +10,5 @@
 void CRD11SamplerState::Create( const D3D11_SAMPLER_DESC& Description )
 {
     HRESULT hr = GD11.GetDevice()->CreateSamplerState( &Description, &ObjectPtr );
-    if ( FAILED( hr ) )
-    {
-	    GLog.AddErrorLog( hr );
-    }
+    CRGeneric::CheckError( hr );
 }
