@@ -10,6 +10,6 @@
 class CRD11PixelShader : public CRD11Object< ID3D11PixelShader >
 {
 public:
-	/// Create shader.
-	void Create( ID3DBlob* CompiledShader );
+    /// Create shader.
+    void Create( ID3DBlob* CompiledShader );
 };

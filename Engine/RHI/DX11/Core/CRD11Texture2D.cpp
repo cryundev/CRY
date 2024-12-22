@@ -13,6 +13,5 @@ void CRD11Texture2D::Create( const D3D11_TEXTURE2D_DESC& Description, const D3D1
     if ( FAILED( hr ) )
     {
         GLog.AddErrorLog( hr );
-        return;
     }
 }

@@ -22,52 +22,52 @@ CRD11BindingConstantBuffer< CRMatrix > GTransformBuffer;
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 {
-	GD11.Create( hWnd );
-	GD11Renderer.Initialize( Width, Height );
+    GD11.Create( hWnd );
+    GD11Renderer.Initialize( Width, Height );
 
-	CRD11VertexBufferSPtr vb = GD11RM.GetVertexBuffer( "Rect" );
-	vb->Create( D3D11_USAGE_DEFAULT, 0, GCRVRect, sizeof( CRVertex ), ARRAYSIZE( GCRVRect ) );
+    CRD11VertexBufferSPtr vb = GD11RM.GetVertexBuffer( "Rect" );
+    vb->Create( D3D11_USAGE_DEFAULT, 0, GCRVRect, sizeof( CRVertex ), ARRAYSIZE( GCRVRect ) );
 
-	GD11Renderer.SetVertexBuffer( vb, 0 );
-	
-	CRD11IndexBufferSPtr ib = GD11RM.GetIndexBuffer( "Rect" );
-	
-	ib->Create( D3D11_USAGE_DEFAULT, 0, { 0, 1, 2, 1, 3, 2 } );
+    GD11Renderer.SetVertexBuffer( vb, 0 );
 
-	GD11Renderer.SetIndexBuffer( ib );
-	
-	CRD11CompiledShader compiledVS;
-	compiledVS.Create( L"RHI/DX11/HLSL/shader.hlsl", "VS", "vs_5_0" );
-	
-	CRD11VertexShaderSPtr vertexShader = GD11RM.GetVertexShader( "Diffuse" );
-	vertexShader->Create( compiledVS.GetObjectPtr() );
+    CRD11IndexBufferSPtr ib = GD11RM.GetIndexBuffer( "Rect" );
 
-	GD11Renderer.SetVertexShader( vertexShader );
+    ib->Create( D3D11_USAGE_DEFAULT, 0, { 0, 1, 2, 1, 3, 2 } );
 
-	D3D11_INPUT_ELEMENT_DESC elements[] =
-	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                            D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
+    GD11Renderer.SetIndexBuffer( ib );
 
-	CRD11InputLayoutSPtr inputLayout = GD11RM.GetInputLayout( "Diffuse" );
-	inputLayout->Create( elements, ARRAYSIZE( elements ), compiledVS.GetObjectPtr() );
+    CRD11CompiledShader compiledVS;
+    compiledVS.Create( L"RHI/DX11/HLSL/shader.hlsl", "VS", "vs_5_0" );
 
-	GD11Renderer.SetInputLayout( inputLayout, 0 );
+    CRD11VertexShaderSPtr vertexShader = GD11RM.GetVertexShader( "Diffuse" );
+    vertexShader->Create( compiledVS.GetObjectPtr() );
 
-	CRD11CompiledShader compiledPS;
-	compiledPS.Create( L"RHI/DX11/HLSL/shader.hlsl", "PS", "ps_5_0" );
+    GD11Renderer.SetVertexShader( vertexShader );
 
-	CRD11PixelShaderSPtr pixelShader = CRMakeShared( new CRD11PixelShader() );
-	pixelShader->Create( compiledPS.GetObjectPtr() );
+    D3D11_INPUT_ELEMENT_DESC elements[] =
+    {
+	    { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                            D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	    { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    };
 
-	GD11Renderer.SetPixelShader( pixelShader );
+    CRD11InputLayoutSPtr inputLayout = GD11RM.GetInputLayout( "Diffuse" );
+    inputLayout->Create( elements, ARRAYSIZE( elements ), compiledVS.GetObjectPtr() );
 
-	CRD11ShaderResourceTexture shaderResourceTexture;
-	shaderResourceTexture.Create( "../Asset/cryun_icon.png" );
-	
-	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( shaderResourceTexture.GetShaderResourceView() ), 0 );
-	GD11Renderer.SetSamplerState  ( CRD11SamplerStateSPtr      ( shaderResourceTexture.GetSamplerState()       ), 0 );
+    GD11Renderer.SetInputLayout( inputLayout, 0 );
+
+    CRD11CompiledShader compiledPS;
+    compiledPS.Create( L"RHI/DX11/HLSL/shader.hlsl", "PS", "ps_5_0" );
+
+    CRD11PixelShaderSPtr pixelShader = CRMakeShared( new CRD11PixelShader() );
+    pixelShader->Create( compiledPS.GetObjectPtr() );
+
+    GD11Renderer.SetPixelShader( pixelShader );
+
+    CRD11ShaderResourceTexture shaderResourceTexture;
+    shaderResourceTexture.Create( "../Asset/cryun_icon.png" );
+
+    GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( shaderResourceTexture.GetShaderResourceView() ), 0 );
+    GD11Renderer.SetSamplerState  ( CRD11SamplerStateSPtr      ( shaderResourceTexture.GetSamplerState()       ), 0 );
 
     GTransformBuffer.Create( "Transform", 0, ED11RenderingPipelineStage::VS );
     GD11Renderer.SetConstantBuffer( GTransformBuffer.GetConstantBuffer().lock(), GTransformBuffer.GetSlot(), GTransformBuffer.GetStage() );
@@ -79,17 +79,17 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 void CRRHI::RenderFrame()
 {
     CRMatrix matrix = CRMatrix::Identity;
-    
-	GD11Renderer.ClearRenderTarget();
-    
+
+    GD11Renderer.ClearRenderTarget();
+
     matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f ) * CRMatrix::CreateTranslation( -0.5f, 0.5f, 0.0f );
 
     GTransformBuffer.Update( DirectX::XMMatrixTranspose( matrix ) );
-	GD11Renderer.Draw( 0 );
-    
+    GD11Renderer.Draw( 0 );
+
     matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f ) * CRMatrix::CreateTranslation( 0.5f, -0.5f, 0.0f );
 
     GTransformBuffer.Update( DirectX::XMMatrixTranspose( matrix ) );
     GD11Renderer.Draw( 0 );
-	GD11Renderer.Present();
+    GD11Renderer.Present();
 }

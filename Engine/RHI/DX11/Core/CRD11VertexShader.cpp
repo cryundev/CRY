@@ -10,14 +10,14 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11VertexShader::Create( ID3DBlob* CompiledShader )
 {
-	if ( !CompiledShader ) return;
+    if ( !CompiledShader ) return;
 
-	HRESULT hr = GD11.GetDevice()->CreateVertexShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &ObjectPtr );
-	
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		
-		return;
-	}
+    HRESULT hr = GD11.GetDevice()->CreateVertexShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &ObjectPtr );
+
+    if ( FAILED( hr ) )
+    {
+	    GLog.AddErrorLog( hr );
+	    
+	    return;
+    }
 }

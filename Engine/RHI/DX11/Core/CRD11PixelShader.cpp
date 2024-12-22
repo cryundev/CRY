@@ -10,14 +10,14 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11PixelShader::Create( ID3DBlob* CompiledShader )
 {
-	if ( !CompiledShader ) return;
-	
-	HRESULT hr = GD11.GetDevice()->CreatePixelShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &ObjectPtr );
-	
-	if ( FAILED( hr ) )
-	{
-		GLog.AddErrorLog( hr );
-		
-		return;
-	}
+    if ( !CompiledShader ) return;
+
+    HRESULT hr = GD11.GetDevice()->CreatePixelShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &ObjectPtr );
+
+    if ( FAILED( hr ) )
+    {
+	    GLog.AddErrorLog( hr );
+	    
+	    return;
+    }
 }

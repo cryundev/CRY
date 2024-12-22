@@ -88,9 +88,9 @@ void CRD11Renderer::SetVertexBuffer( const CRD11VertexBufferSPtr& CRVertexBuffer
 void CRD11Renderer::SetIndexBuffer( const CRD11IndexBufferSPtr& CRIndexBuffer )
 {
     if ( !CRIndexBuffer.get() ) return;
-    
+
     IndexBuffer = CRIndexBuffer;
-    
+
     GD11.GetDeviceContext()->IASetIndexBuffer( CRIndexBuffer->GetObjectPtr(), DXGI_FORMAT_R32_UINT, 0 );
 }
 
@@ -125,7 +125,7 @@ void CRD11Renderer::SetVertexShader( const CRD11VertexShaderSPtr& CRVertexShader
     if ( !CRVertexShader.get() ) return;
 
     VertexShader = CRVertexShader;
-    
+
     GD11.GetDeviceContext()->VSSetShader( CRVertexShader->GetObjectPtr(), nullptr, 0 );
 }
 
@@ -138,7 +138,7 @@ void CRD11Renderer::SetInputLayout( const CRD11InputLayoutSPtr& CRInputLayout, u
     if ( !CRInputLayout.get() ) return;
 
     InputLayout[ Slot ] = CRInputLayout;
-    
+
     GD11.GetDeviceContext()->IASetInputLayout( CRInputLayout->GetObjectPtr() );
 }
 
@@ -150,7 +150,7 @@ void CRD11Renderer::SetPixelShader( const CRD11PixelShaderSPtr& CRPixelShader )
     if ( !CRPixelShader.get() ) return;
 
     PixelShader = CRPixelShader;
-    
+
     GD11.GetDeviceContext()->PSSetShader( CRPixelShader->GetObjectPtr(), nullptr, 0 );
 }
 
@@ -173,13 +173,13 @@ void CRD11Renderer::SetShaderResource( const CRD11ShaderResourceViewSPtr& CRShad
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::SetSamplerState( const CRD11SamplerStateSPtr& CRSamplerState, unsigned int Slot )
 {
-	if ( Slot >= D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ) return;
-	if ( !CRSamplerState.get() ) return;
+    if ( Slot >= D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ) return;
+    if ( !CRSamplerState.get() ) return;
 
-	SamplerStates[ Slot ] = CRSamplerState;
-	
-	ID3D11SamplerState* ss = CRSamplerState->GetObjectPtr();
-	GD11.GetDeviceContext()->PSSetSamplers( Slot, 1, &ss );
+    SamplerStates[ Slot ] = CRSamplerState;
+
+    ID3D11SamplerState* ss = CRSamplerState->GetObjectPtr();
+    GD11.GetDeviceContext()->PSSetSamplers( Slot, 1, &ss );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -21,7 +21,7 @@ private:
     CRD11ConstantBufferWPtr ConstantBuffers[ D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT ][ (int)( ED11RenderingPipelineStage::Max ) ];
 
     CRD11ShaderResourceViewWPtr ShaderResourceViews[ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
-	CRD11SamplerStateWPtr       SamplerStates      [ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
+    CRD11SamplerStateWPtr       SamplerStates      [ D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ];
 
     CRD11RenderTargetViewWPtr RenderTargetView;
     
@@ -50,8 +50,8 @@ public:
     /// Set shader resource.
     void SetShaderResource( const CRD11ShaderResourceViewSPtr& CRShaderResourceView, unsigned int Slot );
 
-	/// Set sampler state.
-	void SetSamplerState( const CRD11SamplerStateSPtr& CRSamplerState, unsigned int Slot );
+    /// Set sampler state.
+    void SetSamplerState( const CRD11SamplerStateSPtr& CRSamplerState, unsigned int Slot );
 
     /// Draw.
     void Draw( unsigned int Slot ) const;
@@ -64,7 +64,7 @@ public:
 private:
     /// Initialize render target.
     void _InitializeRenderTarget();
-    
+
     /// Initialize viewport.
     void _InitializeViewport( float Width, float Height ) const;
 };
