@@ -69,9 +69,7 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( shaderResourceTexture.GetShaderResourceView() ), 0 );
 	GD11Renderer.SetSamplerState  ( CRD11SamplerStateSPtr      ( shaderResourceTexture.GetSamplerState()       ), 0 );
 
-    CRMatrix matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f );
-    GTransformBuffer.Create( "Transform", 0, ED11RenderingPipelineStage::VS, matrix );
-
+    GTransformBuffer.Create( "Transform", 0, ED11RenderingPipelineStage::VS );
     GD11Renderer.SetConstantBuffer( GTransformBuffer.GetConstantBuffer().lock(), GTransformBuffer.GetSlot(), GTransformBuffer.GetStage() );
 }
 
@@ -80,7 +78,18 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::RenderFrame()
 {
+    CRMatrix matrix = CRMatrix::Identity;
+    
 	GD11Renderer.ClearRenderTarget();
+    
+    matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f ) * CRMatrix::CreateTranslation( -0.5f, 0.5f, 0.0f );
+
+    GTransformBuffer.Update( DirectX::XMMatrixTranspose( matrix ) );
 	GD11Renderer.Draw( 0 );
+    
+    matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f ) * CRMatrix::CreateTranslation( 0.5f, -0.5f, 0.0f );
+
+    GTransformBuffer.Update( DirectX::XMMatrixTranspose( matrix ) );
+    GD11Renderer.Draw( 0 );
 	GD11Renderer.Present();
 }

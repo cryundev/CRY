@@ -25,7 +25,7 @@ public:
     CRD11BindingConstantBuffer() = default;
     
     /// Create constant buffer.
-    void Create( const CRName& InName, unsigned int InSlot, ED11RenderingPipelineStage InStage, const T& Data );
+    void Create( const CRName& InName, unsigned int InSlot, ED11RenderingPipelineStage InStage, const T* Data = nullptr );
 
     /// Update constant buffer.
     void Update( const T& Data );
@@ -45,7 +45,7 @@ public:
 /// Create constant buffer.
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
-void CRD11BindingConstantBuffer<T>::Create( const CRName& InName, unsigned int InSlot, ED11RenderingPipelineStage InStage, const T& Data )
+void CRD11BindingConstantBuffer<T>::Create( const CRName& InName, unsigned int InSlot, ED11RenderingPipelineStage InStage, const T* Data )
 {
     Name  = InName;
     Slot  = InSlot;
@@ -54,7 +54,10 @@ void CRD11BindingConstantBuffer<T>::Create( const CRName& InName, unsigned int I
     ConstantBufferPtr = GD11RM.GetConstantBuffer( Name );
     ConstantBufferPtr.lock()->Create( D3D11_USAGE_DYNAMIC, D3D11_CPU_ACCESS_WRITE, sizeof( T ) );
 
-    Update( Data );
+    if ( Data )
+    {
+        Update( *Data );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
