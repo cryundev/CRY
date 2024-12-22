@@ -1,6 +1,7 @@
 ﻿#include "CRRHI.h"
 #include "../Core/CRVertex.h"
 #include "DX11/CRD11.h"
+#include "DX11/CRD11BindingConstantBuffer.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/CRD11ResourceManager.h"
 #include "DX11/CRD11ShaderResourceTexture.h"
@@ -11,6 +12,9 @@
 #include "DX11/Core/CRD11PixelShader.h"
 #include "DX11/Core/CRD11VertexBuffer.h"
 #include "DX11/Core/CRD11VertexShader.h"
+
+
+CRD11BindingConstantBuffer< CRMatrix > GTransformBuffer;
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -64,6 +68,11 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 	
 	GD11Renderer.SetShaderResource( CRD11ShaderResourceViewSPtr( shaderResourceTexture.GetShaderResourceView() ), 0 );
 	GD11Renderer.SetSamplerState  ( CRD11SamplerStateSPtr      ( shaderResourceTexture.GetSamplerState()       ), 0 );
+
+    CRMatrix matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f );
+    GTransformBuffer.Create( "Transform", 0, ED11RenderingPipelineStage::VS, matrix );
+
+    GD11Renderer.SetConstantBuffer( GTransformBuffer.GetConstantBuffer().lock(), GTransformBuffer.GetSlot(), GTransformBuffer.GetStage() );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

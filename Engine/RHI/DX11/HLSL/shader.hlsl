@@ -4,17 +4,24 @@ struct PixelIn
 	float2 texCoord : TEXCOORD0;
 };
 
+
+matrix transform : register( c0 );
+
+
 PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD )
 {
 	PixelIn output;
-	output.position = position;
+    position.w = 1.0f;
+	output.position = mul( position, transform );
 	output.texCoord = texCoord;
 
 	return output;
 }
 
+
 Texture2D    psTexture  : register( t0 );
 SamplerState SampleType : register( s0 );
+
 
 float4 PS( PixelIn input ) : SV_TARGET
 {

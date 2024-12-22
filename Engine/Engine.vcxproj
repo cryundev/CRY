@@ -153,6 +153,7 @@
     <ClInclude Include="RHI\DX11\Core\CRD11VertexBuffer.h" />
     <ClInclude Include="RHI\DX11\Core\CRD11VertexShader.h" />
     <ClInclude Include="RHI\DX11\CRD11.h" />
+    <ClInclude Include="RHI\DX11\CRD11BindingConstantBuffer.h" />
     <ClInclude Include="RHI\DX11\CRD11Include.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
     <ClInclude Include="RHI\DX11\CRD11ResourceManager.h" />
@@ -255,6 +256,7 @@
       <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="RHI\DX11\CRD11BindingConstantBuffer.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Renderer.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
