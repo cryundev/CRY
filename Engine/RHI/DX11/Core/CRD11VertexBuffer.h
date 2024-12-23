@@ -10,7 +10,8 @@
 class CRD11VertexBuffer : public CRD11Object< ID3D11Buffer >
 {
 private:
-    unsigned int Count = 0;
+    unsigned int Count  = 0;
+    unsigned int Stride = 0;
 
 public:
     /// Create vertex buffer.
@@ -18,4 +19,7 @@ public:
 
     /// Get count.
     unsigned int GetCount() const { return Count; }
+
+    /// Get stride.
+    unsigned int GetStride() const { return Stride; }
 };

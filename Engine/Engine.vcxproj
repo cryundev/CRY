@@ -104,7 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)/Extras</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories> $(ProjectDir);$(ProjectDir)/Extras</AdditionalIncludeDirectories>
       <AdditionalModuleDependencies></AdditionalModuleDependencies>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -154,7 +154,6 @@
     <ClInclude Include="RHI\DX11\Core\CRD11VertexShader.h" />
     <ClInclude Include="RHI\DX11\CRD11.h" />
     <ClInclude Include="RHI\DX11\CRD11BindingConstantBuffer.h" />
-    <ClInclude Include="RHI\DX11\CRD11Include.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
     <ClInclude Include="RHI\DX11\CRD11ResourceManager.h" />
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceTexture.h" />

@@ -1,8 +1,6 @@
 ﻿#include "CRD11Renderer.h"
 #include "CRD11.h"
-#include "CRD11Include.h"
 #include "CRD11ResourceManager.h"
-#include "../../Core/CRVertex.h"
 #include "../../Utility/Log/CRLog.h"
 #include "Core/CRD11ConstantBuffer.h"
 #include "Core/CRD11Device.h"
@@ -73,7 +71,7 @@ void CRD11Renderer::SetVertexBuffer( const CRD11VertexBufferSPtr& CRVertexBuffer
 
     VertexBuffers[ Slot ] = CRVertexBuffer;
 
-    unsigned int stride = sizeof( CRVertex );
+    unsigned int stride = CRVertexBuffer->GetStride();
     unsigned int offset = 0;
 
     ID3D11Buffer* bufferPtr = CRVertexBuffer->GetObjectPtr();

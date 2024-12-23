@@ -7,9 +7,10 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create vertex buffer
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11VertexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const void* BlobPtr, unsigned int Stride, unsigned int InCount )
+void CRD11VertexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const void* BlobPtr, unsigned int InStride, unsigned int InCount )
 {
-    Count = InCount;
+    Stride = InStride;
+    Count  = InCount;
 
     D3D11_BUFFER_DESC bd;
     ZeroMemory( &bd, sizeof( D3D11_BUFFER_DESC ) );
