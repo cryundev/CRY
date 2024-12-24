@@ -16,7 +16,13 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
     _InitializeViewport( (float)( Width ), (float)( Height ) );
 
     TransformBuffer.Create( "Transform", 0, ED11RenderingPipelineStage::VS );
-    GD11RP.SetConstantBuffer( TransformBuffer.GetConstantBuffer().lock()->GetObjectPtr(), TransformBuffer.GetSlot(), TransformBuffer.GetStage() );
+    TransformBuffer.SetInRenderingPipeline();
+
+    LightDirectionBuffer.Create( "LightDirection", 0, ED11RenderingPipelineStage::PS );
+    LightDirectionBuffer.SetInRenderingPipeline();
+    
+    LightColorBuffer.Create( "LightColor", 1, ED11RenderingPipelineStage::PS );
+    LightColorBuffer.SetInRenderingPipeline();
 
     Mesh.Initialize();
     Mesh.SetInRenderingPipeline();
@@ -27,6 +33,9 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
+    LightDirectionBuffer.Update( CRVector4D( 0.0f, 0.0f, -1.0f, 1.0f ) );
+    LightColorBuffer    .Update( CRVector4D( 0.0f, 0.0f,  1.0f, 1.0f ) );
+    
     CRMatrix matrix = CRMatrix::Identity;
 
     matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f ) * CRMatrix::CreateTranslation( -0.5f, 0.5f, 0.0f );

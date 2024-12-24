@@ -11,6 +11,8 @@ struct CRVertex
 {
     CRVector   Position;
     CRVector2D TexCoord;
+    CRVector   Normal;
+    
 };
 
 

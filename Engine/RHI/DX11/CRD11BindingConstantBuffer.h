@@ -2,6 +2,7 @@
 
 
 #include "CRD11.h"
+#include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
 #include "CRD11Types.h"
 #include "../../Utility/Generic/CRGeneric.h"
@@ -40,6 +41,9 @@ public:
 
     /// Get slot.
     unsigned int GetSlot() const { return Slot; }
+
+    /// Set in rendering pipeline.
+    void SetInRenderingPipeline() const;
 };
 
 
@@ -80,4 +84,15 @@ void CRD11BindingConstantBuffer<T>::Update( const T& Data )
         memcpy_s( mappedResource.pData, sizeof( T ), &Data, sizeof( T ) );
     }
     GD11.GetDeviceContext()->Unmap( bufferPtr, 0 );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set in rendering pipeline.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+void CRD11BindingConstantBuffer<T>::SetInRenderingPipeline() const
+{
+    if ( ConstantBufferPtr.expired() ) return;
+    
+    GD11RP.SetConstantBuffer( ConstantBufferPtr.lock()->GetObjectPtr(), Slot, Stage );
 }

@@ -15,7 +15,10 @@ class CRD11Renderer
 private:
     CRD11Mesh Mesh;
 
-    CRD11BindingConstantBuffer< CRMatrix > TransformBuffer;
+    CRD11BindingConstantBuffer< CRMatrix   > TransformBuffer;
+    CRD11BindingConstantBuffer< CRVector4D > LightDirectionBuffer;
+    CRD11BindingConstantBuffer< CRVector4D > LightColorBuffer;
+    
     CRD11RenderTargetViewSPtr RenderTargetView;
     
 public:
