@@ -154,7 +154,9 @@
     <ClInclude Include="RHI\DX11\Core\CRD11VertexShader.h" />
     <ClInclude Include="RHI\DX11\CRD11.h" />
     <ClInclude Include="RHI\DX11\CRD11BindingConstantBuffer.h" />
+    <ClInclude Include="RHI\DX11\CRD11Mesh.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
+    <ClInclude Include="RHI\DX11\CRD11RenderingPipeline.h" />
     <ClInclude Include="RHI\DX11\CRD11ResourceManager.h" />
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceTexture.h" />
     <ClInclude Include="RHI\DX11\CRD11Types.h" />
@@ -256,6 +258,7 @@
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
     <ClCompile Include="RHI\DX11\CRD11BindingConstantBuffer.cpp" />
+    <ClCompile Include="RHI\DX11\CRD11Mesh.cpp" />
     <ClCompile Include="RHI\DX11\CRD11Renderer.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -331,6 +334,7 @@
       <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="RHI\DX11\CRD11RenderingPipeline.cpp" />
     <ClCompile Include="RHI\DX11\CRD11ResourceManager.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
