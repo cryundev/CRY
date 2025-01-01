@@ -133,6 +133,15 @@
   <ItemGroup>
     <ClInclude Include="Core\Containers\CRContainerInc.h" />
     <ClInclude Include="Core\CRVertex.h" />
+    <ClInclude Include="Core\ImGUI\imconfig.h" />
+    <ClInclude Include="Core\ImGUI\imgui.h" />
+    <ClInclude Include="Core\ImGUI\imgui_impl_dx11.h" />
+    <ClInclude Include="Core\ImGUI\imgui_impl_dx12.h" />
+    <ClInclude Include="Core\ImGUI\imgui_impl_win32.h" />
+    <ClInclude Include="Core\ImGUI\imgui_internal.h" />
+    <ClInclude Include="Core\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="Core\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="Core\ImGUI\imstb_truetype.h" />
     <ClInclude Include="Core\Strings\CRStringInc.h" />
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />
@@ -168,6 +177,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\CRVertex.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui_impl_dx12.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="Core\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="RHI\CRRHI.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11CompiledShader.cpp" />

@@ -1,5 +1,6 @@
 ﻿#include "framework.h"
 #include "Engine.h"
+#include "Core/ImGUI/imgui_impl_win32.h"
 #include "RHI/CRRHI.h"
 
 
@@ -116,11 +117,16 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 }
 
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
+
 //---------------------------------------------------------------------------------------------------------------------
 /// WndProc
 //---------------------------------------------------------------------------------------------------------------------
 LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
+    if ( ImGui_ImplWin32_WndProcHandler( hWnd, message, wParam, lParam ) )
+        return true;
+    
     switch ( message )
     {
     case WM_COMMAND:
