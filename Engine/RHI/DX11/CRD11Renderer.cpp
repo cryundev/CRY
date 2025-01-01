@@ -12,40 +12,58 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 {
+    ViewportWidth  = Width;
+    ViewportHeight = Height;
+    
     _InitializeRenderTarget();
     _InitializeViewport( (float)( Width ), (float)( Height ) );
 
-    TransformBuffer.Create( "Transform", 0, ED11RenderingPipelineStage::VS );
+    TransformBuffer.Create( "Transform", (unsigned int)( ECVS::Transform ), ED11RenderingPipelineStage::VS );
     TransformBuffer.SetInRenderingPipeline();
+    
+    TransformBuffer.Update( DirectX::XMMatrixTranspose( CRMatrix::Identity ) );
 
-    LightDirectionBuffer.Create( "LightDirection", 0, ED11RenderingPipelineStage::PS );
+    ViewProjectionBuffer.Create( "ViewProjection", (unsigned int)( ECVS::ViewProjection ), ED11RenderingPipelineStage::VS );
+    ViewProjectionBuffer.SetInRenderingPipeline();
+
+    LightDirectionBuffer.Create( "LightDirection", (unsigned int)( ECPS::LightDirection ), ED11RenderingPipelineStage::PS );
     LightDirectionBuffer.SetInRenderingPipeline();
     
-    LightColorBuffer.Create( "LightColor", 1, ED11RenderingPipelineStage::PS );
+    LightColorBuffer.Create( "LightColor", (unsigned int)( ECPS::LightColor ), ED11RenderingPipelineStage::PS );
     LightColorBuffer.SetInRenderingPipeline();
+
+    LightDirectionBuffer.Update( CRVector4D( 0.0f, 0.0f, -1.0f, 1.0f ) );
+    LightColorBuffer    .Update( CRVector4D( 0.0f, 0.0f,  1.0f, 1.0f ) );
 
     Mesh.Initialize();
     Mesh.SetInRenderingPipeline();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Update transform buffer.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::UpdateTransformBuffer( const CRMatrix& Matrix )
+{
+    TransformBuffer.Update( DirectX::XMMatrixTranspose( Matrix ) );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Update view projection buffer.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, const CRMatrix& ProjectionMatrix )
+{
+    CRViewProjection viewProjection;
+    viewProjection.View       = ViewMatrix.Transpose();
+    viewProjection.Projection = ProjectionMatrix.Transpose();
+
+    ViewProjectionBuffer.Update( viewProjection );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Draw.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::Draw()
+void CRD11Renderer::Draw() const
 {
-    LightDirectionBuffer.Update( CRVector4D( 0.0f, 0.0f, -1.0f, 1.0f ) );
-    LightColorBuffer    .Update( CRVector4D( 0.0f, 0.0f,  1.0f, 1.0f ) );
-    
-    CRMatrix matrix = CRMatrix::Identity;
-
-    matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f ) * CRMatrix::CreateTranslation( -0.5f, 0.5f, 0.0f );
-
-    TransformBuffer.Update( DirectX::XMMatrixTranspose( matrix ) );
-    Mesh.Draw();
-
-    matrix = CRMatrix::CreateScale( 0.5f, 0.5f, 1.f ) * CRMatrix::CreateTranslation( 0.5f, -0.5f, 0.0f );
-
-    TransformBuffer.Update( DirectX::XMMatrixTranspose( matrix ) );
     Mesh.Draw();
 }
 

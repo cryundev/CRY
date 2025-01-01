@@ -1,10 +1,15 @@
 ﻿#include "framework.h"
 #include "Engine.h"
 #include "Core/ImGUI/imgui_impl_win32.h"
+#include "Object/Camera/CRCamera.h"
 #include "RHI/CRRHI.h"
-
+#include "RHI/DX11/CRD11.h"
+#include "RHI/DX11/CRD11Renderer.h"
 
 #define MAX_LOADSTRING 100
+
+
+static CRCamera GCamera;
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -109,6 +114,11 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     if ( !hWnd ) return false;
 
     CRRHI::Initialize( hWnd, width,height );
+
+    GCamera.Initialize( CRCamera::EProjectionType::Perspective, 90.0f, width, height, 0.1f, 1000.0f );
+    GCamera.SetLookAtDirection( 0.f, 0.f, 1.f );
+    GCamera.Transform.SetLocation( 0.f, 0.f, -0.5f );
+    GD11Renderer.UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
 
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );

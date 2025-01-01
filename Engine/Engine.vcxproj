@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Core\CRTransform.h" />
     <ClInclude Include="Core\CRVertex.h" />
     <ClInclude Include="Core\ImGUI\imconfig.h" />
     <ClInclude Include="Core\ImGUI\imgui.h" />
@@ -146,6 +147,9 @@
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Object\Camera\CRCamera.h" />
+    <ClInclude Include="Object\CRActor.h" />
+    <ClInclude Include="Object\CRObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RHI\CRRHI.h" />
     <ClInclude Include="RHI\DX11\Core\CRD11CompiledShader.h" />
@@ -176,6 +180,7 @@
     <ClInclude Include="Utility\WIC\CRWICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\CRTransform.cpp" />
     <ClCompile Include="Core\CRVertex.cpp" />
     <ClCompile Include="Core\ImGUI\imgui.cpp" />
     <ClCompile Include="Core\ImGUI\imgui_demo.cpp" />
@@ -186,6 +191,9 @@
     <ClCompile Include="Core\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="Core\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Object\Camera\CRCamera.cpp" />
+    <ClCompile Include="Object\CRActor.cpp" />
+    <ClCompile Include="Object\CRObject.cpp" />
     <ClCompile Include="RHI\CRRHI.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11CompiledShader.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11ConstantBuffer.cpp" />

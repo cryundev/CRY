@@ -11,11 +11,19 @@ cbuffer TransformBuffer : register( b0 )
     matrix transform;
 };
 
+cbuffer ViewProjectionBuffer : register( b1 )
+{
+    matrix view;
+    matrix projection;
+};
 
 PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 normal : NORMAL )
 {
 	PixelIn output;
 	output.position = mul( position, transform );
+    output.position = mul( output.position, view );
+    output.position = mul( output.position, projection );
+    
 	output.texCoord = texCoord;
     output.normal   = normal; 
 
