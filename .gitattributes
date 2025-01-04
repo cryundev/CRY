@@ -1,0 +1,4 @@
+C:/Projects/CRY/Engine/Extras/Fbx/lib/debug/libfbxsdk-md.lib filter=lfs diff=lfs merge=lfs -text
+C:/Projects/CRY/Engine/Extras/Fbx/lib/debug/libfbxsdk-mt.lib filter=lfs diff=lfs merge=lfs -text
+C:/Projects/CRY/Engine/Extras/Fbx/lib/release/libfbxsdk-md.lib filter=lfs diff=lfs merge=lfs -text
+C:/Projects/CRY/Engine/Extras/Fbx/lib/release/libfbxsdk-mt.lib filter=lfs diff=lfs merge=lfs -text
