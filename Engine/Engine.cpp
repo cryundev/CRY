@@ -5,6 +5,7 @@
 #include "RHI/CRRHI.h"
 #include "RHI/DX11/CRD11.h"
 #include "RHI/DX11/CRD11Renderer.h"
+#include "Utility/FBX/CRFbxLoader.h"
 
 #define MAX_LOADSTRING 100
 
@@ -119,6 +120,9 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     GCamera.SetLookAtDirection( 0.f, 0.f, 1.f );
     GCamera.Transform.SetLocation( 0.f, 0.f, -0.5f );
     GD11Renderer.UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
+
+    CRFbxLoader fbxLoader;
+    fbxLoader.Load( "Assets/Minion.fbx" );
 
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );

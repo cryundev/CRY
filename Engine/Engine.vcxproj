@@ -104,15 +104,18 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories> $(ProjectDir);$(ProjectDir)/Extras</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories> $(ProjectDir);$(ProjectDir)/Extras;$(ProjectDir)/Extras/Fbx/include</AdditionalIncludeDirectories>
       <AdditionalModuleDependencies></AdditionalModuleDependencies>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)/Extras/Libs</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)/Extras</AdditionalLibraryDirectories>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy /Y /I "$(SolutionDir)\Engine\Extras\Fbx\debug\libfbxsdk.dll" "$(TargetDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -129,6 +132,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy /Y /I "$(SolutionDir)\Engine\Extras\Fbx\release\libfbxsdk.dll" "$(TargetDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Containers\CRContainerInc.h" />
@@ -448,6 +454,7 @@
     <ClInclude Include="RHI\DX11\Core\CRD11VertexShader.h" />
     <ClInclude Include="RHI\DX11\CRD11.h" />
     <ClInclude Include="RHI\DX11\CRD11BindingConstantBuffer.h" />
+    <ClInclude Include="RHI\DX11\CRD11Include.h" />
     <ClInclude Include="RHI\DX11\CRD11Mesh.h" />
     <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
     <ClInclude Include="RHI\DX11\CRD11RenderingPipeline.h" />
@@ -455,6 +462,8 @@
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceTexture.h" />
     <ClInclude Include="RHI\DX11\CRD11Types.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="Utility\FBX\CRFbxInclude.h" />
+    <ClInclude Include="Utility\FBX\CRFbxLoader.h" />
     <ClInclude Include="Utility\Generic\CRGeneric.h" />
     <ClInclude Include="Utility\Log\CRLog.h" />
     <ClInclude Include="Utility\UtilString.h" />
@@ -791,6 +800,7 @@
       <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="Utility\FBX\CRFbxLoader.cpp" />
     <ClCompile Include="Utility\Generic\CRGeneric.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
