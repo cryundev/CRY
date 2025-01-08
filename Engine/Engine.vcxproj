@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PublicIncludeDirectories></PublicIncludeDirectories>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir);</ExternalIncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -104,7 +108,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories> $(ProjectDir);$(ProjectDir)/Extras;$(ProjectDir)/Extras/Fbx/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories> $(ProjectDir)/Extras;$(ProjectDir)/Extras/Fbx/include</AdditionalIncludeDirectories>
       <AdditionalModuleDependencies></AdditionalModuleDependencies>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -439,6 +443,9 @@
     <ClInclude Include="Object\CRObject.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="RHI\CRRHI.h" />
+    <ClInclude Include="RHI\CRRHITypes.h" />
+    <ClInclude Include="RHI\ICRRHIMesh.h" />
+    <ClInclude Include="RHI\ICRRHIRenderer.h" />
     <ClInclude Include="RHI\DX11\Core\CRD11CompiledShader.h" />
     <ClInclude Include="RHI\DX11\Core\CRD11ConstantBuffer.h" />
     <ClInclude Include="RHI\DX11\Core\CRD11Device.h" />

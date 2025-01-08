@@ -38,4 +38,4 @@ public:
 
     /// Get Dx11 swap chain object.
     IDXGISwapChain* GetSwapChain() const { return SwapChainPtr; }
-    };
+};

@@ -56,6 +56,9 @@ private:
     /// Initialize.
     bool _Initialize( const CRString& Path );
 
+    /// Load node.
+    void _LoadNode( FbxNode* Node );
+
     /// Load mesh node.
     void _LoadMeshNode( FbxNode* Node );
 };

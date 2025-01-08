@@ -31,9 +31,6 @@ LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 INT_PTR CALLBACK About  ( HWND, UINT, WPARAM, LPARAM );
 
 
-void RenderFrame();
-
-
 //---------------------------------------------------------------------------------------------------------------------
 /// wWinMain
 //---------------------------------------------------------------------------------------------------------------------
@@ -62,19 +59,10 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		    if( msg.message == WM_QUIT ) break;
 	    }
 
-	    RenderFrame();
+        GRHI.RenderFrame();
     }
 
     return (int)msg.wParam;
-}
-
-
-//---------------------------------------------------------------------------------------------------------------------
-/// RenderFrame
-//---------------------------------------------------------------------------------------------------------------------
-void RenderFrame()
-{
-    CRRHI::RenderFrame();
 }
 
 
@@ -114,15 +102,15 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     HWND hWnd = CreateWindowW( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, width, height, nullptr, nullptr, hInstance, nullptr );
     if ( !hWnd ) return false;
 
-    CRRHI::Initialize( hWnd, width,height );
+    GRHI.Initialize( hWnd, width,height );
 
     GCamera.Initialize( CRCamera::EProjectionType::Perspective, 90.0f, width, height, 0.1f, 1000.0f );
     GCamera.SetLookAtDirection( 0.f, 0.f, 1.f );
     GCamera.Transform.SetLocation( 0.f, 0.f, -0.5f );
-    GD11Renderer.UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
+    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
 
     CRFbxLoader fbxLoader;
-    fbxLoader.Load( "Assets/Minion.fbx" );
+    fbxLoader.Load( "../Asset/Minion.fbx" );
 
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );

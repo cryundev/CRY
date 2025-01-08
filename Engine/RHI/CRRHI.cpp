@@ -7,13 +7,25 @@
 #include "DX11/Core/CRD11Device.h"
 
 
+CRRHI GRHI( ECRRHIType::DirectX11 );
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Constructor
+//---------------------------------------------------------------------------------------------------------------------
+CRRHI::CRRHI( ECRRHIType InRHIType )
+: RHIType( InRHIType )
+{
+    CreateRenderer();
+}
+
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize RHI.
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 {
     GD11.Create( hWnd );
-    GD11Renderer.Initialize( Width, Height );
+    Renderer->Initialize( Width, Height );
 
     /// Initialize ImGUI
     {
@@ -34,10 +46,10 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 //---------------------------------------------------------------------------------------------------------------------
 /// Render frame RHI.
 //---------------------------------------------------------------------------------------------------------------------
-void CRRHI::RenderFrame()
+void CRRHI::RenderFrame() const
 {
-    GD11Renderer.ClearRenderTarget();
-    GD11Renderer.Draw();
+    Renderer->ClearRenderTarget();
+    Renderer->Draw();
     
     ImGui_ImplDX11_NewFrame();
     ImGui_ImplWin32_NewFrame();
@@ -52,5 +64,31 @@ void CRRHI::RenderFrame()
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
     
-    GD11Renderer.Present();
+    Renderer->Present();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Create renderer.
+//---------------------------------------------------------------------------------------------------------------------
+ICRRHIRenderer* CRRHI::CreateRenderer()
+{
+    switch ( RHIType )
+    {
+    case ECRRHIType::DirectX11: Renderer = new CRD11Renderer(); break;
+    }
+
+    return Renderer;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Create mesh.
+//---------------------------------------------------------------------------------------------------------------------
+ICRRHIMesh* CRRHI::CreateMesh() const
+{
+    switch ( RHIType )
+    {
+    case ECRRHIType::DirectX11: return new CRD11Mesh();
+    }
+
+    return nullptr;
 }

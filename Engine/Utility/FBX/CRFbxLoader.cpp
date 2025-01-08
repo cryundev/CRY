@@ -25,14 +25,11 @@ bool CRFbxLoader::Load( const CRString& Path )
 {
     Clear();
 
-    if ( !_Initialize( Path ) )
-    {
-        GLog.AddLog( "Failed to initialize fbx loader" );
-        return false;
-    }
+    if ( !_Initialize( Path ) ) return false;
 
     _LoadMeshNode( FbxScenePtr->GetRootNode() );
-    
+
+    return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -45,22 +42,53 @@ bool CRFbxLoader::_Initialize( const CRString& Path )
     FbxImporterPtr   = FbxImporter::Create( FbxManagerPtr, "" );
     FbxScenePtr      = FbxScene::Create( FbxManagerPtr, "" );
 
-    if ( !FbxManagerPtr || !FbxIOSettingsPtr || !FbxImporterPtr || !FbxScenePtr ) return false;
+    if ( !FbxManagerPtr || !FbxIOSettingsPtr || !FbxImporterPtr || !FbxScenePtr )
+    {
+        GLog.AddLog( "Failed to create fbx objects" );
+        return false;
+    }
 
     FbxManagerPtr->SetIOSettings( FbxIOSettingsPtr );
     
-    FbxImporterPtr->Initialize( Path.c_str(), -1, FbxIOSettingsPtr );
+    if ( !FbxImporterPtr->Initialize( Path.c_str(), -1, FbxIOSettingsPtr ) )
+    {
+        GLog.AddLog( FbxImporterPtr->GetStatus().GetErrorString() );
+        return false;
+    }
+    
     FbxImporterPtr->Import( FbxScenePtr );
 
-    FbxAxisSystem directXAxisSystem( FbxAxisSystem::eDirectX );
-    directXAxisSystem.ConvertScene( FbxScenePtr );
-
-    FbxGeometryConverter fbxGeometryConverter( FbxManagerPtr );
-    fbxGeometryConverter.Triangulate( FbxScenePtr, true );
+    // FbxAxisSystem directXAxisSystem( FbxAxisSystem::eDirectX );
+    // directXAxisSystem.ConvertScene( FbxScenePtr );
+    //
+    // FbxGeometryConverter fbxGeometryConverter( FbxManagerPtr );
+    // fbxGeometryConverter.Triangulate( FbxScenePtr, true );
     
     FbxImporterPtr->Destroy();
 
     return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Load node.
+//---------------------------------------------------------------------------------------------------------------------
+void CRFbxLoader::_LoadNode( FbxNode* Node )
+{
+    if ( !Node ) return;
+
+    for ( int i = 0; i < Node->GetChildCount(); ++i )
+    {
+        _LoadMeshNode( Node->GetChild( i ) );
+    }
+    
+    FbxNodeAttribute* nodeAttribute = Node->GetNodeAttribute();
+    if ( !nodeAttribute ) return;
+
+    switch ( nodeAttribute->GetAttributeType() )
+    {
+        case FbxNodeAttribute::eMesh: _LoadMeshNode( Node ); break;
+        default: break;
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -69,15 +97,6 @@ bool CRFbxLoader::_Initialize( const CRString& Path )
 void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
 {
     if ( !Node ) return;
-
-    for ( int i = 0; i < Node->GetChildCount(); ++i )
-    {
-        _LoadMeshNode( Node->GetChild( i ) );
-    }   
-
-    FbxNodeAttribute* nodeAttribute = Node->GetNodeAttribute();
-    if ( !nodeAttribute ) return;
-    if ( nodeAttribute->GetAttributeType() != FbxNodeAttribute::eMesh ) return;
 
     FbxMesh* mesh = Node->GetMesh();
     if ( !mesh ) return;

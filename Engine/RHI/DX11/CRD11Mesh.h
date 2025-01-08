@@ -3,12 +3,13 @@
 
 #include "CRD11ShaderResourceTexture.h"
 #include "CRD11Types.h"
+#include "RHI/ICRRHIMesh.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
 /// CRD11Mesh
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11Mesh
+class CRD11Mesh : public ICRRHIMesh
 {
 private:
     CRD11VertexBufferWPtr VertexBuffer;
@@ -26,14 +27,14 @@ public:
     CRD11Mesh() = default;
 
     /// Destructor
-    virtual ~CRD11Mesh() = default;
+    virtual ~CRD11Mesh() override {};
 
     /// Initialize.
-    void Initialize();
+    virtual void Initialize() override;
 
     /// Set in the rendering pipeline.
-    void SetInRenderingPipeline() const;
+    virtual void SetInRenderingPipeline() const override;
 
     /// Draw.
-    void Draw() const;
+    virtual void Draw() const override;
 };

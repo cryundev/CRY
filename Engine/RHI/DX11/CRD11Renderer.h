@@ -5,12 +5,12 @@
 #include "CRD11Include.h"
 #include "CRD11Mesh.h"
 #include "CRD11Types.h"
-
+#include "RHI/ICRRHIRenderer.h"
 
 //---------------------------------------------------------------------------------------------------------------------
 /// CRD11Renderer
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11Renderer
+class CRD11Renderer : public ICRRHIRenderer
 {
 public:
     struct CRViewProjection
@@ -33,29 +33,36 @@ private:
     CRD11RenderTargetViewSPtr RenderTargetView;
     
 public:
+    /// Constructor
+    CRD11Renderer() = default;
+
+    /// Destructor
+    virtual ~CRD11Renderer() override = default;
+    
     /// Initialize renderer.
-    void Initialize( unsigned int Width, unsigned int Height );
-
-    /// Update transform buffer.
-    void UpdateTransformBuffer( const CRMatrix& Matrix );
-
-    /// Update view projection buffer.
-    void UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, const CRMatrix& ProjectionMatrix );
+    virtual void Initialize( unsigned int Width, unsigned int Height ) override;
 
     /// Draw.
-    void Draw() const;
+    virtual void Draw() const override;
 
     /// Clear render target.
-    void ClearRenderTarget() const;
+    virtual void ClearRenderTarget() const override;
 
     /// Present.
-    void Present() const;
+    virtual void Present() const override;
 
     /// Get viewport width.
-    unsigned int GetViewportWidth() const { return ViewportWidth; }
+    virtual unsigned int GetViewportWidth() const override { return ViewportWidth; }
 
     /// Get viewport height.
-    unsigned int GetViewportHeight() const { return ViewportHeight; }
+    virtual unsigned int GetViewportHeight() const override { return ViewportHeight; }
+
+public:
+    /// Update transform buffer.
+    virtual void UpdateTransformBuffer( const CRMatrix& Matrix ) override;
+
+    /// Update view projection buffer.
+    virtual void UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, const CRMatrix& ProjectionMatrix ) override;
     
 private:
     /// Initialize render target.
