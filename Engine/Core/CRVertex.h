@@ -1,7 +1,9 @@
 ﻿#pragma once
 
 
-#include "../CRTypes.h"
+#include "CRPrimitiveData.h"
+#include "CRTypes.h"
+#include "Containers/CRContainerInc.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -9,10 +11,23 @@
 //---------------------------------------------------------------------------------------------------------------------
 struct CRVertex
 {
+public:
     CRVector   Position;
     CRVector2D TexCoord;
     CRVector   Normal;
-    
+
+public:
+    /// Load vertices from primitive data.
+    static void LoadFromPrimitiveData( const CRPrimitiveData& PrimitiveData, CRArray< CRVertex >& Vertices )
+    {
+        Vertices.clear();
+        Vertices.reserve( PrimitiveData.VertexCount );
+
+        for ( unsigned int i = 0; i < PrimitiveData.VertexCount; ++i )
+        {
+            Vertices.emplace_back( PrimitiveData.Positions[ i ], PrimitiveData.UVs[ i ], PrimitiveData.Normals[ i ] );
+        }
+    }
 };
 
 
