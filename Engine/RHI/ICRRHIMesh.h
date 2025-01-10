@@ -1,6 +1,9 @@
 ﻿#pragma once
 
 
+struct CRPrimitiveData;
+
+
 class ICRRHIMesh
 {
 public:
@@ -11,8 +14,11 @@ public:
     virtual ~ICRRHIMesh() = 0 {}
 
 public:
-    /// Initialize.
-    virtual void Initialize() = 0;
+    /// Initialize primitive.
+    virtual void InitializePrimitive( const CRPrimitiveData& PrimitiveData ) = 0;
+
+    /// Initialize material.
+    virtual void InitializeMaterial() = 0;
 
     /// Set in the rendering pipeline.
     virtual void SetInRenderingPipeline() const = 0;

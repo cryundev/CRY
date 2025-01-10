@@ -2,11 +2,8 @@
 
 
 #include "CRRHITypes.h"
+#include "Core/Containers/CRContainerInc.h"
 #include <windows.h>
-
-
-class ICRRHIMesh;
-class ICRRHIRenderer;
 
 
 class CRRHI
@@ -14,6 +11,8 @@ class CRRHI
 private:
     ECRRHIType      RHIType  = ECRRHIType::DirectX11;
     ICRRHIRenderer* Renderer = nullptr;
+
+    CRArray< ICRRHIMeshSPtr > Meshes;
     
 public:
     /// Constructor
@@ -25,14 +24,15 @@ public:
     /// Render frame RHI.
     void RenderFrame() const;
 
-    /// Create renderer. 
-    ICRRHIRenderer* CreateRenderer();
-
     /// Create mesh.
-    ICRRHIMesh* CreateMesh() const;
+    ICRRHIMeshSPtr CreateMesh();
 
     /// Get renderer.
     ICRRHIRenderer* GetRenderer() const { return Renderer; }
+
+private:
+    /// Create renderer. 
+    ICRRHIRenderer* _CreateRenderer();
 };
 
 

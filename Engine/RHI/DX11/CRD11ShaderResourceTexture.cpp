@@ -4,9 +4,9 @@
 #include "Core/CRD11SamplerState.h"
 #include "Core/CRD11ShaderResourceView.h"
 #include "Core/CRD11Texture2D.h"
-#include "../../Extras/DirectXTK/Inc/WICTextureLoader.h"
-#include "../../Utility/Log/CRLog.h"
-#include "../../Utility/WIC/CRWICTextureLoader.h"
+#include "Extras/DirectXTK/Inc/WICTextureLoader.h"
+#include "Utility/Log/CRLog.h"
+#include "Utility/WIC/CRWICTextureLoader.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------

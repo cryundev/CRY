@@ -15,16 +15,25 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Initialize.
+/// Initialize primitive.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Mesh::Initialize()
+void CRD11Mesh::InitializePrimitive( const CRPrimitiveData& PrimitiveData )
 {
-    VertexBuffer = GD11RM.GetVertexBuffer( "Rect" );
-    VertexBuffer.lock()->Create( D3D11_USAGE_DEFAULT, 0, GCRVRect, sizeof( CRVertex ), ARRAYSIZE( GCRVRect ) );
+    CRArray< CRVertex > vertice;
+    CRVertex::LoadFromPrimitiveData( PrimitiveData, vertice );
     
-    IndexBuffer = GD11RM.GetIndexBuffer( "Rect" );
-    IndexBuffer.lock()->Create( D3D11_USAGE_DEFAULT, 0, { 0, 1, 2, 1, 3, 2 } );
+    VertexBuffer = GD11RM.GetVertexBuffer( "Rect" );
+    VertexBuffer.lock()->Create( D3D11_USAGE_DEFAULT, 0, vertice.data(), sizeof( CRVertex ), vertice.size() );
+    
+    // IndexBuffer = GD11RM.GetIndexBuffer( "Rect" );
+    // IndexBuffer.lock()->Create( D3D11_USAGE_DEFAULT, 0, { 0, 1, 2, 1, 3, 2 } );
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Initialize material.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Mesh::InitializeMaterial()
+{
     CRD11CompiledShader compiledVS;
     compiledVS.Create( L"RHI/DX11/HLSL/shader.hlsl", "VS", "vs_5_0" );
 
@@ -40,7 +49,7 @@ void CRD11Mesh::Initialize()
 
     InputLayout = GD11RM.GetInputLayout( "Diffuse" );
     InputLayout.lock()->Create( elements, ARRAYSIZE( elements ), compiledVS.GetObjectPtr() );
-
+    
     CRD11CompiledShader compiledPS;
     compiledPS.Create( L"RHI/DX11/HLSL/shader.hlsl", "PS", "ps_5_0" );
 

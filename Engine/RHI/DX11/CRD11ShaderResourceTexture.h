@@ -2,7 +2,7 @@
 
 
 #include "CRD11Types.h"
-#include "../../Core/Strings/CRStringInc.h"
+#include "Core/Strings/CRStringInc.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------

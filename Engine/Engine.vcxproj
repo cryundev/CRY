@@ -142,6 +142,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Core\CRPrimitiveData.h" />
+    <ClInclude Include="Core\CRSmartPtrMacro.h" />
     <ClInclude Include="Core\CRTransform.h" />
     <ClInclude Include="Core\CRVertex.h" />
     <ClInclude Include="Core\ImGUI\imconfig.h" />
@@ -153,6 +155,7 @@
     <ClInclude Include="Core\ImGUI\imstb_rectpack.h" />
     <ClInclude Include="Core\ImGUI\imstb_textedit.h" />
     <ClInclude Include="Core\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Core\Math\CRMath.h" />
     <ClInclude Include="Core\Strings\CRStringInc.h" />
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />

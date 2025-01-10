@@ -16,7 +16,7 @@ CRRHI GRHI( ECRRHIType::DirectX11 );
 CRRHI::CRRHI( ECRRHIType InRHIType )
 : RHIType( InRHIType )
 {
-    CreateRenderer();
+    _CreateRenderer();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -68,9 +68,26 @@ void CRRHI::RenderFrame() const
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Create mesh.
+//---------------------------------------------------------------------------------------------------------------------
+ICRRHIMeshSPtr CRRHI::CreateMesh()
+{
+    ICRRHIMesh* newMesh = nullptr;
+
+    switch ( RHIType )
+    {
+    case ECRRHIType::DirectX11: newMesh = new CRD11Mesh(); break;
+    }
+
+    Meshes.push_back( CRMakeShared( newMesh ) );
+
+    return Meshes.back();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Create renderer.
 //---------------------------------------------------------------------------------------------------------------------
-ICRRHIRenderer* CRRHI::CreateRenderer()
+ICRRHIRenderer* CRRHI::_CreateRenderer()
 {
     switch ( RHIType )
     {
@@ -78,17 +95,4 @@ ICRRHIRenderer* CRRHI::CreateRenderer()
     }
 
     return Renderer;
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Create mesh.
-//---------------------------------------------------------------------------------------------------------------------
-ICRRHIMesh* CRRHI::CreateMesh() const
-{
-    switch ( RHIType )
-    {
-    case ECRRHIType::DirectX11: return new CRD11Mesh();
-    }
-
-    return nullptr;
 }

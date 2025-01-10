@@ -2,9 +2,10 @@
 #include "CRD11.h"
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
-#include "../../Utility/Log/CRLog.h"
+#include "Utility/Log/CRLog.h"
 #include "Core/CRD11Device.h"
 #include "Core/CRD11RenderTargetView.h"
+#include "Core/CRPrimitiveData.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -34,9 +35,14 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 
     LightDirectionBuffer.Update( CRVector4D( 0.0f, 0.0f, -1.0f, 1.0f ) );
     LightColorBuffer    .Update( CRVector4D( 0.0f, 0.0f,  1.0f, 1.0f ) );
+}
 
-    Mesh.Initialize();
-    Mesh.SetInRenderingPipeline();
+//---------------------------------------------------------------------------------------------------------------------
+/// Add render mesh.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::AddRenderMesh( const ICRRHIMeshWPtr& Mesh )
+{
+    RenderMeshes.push_back( Mesh );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -64,7 +70,13 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw() const
 {
-    Mesh.Draw();
+    for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
+    {
+        if ( renderMesh.expired() ) continue;
+        
+        renderMesh.lock()->SetInRenderingPipeline();
+        renderMesh.lock()->Draw();
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -14,6 +14,9 @@ public:
     /// Initialize renderer.
     virtual void Initialize( unsigned int Width, unsigned int Height ) = 0;
 
+    /// Add render mesh.
+    virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) = 0;
+
     /// Draw.
     virtual void Draw() const = 0;
 

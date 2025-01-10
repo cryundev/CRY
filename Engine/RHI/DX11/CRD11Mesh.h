@@ -29,8 +29,11 @@ public:
     /// Destructor
     virtual ~CRD11Mesh() override {};
 
-    /// Initialize.
-    virtual void Initialize() override;
+    /// Initialize primitive.
+    virtual void InitializePrimitive( const CRPrimitiveData& PrimitiveData ) override;
+
+    /// Initialize material.
+    virtual void InitializeMaterial() override;
 
     /// Set in the rendering pipeline.
     virtual void SetInRenderingPipeline() const override;

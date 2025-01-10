@@ -5,7 +5,9 @@
 #include "CRD11Include.h"
 #include "CRD11Mesh.h"
 #include "CRD11Types.h"
+#include "RHI/CRRHITypes.h"
 #include "RHI/ICRRHIRenderer.h"
+
 
 //---------------------------------------------------------------------------------------------------------------------
 /// CRD11Renderer
@@ -18,12 +20,12 @@ public:
         CRMatrix View;
         CRMatrix Projection;
     };
-    
+
 private:
     unsigned int ViewportWidth  = 1920;
     unsigned int ViewportHeight = 1080;
 
-    CRD11Mesh Mesh;
+    CRArray< ICRRHIMeshWPtr > RenderMeshes;
 
     CRD11BindingConstantBuffer< CRMatrix         > TransformBuffer;
     CRD11BindingConstantBuffer< CRViewProjection > ViewProjectionBuffer;
@@ -41,6 +43,9 @@ public:
     
     /// Initialize renderer.
     virtual void Initialize( unsigned int Width, unsigned int Height ) override;
+
+    /// Add render mesh.
+    virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
 
     /// Draw.
     virtual void Draw() const override;

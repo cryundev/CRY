@@ -2,6 +2,7 @@
 
 
 #include "CRFbxInclude.h"
+#include "Core/CRPrimitiveData.h"
 #include "Core/Containers/CRContainerInc.h"
 #include "Core/Strings/CRStringInc.h"
 #include "RHI/DX11/CRD11Include.h"
@@ -13,26 +14,7 @@
 class CRFbxLoader
 {
 public:
-    struct MeshData
-    {
-        CRArray< CRVector     > Positions;
-        CRArray< CRVector     > Normals;
-        CRArray< CRVector     > Tangents;
-        CRArray< CRVector     > Binormals;
-        CRArray< CRVector     > Colors;
-        CRArray< CRVector2D   > UVs;    
-        CRArray< unsigned int > Indices;
-
-        void Reserve( int VertexCount )
-        {
-            Positions.reserve( VertexCount );
-            Normals  .reserve( VertexCount );
-            Tangents .reserve( VertexCount );
-            Binormals.reserve( VertexCount );
-            Colors   .reserve( VertexCount );
-            UVs      .reserve( VertexCount );
-        }
-    };
+    ;
     
 private:
     FbxManager*    FbxManagerPtr    = nullptr;
@@ -40,7 +22,7 @@ private:
     FbxImporter*   FbxImporterPtr   = nullptr;
     FbxScene*      FbxScenePtr      = nullptr;
 
-    CRArray< MeshData > Meshes;
+    CRArray< CRPrimitiveData > Primitives;
 
 public:
     /// Constructor
@@ -51,6 +33,9 @@ public:
     
     /// Load fbx file.
     bool Load( const CRString& Path );
+
+    /// Get primitive data.
+    const CRPrimitiveData& GetPrimitiveData( unsigned int Index ) const;
 
 private:
     /// Initialize.

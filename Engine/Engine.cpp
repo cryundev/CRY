@@ -112,6 +112,14 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     CRFbxLoader fbxLoader;
     fbxLoader.Load( "../Asset/Minion.fbx" );
 
+    if ( const ICRRHIMeshSPtr& rhiMesh = GRHI.CreateMesh() )
+    {
+        rhiMesh->InitializePrimitive( fbxLoader.GetPrimitiveData( 0 ) );
+        rhiMesh->InitializeMaterial();
+
+        GRHI.GetRenderer()->AddRenderMesh( rhiMesh );
+    }
+
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );
 
