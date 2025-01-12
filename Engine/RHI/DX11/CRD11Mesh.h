@@ -30,7 +30,7 @@ public:
     virtual ~CRD11Mesh() override {};
 
     /// Initialize primitive.
-    virtual void InitializePrimitive( const CRPrimitiveData& PrimitiveData ) override;
+    virtual void InitializePrimitive( const CRName& Name, const CRPrimitiveData& PrimitiveData ) override;
 
     /// Initialize material.
     virtual void InitializeMaterial() override;

@@ -49,7 +49,7 @@ cbuffer LightColorBuffer : register( b1 )
 float4 PS( PixelIn input ) : SV_TARGET
 {
 	float4 textureColor = float4( 1.f, 1.f, 1.f, 1.f );
-	textureColor = psTexture.Sample( SampleType, input.texCoord );
+	//textureColor = psTexture.Sample( SampleType, input.texCoord );
 
     float3 lightDir = normalize( -lightDirection );
     float lightIntensity = saturate( dot( lightDir, input.normal ) );

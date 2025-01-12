@@ -13,9 +13,6 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRFbxLoader
 {
-public:
-    ;
-    
 private:
     FbxManager*    FbxManagerPtr    = nullptr;
     FbxIOSettings* FbxIOSettingsPtr = nullptr;
@@ -34,8 +31,8 @@ public:
     /// Load fbx file.
     bool Load( const CRString& Path );
 
-    /// Get primitive data.
-    const CRPrimitiveData& GetPrimitiveData( unsigned int Index ) const;
+    /// Get primitive data array.
+    CRArray< CRPrimitiveData >& GetPrimitives() { return Primitives; }
 
 private:
     /// Initialize.

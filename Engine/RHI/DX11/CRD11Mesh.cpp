@@ -17,12 +17,12 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize primitive.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Mesh::InitializePrimitive( const CRPrimitiveData& PrimitiveData )
+void CRD11Mesh::InitializePrimitive( const CRName& Name, const CRPrimitiveData& PrimitiveData )
 {
     CRArray< CRVertex > vertice;
     CRVertex::LoadFromPrimitiveData( PrimitiveData, vertice );
     
-    VertexBuffer = GD11RM.GetVertexBuffer( "Rect" );
+    VertexBuffer = GD11RM.GetVertexBuffer( Name );
     VertexBuffer.lock()->Create( D3D11_USAGE_DEFAULT, 0, vertice.data(), sizeof( CRVertex ), vertice.size() );
     
     // IndexBuffer = GD11RM.GetIndexBuffer( "Rect" );

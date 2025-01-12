@@ -15,7 +15,7 @@ public:
 
 public:
     /// Initialize primitive.
-    virtual void InitializePrimitive( const CRPrimitiveData& PrimitiveData ) = 0;
+    virtual void InitializePrimitive( const CRName& Name, const CRPrimitiveData& PrimitiveData ) = 0;
 
     /// Initialize material.
     virtual void InitializeMaterial() = 0;

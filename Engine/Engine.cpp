@@ -106,18 +106,34 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 
     GCamera.Initialize( CRCamera::EProjectionType::Perspective, 90.0f, width, height, 0.1f, 1000.0f );
     GCamera.SetLookAtDirection( 0.f, 0.f, 1.f );
-    GCamera.Transform.SetLocation( 0.f, 0.f, -0.5f );
+    GCamera.Transform.SetLocation( 0.f, 0.f, -25.5f );
     GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
 
+    CRMatrix t = CRMatrix::CreateTranslation( 0.f, -10.f, 0.f );
+    CRMatrix r = CRMatrix::Identity;
+    CRMatrix s = CRMatrix::Identity; //CreateScale( 0.1f, 0.1f, 0.1f );
+    
+    GRHI.GetRenderer()->UpdateTransformBuffer( s * r * t );
+
     CRFbxLoader fbxLoader;
-    fbxLoader.Load( "../Asset/Minion.fbx" );
+    fbxLoader.Load( "../Asset/Minion.fbx" ); 
 
-    if ( const ICRRHIMeshSPtr& rhiMesh = GRHI.CreateMesh() )
+    int i = 0;
+    for ( auto& primitive : fbxLoader.GetPrimitives() )
+    //for ( int i = 0; i < 20; ++i )
     {
-        rhiMesh->InitializePrimitive( fbxLoader.GetPrimitiveData( 0 ) );
-        rhiMesh->InitializeMaterial();
+        // CRPrimitiveData primitive;
+        // primitive.Load( "../Asset/Minion" + std::to_string( i ) + ".cra" );
 
-        GRHI.GetRenderer()->AddRenderMesh( rhiMesh );
+        if ( const ICRRHIMeshSPtr& rhiMesh = GRHI.CreateMesh() )
+        {
+            CRName name = "Minion";
+            name.append( std::to_string( i++ ) );
+            rhiMesh->InitializePrimitive( name, primitive );
+            rhiMesh->InitializeMaterial();
+
+            GRHI.GetRenderer()->AddRenderMesh( rhiMesh );
+        }
     }
 
     ShowWindow( hWnd, nCmdShow );

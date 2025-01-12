@@ -1,11 +1,12 @@
 ﻿#pragma once
 
 
+#include "ICRAsset.h"
 #include "Containers/CRContainerInc.h"
 #include "Math/CRMath.h"
 
 
-struct CRPrimitiveData
+class CRPrimitiveData : public ICRAsset
 {
 public:
     CRArray< CRVector     > Positions;
@@ -19,18 +20,20 @@ public:
     int VertexCount = 0;
 
 public:
-    /// Initialize.
-    void Initialize( int InVertexCount )
-    {
-        VertexCount = InVertexCount;
-        
-        Positions = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-        Normals   = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-        Tangents  = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-        Binormals = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-        Colors    = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-        
-        UVs = CRArray< CRVector2D >( InVertexCount, CRVector2D::Zero );
+    /// Constructor.
+    CRPrimitiveData() = default;
 
-    }
+    /// Destructor.
+    virtual ~CRPrimitiveData() override {}
+
+    /// Save to file.
+    virtual void Save( const CRString& Path ) override;
+
+    /// Load from file.
+    virtual void Load( const CRString& Path ) override;
+    
+    /// Initialize.
+    void Initialize( int InVertexCount );
+
+     
 };

@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Core\ICRAsset.h" />
     <ClInclude Include="Core\CRPrimitiveData.h" />
     <ClInclude Include="Core\CRSmartPtrMacro.h" />
     <ClInclude Include="Core\CRTransform.h" />
@@ -480,6 +481,8 @@
     <ClInclude Include="Utility\WIC\CRWICTextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\CRPrimitiveData.cpp" />
+    <ClCompile Include="Core\ICRAsset.cpp" />
     <ClCompile Include="Core\CRTransform.cpp" />
     <ClCompile Include="Core\CRVertex.cpp" />
     <ClCompile Include="Core\ImGUI\imgui.cpp" />
