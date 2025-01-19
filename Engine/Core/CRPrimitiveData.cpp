@@ -65,12 +65,10 @@ void CRPrimitiveData::Initialize( int InVertexCount )
 {
     VertexCount = InVertexCount;
         
-    Positions = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-    Normals   = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-    Tangents  = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-    Binormals = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-    Colors    = CRArray< CRVector >( InVertexCount, CRVector::Zero );
-        
-    UVs = CRArray< CRVector2D >( InVertexCount, CRVector2D::Zero );
-
+    Positions.resize( InVertexCount );
+    Normals  .resize( InVertexCount );
+    Tangents .resize( InVertexCount );
+    Binormals.resize( InVertexCount );
+    Colors   .resize( InVertexCount );
+    UVs      .resize( InVertexCount );
 }

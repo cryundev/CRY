@@ -21,7 +21,7 @@ PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 norma
 {
 	PixelIn output;
 	output.position = mul( position, transform );
-    output.position = mul( output.position, view );
+    output.position = mul( position, view );
     output.position = mul( output.position, projection );
     
 	output.texCoord = texCoord;
@@ -40,7 +40,7 @@ cbuffer LightDirectionBuffer : register( b0 )
     float4 lightDirection;
 };
 
-cbuffer LightColorBuffer : register( b1 )
+cbuffer LightColorBuffer : register( b1 ) 
 {
     float4 lightColor;
 };
@@ -51,7 +51,7 @@ float4 PS( PixelIn input ) : SV_TARGET
 	float4 textureColor = float4( 1.f, 1.f, 1.f, 1.f );
 	//textureColor = psTexture.Sample( SampleType, input.texCoord );
 
-    float3 lightDir = normalize( -lightDirection );
+    float3 lightDir = normalize( lightDirection );
     float lightIntensity = saturate( dot( lightDir, input.normal ) );
     
     lightIntensity = lightIntensity * 0.5 + 0.5;

@@ -3,6 +3,7 @@
 #include "Core/ImGUI/imgui_impl_dx11.h"
 #include "Core/ImGUI/imgui_impl_win32.h"
 #include "DX11/CRD11.h"
+#include "DX11/CRD11Mesh.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/Core/CRD11Device.h"
 

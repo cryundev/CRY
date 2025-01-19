@@ -3,9 +3,11 @@
 #include "Core/ImGUI/imgui_impl_win32.h"
 #include "Object/Camera/CRCamera.h"
 #include "RHI/CRRHI.h"
+#include "RHI/ICRRHIMesh.h"
 #include "RHI/DX11/CRD11.h"
 #include "RHI/DX11/CRD11Renderer.h"
 #include "Utility/FBX/CRFbxLoader.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -106,36 +108,34 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 
     GCamera.Initialize( CRCamera::EProjectionType::Perspective, 90.0f, width, height, 0.1f, 1000.0f );
     GCamera.SetLookAtDirection( 0.f, 0.f, 1.f );
-    GCamera.Transform.SetLocation( 0.f, 0.f, -25.5f );
+    GCamera.Transform.SetLocation( 0.f, 0.f, -15.5f );
     GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
 
-    CRMatrix t = CRMatrix::CreateTranslation( 0.f, -10.f, 0.f );
-    CRMatrix r = CRMatrix::Identity;
-    CRMatrix s = CRMatrix::Identity; //CreateScale( 0.1f, 0.1f, 0.1f );
+    // CRFbxLoader fbxLoader;
+    // fbxLoader.Load( "../Asset/Minion.fbx" );
+    //
+    // for ( auto& primitive : fbxLoader.GetPrimitives() )
+    // {
+    //     if ( const ICRRHIMeshSPtr& rhiMesh = GRHI.CreateMesh() )
+    //     {
+    //         CRName name = "Minion";
+    //         rhiMesh->InitializePrimitive( name, primitive );
+    //         rhiMesh->InitializeMaterial();
+    //
+    //         GRHI.GetRenderer()->AddRenderMesh( rhiMesh );
+    //     }
+    // }
     
-    GRHI.GetRenderer()->UpdateTransformBuffer( s * r * t );
-
-    CRFbxLoader fbxLoader;
-    fbxLoader.Load( "../Asset/Minion.fbx" ); 
-
-    int i = 0;
-    for ( auto& primitive : fbxLoader.GetPrimitives() )
-    //for ( int i = 0; i < 20; ++i )
-    {
-        // CRPrimitiveData primitive;
-        // primitive.Load( "../Asset/Minion" + std::to_string( i ) + ".cra" );
-
-        if ( const ICRRHIMeshSPtr& rhiMesh = GRHI.CreateMesh() )
-        {
-            CRName name = "Minion";
-            name.append( std::to_string( i++ ) );
-            rhiMesh->InitializePrimitive( name, primitive );
-            rhiMesh->InitializeMaterial();
-
-            GRHI.GetRenderer()->AddRenderMesh( rhiMesh );
-        }
-    }
-
+    CRPrimitiveData primitive;
+    primitive.Load( "../Asset/Minion.cra" );
+    
+    const ICRRHIMeshSPtr& rhiMesh = GRHI.CreateMesh();
+    
+    rhiMesh->InitializePrimitive( "Minion", primitive );
+    rhiMesh->InitializeMaterial();
+    
+    GRHI.GetRenderer()->AddRenderMesh( rhiMesh );
+    
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );
 

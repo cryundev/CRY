@@ -18,7 +18,7 @@ public:
     virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) = 0;
 
     /// Draw.
-    virtual void Draw() const = 0;
+    virtual void Draw() = 0;
 
     /// Clear render target.
     virtual void ClearRenderTarget() const = 0;

@@ -6,6 +6,7 @@
 #include "Core/CRD11Device.h"
 #include "Core/CRD11RenderTargetView.h"
 #include "Core/CRPrimitiveData.h"
+#include "RHI/ICRRHIMesh.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -33,8 +34,8 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
     LightColorBuffer.Create( "LightColor", (unsigned int)( ECPS::LightColor ), ED11RenderingPipelineStage::PS );
     LightColorBuffer.SetInRenderingPipeline();
 
-    LightDirectionBuffer.Update( CRVector4D( 0.0f, 0.0f, -1.0f, 1.0f ) );
-    LightColorBuffer    .Update( CRVector4D( 0.0f, 0.0f,  1.0f, 1.0f ) );
+    LightDirectionBuffer.Update( CRVector4D( 1.0f, -1.0f, 1.0f, 1.0f ) );
+    LightColorBuffer    .Update( CRVector4D( 1.0f, 1.0f,  1.0f, 1.0f ) );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -68,11 +69,13 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 //---------------------------------------------------------------------------------------------------------------------
 /// Draw.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::Draw() const
+void CRD11Renderer::Draw()
 {
     for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
     {
         if ( renderMesh.expired() ) continue;
+        
+        UpdateTransformBuffer( renderMesh.lock()->GetTransformMatrix() );
         
         renderMesh.lock()->SetInRenderingPipeline();
         renderMesh.lock()->Draw();

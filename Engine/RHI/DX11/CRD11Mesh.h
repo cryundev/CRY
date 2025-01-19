@@ -3,6 +3,7 @@
 
 #include "CRD11ShaderResourceTexture.h"
 #include "CRD11Types.h"
+#include "Core/CRTransform.h"
 #include "RHI/ICRRHIMesh.h"
 
 
@@ -21,6 +22,8 @@ private:
 
     CRD11VertexShaderWPtr VertexShader;
     CRD11PixelShaderWPtr  PixelShader;
+
+    CRMatrix TransformMatrix = CRMatrix::Identity;
     
 public:
     /// Constructor
@@ -40,4 +43,7 @@ public:
 
     /// Draw.
     virtual void Draw() const override;
+
+    /// Get transform matrix.
+    virtual CRMatrix& GetTransformMatrix() override { return TransformMatrix; }
 };

@@ -473,6 +473,7 @@
     <ClInclude Include="RHI\DX11\CRD11ShaderResourceTexture.h" />
     <ClInclude Include="RHI\DX11\CRD11Types.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="UI\CRLogUI.h" />
     <ClInclude Include="Utility\FBX\CRFbxInclude.h" />
     <ClInclude Include="Utility\FBX\CRFbxLoader.h" />
     <ClInclude Include="Utility\Generic\CRGeneric.h" />
@@ -813,6 +814,7 @@
       <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="UI\CRLogUI.cpp" />
     <ClCompile Include="Utility\FBX\CRFbxLoader.cpp" />
     <ClCompile Include="Utility\Generic\CRGeneric.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>

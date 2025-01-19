@@ -27,6 +27,8 @@ bool CRFbxLoader::Load( const CRString& Path )
 
     if ( !_Initialize( Path ) ) return false;
 
+    Primitives.push_back( CRPrimitiveData() );
+
     _LoadNode( FbxScenePtr->GetRootNode() );
 
     return true;
@@ -58,8 +60,13 @@ bool CRFbxLoader::_Initialize( const CRString& Path )
     
     FbxImporterPtr->Import( FbxScenePtr );
 
+    const FbxAxisSystem& sceneAxisSystem = FbxScenePtr->GetGlobalSettings().GetAxisSystem();
     FbxAxisSystem directXAxisSystem( FbxAxisSystem::eDirectX );
-    directXAxisSystem.ConvertScene( FbxScenePtr );
+    
+    // if ( sceneAxisSystem != directXAxisSystem )
+    // {
+    //     directXAxisSystem.ConvertScene( FbxScenePtr );
+    // }
     
     FbxGeometryConverter fbxGeometryConverter( FbxManagerPtr );
     fbxGeometryConverter.Triangulate( FbxScenePtr, true );
@@ -100,32 +107,34 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
 
     FbxMesh* mesh = Node->GetMesh();
     if ( !mesh ) return;
+    
+    CRPrimitiveData& primitiveData = Primitives.back();
+    
+    int vertexCount = mesh->GetPolygonCount() * 3;
+    int vertexIndex = primitiveData.VertexCount;
+    
+    primitiveData.Initialize( primitiveData.VertexCount + vertexCount ); 
 
-    FbxAMatrix transformMatrix = Node->EvaluateGlobalTransform( FBXSDK_TIME_INFINITE, FbxNode::eDestinationPivot );
-
-    Primitives.push_back( CRPrimitiveData() );
-    CRPrimitiveData& meshData = Primitives.back();
-    meshData.Initialize( mesh->GetPolygonCount() * 3 );
-
-    int i = 0;
+    const FbxAMatrix& transformMatrix = Node->EvaluateGlobalTransform();
+    
     for ( int polygonIndex = 0; polygonIndex < mesh->GetPolygonCount(); ++polygonIndex )
     {
         FbxVector4* fbxVertices = mesh->GetControlPoints();
         
-        for ( int vertexIndex = 0; vertexIndex < 3; ++vertexIndex )
+        for ( int t = 0; t < 3; ++t )
         {
-            int index = mesh->GetPolygonVertex( polygonIndex, vertexIndex );
+            int index = mesh->GetPolygonVertex( polygonIndex, t );
 
-            FbxVector4 transformedVertex = transformMatrix.MultT( fbxVertices[ index ] );
-            meshData.Positions[ i ] = CRVector( transformedVertex.mData[ 0 ], transformedVertex.mData[ 1 ], transformedVertex.mData[ 2 ] );
+            const FbxVector4& transformedVertex = transformMatrix.MultT( fbxVertices[ index ] );
+            primitiveData.Positions[ vertexIndex ] = CRVector( transformedVertex.mData[ 0 ], transformedVertex.mData[ 1 ], transformedVertex.mData[ 2 ] );
 
             FbxVector4 normal;
-            mesh->GetPolygonVertexNormal( polygonIndex, vertexIndex, normal );
+            mesh->GetPolygonVertexNormal( polygonIndex, t, normal );
 
-            FbxVector4 transformedNormal = normal;
-            meshData.Normals[ i ] = CRVector( transformedNormal.mData[ 0 ], transformedNormal.mData[ 1 ], transformedNormal.mData[ 2 ] );
-            
-            ++i;
+            const FbxVector4& transformedNormal = -normal;
+            primitiveData.Normals[ vertexIndex ] = CRVector( transformedNormal.mData[ 0 ], transformedNormal.mData[ 1 ], transformedNormal.mData[ 2 ] );
+
+            ++vertexIndex;
         }
     }
 }

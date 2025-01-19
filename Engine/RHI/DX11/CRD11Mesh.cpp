@@ -24,9 +24,6 @@ void CRD11Mesh::InitializePrimitive( const CRName& Name, const CRPrimitiveData& 
     
     VertexBuffer = GD11RM.GetVertexBuffer( Name );
     VertexBuffer.lock()->Create( D3D11_USAGE_DEFAULT, 0, vertice.data(), sizeof( CRVertex ), vertice.size() );
-    
-    // IndexBuffer = GD11RM.GetIndexBuffer( "Rect" );
-    // IndexBuffer.lock()->Create( D3D11_USAGE_DEFAULT, 0, { 0, 1, 2, 1, 3, 2 } );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

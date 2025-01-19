@@ -1,7 +1,10 @@
 ﻿#pragma once
 
 
-struct CRPrimitiveData;
+#include "Core/Strings/CRStringInc.h"
+
+
+class CRPrimitiveData;
 
 
 class ICRRHIMesh
@@ -25,4 +28,7 @@ public:
 
     /// Draw.
     virtual void Draw() const = 0;
+
+    /// Get transform matrix.
+    virtual CRMatrix& GetTransformMatrix() = 0;
 };

@@ -3,7 +3,6 @@
 
 #include "CRD11BindingConstantBuffer.h"
 #include "CRD11Include.h"
-#include "CRD11Mesh.h"
 #include "CRD11Types.h"
 #include "RHI/CRRHITypes.h"
 #include "RHI/ICRRHIRenderer.h"
@@ -48,7 +47,7 @@ public:
     virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
 
     /// Draw.
-    virtual void Draw() const override;
+    virtual void Draw() override;
 
     /// Clear render target.
     virtual void ClearRenderTarget() const override;

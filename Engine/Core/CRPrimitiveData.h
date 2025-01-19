@@ -34,6 +34,4 @@ public:
     
     /// Initialize.
     void Initialize( int InVertexCount );
-
-     
 };
