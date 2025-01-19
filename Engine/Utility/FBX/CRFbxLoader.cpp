@@ -116,23 +116,26 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
     primitiveData.Initialize( primitiveData.VertexCount + vertexCount ); 
 
     const FbxAMatrix& transformMatrix = Node->EvaluateGlobalTransform();
+    const FbxVector4* fbxVertices     = mesh->GetControlPoints();
     
     for ( int polygonIndex = 0; polygonIndex < mesh->GetPolygonCount(); ++polygonIndex )
     {
-        FbxVector4* fbxVertices = mesh->GetControlPoints();
-        
         for ( int t = 0; t < 3; ++t )
         {
             int index = mesh->GetPolygonVertex( polygonIndex, t );
 
             const FbxVector4& transformedVertex = transformMatrix.MultT( fbxVertices[ index ] );
-            primitiveData.Positions[ vertexIndex ] = CRVector( transformedVertex.mData[ 0 ], transformedVertex.mData[ 1 ], transformedVertex.mData[ 2 ] );
+            primitiveData.Positions[ vertexIndex ].x = transformedVertex.mData[ 0 ];
+            primitiveData.Positions[ vertexIndex ].y = transformedVertex.mData[ 1 ];
+            primitiveData.Positions[ vertexIndex ].z = transformedVertex.mData[ 2 ];
 
             FbxVector4 normal;
             mesh->GetPolygonVertexNormal( polygonIndex, t, normal );
 
             const FbxVector4& transformedNormal = -normal;
-            primitiveData.Normals[ vertexIndex ] = CRVector( transformedNormal.mData[ 0 ], transformedNormal.mData[ 1 ], transformedNormal.mData[ 2 ] );
+            primitiveData.Normals[ vertexIndex ].x = transformedNormal.mData[ 0 ];
+            primitiveData.Normals[ vertexIndex ].y = transformedNormal.mData[ 1 ];
+            primitiveData.Normals[ vertexIndex ].z = transformedNormal.mData[ 2 ];
 
             ++vertexIndex;
         }
