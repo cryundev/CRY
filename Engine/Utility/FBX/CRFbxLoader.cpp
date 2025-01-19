@@ -124,15 +124,15 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
         {
             int index = mesh->GetPolygonVertex( polygonIndex, t );
 
-            const FbxVector4& transformedVertex = transformMatrix.MultT( fbxVertices[ index ] );
-            primitiveData.Positions[ vertexIndex ].x = transformedVertex.mData[ 0 ];
-            primitiveData.Positions[ vertexIndex ].y = transformedVertex.mData[ 1 ];
-            primitiveData.Positions[ vertexIndex ].z = transformedVertex.mData[ 2 ];
+            const FbxVector4& fbxPosition = transformMatrix.MultT( fbxVertices[ index ] );
+            primitiveData.Positions[ vertexIndex ].x = fbxPosition.mData[ 0 ];
+            primitiveData.Positions[ vertexIndex ].y = fbxPosition.mData[ 1 ];
+            primitiveData.Positions[ vertexIndex ].z = fbxPosition.mData[ 2 ];
 
-            FbxVector4 normal;
-            mesh->GetPolygonVertexNormal( polygonIndex, t, normal );
+            FbxVector4 fbxNormal;
+            mesh->GetPolygonVertexNormal( polygonIndex, t, fbxNormal );
 
-            const FbxVector4& transformedNormal = -normal;
+            const FbxVector4& transformedNormal = -fbxNormal;
             primitiveData.Normals[ vertexIndex ].x = transformedNormal.mData[ 0 ];
             primitiveData.Normals[ vertexIndex ].y = transformedNormal.mData[ 1 ];
             primitiveData.Normals[ vertexIndex ].z = transformedNormal.mData[ 2 ];
