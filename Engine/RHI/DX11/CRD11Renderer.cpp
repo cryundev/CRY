@@ -2,6 +2,7 @@
 #include "CRD11.h"
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
+#include "Engine.h"
 #include "Utility/Log/CRLog.h"
 #include "Core/CRD11Device.h"
 #include "Core/CRD11RenderTargetView.h"
@@ -76,6 +77,8 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
+    UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
+    
     for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
     {
         if ( renderMesh.expired() ) continue;

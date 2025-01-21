@@ -13,3 +13,27 @@ CRMatrix CRTransform::ToLocalMatrix() const
            CRMatrix::CreateFromQuaternion( Rotation  ) *
            CRMatrix::CreateTranslation   ( Location  );
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get forward vector.
+//---------------------------------------------------------------------------------------------------------------------
+CRVector CRTransform::GetForward() const
+{
+    return CRVector::Transform( CRVector::Forward, Rotation );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get right vector.
+//---------------------------------------------------------------------------------------------------------------------
+CRVector CRTransform::GetRight() const
+{
+    return CRVector::Transform( CRVector::Right, Rotation );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get up vector.
+//---------------------------------------------------------------------------------------------------------------------
+CRVector CRTransform::GetUp() const
+{
+    return CRVector::Transform( CRVector::Up, Rotation );
+}

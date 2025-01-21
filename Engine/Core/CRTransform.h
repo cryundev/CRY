@@ -9,7 +9,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRTransform
 {
-private:
+public:
     CRVector     Location = CRVector::Zero;
     CRQuaternion Rotation = CRQuaternion::Identity;
     CRVector     Scale    = CRVector::One;
@@ -53,4 +53,13 @@ public:
 
     /// Set scale.
     void SetScale( const CRVector& InScale ) { Scale = InScale; }
+
+    /// Get forward vector.
+    CRVector GetForward() const;
+
+    /// Get right vector.
+    CRVector GetRight() const;
+
+    /// Get up vector.
+    CRVector GetUp() const;
 };

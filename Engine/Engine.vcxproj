@@ -442,6 +442,7 @@
     <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xpathInternals.h" />
     <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xpointer.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="Input\CRInputProcessorCamera.h" />
     <ClInclude Include="Object\Camera\CRCamera.h" />
     <ClInclude Include="Object\CRActor.h" />
     <ClInclude Include="Object\CRObject.h" />
@@ -498,6 +499,7 @@
     <ClCompile Include="Core\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="Core\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Input\CRInputProcessorCamera.cpp" />
     <ClCompile Include="Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Object\CRActor.cpp" />
     <ClCompile Include="Object\CRObject.cpp" />
