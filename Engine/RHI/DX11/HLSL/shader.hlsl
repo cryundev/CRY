@@ -21,7 +21,7 @@ PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 norma
 {
 	PixelIn output;
 	output.position = mul( position, transform );
-    output.position = mul( position, view );
+    output.position = mul( output.position, view );
     output.position = mul( output.position, projection );
     
 	output.texCoord = texCoord;

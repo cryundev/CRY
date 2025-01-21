@@ -107,13 +107,13 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
 
     FbxMesh* mesh = Node->GetMesh();
     if ( !mesh ) return;
-    
+
     CRPrimitiveData& primitiveData = Primitives.back();
     
     int vertexCount = mesh->GetPolygonCount() * 3;
     int vertexIndex = primitiveData.VertexCount;
     
-    primitiveData.Initialize( primitiveData.VertexCount + vertexCount ); 
+    primitiveData.Initialize( primitiveData.VertexCount + vertexCount );
 
     const FbxAMatrix& transformMatrix = Node->EvaluateGlobalTransform();
     const FbxVector4* fbxVertices     = mesh->GetControlPoints();
@@ -132,7 +132,7 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
             FbxVector4 fbxNormal;
             mesh->GetPolygonVertexNormal( polygonIndex, t, fbxNormal );
 
-            const FbxVector4& transformedNormal = -fbxNormal;
+            const FbxVector4& transformedNormal = fbxNormal;
             primitiveData.Normals[ vertexIndex ].x = transformedNormal.mData[ 0 ];
             primitiveData.Normals[ vertexIndex ].y = transformedNormal.mData[ 1 ];
             primitiveData.Normals[ vertexIndex ].z = transformedNormal.mData[ 2 ];

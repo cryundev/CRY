@@ -5,10 +5,10 @@
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
 #include "CRD11Types.h"
-#include "../../Utility/Generic/CRGeneric.h"
-#include "../../Utility/Log/CRLog.h"
 #include "Core/CRD11ConstantBuffer.h"
 #include "Core/CRD11Device.h"
+#include "Utility/Generic/CRGeneric.h"
+#include "Utility/Log/CRLog.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -95,4 +95,4 @@ void CRD11BindingConstantBuffer<T>::SetInRenderingPipeline() const
     if ( ConstantBufferPtr.expired() ) return;
     
     GD11RP.SetConstantBuffer( ConstantBufferPtr.lock()->GetObjectPtr(), Slot, Stage );
-}
+} 

@@ -4,17 +4,19 @@
 #include "Core/CRSmartPtrMacro.h"
 
 
-DECLARE_SMART_PTR( CRD11VertexBuffer       )
-DECLARE_SMART_PTR( CRD11IndexBuffer        )
-DECLARE_SMART_PTR( CRD11ConstantBuffer     )
-DECLARE_SMART_PTR( CRD11InputLayout        )
 DECLARE_SMART_PTR( CRD11CompiledShader     )
-DECLARE_SMART_PTR( CRD11VertexShader       )
+DECLARE_SMART_PTR( CRD11ConstantBuffer     )
+DECLARE_SMART_PTR( CRD11DepthStencilState  )
+DECLARE_SMART_PTR( CRD11DepthStencilView   )
+DECLARE_SMART_PTR( CRD11IndexBuffer        )
+DECLARE_SMART_PTR( CRD11InputLayout        )
 DECLARE_SMART_PTR( CRD11PixelShader        )
-DECLARE_SMART_PTR( CRD11Texture2D          )
+DECLARE_SMART_PTR( CRD11RenderTargetView   )
 DECLARE_SMART_PTR( CRD11SamplerState       )
 DECLARE_SMART_PTR( CRD11ShaderResourceView )
-DECLARE_SMART_PTR( CRD11RenderTargetView   )
+DECLARE_SMART_PTR( CRD11Texture2D          )
+DECLARE_SMART_PTR( CRD11VertexBuffer       )
+DECLARE_SMART_PTR( CRD11VertexShader       )
 
 
 //---------------------------------------------------------------------------------------------------------------------

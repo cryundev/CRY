@@ -16,6 +16,8 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 {
     ViewportWidth  = Width;
     ViewportHeight = Height;
+
+    DepthStencilBuffer.Create( Width, Height );
     
     _InitializeRenderTarget();
     _InitializeViewport( (float)( Width ), (float)( Height ) );
@@ -34,7 +36,10 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
     LightColorBuffer.Create( "LightColor", (unsigned int)( ECPS::LightColor ), ED11RenderingPipelineStage::PS );
     LightColorBuffer.SetInRenderingPipeline();
 
-    LightDirectionBuffer.Update( CRVector4D( 1.0f, -1.0f, 1.0f, 1.0f ) );
+    CRVector lightDir( 1.0f, -1.0f, 1.0f );
+    lightDir.Normalize();
+
+    LightDirectionBuffer.Update( CRVector4D( lightDir.x, lightDir.y, lightDir.z, 1.0f ) );
     LightColorBuffer    .Update( CRVector4D( 1.0f, 1.0f,  1.0f, 1.0f ) );
 }
 
@@ -74,7 +79,10 @@ void CRD11Renderer::Draw()
     for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
     {
         if ( renderMesh.expired() ) continue;
-        
+
+        // const CRMatrix& mat = CRMatrix::CreateRotationY( 3.14f );
+        //
+        // UpdateTransformBuffer( mat.Transpose() );
         UpdateTransformBuffer( renderMesh.lock()->GetTransformMatrix() );
         
         renderMesh.lock()->SetInRenderingPipeline();
@@ -89,6 +97,8 @@ void CRD11Renderer::ClearRenderTarget() const
 {
     float color[ 4 ] = { 0.0f, 0.4f, 0.7f, 1.0f };
     GD11.GetDeviceContext()->ClearRenderTargetView( RenderTargetView->GetObjectPtr(), color );
+
+    DepthStencilBuffer.ClearBuffer();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -112,7 +122,7 @@ void CRD11Renderer::_InitializeRenderTarget()
     RenderTargetView = GD11RM.GetRenderTargetView( "BackBuffer" );
     RenderTargetView->Create( texture, nullptr );
 
-    GD11RP.SetRenderTargetView( RenderTargetView->GetObjectPtr() );
+    GD11RP.SetRenderTargetView( RenderTargetView->GetObjectPtr(), DepthStencilBuffer.GetView() );
 
     texture->Release();
 }

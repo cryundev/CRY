@@ -17,17 +17,19 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRD11ResourceManager
 {
-    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( VertexBuffer       )
-    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
-    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
-    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( CompiledShader     )
-    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( VertexShader       )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( DepthStencilState  )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( DepthStencilView   )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( PixelShader        )
-    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( Texture2D          )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( RenderTargetView   )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( SamplerState       )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( ShaderResourceView )
-    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( RenderTargetView   )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( Texture2D          )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( VertexBuffer       )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( VertexShader       )
 	
 public:
 	/// Constructor
@@ -48,7 +50,7 @@ private:
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
 CRSharedPtr< T > CRD11ResourceManager::_GetResource( const CRName& Name, CRMap< CRName, CRSharedPtr< T > >& Resources )
-{
+    {
 	auto find = Resources.find( Name );
 
 	if ( find == Resources.end() )

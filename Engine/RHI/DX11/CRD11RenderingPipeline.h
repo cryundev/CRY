@@ -40,6 +40,11 @@ private:
     //-----------------------------------------------------------------------------------------------------------------
     ID3D11RenderTargetView* RenderTargetView = nullptr;
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// DepthStencil state
+    //-----------------------------------------------------------------------------------------------------------------
+    ID3D11DepthStencilState* DepthStencilState = nullptr;
+
 public:
     /// Set vertex buffer.
     void SetVertexBuffer( ID3D11Buffer* Buffer, unsigned int Slot, unsigned int Stride, unsigned int Offset, D3D_PRIMITIVE_TOPOLOGY TopologyType );
@@ -66,6 +71,9 @@ public:
     void SetPixelShader( ID3D11PixelShader* Shader );
 
     /// Set render target view.
-    void SetRenderTargetView( ID3D11RenderTargetView* View );
+    void SetRenderTargetView( ID3D11RenderTargetView* View, ID3D11DepthStencilView* DepthStencilView ); 
+
+    /// Set depth stencil state.
+    void SetDepthStencilState( ID3D11DepthStencilState* State );
     
 };

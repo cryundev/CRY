@@ -126,11 +126,23 @@ void CRD11RenderingPipeline::SetPixelShader( ID3D11PixelShader* Shader )
 //---------------------------------------------------------------------------------------------------------------------
 /// Set render target view.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11RenderingPipeline::SetRenderTargetView( ID3D11RenderTargetView* View )
+void CRD11RenderingPipeline::SetRenderTargetView( ID3D11RenderTargetView* View, ID3D11DepthStencilView* DepthStencilView )
 {
     if ( !View ) return;
 
     RenderTargetView = View;
 
-    GD11.GetDeviceContext()->OMSetRenderTargets( 1, &View, nullptr );
+    GD11.GetDeviceContext()->OMSetRenderTargets( 1, &View, DepthStencilView );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set depth stencil state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::SetDepthStencilState( ID3D11DepthStencilState* State )
+{
+    if ( !State ) return;
+    
+    DepthStencilState = State;
+
+    GD11.GetDeviceContext()->OMSetDepthStencilState( State, 0 );
 }

@@ -2,6 +2,7 @@
 
 
 #include "CRD11BindingConstantBuffer.h"
+#include "CRD11DepthStencilBuffer.h"
 #include "CRD11Include.h"
 #include "CRD11Types.h"
 #include "RHI/CRRHITypes.h"
@@ -32,6 +33,8 @@ private:
     CRD11BindingConstantBuffer< CRVector4D       > LightColorBuffer;    
     
     CRD11RenderTargetViewSPtr RenderTargetView;
+
+    CRD11DepthStencilBuffer DepthStencilBuffer;
     
 public:
     /// Constructor
