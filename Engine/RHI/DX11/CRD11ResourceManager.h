@@ -24,6 +24,7 @@ class CRD11ResourceManager
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( PixelShader        )
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( RasterizerState    )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( RenderTargetView   )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( SamplerState       )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( ShaderResourceView )

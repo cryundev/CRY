@@ -6,6 +6,7 @@
 #include "Core/CRD11IndexBuffer.h"
 #include "Core/CRD11InputLayout.h"
 #include "Core/CRD11PixelShader.h"
+#include "Core/CRD11RasterizerState.h""
 #include "Core/CRD11RenderTargetView.h"
 #include "Core/CRD11SamplerState.h"
 #include "Core/CRD11ShaderResourceView.h"
@@ -37,6 +38,7 @@ void CRD11ResourceManager::Clear()
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( PixelShader        )
+    CLEAR_CRD11_RESOURCE_MANAGE_TYPE( RasterizerState    )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( RenderTargetView   )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( SamplerState       )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( ShaderResourceView )
@@ -53,6 +55,7 @@ GET_CRD11_RESOURCE_MANAGE_TYPE( DepthStencilView   )
 GET_CRD11_RESOURCE_MANAGE_TYPE( IndexBuffer        )
 GET_CRD11_RESOURCE_MANAGE_TYPE( InputLayout        )
 GET_CRD11_RESOURCE_MANAGE_TYPE( PixelShader        )
+GET_CRD11_RESOURCE_MANAGE_TYPE( RasterizerState    )
 GET_CRD11_RESOURCE_MANAGE_TYPE( RenderTargetView   )
 GET_CRD11_RESOURCE_MANAGE_TYPE( SamplerState       )
 GET_CRD11_RESOURCE_MANAGE_TYPE( ShaderResourceView )

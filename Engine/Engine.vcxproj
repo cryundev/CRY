@@ -451,6 +451,7 @@
     <ClInclude Include="RHI\CRRHITypes.h" />
     <ClInclude Include="RHI\DX11\Core\CRD11DepthStencilState.h" />
     <ClInclude Include="RHI\DX11\Core\CRD11DepthStencilView.h" />
+    <ClInclude Include="RHI\DX11\Core\CRD11RasterizerState.h" />
     <ClInclude Include="RHI\DX11\CRD11DepthStencilBuffer.h" />
     <ClInclude Include="RHI\ICRRHIMesh.h" />
     <ClInclude Include="RHI\ICRRHIRenderer.h" />
@@ -482,6 +483,8 @@
     <ClInclude Include="Utility\FBX\CRFbxLoader.h" />
     <ClInclude Include="Utility\Generic\CRGeneric.h" />
     <ClInclude Include="Utility\Log\CRLog.h" />
+    <ClInclude Include="Utility\Time\CRFrameUpdator.h" />
+    <ClInclude Include="Utility\Time\CRTime.h" />
     <ClInclude Include="Utility\UtilString.h" />
     <ClInclude Include="Utility\WIC\CRWICTextureLoader.h" />
   </ItemGroup>
@@ -658,6 +661,7 @@
     <ClCompile Include="RHI\DX11\Core\CRD11IndexBuffer.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11InputLayout.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11PixelShader.cpp" />
+    <ClCompile Include="RHI\DX11\Core\CRD11RasterizerState.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11RenderTargetView.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11SamplerState.cpp" />
     <ClCompile Include="RHI\DX11\Core\CRD11ShaderResourceView.cpp" />
@@ -1118,6 +1122,8 @@
       <AdditionalIncludeDirectories>C:\Project\CRY\Engine\/Extras</AdditionalIncludeDirectories>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
+    <ClCompile Include="Utility\Time\CRFrameUpdator.cpp" />
+    <ClCompile Include="Utility\Time\CRTime.cpp" />
     <ClCompile Include="Utility\UtilString.cpp" />
     <ClCompile Include="Utility\WIC\CRWICTextureLoader.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>

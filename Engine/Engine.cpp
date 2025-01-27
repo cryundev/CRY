@@ -8,6 +8,7 @@
 #include "RHI/DX11/CRD11.h"
 #include "RHI/DX11/CRD11Renderer.h"
 #include "Utility/FBX/CRFbxLoader.h"
+#include "Utility/Time/CRFrameUpdator.h"
 
 
 #define MAX_LOADSTRING 100
@@ -21,6 +22,7 @@ WCHAR     szTitle      [ MAX_LOADSTRING ]; // 제목 표시줄 텍스트입니�
 WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니다.
 
 CRCamera GCamera;
+CRFrameUpdator GFrameUpdator;
 
 DirectX::Keyboard GKeyboard;
 DirectX::Mouse    GMouse;
@@ -67,7 +69,12 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	    }
 
         GInputProcessorCamera.Tick( 0.016f );
-        GRHI.RenderFrame();
+
+        if ( GFrameUpdator.Update() )
+        {
+            GRHI.RenderFrame();
+        }
+        
     }
 
     return (int)msg.wParam;
@@ -120,8 +127,8 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
 
     // CRFbxLoader fbxLoader;
-    // fbxLoader.Load( "../Asset/Minion.fbx" );
-    // fbxLoader.GetPrimitives()[0].Save( "../Asset/Minion.cra" );
+    // fbxLoader.Load( "../Asset/tower.fbx" );
+    // fbxLoader.GetPrimitives()[0].Save( "../Asset/tower.cra" );
     //
     // int i = 0;
     // for ( auto& primitive : fbxLoader.GetPrimitives() )
@@ -152,6 +159,8 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );
+
+    GFrameUpdator.Initialize( 30 );
 
     return TRUE;
 }
@@ -192,6 +201,8 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
             DirectX::Mouse::ProcessMessage( message, wParam, lParam );
         }
         break;
+    case WM_MOUSEACTIVATE:
+        return MA_ACTIVATEANDEAT;
     case WM_KEYDOWN:
     case WM_KEYUP:
     case WM_SYSKEYUP:

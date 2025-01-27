@@ -45,6 +45,11 @@ private:
     //-----------------------------------------------------------------------------------------------------------------
     ID3D11DepthStencilState* DepthStencilState = nullptr;
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// Rasterizer state
+    //-----------------------------------------------------------------------------------------------------------------
+    ID3D11RasterizerState* RasterizerState = nullptr;
+
 public:
     /// Set vertex buffer.
     void SetVertexBuffer( ID3D11Buffer* Buffer, unsigned int Slot, unsigned int Stride, unsigned int Offset, D3D_PRIMITIVE_TOPOLOGY TopologyType );
@@ -75,5 +80,8 @@ public:
 
     /// Set depth stencil state.
     void SetDepthStencilState( ID3D11DepthStencilState* State );
+
+    /// Set rasterizer state.
+    void SetRasterizerState( ID3D11RasterizerState* State );
     
 };

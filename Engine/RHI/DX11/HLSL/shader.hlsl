@@ -19,7 +19,7 @@ cbuffer ViewProjectionBuffer : register( b1 )
 
 PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 normal : NORMAL )
 {
-	PixelIn output;
+    PixelIn output;
 	output.position = mul( position, transform );
     output.position = mul( output.position, view );
     output.position = mul( output.position, projection );

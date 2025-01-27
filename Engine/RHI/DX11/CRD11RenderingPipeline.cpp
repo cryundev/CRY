@@ -146,3 +146,15 @@ void CRD11RenderingPipeline::SetDepthStencilState( ID3D11DepthStencilState* Stat
 
     GD11.GetDeviceContext()->OMSetDepthStencilState( State, 0 );
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set rasterizer state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::SetRasterizerState( ID3D11RasterizerState* State )
+{
+    if ( !State ) return;
+
+    RasterizerState = State;
+
+    GD11.GetDeviceContext()->RSSetState( State );
+}

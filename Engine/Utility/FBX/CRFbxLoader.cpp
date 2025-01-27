@@ -60,12 +60,17 @@ bool CRFbxLoader::_Initialize( const CRString& Path )
     
     FbxImporterPtr->Import( FbxScenePtr );
 
-    const FbxAxisSystem& sceneAxisSystem = FbxScenePtr->GetGlobalSettings().GetAxisSystem();
-    FbxAxisSystem directXAxisSystem( FbxAxisSystem::eDirectX );
+    const FbxAxisSystem& sceneAxisSystem  = FbxScenePtr->GetGlobalSettings().GetAxisSystem();
+    const FbxAxisSystem& targetAxisSystem = FbxAxisSystem::OpenGL;
+    if ( sceneAxisSystem != targetAxisSystem )
+    {
+        targetAxisSystem.ConvertScene( FbxScenePtr );
+    }
     
-    // if ( sceneAxisSystem != directXAxisSystem )
+    // FbxSystemUnit sceneSystemUnit = FbxScenePtr->GetGlobalSettings().GetSystemUnit();
+    // if ( sceneSystemUnit.GetScaleFactor() != 1.0 )
     // {
-    //     directXAxisSystem.ConvertScene( FbxScenePtr );
+    //     FbxSystemUnit::cm.ConvertScene( FbxScenePtr );
     // }
     
     FbxGeometryConverter fbxGeometryConverter( FbxManagerPtr );
@@ -115,16 +120,44 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
     
     primitiveData.Initialize( primitiveData.VertexCount + vertexCount );
 
-    const FbxAMatrix& transformMatrix = Node->EvaluateGlobalTransform();
+    const FbxVector4& t = Node->GetGeometricTranslation( FbxNode::eSourcePivot );
+    const FbxVector4& r = Node->GetGeometricRotation   ( FbxNode::eSourcePivot );
+    const FbxVector4& s = Node->GetGeometricScaling    ( FbxNode::eSourcePivot );
+
+    FbxAMatrix trsMatrix( t, r, s );
+
+    bool allByControlPoint = true;
+
+    bool hasNormal = mesh->GetElementNormalCount() > 0;  
+    bool hasUV     = mesh->GetElementUVCount()     > 0;  
+
+    FbxGeometryElement::EMappingMode normalMappingMode = FbxGeometryElement::eNone;  
+    FbxGeometryElement::EMappingMode uvMappingMode     = FbxGeometryElement::eNone;
+
+    if ( hasNormal )  
+    {  
+        normalMappingMode = mesh->GetElementNormal( 0 )->GetMappingMode();  
+        if ( normalMappingMode == FbxGeometryElement::eNone )  
+        {  
+            hasNormal = false;  
+        }  
+        if ( hasNormal && normalMappingMode != FbxGeometryElement::eByControlPoint )  
+        {  
+            allByControlPoint = false;  
+        }  
+    }
+
+    const FbxAMatrix& transformMatrix = Node->EvaluateGlobalTransform() * trsMatrix;
     const FbxVector4* fbxVertices     = mesh->GetControlPoints();
-    
+
     for ( int polygonIndex = 0; polygonIndex < mesh->GetPolygonCount(); ++polygonIndex )
     {
         for ( int t = 0; t < 3; ++t )
         {
             int index = mesh->GetPolygonVertex( polygonIndex, t );
 
-            const FbxVector4& fbxPosition = transformMatrix.MultT( fbxVertices[ index ] );
+            const FbxVector4& fbxPosition = transformMatrix.Transpose().MultT( fbxVertices[ index ] );
+            
             primitiveData.Positions[ vertexIndex ].x = fbxPosition.mData[ 0 ];
             primitiveData.Positions[ vertexIndex ].y = fbxPosition.mData[ 1 ];
             primitiveData.Positions[ vertexIndex ].z = fbxPosition.mData[ 2 ];

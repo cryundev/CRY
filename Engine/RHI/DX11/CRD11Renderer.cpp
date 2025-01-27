@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "Utility/Log/CRLog.h"
 #include "Core/CRD11Device.h"
+#include "Core/CRD11RasterizerState.h"
 #include "Core/CRD11RenderTargetView.h"
 #include "Core/CRPrimitiveData.h"
 #include "RHI/ICRRHIMesh.h"
@@ -42,6 +43,21 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
 
     LightDirectionBuffer.Update( CRVector4D( lightDir.x, lightDir.y, lightDir.z, 1.0f ) );
     LightColorBuffer    .Update( CRVector4D( 1.0f, 1.0f,  1.0f, 1.0f ) );
+
+    RasterizerState = GD11RM.GetRasterizerState( "Default" );
+    if ( !RasterizerState.expired() )
+    {
+        D3D11_RASTERIZER_DESC rd;
+        ZeroMemory( &rd, sizeof( D3D11_RASTERIZER_DESC ) );
+        
+        rd.CullMode = D3D11_CULL_BACK;
+        rd.FillMode = D3D11_FILL_SOLID;
+        rd.FrontCounterClockwise = false;
+        
+        RasterizerState.lock()->Create( rd );
+    
+        GD11RP.SetRasterizerState( RasterizerState.lock()->GetObjectPtr() );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -140,6 +156,8 @@ void CRD11Renderer::_InitializeViewport( float Width, float Height ) const
 
     viewport.TopLeftX = 0;
     viewport.TopLeftY = 0;
+    viewport.MinDepth = 0.0f;
+    viewport.MaxDepth = 1.0f;
     viewport.Width    = Width;
     viewport.Height   = Height;
 

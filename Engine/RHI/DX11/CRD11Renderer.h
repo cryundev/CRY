@@ -33,6 +33,7 @@ private:
     CRD11BindingConstantBuffer< CRVector4D       > LightColorBuffer;    
     
     CRD11RenderTargetViewSPtr RenderTargetView;
+    CRD11RasterizerStateWPtr  RasterizerState;
 
     CRD11DepthStencilBuffer DepthStencilBuffer;
     
