@@ -4,7 +4,12 @@
 #include "CRD11ResourceManager.h"
 #include "Core/CRD11Device.h"
 #include "Core/CRD11IndexBuffer.h"
+#include "Core/CRD11InputLayout.h"
+#include "Core/CRD11PixelShader.h"
+#include "Core/CRD11SamplerState.h"
+#include "Core/CRD11ShaderResourceView.h"
 #include "Core/CRD11VertexBuffer.h"
+#include "Core/CRD11VertexShader.h"
 #include "Core/CRVertex.h"
 
 
@@ -25,8 +30,14 @@ void CRD11Mesh::InitializePrimitive( const CRName& Name, const CRPrimitiveAsset&
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Mesh::InitializeMaterial()
 {
-    Materials.push_back( CRD11Material() );
-    Materials.back().Initialize();
+    VertexShader = GD11RM.GetVertexShader( "Diffuse" );
+    PixelShader  = GD11RM.GetPixelShader ( "Diffuse" );
+    InputLayout  = GD11RM.GetInputLayout ( "Diffuse" );
+
+    CRD11ShaderResourceTexture texture;
+    texture.Create( "../Asset/cryun_icon.png" );
+
+    Textures.push_back( texture );;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -44,7 +55,33 @@ void CRD11Mesh::SetInRenderingPipeline() const
         GD11RP.SetIndexBuffer( IndexBuffer.lock()->GetObjectPtr(), 0 );
     }
 
-    Materials.back().SetInRenderingPipeline();
+    if ( !InputLayout.expired() )
+    {
+        GD11RP.SetInputLayout( InputLayout.lock()->GetObjectPtr(), 0 );
+    }
+
+    for ( int i = 0; i < Textures.size(); ++i )
+    {
+        if ( !Textures[ i ].GetShaderResourceView().expired() )
+        {
+            GD11RP.SetShaderResourceView( Textures[ i ].GetShaderResourceView().lock()->GetObjectPtr(), i, ED11RenderingPipelineStage::PS );
+        }
+
+        if ( !Textures[ i ].GetSamplerState().expired() )
+        {
+            GD11RP.SetSamplerState( Textures[ i ].GetSamplerState().lock()->GetObjectPtr(), i );
+        }
+    }
+    
+    if ( !VertexShader.expired() )
+    {
+        GD11RP.SetVertexShader( VertexShader.lock()->GetObjectPtr() );
+    }
+
+    if ( !PixelShader.expired() )
+    {
+        GD11RP.SetPixelShader( PixelShader.lock()->GetObjectPtr() );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------

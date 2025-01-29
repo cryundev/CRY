@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-
-#include "CRD11Material.h"
+#include "CRD11ShaderResourceTexture.h"
 #include "CRD11Types.h"
 #include "Core/Containers/CRContainerInc.h"
 #include "RHI/ICRRHIMesh.h"
@@ -16,7 +15,11 @@ private:
     CRD11VertexBufferWPtr VertexBuffer;
     CRD11IndexBufferWPtr  IndexBuffer;
 
-    CRArray< CRD11Material > Materials;
+    CRD11VertexShaderWPtr VertexShader;
+    CRD11PixelShaderWPtr  PixelShader;
+    CRD11InputLayoutWPtr  InputLayout;
+    
+    CRArray< CRD11ShaderResourceTexture > Textures;
     
 public:
     /// Constructor
