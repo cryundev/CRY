@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 
-#include "CRD11ShaderResourceTexture.h"
+#include "CRD11Material.h"
 #include "CRD11Types.h"
-#include "Core/CRTransform.h"
+#include "Core/Containers/CRContainerInc.h"
 #include "RHI/ICRRHIMesh.h"
 
 
@@ -15,25 +15,18 @@ class CRD11Mesh : public ICRRHIMesh
 private:
     CRD11VertexBufferWPtr VertexBuffer;
     CRD11IndexBufferWPtr  IndexBuffer;
-    CRD11InputLayoutWPtr  InputLayout;
 
-    CRD11ShaderResourceTexture Texture;
-    CRD11SamplerStateWPtr SamplerState;
-
-    CRD11VertexShaderWPtr VertexShader;
-    CRD11PixelShaderWPtr  PixelShader;
-
-    CRMatrix TransformMatrix = CRMatrix::Identity;
+    CRArray< CRD11Material > Materials;
     
 public:
     /// Constructor
     CRD11Mesh() = default;
 
     /// Destructor
-    virtual ~CRD11Mesh() override {};
+    virtual ~CRD11Mesh() override {}
 
     /// Initialize primitive.
-    virtual void InitializePrimitive( const CRName& Name, const CRPrimitiveData& PrimitiveData ) override;
+    virtual void InitializePrimitive( const CRName& Name, const CRPrimitiveAsset& PrimitiveData ) override;
 
     /// Initialize material.
     virtual void InitializeMaterial() override;
@@ -43,7 +36,4 @@ public:
 
     /// Draw.
     virtual void Draw() const override;
-
-    /// Get transform matrix.
-    virtual CRMatrix& GetTransformMatrix() override { return TransformMatrix; }
 };

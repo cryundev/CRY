@@ -15,3 +15,17 @@ CRWString UtilString::ToWString( const CRString& Str )
 
 	return wstr;
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Convert wstring to string.
+//---------------------------------------------------------------------------------------------------------------------
+CRString UtilString::ToString( const CRWString& Str )
+{
+    int bufferSize = WideCharToMultiByte( CP_UTF8, 0, Str.c_str(), -1, nullptr, 0, nullptr, nullptr );
+
+    CRString str( bufferSize, 0 );
+
+    WideCharToMultiByte( CP_UTF8, 0, Str.c_str(), -1, str.data(), bufferSize, nullptr, nullptr );
+
+    return str;
+}

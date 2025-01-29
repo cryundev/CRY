@@ -12,15 +12,17 @@
 class CRLog
 {
 private:
-	CRArray< CRString  > Logs;
-	CRArray< CRWString > ErrorLogs;
-
+	CRArray< CRString > Logs;
+    
 public:
 	/// Add log.
 	void AddLog( const CRString& Log );
 
 	/// Add error log.
 	void AddErrorLog( HRESULT HR );
+
+    /// Return logs.
+    const CRArray< CRString >& GetLogs() const { return Logs; }
 };
 
 

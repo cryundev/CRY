@@ -2,11 +2,11 @@
 
 
 #include "ICRAsset.h"
-#include "Containers/CRContainerInc.h"
-#include "Math/CRMath.h"
+#include "Core/Containers/CRContainerInc.h"
+#include "Core/Math/CRMath.h"
 
 
-class CRPrimitiveData : public ICRAsset
+class CRPrimitiveAsset : public ICRAsset
 {
 public:
     CRArray< CRVector     > Positions;
@@ -21,10 +21,10 @@ public:
 
 public:
     /// Constructor.
-    CRPrimitiveData() = default;
+    CRPrimitiveAsset() = default;
 
     /// Destructor.
-    virtual ~CRPrimitiveData() override {}
+    virtual ~CRPrimitiveAsset() override {}
 
     /// Save to file.
     virtual void Save( const CRString& Path ) override;

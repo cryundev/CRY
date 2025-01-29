@@ -11,7 +11,7 @@
 class CRInputProcessorCamera
 {
 protected:
-    float MoveDistancePerSecond   = 1.f;
+    float MoveDistancePerSecond   = 0.001f;
     float RotateDistancePerSecond = 1.f;
 
     DirectX::Keyboard::KeyboardStateTracker KeyboardTracker;

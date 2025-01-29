@@ -27,7 +27,7 @@ bool CRFbxLoader::Load( const CRString& Path )
 
     if ( !_Initialize( Path ) ) return false;
 
-    Primitives.push_back( CRPrimitiveData() );
+    Primitives.push_back( CRPrimitiveAsset() );
 
     _LoadNode( FbxScenePtr->GetRootNode() );
 
@@ -61,11 +61,11 @@ bool CRFbxLoader::_Initialize( const CRString& Path )
     FbxImporterPtr->Import( FbxScenePtr );
 
     const FbxAxisSystem& sceneAxisSystem  = FbxScenePtr->GetGlobalSettings().GetAxisSystem();
-    const FbxAxisSystem& targetAxisSystem = FbxAxisSystem::OpenGL;
-    if ( sceneAxisSystem != targetAxisSystem )
-    {
-        targetAxisSystem.ConvertScene( FbxScenePtr );
-    }
+    const FbxAxisSystem& targetAxisSystem = FbxAxisSystem::DirectX;
+    // if ( sceneAxisSystem != targetAxisSystem )
+    // {
+    //     targetAxisSystem.ConvertScene( FbxScenePtr );
+    // }
     
     // FbxSystemUnit sceneSystemUnit = FbxScenePtr->GetGlobalSettings().GetSystemUnit();
     // if ( sceneSystemUnit.GetScaleFactor() != 1.0 )
@@ -113,7 +113,7 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
     FbxMesh* mesh = Node->GetMesh();
     if ( !mesh ) return;
 
-    CRPrimitiveData& primitiveData = Primitives.back();
+    CRPrimitiveAsset& primitiveData = Primitives.back();
     
     int vertexCount = mesh->GetPolygonCount() * 3;
     int vertexIndex = primitiveData.VertexCount;
@@ -147,7 +147,11 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
         }  
     }
 
-    const FbxAMatrix& transformMatrix = Node->EvaluateGlobalTransform() * trsMatrix;
+    FbxAMatrix mat;
+    mat.SetIdentity();
+    mat *= -1;
+
+    const FbxAMatrix& transformMatrix = (Node->EvaluateGlobalTransform() * trsMatrix);// * mat;
     const FbxVector4* fbxVertices     = mesh->GetControlPoints();
 
     for ( int polygonIndex = 0; polygonIndex < mesh->GetPolygonCount(); ++polygonIndex )
@@ -156,7 +160,7 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
         {
             int index = mesh->GetPolygonVertex( polygonIndex, t );
 
-            const FbxVector4& fbxPosition = transformMatrix.Transpose().MultT( fbxVertices[ index ] );
+            const FbxVector4& fbxPosition = transformMatrix.MultT( fbxVertices[ index ] );
             
             primitiveData.Positions[ vertexIndex ].x = fbxPosition.mData[ 0 ];
             primitiveData.Positions[ vertexIndex ].y = fbxPosition.mData[ 1 ];

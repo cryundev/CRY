@@ -1,15 +1,23 @@
 ﻿#pragma once
 
 
-#include "ICRUI.h"
+#include "CRCameraUI.h"
+#include "CRLogUI.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
 /// CREditorUI
 //---------------------------------------------------------------------------------------------------------------------
-class CRLogUI : public ICRUI
+class CREditorUI : public ICRUI
 {
+private:
+    CRCameraUI CameraUI;
+    CRLogUI    LogUI;
+
 public:
+    /// Initialize.
+    virtual void Initialize() override;
+    
     /// Draw.
     virtual void Draw() override;
 };

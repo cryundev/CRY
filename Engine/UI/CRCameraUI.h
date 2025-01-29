@@ -2,14 +2,25 @@
 
 
 #include "ICRUI.h"
+#include "Core/CRSmartPtrMacro.h"
+
+
+class CRCamera;
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CREditorUI
+/// CRCameraUI
 //---------------------------------------------------------------------------------------------------------------------
-class CRLogUI : public ICRUI
+class CRCameraUI : public ICRUI
 {
+private:
+    CRWeakPtr< CRCamera > CameraPtr;
+    
 public:
+    /// Set camera.
+    void SetCamera( const CRWeakPtr< CRCamera >& InCameraPtr ) { CameraPtr = InCameraPtr; }
+    
     /// Draw.
     virtual void Draw() override;
+    
 };

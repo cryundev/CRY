@@ -1,24 +1,34 @@
 ﻿#pragma once
 
 
-#include "Strings/CRStringInc.h"
+#include "Core/Containers/CRContainerInc.h"
+
+
+class ICRUI;
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRAsset
+/// CRUIManager
 //---------------------------------------------------------------------------------------------------------------------
-class ICRAsset
+class CRUIManager
 {
+private:
+    CRArray< ICRUI* > UIs;
+
 public:
     /// Constructor.
-    ICRAsset() = default;
+    CRUIManager() = default;
 
     /// Destructor.
-    virtual ~ICRAsset() = 0 {}
+    virtual ~CRUIManager();
+    
+    /// Initialize.
+    void Initialize();
 
-    /// Save.
-    virtual void Save( const CRString& Path ) {}
+    /// Clear.
+    void Clear();
 
-    /// Load.
-    virtual void Load( const CRString& Path ) {}
+    /// Draw.
+    void Draw() const;
+    
 };

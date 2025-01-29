@@ -2,7 +2,7 @@
 
 
 #include "CRFbxInclude.h"
-#include "Core/CRPrimitiveData.h"
+#include "Asset//CRPrimitiveAsset.h"
 #include "Core/Containers/CRContainerInc.h"
 #include "Core/Strings/CRStringInc.h"
 #include "RHI/DX11/CRD11Include.h"
@@ -19,7 +19,7 @@ private:
     FbxImporter*   FbxImporterPtr   = nullptr;
     FbxScene*      FbxScenePtr      = nullptr;
 
-    CRArray< CRPrimitiveData > Primitives;
+    CRArray< CRPrimitiveAsset > Primitives;
 
 public:
     /// Constructor
@@ -32,7 +32,7 @@ public:
     bool Load( const CRString& Path );
 
     /// Get primitive data array.
-    CRArray< CRPrimitiveData >& GetPrimitives() { return Primitives; }
+    CRArray< CRPrimitiveAsset >& GetPrimitives() { return Primitives; }
 
 private:
     /// Initialize.

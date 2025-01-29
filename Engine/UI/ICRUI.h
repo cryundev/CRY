@@ -1,17 +1,18 @@
 ﻿#pragma once
 
 
-#include "../Core/Strings/CRStringInc.h"
-
-
 //---------------------------------------------------------------------------------------------------------------------
-/// UtilString
+/// ICRUI
 //---------------------------------------------------------------------------------------------------------------------
-namespace UtilString
+class ICRUI
 {
-	/// Convert string to wstring.
-	CRWString ToWString( const CRString& Str );
+public:
+    /// Destructor.
+    virtual ~ICRUI() = 0 {}
 
-    /// Convert wstring to string.
-    CRString ToString( const CRWString& Str );
+    /// Initialize.
+    virtual void Initialize() {}
+
+    /// Draw.
+    virtual void Draw() = 0;
 };

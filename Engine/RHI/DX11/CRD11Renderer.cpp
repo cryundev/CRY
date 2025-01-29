@@ -3,12 +3,12 @@
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
 #include "Engine.h"
-#include "Utility/Log/CRLog.h"
+#include "Asset/CRPrimitiveAsset.h"
 #include "Core/CRD11Device.h"
 #include "Core/CRD11RasterizerState.h"
 #include "Core/CRD11RenderTargetView.h"
-#include "Core/CRPrimitiveData.h"
 #include "RHI/ICRRHIMesh.h"
+#include "Utility/Log/CRLog.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -93,16 +93,11 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
-    UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
+    UpdateViewProjectionBuffer( GCamera->GetViewMatrix(), GCamera->GetProjectionMatrix() );
     
     for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
     {
         if ( renderMesh.expired() ) continue;
-
-        // const CRMatrix& mat = CRMatrix::CreateRotationY( 3.14f );
-        //
-        // UpdateTransformBuffer( mat.Transpose() );
-        UpdateTransformBuffer( renderMesh.lock()->GetTransformMatrix() );
         
         renderMesh.lock()->SetInRenderingPipeline();
         renderMesh.lock()->Draw();

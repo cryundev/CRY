@@ -4,7 +4,7 @@
 #include "Core/Strings/CRStringInc.h"
 
 
-class CRPrimitiveData;
+class CRPrimitiveAsset;
 
 
 class ICRRHIMesh
@@ -18,7 +18,7 @@ public:
 
 public:
     /// Initialize primitive.
-    virtual void InitializePrimitive( const CRName& Name, const CRPrimitiveData& PrimitiveData ) = 0;
+    virtual void InitializePrimitive( const CRName& Name, const CRPrimitiveAsset& PrimitiveData ) = 0;
 
     /// Initialize material.
     virtual void InitializeMaterial() = 0;
@@ -28,7 +28,4 @@ public:
 
     /// Draw.
     virtual void Draw() const = 0;
-
-    /// Get transform matrix.
-    virtual CRMatrix& GetTransformMatrix() = 0;
 };

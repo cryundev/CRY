@@ -11,10 +11,10 @@ void CRInputProcessorCamera::Tick( float DeltaTime )
 
     KeyboardTracker.Update( k );
 
-    if ( k.W ) GCamera.Transform.Location -= GCamera.Transform.GetUp()    * MoveDistancePerSecond * DeltaTime;
-    if ( k.S ) GCamera.Transform.Location += GCamera.Transform.GetUp()    * MoveDistancePerSecond * DeltaTime;
-    if ( k.A ) GCamera.Transform.Location -= GCamera.Transform.GetRight() * MoveDistancePerSecond * DeltaTime;
-    if ( k.D ) GCamera.Transform.Location += GCamera.Transform.GetRight() * MoveDistancePerSecond * DeltaTime;
+    if ( k.W ) GCamera->Transform.Location += GCamera->Transform.GetUp()    * MoveDistancePerSecond * DeltaTime;
+    if ( k.S ) GCamera->Transform.Location -= GCamera->Transform.GetUp()    * MoveDistancePerSecond * DeltaTime;
+    if ( k.A ) GCamera->Transform.Location += GCamera->Transform.GetRight() * MoveDistancePerSecond * DeltaTime;
+    if ( k.D ) GCamera->Transform.Location -= GCamera->Transform.GetRight() * MoveDistancePerSecond * DeltaTime;
 
     auto m = GMouse.GetState();
 
@@ -26,8 +26,8 @@ void CRInputProcessorCamera::Tick( float DeltaTime )
         {
             int i = 0;
         }
-        GCamera.Transform.Rotate( GCamera.Transform.GetUp(),    m.x * RotateDistancePerSecond * DeltaTime );
-        GCamera.Transform.Rotate( GCamera.Transform.GetRight(), m.y * RotateDistancePerSecond * DeltaTime );
+        GCamera->Transform.Rotate( GCamera->Transform.GetUp(),    m.x * RotateDistancePerSecond * DeltaTime );
+        GCamera->Transform.Rotate( GCamera->Transform.GetRight(), m.y * RotateDistancePerSecond * DeltaTime );
     }
 
     GMouse.SetMode( m.leftButton ? DirectX::Mouse::MODE_RELATIVE : DirectX::Mouse::MODE_ABSOLUTE );

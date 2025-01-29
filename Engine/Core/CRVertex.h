@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 
-#include "CRPrimitiveData.h"
+#include "Asset/CRPrimitiveAsset.h"
 #include "CRTypes.h"
 #include "Containers/CRContainerInc.h"
 
@@ -18,7 +18,7 @@ public:
 
 public:
     /// Load vertices from primitive data.
-    static void LoadFromPrimitiveData( const CRPrimitiveData& PrimitiveData, CRArray< CRVertex >& Vertices )
+    static void LoadFromPrimitiveData( const CRPrimitiveAsset& PrimitiveData, CRArray< CRVertex >& Vertices )
     {
         Vertices.clear();
         Vertices.reserve( PrimitiveData.VertexCount );

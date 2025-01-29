@@ -21,6 +21,9 @@ public:
     /// Initialize RHI.
     void Initialize( HWND hWnd, unsigned int Width, unsigned int Height );
 
+    /// Initialize shaders.
+    void InitializeShaders();
+
     /// Render frame RHI.
     void RenderFrame() const;
 

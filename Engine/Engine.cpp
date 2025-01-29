@@ -21,7 +21,7 @@ HINSTANCE hInst;                           // 현재 인스턴스입니다.
 WCHAR     szTitle      [ MAX_LOADSTRING ]; // 제목 표시줄 텍스트입니다.
 WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니다.
 
-CRCamera GCamera;
+CRSharedPtr< CRCamera > GCamera = CRMakeShared< CRCamera >(new CRCamera() );
 CRFrameUpdator GFrameUpdator;
 
 DirectX::Keyboard GKeyboard;
@@ -121,14 +121,15 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 
     GRHI.Initialize( hWnd, width,height );
 
-    GCamera.Initialize( CRCamera::EProjectionType::Perspective, 90.0f, width, height, 0.1f, 1000.0f );
-    GCamera.SetLookAtDirection( 0.f, 0.f, -1.f );
-    GCamera.Transform.SetLocation( 0.f, 0.f, 15.0f );
-    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera.GetViewMatrix(), GCamera.GetProjectionMatrix() );
+    GCamera->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, width, height, 0.1f, 1000.0f );
+    GCamera->SetLookAtDirection( 0.f, 0.f, -1.f );
+    GCamera->Transform.SetLocation( 0.f, 0.f, 15.0f );
+    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera->GetViewMatrix(), GCamera->GetProjectionMatrix() );
 
+    // const CRString& loadFbxPaht = "../Asset/Minion";
     // CRFbxLoader fbxLoader;
-    // fbxLoader.Load( "../Asset/tower.fbx" );
-    // fbxLoader.GetPrimitives()[0].Save( "../Asset/tower.cra" );
+    // fbxLoader.Load( loadFbxPaht + ".fbx" );
+    // fbxLoader.GetPrimitives()[0].Save( loadFbxPaht + ".cra" );
     //
     // int i = 0;
     // for ( auto& primitive : fbxLoader.GetPrimitives() )
@@ -147,7 +148,7 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     //     }
     // }
     
-    CRPrimitiveData primitive;
+    CRPrimitiveAsset primitive;
     primitive.Load( "../Asset/Minion.cra" );
     
     const ICRRHIMeshSPtr& rhiMesh = GRHI.CreateMesh();

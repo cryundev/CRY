@@ -1,4 +1,4 @@
-﻿#include "CRPrimitiveData.h"
+﻿#include "CRPrimitiveAsset.h"
 #include <fstream>
 #include <ios>
 
@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Save to file.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveData::Save( const CRString& Path )
+void CRPrimitiveAsset::Save( const CRString& Path )
 {
     std::ofstream ofs( Path, std::ios::binary );
     if ( !ofs ) return;
@@ -27,7 +27,7 @@ void CRPrimitiveData::Save( const CRString& Path )
 //---------------------------------------------------------------------------------------------------------------------
 /// Load from file.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveData::Load( const CRString& Path )
+void CRPrimitiveAsset::Load( const CRString& Path )
 {
     std::ifstream ifs( Path, std::ios::binary );
     if ( !ifs ) return;
@@ -61,7 +61,7 @@ void CRPrimitiveData::Load( const CRString& Path )
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveData::Initialize( int InVertexCount )
+void CRPrimitiveAsset::Initialize( int InVertexCount )
 {
     VertexCount = InVertexCount;
         

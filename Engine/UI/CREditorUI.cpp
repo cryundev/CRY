@@ -1,25 +1,25 @@
-﻿#include "CRLog.h"
-#include "Utility/UtilString.h"
-#include <comdef.h>
-
-
-CRLog GLog;
-
+﻿#include "CREditorUI.h"
+#include "Engine.h"
+#include "Core/ImGUI/imgui.h"
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Add log.
+/// Initialize.
 //---------------------------------------------------------------------------------------------------------------------
-void CRLog::AddLog( const CRString& Log )
+void CREditorUI::Initialize()
 {
-	Logs.push_back( Log );
+    CameraUI.SetCamera( GCamera );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Add error log.
+/// Draw.
 //---------------------------------------------------------------------------------------------------------------------
-void CRLog::AddErrorLog( HRESULT HR )
+void CREditorUI::Draw()
 {
-	_com_error comError( HR );
+    ImGui::Begin( "Camera UI" );
+        CameraUI.Draw();
+    ImGui::End();
 
-	Logs.emplace_back( UtilString::ToString( comError.ErrorMessage() ) );
+    ImGui::Begin( "Logs" );
+        LogUI.Draw();
+    ImGui::End();
 }
