@@ -12,15 +12,15 @@ void CRFrameUpdator::Initialize( int InFPS )
 //---------------------------------------------------------------------------------------------------------------------
 /// Update.
 //---------------------------------------------------------------------------------------------------------------------
-bool CRFrameUpdator::Update()
+bool CRFrameUpdator::Update( float DeltaSeconds )
 {
-    float deltaSeconds = Time.Finish();
+    AccumulatedSeconds += DeltaSeconds;
 
-    bool bElapsed = deltaSeconds > ( 1.0f / (float)( FPS ) );
+    bool bElapsed = AccumulatedSeconds > ( 1.0f / (float)( FPS ) );
 
     if ( bElapsed )
     {
-        Time.Start();
+        AccumulatedSeconds -= ( 1.0f / (float)( FPS ) );
     }
 
     return bElapsed;

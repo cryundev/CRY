@@ -22,6 +22,7 @@ WCHAR     szTitle      [ MAX_LOADSTRING ]; // 제목 표시줄 텍스트입니�
 WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니다.
 
 CRSharedPtr< CRCamera > GCamera = CRMakeShared< CRCamera >(new CRCamera() );
+CRTime         GFrameTime;
 CRFrameUpdator GFrameUpdator;
 
 DirectX::Keyboard GKeyboard;
@@ -58,8 +59,12 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
     HACCEL hAccelTable = LoadAccelerators( hInstance, MAKEINTRESOURCE( IDC_ENGINE ) );
     MSG    msg;
 
+    float deltaSeconds = 0.f;
+
     while( true )
     {
+        GFrameTime.Start();
+        
 	    if ( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
 	    {
 		    TranslateMessage( &msg );
@@ -68,13 +73,14 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		    if( msg.message == WM_QUIT ) break;
 	    }
 
-        GInputProcessorCamera.Tick( 0.016f );
+        GInputProcessorCamera.Tick( deltaSeconds );
 
-        if ( GFrameUpdator.Update() )
+        if ( GFrameUpdator.Update( deltaSeconds ) )
         {
             GRHI.RenderFrame();
         }
-        
+
+        deltaSeconds = GFrameTime.Finish();
     }
 
     return (int)msg.wParam;

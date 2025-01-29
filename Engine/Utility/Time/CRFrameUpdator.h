@@ -10,13 +10,13 @@
 class CRFrameUpdator
 {
 private:
-    CRTime Time;
-    int    FPS = 30;
+    int   FPS                = 30;
+    float AccumulatedSeconds = 0.f;
     
 public:
     /// Initialize.
     void Initialize( int InFPS );
 
     /// Update.
-    bool Update();
+    bool Update( float DeltaSeconds = 0.f );
 };
