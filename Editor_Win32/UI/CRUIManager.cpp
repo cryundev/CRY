@@ -1,5 +1,4 @@
 ﻿#include "CRUIManager.h"
-#include "CREditorUI.h"
 #include "ICRUI.h"
 
 
@@ -12,16 +11,15 @@ CRUIManager::~CRUIManager()
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Initialize.
+/// Add UI.
 //---------------------------------------------------------------------------------------------------------------------
-void CRUIManager::Initialize()
+void CRUIManager::AddUI( ICRUI* InUI )
 {
-    CREditorUI* editorUi = new CREditorUI();
-    if ( editorUi )
-    {
-        editorUi->Initialize();
-        UIs.push_back( editorUi );
-    }
+    if ( !InUI ) return;
+
+    InUI->Initialize();
+    
+    UIs.push_back( InUI );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -107,7 +107,6 @@
     <ClCompile Include="Source\Asset\ICRAsset.cpp" />
     <ClCompile Include="Source\Core\CRTransform.cpp" />
     <ClCompile Include="Source\Core\CRVertex.cpp" />
-    <ClCompile Include="Source\Input\CRInputProcessorCamera.cpp" />
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Source\Object\CRActor.cpp" />
     <ClCompile Include="Source\Object\CRObject.cpp" />
@@ -136,10 +135,6 @@
     <ClCompile Include="Source\RHI\DX11\CRD11ResourceManager.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ShaderResourceTexture.cpp" />
     <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
-    <ClCompile Include="Source\UI\CRCameraUI.cpp" />
-    <ClCompile Include="Source\UI\CREditorUI.cpp" />
-    <ClCompile Include="Source\UI\CRLogUI.cpp" />
-    <ClCompile Include="Source\UI\CRUIManager.cpp" />
     <ClCompile Include="Source\Utility\FBX\CRFbxLoader.cpp" />
     <ClCompile Include="Source\Utility\Generic\CRGeneric.cpp" />
     <ClCompile Include="Source\Utility\Log\CRLog.cpp" />
@@ -168,7 +163,6 @@
     <ClInclude Include="Source\Core\CRVertex.h" />
     <ClInclude Include="Source\Core\Math\CRMath.h" />
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
-    <ClInclude Include="Source\Input\CRInputProcessorCamera.h" />
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />
     <ClInclude Include="Source\Object\CRActor.h" />
     <ClInclude Include="Source\Object\CRObject.h" />
@@ -202,11 +196,6 @@
     <ClInclude Include="Source\RHI\DX11\CRD11Types.h" />
     <ClInclude Include="Source\RHI\ICRRHIMesh.h" />
     <ClInclude Include="Source\RHI\ICRRHIRenderer.h" />
-    <ClInclude Include="Source\UI\CRCameraUI.h" />
-    <ClInclude Include="Source\UI\CREditorUI.h" />
-    <ClInclude Include="Source\UI\CRLogUI.h" />
-    <ClInclude Include="Source\UI\CRUIManager.h" />
-    <ClInclude Include="Source\UI\ICRUI.h" />
     <ClInclude Include="Source\Utility\FBX\CRFbxInclude.h" />
     <ClInclude Include="Source\Utility\FBX\CRFbxLoader.h" />
     <ClInclude Include="Source\Utility\Generic\CRGeneric.h" />

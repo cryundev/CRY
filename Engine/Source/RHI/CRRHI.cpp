@@ -11,10 +11,7 @@
 #include "Extras/ImGUI/imgui.h"
 #include "Extras/ImGUI/imgui_impl_dx11.h"
 #include "Extras/ImGUI/imgui_impl_win32.h"
-#include "Source/UI/CRUIManager.h"
 #include <filesystem>
-
-CRUIManager GUIManager;
 
 
 CRRHI GRHI( ECRRHIType::DirectX11 );
@@ -53,8 +50,6 @@ void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
         ImGui_ImplWin32_Init( hWnd );
         ImGui_ImplDX11_Init( GD11.GetDevice(), GD11.GetDeviceContext() );
     }
-
-    GUIManager.Initialize();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -114,12 +109,13 @@ void CRRHI::RenderFrame() const
     ImGui_ImplWin32_NewFrame();
 
     ImGui::NewFrame();
-    
-    /// 이곳부터 내가 그리고 싶은 GUI들을 구성한다.
-    {
-        GUIManager.Draw(); 
-    }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Present.
+//---------------------------------------------------------------------------------------------------------------------
+void CRRHI::Present() const
+{
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
     

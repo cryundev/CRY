@@ -1,6 +1,5 @@
 #include "Engine.h"
-#include "Source/Asset/CRPrimitiveAsset.h"
-#include "Source/Input/CRInputProcessorCamera.h"
+#include "Source/Asset/CRPrimitiveAsset.h"\
 #include "Source/Object/Camera/CRCamera.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIMesh.h"
@@ -14,8 +13,6 @@ CRSharedPtr< CRCamera > GCamera = CRMakeShared< CRCamera >(new CRCamera() );
 
 CRTime         GFrameTime;
 CRFrameUpdator GFrameUpdator;
-
-CRInputProcessorCamera GInputProcessorCamera;
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -67,19 +64,34 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Call per message loop.
+/// Tick.
 //---------------------------------------------------------------------------------------------------------------------
-void CREngine::MessageLoop()
+void CREngine::Tick( float DeltaSeconds )
 {
-    float deltaSeconds = 1/30.f;
-    GFrameTime.Start();
+}
 
-    GInputProcessorCamera.Tick( deltaSeconds );
+//---------------------------------------------------------------------------------------------------------------------
+/// Pre-render.
+//---------------------------------------------------------------------------------------------------------------------
+bool CREngine::PreRender( float DeltaSeconds )
+{
+    bool bRender = GFrameUpdator.Update( DeltaSeconds );
 
-    if ( GFrameUpdator.Update( deltaSeconds ) )
-    {
-        GRHI.RenderFrame();
-    }
+    return bRender;
+}
 
-    deltaSeconds = GFrameTime.Finish();
+//---------------------------------------------------------------------------------------------------------------------
+/// Render.
+//---------------------------------------------------------------------------------------------------------------------
+void CREngine::Render( float DeltaSeconds )
+{
+    GRHI.RenderFrame();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Post-render.
+//---------------------------------------------------------------------------------------------------------------------
+void CREngine::PostRender( float DeltaSeconds )
+{
+    GRHI.Present();
 }

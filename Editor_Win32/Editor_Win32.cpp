@@ -1,6 +1,10 @@
 ﻿#include "framework.h"
 #include "Editor_Win32.h"
-#include "Extras/ImGUI/imgui.h"
+#include "Input/CRInputProcessorCamera.h"
+#include "UI/CREditorUI.h"
+#include "UI/CRUIManager.h"
+#include <Extras/ImGUI/imgui.h>
+#include <Source/RHI/CRRHI.h>
 #include <Engine.h>
 
 
@@ -18,6 +22,8 @@ WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니�
 DirectX::Keyboard GKeyboard;
 DirectX::Mouse    GMouse;
 
+CRUIManager GUIManager;
+CRInputProcessorCamera GInputProcessorCamera;
 
 //---------------------------------------------------------------------------------------------------------------------
 /// function forward declaration
@@ -47,6 +53,8 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
     HACCEL hAccelTable = LoadAccelerators( hInstance, MAKEINTRESOURCE( IDC_ENGINE ) );
     MSG    msg;
 
+    float deltaSeconds = 0.f;
+    
     while( true )
     {
         if ( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
@@ -57,7 +65,23 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		    if( msg.message == WM_QUIT ) break;
 	    }
 
-        CREngine::MessageLoop();
+        
+        GFrameTime.Start();
+
+        CREngine::Tick( deltaSeconds );
+
+        GInputProcessorCamera.Tick( deltaSeconds );
+
+        if ( CREngine::PreRender( deltaSeconds ) )
+        {
+            CREngine::Render( deltaSeconds );
+
+            GUIManager.Draw();
+            
+            CREngine::PostRender( deltaSeconds );
+        }
+        
+        deltaSeconds = GFrameTime.Finish();
     }
 
     return (int)msg.wParam;
@@ -103,6 +127,8 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     GMouse.SetWindow( hWnd );
 
     CREngine::Initialize( hWnd, width, height );
+
+    GUIManager.AddUI( new CREditorUI() );
 
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );

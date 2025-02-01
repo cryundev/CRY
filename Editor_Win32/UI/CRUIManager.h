@@ -22,8 +22,8 @@ public:
     /// Destructor.
     virtual ~CRUIManager();
     
-    /// Initialize.
-    void Initialize();
+    /// Add UI.
+    void AddUI( ICRUI* InUI );
 
     /// Clear.
     void Clear();

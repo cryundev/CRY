@@ -27,6 +27,9 @@ public:
     /// Render frame RHI.
     void RenderFrame() const;
 
+    /// Present.
+    void Present() const;
+
     /// Create mesh.
     ICRRHIMeshSPtr CreateMesh();
 

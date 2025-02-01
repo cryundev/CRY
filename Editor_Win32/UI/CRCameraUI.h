@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include "ICRUI.h"
 #include <Source/Core/CRSmartPtrMacro.h>
 
