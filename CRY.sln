@@ -8,6 +8,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Editor_Win32", "Editor_Win3
 		{8B4D84D6-CB03-431C-B087-C4DDC291477F} = {8B4D84D6-CB03-431C-B087-C4DDC291477F}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor_WPF", "Editor_WPF\Editor_WPF.csproj", "{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B4D84D6-CB03-431C-B087-C4DDC291477F} = {8B4D84D6-CB03-431C-B087-C4DDC291477F}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{8B4D84D6-CB03-431C-B087-C4DDC291477F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{E0B52AE7-E160-4D32-BF3F-910B785E5A8E} = {E0B52AE7-E160-4D32-BF3F-910B785E5A8E}
@@ -34,6 +39,10 @@ Global
 		{8B4D84D6-CB03-431C-B087-C4DDC291477F}.Debug|x64.Build.0 = Debug|x64
 		{8B4D84D6-CB03-431C-B087-C4DDC291477F}.Release|x64.ActiveCfg = Release|x64
 		{8B4D84D6-CB03-431C-B087-C4DDC291477F}.Release|x64.Build.0 = Release|x64
+		{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}.Debug|x64.Build.0 = Debug|Any CPU
+		{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}.Release|x64.ActiveCfg = Release|Any CPU
+		{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
