@@ -1,12 +1,15 @@
-﻿#pragma once
+﻿#include "CRLogUI.h"
+#include "ImGUI/imgui.h"
+#include <Source/Utility/Log/CRLog.h>
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Includes
+/// Draw.
 //---------------------------------------------------------------------------------------------------------------------
-#include "Source/RHI/DX11/CRD11Include.h"
-
-
-
-
-
+void CRLogUI::Draw()
+{
+    for ( const auto& log : GLog.GetLogs() )
+    {
+        ImGui::Text( log.c_str() );
+    }
+}

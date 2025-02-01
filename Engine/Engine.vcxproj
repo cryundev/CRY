@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
@@ -19,34 +11,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>17.0</VCProjectVersion>
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{8B4D84D6-CB03-431C-B087-C4DDC291477F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{1c719a58-c27b-4af0-9500-491292ce821a}</ProjectGuid>
     <RootNamespace>Engine</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -57,12 +39,6 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
@@ -71,64 +47,44 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PublicIncludeDirectories></PublicIncludeDirectories>
-    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir);</ExternalIncludePath>
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)x64/Debug/</OutDir>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)x64\Debug\;$(SolutionDir)Engine\Extras\</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</ExternalIncludePath>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <ConformanceMode>true</ConformanceMode>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-    </Link>
-  </ItemDefinitionGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)x64/Release/</OutDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories> $(ProjectDir)/Extras;$(ProjectDir)/Extras/Fbx/include</AdditionalIncludeDirectories>
-      <AdditionalModuleDependencies></AdditionalModuleDependencies>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)/Extras</AdditionalLibraryDirectories>
     </Link>
-    <PreBuildEvent>
-      <Command>xcopy /Y /I "$(SolutionDir)\Engine\Extras\Fbx\debug\libfbxsdk.dll" "$(TargetDir)"</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -136,1230 +92,129 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PreBuildEvent>
-      <Command>xcopy /Y /I "$(SolutionDir)\Engine\Extras\Fbx\release\libfbxsdk.dll" "$(TargetDir)"</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Asset\CRPrimitiveAsset.h" />
-    <ClInclude Include="Asset\ICRAsset.h" />
-    <ClInclude Include="Core\Containers\CRContainerInc.h" />
-    <ClInclude Include="Core\CRSmartPtrMacro.h" />
-    <ClInclude Include="Core\CRTransform.h" />
-    <ClInclude Include="Core\CRVertex.h" />
-    <ClInclude Include="Core\ImGUI\imconfig.h" />
-    <ClInclude Include="Core\ImGUI\imgui.h" />
-    <ClInclude Include="Core\ImGUI\imgui_impl_dx11.h" />
-    <ClInclude Include="Core\ImGUI\imgui_impl_dx12.h" />
-    <ClInclude Include="Core\ImGUI\imgui_impl_win32.h" />
-    <ClInclude Include="Core\ImGUI\imgui_internal.h" />
-    <ClInclude Include="Core\ImGUI\imstb_rectpack.h" />
-    <ClInclude Include="Core\ImGUI\imstb_textedit.h" />
-    <ClInclude Include="Core\ImGUI\imstb_truetype.h" />
-    <ClInclude Include="Core\Math\CRMath.h" />
-    <ClInclude Include="Core\Strings\CRStringInc.h" />
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_impl_dx12.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Asset\CRPrimitiveAsset.cpp" />
+    <ClCompile Include="Source\Asset\ICRAsset.cpp" />
+    <ClCompile Include="Source\Core\CRTransform.cpp" />
+    <ClCompile Include="Source\Core\CRVertex.cpp" />
+    <ClCompile Include="Source\Input\CRInputProcessorCamera.cpp" />
+    <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
+    <ClCompile Include="Source\Object\CRActor.cpp" />
+    <ClCompile Include="Source\Object\CRObject.cpp" />
+    <ClCompile Include="Source\RHI\CRRHI.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11CompiledShader.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11DepthStencilView.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11Device.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11IndexBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11InputLayout.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11PixelShader.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11RasterizerState.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11RenderTargetView.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11SamplerState.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11ShaderResourceView.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11Texture2D.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11VertexBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11VertexShader.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11BindingConstantBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11DepthStencilBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11RenderingPipeline.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11ResourceManager.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11ShaderResourceTexture.cpp" />
+    <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
+    <ClCompile Include="Source\UI\CRCameraUI.cpp" />
+    <ClCompile Include="Source\UI\CREditorUI.cpp" />
+    <ClCompile Include="Source\UI\CRLogUI.cpp" />
+    <ClCompile Include="Source\UI\CRUIManager.cpp" />
+    <ClCompile Include="Source\Utility\FBX\CRFbxLoader.cpp" />
+    <ClCompile Include="Source\Utility\Generic\CRGeneric.cpp" />
+    <ClCompile Include="Source\Utility\Log\CRLog.cpp" />
+    <ClCompile Include="Source\Utility\Time\CRFrameUpdator.cpp" />
+    <ClCompile Include="Source\Utility\Time\CRTime.cpp" />
+    <ClCompile Include="Source\Utility\UtilString.cpp" />
+    <ClCompile Include="Source\Utility\WIC\CRWICTextureLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="CRTypes.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\arch\fbxalloc.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\arch\fbxarch.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\arch\fbxdebug.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\arch\fbxnew.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\arch\fbxstdcompliant.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\arch\fbxtypes.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxarray.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxbitset.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxcharptrset.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxcontainerallocators.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxdynamicarray.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxfile.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxfolder.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxhashmap.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxintrusivelist.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxmap.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxmemorypool.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxmultimap.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxpair.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxredblacktree.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxset.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxstatus.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxstring.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxstringlist.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxtime.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxtimecode.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\base\fbxutils.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxclassid.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxconnectionpoint.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxdatatypes.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxemitter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxevent.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxeventhandler.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxlistener.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxloadingstrategy.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxmanager.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxmodule.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxobject.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxperipheral.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxplugin.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxplugincontainer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxproperty.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxpropertydef.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxpropertyhandle.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxpropertypage.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxpropertytypes.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxquery.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxqueryevent.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxscopedloadingdirectory.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxscopedloadingfilename.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxstream.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxsymbol.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxsystemunit.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\fbxxref.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxaffinematrix.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxdualquaternion.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxmath.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxmatrix.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxquaternion.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxtransforms.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxvector2.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\math\fbxvector4.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\sync\fbxatomic.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\sync\fbxclock.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\sync\fbxsync.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\core\sync\fbxthread.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fbxsdk_def.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fbxsdk_nsbegin.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fbxsdk_nsend.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fbxsdk_version.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxcolladaanimationelement.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxcolladaelement.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxcolladaiostream.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxcolladanamespace.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxcolladatokens.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxcolladautils.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxreadercollada14.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\collada\fbxwritercollada14.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxbase64coder.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxcallbacks.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxexporter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxexternaldocreflistener.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxfiletokens.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxglobalcamerasettings.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxgloballightsettings.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxglobalsettings.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxgobo.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbximporter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxiobase.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxiopluginregistry.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxiosettings.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxiosettingspath.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxprogress.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxreader.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxstatistics.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxstatisticsfbx.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbxwriter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbx\fbxio.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbx\fbxreaderfbx5.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbx\fbxreaderfbx6.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbx\fbxreaderfbx7.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbx\fbxwriterfbx5.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbx\fbxwriterfbx6.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\fileio\fbx\fbxwriterfbx7.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimcurve.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimcurvebase.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimcurvefilters.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimcurvenode.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimevalclassic.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimevalstate.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimevaluator.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimlayer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimstack.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\animation\fbxanimutilities.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxcharacter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxcharacternodename.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxcharacterpose.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraint.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintaim.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintcustom.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintparent.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintposition.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintrotation.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintscale.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintsinglechainik.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxconstraintutils.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxcontrolset.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\constraint\fbxhik2fbxcharacter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxaudio.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxaudiolayer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxaxissystem.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxcollection.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxcollectionexclusive.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxcontainer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxcontainertemplate.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxdisplaylayer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxdocument.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxdocumentinfo.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxenvironment.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxgroupname.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxlibrary.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxmediaclip.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxobjectfilter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxobjectmetadata.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxobjectscontainer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxpose.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxreference.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxscene.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxselectionnode.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxselectionset.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxtakeinfo.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxthumbnail.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\fbxvideo.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxblendshape.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxblendshapechannel.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxcache.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxcachedeffect.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxcamera.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxcamerastereo.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxcameraswitcher.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxcluster.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxdeformer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxgenericnode.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxgeometry.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxgeometrybase.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxgeometryweightedmap.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxlayer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxlayercontainer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxlight.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxlimitsutilities.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxline.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxlodgroup.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxmarker.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxmesh.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxnode.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxnodeattribute.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxnull.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxnurbs.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxnurbscurve.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxnurbssurface.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxopticalreference.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxpatch.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxproceduralgeometry.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxshape.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxskeleton.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxskin.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxsubdeformer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxsubdiv.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxtrimnurbssurface.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxvertexcachedeformer.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\geometry\fbxweightedmapping.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxbindingoperator.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxbindingsentryview.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxbindingtable.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxbindingtablebase.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxbindingtableentry.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxconstantentryview.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxentryview.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxfiletexture.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbximplementation.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbximplementationfilter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbximplementationutils.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxlayeredtexture.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxlayerentryview.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxoperatorentryview.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxproceduraltexture.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxpropertyentryview.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxsemanticentryview.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxshadingconventions.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxsurfacelambert.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxsurfacematerial.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxsurfacematerialutils.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxsurfacephong.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\scene\shading\fbxtexture.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxclonemanager.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxdeformationsevaluator.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxembeddedfilesaccumulator.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxgeometryconverter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxmanipulators.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxmaterialconverter.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxnamehandler.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxprocessor.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxprocessorshaderdependency.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxprocessorxref.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxprocessorxrefuserlib.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxrenamingstrategy.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxrenamingstrategybase.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxrenamingstrategyfbx5.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxrenamingstrategyfbx6.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxrenamingstrategyfbx7.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxrenamingstrategyutilities.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxrootnodeutility.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxscenecheckutility.h" />
-    <ClInclude Include="Extras\Fbx\include\fbxsdk\utils\fbxusernotification.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\c14n.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\catalog.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\chvalid.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\debugXML.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\dict.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\encoding.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\entities.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\globals.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\hash.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\HTMLparser.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\HTMLtree.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\list.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\nanoftp.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\nanohttp.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\parser.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\parserInternals.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\pattern.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\relaxng.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\SAX.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\SAX2.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\schemasInternals.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\schematron.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\threads.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\tree.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\uri.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\valid.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xinclude.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xlink.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlautomata.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlerror.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlexports.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlIO.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlmemory.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlmodule.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlreader.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlregexp.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlsave.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlschemas.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlschemastypes.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlstring.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlunicode.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlversion.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xmlwriter.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xpath.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xpathInternals.h" />
-    <ClInclude Include="Extras\Fbx\include\libxml2\libxml\xpointer.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Input\CRInputProcessorCamera.h" />
-    <ClInclude Include="Object\Camera\CRCamera.h" />
-    <ClInclude Include="Object\CRActor.h" />
-    <ClInclude Include="Object\CRObject.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="RHI\CRRHI.h" />
-    <ClInclude Include="RHI\CRRHITypes.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11DepthStencilState.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11DepthStencilView.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11RasterizerState.h" />
-    <ClInclude Include="RHI\DX11\CRD11DepthStencilBuffer.h" />
-    <ClInclude Include="RHI\ICRRHIMesh.h" />
-    <ClInclude Include="RHI\ICRRHIRenderer.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11CompiledShader.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11ConstantBuffer.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11Device.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11IndexBuffer.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11InputLayout.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11Object.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11PixelShader.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11RenderTargetView.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11SamplerState.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11ShaderResourceView.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11Texture2D.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11VertexBuffer.h" />
-    <ClInclude Include="RHI\DX11\Core\CRD11VertexShader.h" />
-    <ClInclude Include="RHI\DX11\CRD11.h" />
-    <ClInclude Include="RHI\DX11\CRD11BindingConstantBuffer.h" />
-    <ClInclude Include="RHI\DX11\CRD11Include.h" />
-    <ClInclude Include="RHI\DX11\CRD11Mesh.h" />
-    <ClInclude Include="RHI\DX11\CRD11Renderer.h" />
-    <ClInclude Include="RHI\DX11\CRD11RenderingPipeline.h" />
-    <ClInclude Include="RHI\DX11\CRD11ResourceManager.h" />
-    <ClInclude Include="RHI\DX11\CRD11ShaderResourceTexture.h" />
-    <ClInclude Include="RHI\DX11\CRD11Types.h" />
-    <ClInclude Include="targetver.h" />
-    <ClInclude Include="UI\CRCameraUI.h" />
-    <ClInclude Include="UI\CREditorUI.h" />
-    <ClInclude Include="UI\CRLogUI.h" />
-    <ClInclude Include="UI\CRUIManager.h" />
-    <ClInclude Include="UI\ICRUI.h" />
-    <ClInclude Include="Utility\FBX\CRFbxInclude.h" />
-    <ClInclude Include="Utility\FBX\CRFbxLoader.h" />
-    <ClInclude Include="Utility\Generic\CRGeneric.h" />
-    <ClInclude Include="Utility\Log\CRLog.h" />
-    <ClInclude Include="Utility\Time\CRFrameUpdator.h" />
-    <ClInclude Include="Utility\Time\CRTime.h" />
-    <ClInclude Include="Utility\UtilString.h" />
-    <ClInclude Include="Utility\WIC\CRWICTextureLoader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Asset\CRPrimitiveAsset.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories> C:\Project\CRY\Engine\/Extras;C:\Project\CRY\Engine\/Extras/Fbx/include</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="Asset\ICRAsset.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories> C:\Project\CRY\Engine\/Extras;C:\Project\CRY\Engine\/Extras/Fbx/include</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="Core\CRTransform.cpp" />
-    <ClCompile Include="Core\CRVertex.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui_demo.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui_draw.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui_impl_dx11.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui_impl_dx12.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui_impl_win32.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui_tables.cpp" />
-    <ClCompile Include="Core\ImGUI\imgui_widgets.cpp" />
-    <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="Input\CRInputProcessorCamera.cpp" />
-    <ClCompile Include="Object\Camera\CRCamera.cpp" />
-    <ClCompile Include="Object\CRActor.cpp" />
-    <ClCompile Include="Object\CRObject.cpp" />
-    <ClCompile Include="RHI\CRRHI.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11CompiledShader.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11ConstantBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11DepthStencilState.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories> C:\Project\CRY\Engine\/Extras;C:\Project\CRY\Engine\/Extras/Fbx/include</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="RHI\DX11\Core\CRD11DepthStencilView.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories> C:\Project\CRY\Engine\/Extras;C:\Project\CRY\Engine\/Extras/Fbx/include</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="RHI\DX11\Core\CRD11Device.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11IndexBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11InputLayout.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11PixelShader.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11RasterizerState.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11RenderTargetView.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11SamplerState.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11ShaderResourceView.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11Texture2D.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11VertexBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\Core\CRD11VertexShader.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <BuildStlModules>false</BuildStlModules>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="RHI\DX11\CRD11BindingConstantBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11DepthStencilBuffer.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11Mesh.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11Renderer.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <BuildStlModules>false</BuildStlModules>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="RHI\DX11\CRD11RenderingPipeline.cpp" />
-    <ClCompile Include="RHI\DX11\CRD11ResourceManager.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <BuildStlModules>false</BuildStlModules>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="RHI\DX11\CRD11ShaderResourceTexture.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <BuildStlModules>false</BuildStlModules>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Projects\CRY\Engine\/Extras</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="UI\CRCameraUI.cpp" />
-    <ClCompile Include="UI\CREditorUI.cpp" />
-    <ClCompile Include="UI\CRLogUI.cpp" />
-    <ClCompile Include="UI\CRUIManager.cpp" />
-    <ClCompile Include="Utility\FBX\CRFbxLoader.cpp" />
-    <ClCompile Include="Utility\Generic\CRGeneric.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Project\CRY\Engine\/Extras</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="Utility\Log\CRLog.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Project\CRY\Engine\/Extras</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <ClCompile Include="Utility\Time\CRFrameUpdator.cpp" />
-    <ClCompile Include="Utility\Time\CRTime.cpp" />
-    <ClCompile Include="Utility\UtilString.cpp" />
-    <ClCompile Include="Utility\WIC\CRWICTextureLoader.cpp">
-      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
-      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <Optimization>Disabled</Optimization>
-      <SupportJustMyCode>true</SupportJustMyCode>
-      <AssemblerOutput>NoListing</AssemblerOutput>
-      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
-      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
-      <BrowseInformation>false</BrowseInformation>
-      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
-      <CompileAs>Default</CompileAs>
-      <ConformanceMode>true</ConformanceMode>
-      <DiagnosticsFormat>Column</DiagnosticsFormat>
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <ErrorReporting>Prompt</ErrorReporting>
-      <ExpandAttributedSource>false</ExpandAttributedSource>
-      <ExceptionHandling>Sync</ExceptionHandling>
-      <EnableASAN>false</EnableASAN>
-      <EnableFuzzer>false</EnableFuzzer>
-      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
-      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
-      <FloatingPointModel>Precise</FloatingPointModel>
-      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
-      <GenerateModuleDependencies>false</GenerateModuleDependencies>
-      <GenerateSourceDependencies>false</GenerateSourceDependencies>
-      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
-      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
-      <IntrinsicFunctions>false</IntrinsicFunctions>
-      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
-      <LanguageStandard>stdcpp20</LanguageStandard>
-      <LanguageStandard_C>Default</LanguageStandard_C>
-      <MinimalRebuild>false</MinimalRebuild>
-      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
-      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
-      <OmitDefaultLibName>false</OmitDefaultLibName>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
-      <ObjectFileName>x64\Debug\</ObjectFileName>
-      <CallingConvention>Cdecl</CallingConvention>
-      <ProgramDataBaseFileName>x64\Debug\vc143.pdb</ProgramDataBaseFileName>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
-      <PreprocessToFile>false</PreprocessToFile>
-      <PreprocessKeepComments>false</PreprocessKeepComments>
-      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
-      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
-      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
-      <ShowIncludes>false</ShowIncludes>
-      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
-      <SuppressStartupBanner>true</SuppressStartupBanner>
-      <BufferSecurityCheck>true</BufferSecurityCheck>
-      <SmallerTypeCheck>false</SmallerTypeCheck>
-      <SpectreMitigation>false</SpectreMitigation>
-      <StructMemberAlignment>Default</StructMemberAlignment>
-      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
-      <TranslateIncludes>false</TranslateIncludes>
-      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
-      <TreatWarningAsError>false</TreatWarningAsError>
-      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <UseFullPaths>true</UseFullPaths>
-      <WarningLevel>Level3</WarningLevel>
-      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <IntelJCCErratum>false</IntelJCCErratum>
-      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
-      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
-      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
-      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
-      <PreprocessorDefinitions>_DEBUG;_WINDOWS;_UNICODE;UNICODE;</PreprocessorDefinitions>
-      <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Project\CRY\Engine\/Extras</AdditionalIncludeDirectories>
-      <LinkCompiled>true</LinkCompiled>
-    </ClCompile>
-    <None Include="RHI\DX11\HLSL\shader.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="Engine.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Engine.ico" />
-    <Image Include="small.ico" />
+    <ClInclude Include="Extras\ImGUI\imconfig.h" />
+    <ClInclude Include="Extras\ImGUI\imgui.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_impl_dx11.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_impl_dx12.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_impl_win32.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_internal.h" />
+    <ClInclude Include="Extras\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="Extras\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="Extras\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Source\Asset\CRPrimitiveAsset.h" />
+    <ClInclude Include="Source\Asset\ICRAsset.h" />
+    <ClInclude Include="Source\Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Source\Core\CRSmartPtrMacro.h" />
+    <ClInclude Include="Source\Core\CRTransform.h" />
+    <ClInclude Include="Source\Core\CRVertex.h" />
+    <ClInclude Include="Source\Core\Math\CRMath.h" />
+    <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
+    <ClInclude Include="Source\Input\CRInputProcessorCamera.h" />
+    <ClInclude Include="Source\Object\Camera\CRCamera.h" />
+    <ClInclude Include="Source\Object\CRActor.h" />
+    <ClInclude Include="Source\Object\CRObject.h" />
+    <ClInclude Include="Source\RHI\CRRHI.h" />
+    <ClInclude Include="Source\RHI\CRRHITypes.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11DepthStencilView.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11Device.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11IndexBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11InputLayout.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11Object.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11PixelShader.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11RasterizerState.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11RenderTargetView.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11SamplerState.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11ShaderResourceView.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11Texture2D.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11VertexBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11VertexShader.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11BindingConstantBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11DepthStencilBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Include.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Renderer.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11RenderingPipeline.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11ResourceManager.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11ShaderResourceTexture.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Types.h" />
+    <ClInclude Include="Source\RHI\ICRRHIMesh.h" />
+    <ClInclude Include="Source\RHI\ICRRHIRenderer.h" />
+    <ClInclude Include="Source\UI\CRCameraUI.h" />
+    <ClInclude Include="Source\UI\CREditorUI.h" />
+    <ClInclude Include="Source\UI\CRLogUI.h" />
+    <ClInclude Include="Source\UI\CRUIManager.h" />
+    <ClInclude Include="Source\UI\ICRUI.h" />
+    <ClInclude Include="Source\Utility\FBX\CRFbxInclude.h" />
+    <ClInclude Include="Source\Utility\FBX\CRFbxLoader.h" />
+    <ClInclude Include="Source\Utility\Generic\CRGeneric.h" />
+    <ClInclude Include="Source\Utility\Log\CRLog.h" />
+    <ClInclude Include="Source\Utility\Time\CRFrameUpdator.h" />
+    <ClInclude Include="Source\Utility\Time\CRTime.h" />
+    <ClInclude Include="Source\Utility\UtilString.h" />
+    <ClInclude Include="Source\Utility\WIC\CRWICTextureLoader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,14 +1,19 @@
-#pragma once
+﻿#pragma once
 
 
-#include "resource.h"
-#include "Core/CRSmartPtrMacro.h"
-#include "Extras/DirectXTK/Inc/Keyboard.h"
-#include "Extras/DirectXTK/Inc/Mouse.h"
-#include "Object/Camera/CRCamera.h"
+#include "Source/Core/CRSmartPtrMacro.h"
+#include "Source/Object/Camera/CRCamera.h"
+#include <windows.h>
 
 
 extern CRSharedPtr< CRCamera > GCamera;
 
-extern DirectX::Keyboard GKeyboard;
-extern DirectX::Mouse    GMouse;
+
+namespace CREngine
+{
+    /// Initialize.
+    void Initialize( HWND hWnd, unsigned int Width, unsigned int Height );
+    
+    /// Call per message loop.
+    void MessageLoop(); 
+}
