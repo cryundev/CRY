@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{8B4D84D6-CB03-431C-B087-C4DDC291477F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)x64/Debug/</OutDir>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)x64\Debug\;$(SolutionDir)Engine\Extras\</LibraryPath>
+    <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</ExternalIncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)x64/Release/</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories> $(ProjectDir)/Extras;$(ProjectDir)/Extras/Fbx/include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_demo.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_draw.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_impl_dx11.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_impl_dx12.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_impl_win32.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_tables.cpp" />
+    <ClCompile Include="Extras\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Asset\CRPrimitiveAsset.cpp" />
+    <ClCompile Include="Source\Asset\ICRAsset.cpp" />
+    <ClCompile Include="Source\Core\CRTransform.cpp" />
+    <ClCompile Include="Source\Core\CRVertex.cpp" />
+    <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
+    <ClCompile Include="Source\Object\CRActor.cpp" />
+    <ClCompile Include="Source\Object\CRObject.cpp" />
+    <ClCompile Include="Source\RHI\CRRHI.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11CompiledShader.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11DepthStencilView.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11Device.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11IndexBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11InputLayout.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11PixelShader.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11RasterizerState.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11RenderTargetView.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11SamplerState.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11ShaderResourceView.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11Texture2D.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11VertexBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11VertexShader.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11BindingConstantBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11DepthStencilBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11RenderingPipeline.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11ResourceManager.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11ShaderResourceTexture.cpp" />
+    <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
+    <ClCompile Include="Source\Utility\FBX\CRFbxLoader.cpp" />
+    <ClCompile Include="Source\Utility\Generic\CRGeneric.cpp" />
+    <ClCompile Include="Source\Utility\Log\CRLog.cpp" />
+    <ClCompile Include="Source\Utility\Time\CRFrameUpdator.cpp" />
+    <ClCompile Include="Source\Utility\Time\CRTime.cpp" />
+    <ClCompile Include="Source\Utility\UtilString.cpp" />
+    <ClCompile Include="Source\Utility\WIC\CRWICTextureLoader.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CRTypes.h" />
+    <ClInclude Include="Engine.h" />
+    <ClInclude Include="Extras\ImGUI\imconfig.h" />
+    <ClInclude Include="Extras\ImGUI\imgui.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_impl_dx11.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_impl_dx12.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_impl_win32.h" />
+    <ClInclude Include="Extras\ImGUI\imgui_internal.h" />
+    <ClInclude Include="Extras\ImGUI\imstb_rectpack.h" />
+    <ClInclude Include="Extras\ImGUI\imstb_textedit.h" />
+    <ClInclude Include="Extras\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Source\Asset\CRPrimitiveAsset.h" />
+    <ClInclude Include="Source\Asset\ICRAsset.h" />
+    <ClInclude Include="Source\Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Source\Core\CRSmartPtrMacro.h" />
+    <ClInclude Include="Source\Core\CRTransform.h" />
+    <ClInclude Include="Source\Core\CRVertex.h" />
+    <ClInclude Include="Source\Core\Math\CRMath.h" />
+    <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
+    <ClInclude Include="Source\Object\Camera\CRCamera.h" />
+    <ClInclude Include="Source\Object\CRActor.h" />
+    <ClInclude Include="Source\Object\CRObject.h" />
+    <ClInclude Include="Source\RHI\CRRHI.h" />
+    <ClInclude Include="Source\RHI\CRRHITypes.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11DepthStencilView.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11Device.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11IndexBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11InputLayout.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11Object.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11PixelShader.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11RasterizerState.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11RenderTargetView.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11SamplerState.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11ShaderResourceView.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11Texture2D.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11VertexBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11VertexShader.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11BindingConstantBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11DepthStencilBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Include.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Renderer.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11RenderingPipeline.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11ResourceManager.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11ShaderResourceTexture.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Types.h" />
+    <ClInclude Include="Source\RHI\ICRRHIMesh.h" />
+    <ClInclude Include="Source\RHI\ICRRHIRenderer.h" />
+    <ClInclude Include="Source\Utility\FBX\CRFbxInclude.h" />
+    <ClInclude Include="Source\Utility\FBX\CRFbxLoader.h" />
+    <ClInclude Include="Source\Utility\Generic\CRGeneric.h" />
+    <ClInclude Include="Source\Utility\Log\CRLog.h" />
+    <ClInclude Include="Source\Utility\Time\CRFrameUpdator.h" />
+    <ClInclude Include="Source\Utility\Time\CRTime.h" />
+    <ClInclude Include="Source\Utility\UtilString.h" />
+    <ClInclude Include="Source\Utility\WIC\CRWICTextureLoader.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
