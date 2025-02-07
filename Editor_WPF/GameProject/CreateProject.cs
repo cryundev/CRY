@@ -71,6 +71,14 @@ namespace Editor_WPF.GameProject
                 foreach ( string file in templatesFiles )
                 {
                     ProjectTemplate template = Serializer.FromFile< ProjectTemplate >( file );
+                    
+                    template.IconFilePath    = Path.GetFullPath( Path.Combine( Path.GetDirectoryName( file ), "Icon.png"    ) );
+                    template.PreviewPath     = Path.GetFullPath( Path.Combine( Path.GetDirectoryName( file ), "Preview.png" ) );;
+                    template.ProjectFilePath = Path.GetFullPath( Path.Combine( Path.GetDirectoryName( file ), template.ProjectFile ) );
+                    
+                    template.Icon    = File.ReadAllBytes( template.IconFilePath );
+                    template.Preview = File.ReadAllBytes( template.PreviewPath  );
+                    
                     _projectTemplates.Add( template );
                 }
             }
