@@ -1,15 +1,17 @@
 ﻿using System.ComponentModel;
+using System.Runtime.Serialization;
 
 
-namespace Editor_WPF
+namespace Editor_WPF.Common;
+
+
+[DataContract(IsReference = true)]
+public class ViewModelBase : INotifyPropertyChanged
 {
-    public class ViewModelBase : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
+    public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged( string propertyName )
-        {
-            PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
-        }
+    protected void OnPropertyChanged( string propertyName )
+    {
+        PropertyChanged?.Invoke( this, new PropertyChangedEventArgs( propertyName ) );
     }
 }
