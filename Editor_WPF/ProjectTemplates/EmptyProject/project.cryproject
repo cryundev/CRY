@@ -2,7 +2,9 @@
     <Name>{0}</Name>
     <Path>{1}</Path>
     <Scenes>
-        <Scene z:Id="i2"><Name>Default Scene</Name>
+        <Scene z:Id="i2">
+            <IsActive>true</IsActive>
+            <Name>Default Scene</Name>
             <Project z:Ref="i1"/>
         </Scene>
     </Scenes>

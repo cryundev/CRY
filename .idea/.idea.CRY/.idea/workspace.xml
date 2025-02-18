@@ -9,21 +9,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Scene.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Common/ViewModelBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Common/ViewModelBase.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProject.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/EmptyProject/template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/EmptyProject/template.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/FirstPersonProject/template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/FirstPersonProject/template.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/ThirdPersonProject/template.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/ThirdPersonProject/template.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/Scene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Scene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/EmptyProject/project.cryproject" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/EmptyProject/project.cryproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/FirstPersonProject/project.cryproject" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/FirstPersonProject/project.cryproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/ThirdPersonProject/project.cryproject" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/ThirdPersonProject/project.cryproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/Editor_WPF.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/Editor_WPF.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
   </component>
   <component name="DpaMonitoringSettings">
     <option name="firstShow" value="false" />
@@ -37,10 +49,16 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://C:/Projects/CRY/Editor_WPF/Common/ViewModelBase.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Projects/CRY/Editor_WPF/GameProject/CreateProjectView.xaml" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Projects/CRY/Editor_WPF/GameProject/CreateProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9f3f6ac2973b52b9b246bc900a441bf6a7cc21b73be1a5faf7f363865e61/XamlReader.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/CreateProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/CreateProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Scene.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/MainWindow.xaml.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -48,6 +66,7 @@
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="2scyTwAHmqpfG3YM509RgRboUXl" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -122,6 +141,7 @@
       <workItem from="1739019200606" duration="6267000" />
       <workItem from="1739102969545" duration="4904000" />
       <workItem from="1739111807970" duration="1567000" />
+      <workItem from="1739788540467" duration="6409000" />
     </task>
     <servers />
   </component>
@@ -140,6 +160,25 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs</url>
+          <line>101</line>
+          <properties documentPath="C:\Project\CRY\Editor_WPF\GameProject\OpenProject.cs" containingFunctionPresentation="Constructor 'OpenProject'">
+            <startOffsets>
+              <option value="2751" />
+            </startOffsets>
+            <endOffsets>
+              <option value="2799" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

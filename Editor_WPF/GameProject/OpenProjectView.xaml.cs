@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 
 namespace Editor_WPF.GameProject;
@@ -9,5 +11,32 @@ public partial class OpenProjectView : UserControl
     public OpenProjectView()
     {
         InitializeComponent();
+    }
+    
+    private void OnOpenButtonClicked( object sender, RoutedEventArgs e )
+    {
+        OpenSelectedProject();
+    }
+    
+    private void OnListBoxItemDoubleClicked( object sender, MouseButtonEventArgs e )
+    {
+        OpenSelectedProject();
+    }
+    
+    private void OpenSelectedProject() 
+    {
+        Project project = GameProject.OpenProject.Open( projectsListBox.SelectedItem as ProjectData );
+        
+        bool dialogResult = false;
+
+        var win = Window.GetWindow( this );
+        
+        if ( project != null )
+        {
+            dialogResult = true;
+        }
+
+        win.DialogResult = dialogResult;
+        win.Close();
     }
 }
