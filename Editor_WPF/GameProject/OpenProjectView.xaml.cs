@@ -29,11 +29,12 @@ public partial class OpenProjectView : UserControl
         
         bool dialogResult = false;
 
-        var win = Window.GetWindow( this );
+        Window? win = Window.GetWindow( this );
         
         if ( project != null )
         {
             dialogResult = true;
+            win.DataContext = project;
         }
 
         win.DialogResult = dialogResult;
