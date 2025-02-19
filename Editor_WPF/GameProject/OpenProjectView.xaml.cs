@@ -11,6 +11,12 @@ public partial class OpenProjectView : UserControl
     public OpenProjectView()
     {
         InitializeComponent();
+
+        Loaded += ( s, e ) =>
+        {
+            ListBoxItem? item = projectsListBox.ItemContainerGenerator.ContainerFromIndex( projectsListBox.SelectedIndex ) as ListBoxItem;
+            item?.Focus();
+        };
     }
     
     private void OnOpenButtonClicked( object sender, RoutedEventArgs e )

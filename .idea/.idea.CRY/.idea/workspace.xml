@@ -8,24 +8,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs" afterDir="false" />
+    <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )&#10;- 누락 코드 추가&#10;- DataContext가 지정되지 않은 경우 다이얼로그 윈도우가 종료될 때 메인 윈도우도 함께 종료되는 이슈가 있음">
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Common/RelayCommand.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedo.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedoView.xaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedoView.xaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/Scene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Scene.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/EmptyProject/project.cryproject" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/EmptyProject/project.cryproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/FirstPersonProject/project.cryproject" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/FirstPersonProject/project.cryproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/ThirdPersonProject/project.cryproject" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/ProjectTemplates/ThirdPersonProject/project.cryproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/Editor_WPF.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/Editor_WPF.csproj.nuget.dgspec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.assets.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.nuget.cache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.packagespec.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,16 +45,12 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/CreateProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/CreateProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Scene.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/MainWindow.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/MainWindow.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Editor_WPF/obj/Debug/MainWindow.g.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/56b895832ba1dd5dcf6eab77be40a0537da9d1bf60cfbac19515378f1ac9ca13/Debug.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6a1fb5a19c4883d19f63515be2d0cce5e0e9929bb30469a912a58ad2e1e6152/Uri.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -142,7 +134,27 @@
       <workItem from="1739102969545" duration="4904000" />
       <workItem from="1739111807970" duration="1567000" />
       <workItem from="1739788540467" duration="6409000" />
+      <workItem from="1739841857226" duration="8688000" />
+      <workItem from="1739937442817" duration="5202000" />
+      <workItem from="1739948523437" duration="8576000" />
     </task>
+    <task id="LOCAL-00001" summary="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )">
+      <option name="closed" value="true" />
+      <created>1739845487845</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1739845487845</updated>
+    </task>
+    <task id="LOCAL-00002" summary="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )&#10;- 누락 코드 추가&#10;- DataContext가 지정되지 않은 경우 다이얼로그 윈도우가 종료될 때 메인 윈도우도 함께 종료되는 이슈가 있음">
+      <option name="closed" value="true" />
+      <created>1739947333678</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1739947333678</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -161,24 +173,10 @@
       </map>
     </option>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs</url>
-          <line>101</line>
-          <properties documentPath="C:\Project\CRY\Editor_WPF\GameProject\OpenProject.cs" containingFunctionPresentation="Constructor 'OpenProject'">
-            <startOffsets>
-              <option value="2751" />
-            </startOffsets>
-            <endOffsets>
-              <option value="2799" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )" />
+    <MESSAGE value="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )&#10;- 누락 코드 추가&#10;- DataContext가 지정되지 않은 경우 다이얼로그 윈도우가 종료될 때 메인 윈도우도 함께 종료되는 이슈가 있음" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )&#10;- 누락 코드 추가&#10;- DataContext가 지정되지 않은 경우 다이얼로그 윈도우가 종료될 때 메인 윈도우도 함께 종료되는 이슈가 있음" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

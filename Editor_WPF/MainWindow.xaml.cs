@@ -34,7 +34,7 @@ public partial class MainWindow : Window
 
     private void OpenProjectBrowserDialog()
     {
-        var projectBrowserDialog = new ProjectBrowserDialog();
+        ProjectBrowserDialog projectBrowserDialog = new ProjectBrowserDialog();
         if ( projectBrowserDialog.ShowDialog() == false || projectBrowserDialog.DataContext == null )
         {
             Application.Current.Shutdown();

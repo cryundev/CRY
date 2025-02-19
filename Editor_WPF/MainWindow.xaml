@@ -4,9 +4,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Editor_WPF"
+        xmlns:editors="clr-namespace:Editor_WPF.Editors"
+        xmlns:worldEditor="clr-namespace:Editor_WPF.Editors"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="CRYEditor" Height="450" Width="800">
+        Title="CRYEditor" Height="1080" Width="1920">
     <Grid>
-        
+        <worldEditor:WorldEditorView/>
     </Grid>
 </Window>
