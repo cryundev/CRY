@@ -8,70 +8,87 @@ using Editor_WPF.Utilities;
 namespace Editor_WPF.GameProject;
 
 
+//---------------------------------------------------------------------------------------------------------------------
+/// ProjectData
+//---------------------------------------------------------------------------------------------------------------------
 [DataContract]
 public class ProjectData
 {
     [DataMember]
-    public string ProjectName { get; set; }
+    public required string ProjectName { get; set; }
     
     [DataMember]
-    public string ProjectPath { get; set; }
+    public required string ProjectPath { get; set; }
     
     [DataMember]
     public DateTime Date { get; set; }
     
-    public string FullPath { get => $"{ProjectPath}{ProjectName}{Project.Extension}"; }
-    public byte[] Icon { get; set; }
-    public byte[] Preview { get; set; }
+    public string? FullPath => $"{ProjectPath}{ProjectName}{Project.Extension}";
+    public byte[]? Icon { get; set; }
+    public byte[]? Preview { get; set; }
 }
 
 
+//---------------------------------------------------------------------------------------------------------------------
+/// ProjectDataList
+//---------------------------------------------------------------------------------------------------------------------
 [DataContract]
 public class ProjectDataList
 {
     [DataMember]
-    public List< ProjectData > Projects { get; set; }
+    public required List< ProjectData > Projects { get; set; }
 }
 
 
+//---------------------------------------------------------------------------------------------------------------------
+/// OpenProject
+//---------------------------------------------------------------------------------------------------------------------
 public class OpenProject
 {
-    private static readonly string _applicationDataPath = $@"{ Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ) }\Editor_WPF\";
+    private static readonly string ApplicationDataPath = $@"{ Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ) }\Editor_WPF\";
     
-    private static readonly string _projectDataPath;
+    private static readonly string ProjectDataPath;
     
     private static readonly ObservableCollection< ProjectData > _projects = new ObservableCollection< ProjectData >();
-    public static ReadOnlyCollection< ProjectData > Projects { get; }
+    public static ReadOnlyCollection< ProjectData >? Projects { get; }
 
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// ReadProjectData
+    //-----------------------------------------------------------------------------------------------------------------
     private static void ReadProjectData()
     {
-        if ( File.Exists( _projectDataPath ) )
-        {
-            IOrderedEnumerable< ProjectData > projects = Serializer.FromFile< ProjectDataList >( _projectDataPath )
-                .Projects.OrderByDescending( x => x.Date );
+        if ( !File.Exists( ProjectDataPath ) ) return;
+        
+        IOrderedEnumerable< ProjectData > projects = Serializer.FromFile< ProjectDataList >( ProjectDataPath )
+            .Projects.OrderByDescending( x => x.Date );
             
-            _projects.Clear();
+        _projects.Clear();
 
-            foreach ( ProjectData project in projects )
-            {
-                if ( File.Exists( project.FullPath ) )
-                {
-                    project.Icon    = File.ReadAllBytes( $@"{project.ProjectPath}\.cryproject\Icon.png"    );
-                    project.Preview = File.ReadAllBytes( $@"{project.ProjectPath}\.cryproject\Preview.png" );
+        foreach ( ProjectData project in projects )
+        {
+            if ( !File.Exists( project.FullPath ) ) continue;
+            
+            project.Icon    = File.ReadAllBytes( $@"{project.ProjectPath}\.cryproject\Icon.png"    );
+            project.Preview = File.ReadAllBytes( $@"{project.ProjectPath}\.cryproject\Preview.png" );
 
-                    _projects.Add( project );
-                }
-            }
+            _projects.Add( project );
         }
     }
-    
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// WriteProjectData
+    //-----------------------------------------------------------------------------------------------------------------
     private static void WriteProjectData()
     {
         List< ProjectData > projects = _projects.OrderBy( x => x.Date ).ToList();
         
-        Serializer.ToFile( new ProjectDataList() { Projects = projects }, _projectDataPath );
+        Serializer.ToFile( new ProjectDataList() { Projects = projects }, ProjectDataPath );
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// Open
+    //-----------------------------------------------------------------------------------------------------------------
     public static Project Open( ProjectData data )
     {
         ReadProjectData();
@@ -95,16 +112,19 @@ public class OpenProject
         return Project.Load( project.FullPath );
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OpenProject
+    //-----------------------------------------------------------------------------------------------------------------
     static OpenProject()
     {
+        ProjectDataPath = $@"{ApplicationDataPath}ProjectData.xml";
+        
         try
         {
-            if ( !Directory.Exists( _applicationDataPath ) )
+            if ( !Directory.Exists( ApplicationDataPath ) )
             {
-                Directory.CreateDirectory( _applicationDataPath );
+                Directory.CreateDirectory( ApplicationDataPath );
             }
-
-            _projectDataPath = $@"{_applicationDataPath}ProjectData.xml";
 
             Projects = new ReadOnlyObservableCollection< ProjectData >( _projects );
             

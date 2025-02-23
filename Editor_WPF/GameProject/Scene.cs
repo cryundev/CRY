@@ -6,49 +6,51 @@ using Editor_WPF.Common;
 namespace Editor_WPF.GameProject;
 
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Scene
+//---------------------------------------------------------------------------------------------------------------------
 [DataContract]
 public class Scene : ViewModelBase
 {
+    [DataMember( Name = "Name" )]
     private string _name;
-    
-    [DataMember]
     public string Name
     {
         get => _name;
         set
         {
-            if ( _name != value )
-            {
-                _name = value;
-                OnPropertyChanged( nameof( Name ) );
-            }
+            if ( _name == value ) return;
+            
+            _name = value;
+            OnPropertyChanged( nameof( Name ) );
         }
     }
     
     [DataMember]
     public Project Project { get; private set; }
 
+    [DataMember( Name = "IsActive" )]
     private bool _isActive;
-    
-    [DataMember]
     public bool IsActive
     {
         get => _isActive;
         set
         {
-            if ( _isActive != value )
-            {
-                _isActive = value;
-                OnPropertyChanged( nameof( IsActive ) );
-            }
+            if ( _isActive == value ) return;
+            
+            _isActive = value;
+            OnPropertyChanged( nameof( IsActive ) );
         }
     }
-    
-    public Scene( Project InPoject, string Iname )
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// Scene
+    //-----------------------------------------------------------------------------------------------------------------
+    public Scene( Project poject, string name )
     {
-        Debug.Assert( InPoject != null );
+        Debug.Assert( poject != null );
         
-        Project = InPoject;
-        Name    = Iname;
+        Project = poject;
+        _name   = name;
     }
 }

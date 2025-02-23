@@ -6,32 +6,44 @@ using Editor_WPF.GameProject;
 namespace Editor_WPF;
 
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
+//---------------------------------------------------------------------------------------------------------------------
+/// MainWindow
+//---------------------------------------------------------------------------------------------------------------------
 public partial class MainWindow : Window
 {
+    //-----------------------------------------------------------------------------------------------------------------
+    /// MainWindow
+    //-----------------------------------------------------------------------------------------------------------------
     public MainWindow()
     {
         InitializeComponent();
-        Loaded += OnMainWindowLoaded;
+        Loaded  += OnMainWindowLoaded;
         Closing += OnMainWindowClosing;
     }
-    
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnMainWindowLoaded
+    //-----------------------------------------------------------------------------------------------------------------
     private void OnMainWindowLoaded( object sender, RoutedEventArgs e )
     {
         Loaded -= OnMainWindowLoaded;
         
         OpenProjectBrowserDialog();
     }
-    
-    private void OnMainWindowClosing( object sender, CancelEventArgs e )
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnMainWindowClosing
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnMainWindowClosing( object? sender, CancelEventArgs e )
     {
         Closing -= OnMainWindowClosing;
         
         Project.Current?.Unload();
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OpenProjectBrowserDialog
+    //-----------------------------------------------------------------------------------------------------------------
     private void OpenProjectBrowserDialog()
     {
         ProjectBrowserDialog projectBrowserDialog = new ProjectBrowserDialog();

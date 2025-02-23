@@ -1,32 +1,40 @@
 ﻿using System.Windows;
-using System.Windows.Controls;
 
 
 namespace Editor_WPF.GameProject;
 
 
-public partial class CreateProjectView : UserControl
+//---------------------------------------------------------------------------------------------------------------------
+/// CreateProjectView
+//---------------------------------------------------------------------------------------------------------------------
+public partial class CreateProjectView
 {
     public CreateProjectView()
     {
         InitializeComponent();
     }
-    
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnCreateButtonClick
+    //-----------------------------------------------------------------------------------------------------------------
     private void OnCreateButtonClick( object sender, RoutedEventArgs e )
     {
-        var vm = DataContext as CreateProject;
-        string projectPath = vm.CreateNewProject( templateListBox.SelectedItem as ProjectTemplate );
+        if ( DataContext is not CreateProject vm ) return;
+        
+        string projectPath = vm.CreateNewProject( templateListBox.SelectedItem as ProjectTemplate ?? throw new InvalidOperationException() );
         
         bool dialogResult = false;
-        var win = Window.GetWindow( this );
+        Window? win = Window.GetWindow( this );
         
         if( !string.IsNullOrEmpty( projectPath ) )
         {
             dialogResult = true;
             
             Project project = OpenProject.Open( new ProjectData() { ProjectName = vm.ProjectName, ProjectPath = projectPath } );
-            win.DataContext = project;
+            if ( win != null ) win.DataContext = project;
         }
+
+        if ( win == null ) return;
         
         win.DialogResult = dialogResult;
         win.Close();

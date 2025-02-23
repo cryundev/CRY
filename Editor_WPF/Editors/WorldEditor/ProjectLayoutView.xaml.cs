@@ -1,11 +1,18 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using Editor_WPF.GameProject;
+﻿using System.Windows.Controls;
+
 
 namespace Editor_WPF.Editors;
 
+
+//---------------------------------------------------------------------------------------------------------------------
+/// ProjectLayoutView
+//---------------------------------------------------------------------------------------------------------------------
 public partial class ProjectLayoutView : UserControl
 {
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// ProjectLayoutView
+    //-----------------------------------------------------------------------------------------------------------------
     public ProjectLayoutView()
     {
         InitializeComponent();

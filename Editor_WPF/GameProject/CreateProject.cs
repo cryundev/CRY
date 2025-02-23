@@ -2,216 +2,229 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
-using Editor_WPF;
 using Editor_WPF.Common;
 using Editor_WPF.Utilities;
 
 
-namespace Editor_WPF.GameProject
+namespace Editor_WPF.GameProject;
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// ProjectTemplate
+//---------------------------------------------------------------------------------------------------------------------
+[DataContract]
+public class ProjectTemplate
 {
-    [DataContract]
-    public class ProjectTemplate
+    [DataMember] public required string         ProjectType { get; set; }
+    [DataMember] public required string         ProjectFile { get; set; }
+    [DataMember] public required List< string > Folders     { get; set; }
+    
+    public required byte[] Icon            { get; set; }
+    public required byte[] Preview         { get; set; }
+    public required string IconFilePath    { get; set; }
+    public required string PreviewPath     { get; set; }
+    public required string ProjectFilePath { get; set; }
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// CreateProject
+//---------------------------------------------------------------------------------------------------------------------
+public class CreateProject : ViewModelBase
+{
+    private readonly string _templatePath = @"../../Editor_WPF/ProjectTemplates/";
+
+    private string _projectName = "CreateProject";
+    public  string ProjectName
     {
-        [DataMember] public string         ProjectType { get; set; }
-        [DataMember] public string         ProjectFile { get; set; }
-        [DataMember] public List< string > Folders     { get; set; }
-        
-        public byte[] Icon            { get; set; }
-        public byte[] Preview         { get; set; }
-        public string IconFilePath    { get; set; }
-        public string PreviewPath     { get; set; }
-        public string ProjectFilePath { get; set; }
-        
+        get => _projectName;
+        set
+        {
+            if ( _projectName == value ) return;
+            
+            _projectName = value;
+            ValidateProjectPath();
+            OnPropertyChanged( nameof( ProjectName ) );
+        }
+    }
+    
+    private string _projectPath = $@"{ Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) }\CRYProject\";
+    public  string ProjectPath
+    {
+        get => _projectPath;
+        set
+        {
+            if ( _projectPath == value ) return;
+            
+            _projectPath = value;
+            ValidateProjectPath();
+            OnPropertyChanged( nameof( ProjectPath ) );
+        }
     }
 
-    public class CreateProject : ViewModelBase
+    private bool _isValid;
+    public bool IsValid
     {
-        private readonly string _templatePath = @"../../Editor_WPF/ProjectTemplates/";
-        
-        private string _projectName = "CreateProject";
-        public  string ProjectName
+        get => _isValid;
+        set
         {
-            get => _projectName;
-            set
-            {
-                if ( _projectName != value )
-                {
-                    _projectName = value;
-                    ValidateProjectPath();
-                    OnPropertyChanged( nameof( ProjectName ) );
-                }
-            }
+            if ( _isValid == value ) return;
+            
+            _isValid = value;
+            OnPropertyChanged( nameof( IsValid ) );
+        }
+    }
+
+    private string _errorMsg = "";
+    public string ErrorMsg
+    {
+        get => _errorMsg;
+        set
+        {
+            if ( _errorMsg == value ) return;
+            
+            _errorMsg = value;
+            OnPropertyChanged( nameof( ErrorMsg ) );
+        }
+    }
+    
+    private readonly ObservableCollection< ProjectTemplate > _projectTemplates = [];
+    public ReadOnlyObservableCollection< ProjectTemplate > ProjectTemplates { get; }
+
+    
+    //-----------------------------------------------------------------------------------------------------------------
+    /// ValidateProjectPath
+    //-----------------------------------------------------------------------------------------------------------------
+    private bool ValidateProjectPath()
+    {
+        string path = ProjectPath;
+        if ( Path.EndsInDirectorySeparator( path ) )
+        {
+            path += @"\";
         }
         
-        private string _projectPath = $@"{ Environment.GetFolderPath( Environment.SpecialFolder.MyDocuments ) }\CRYProject\";
-        public  string ProjectPath
+        path += $@"{ ProjectName }\";
+
+        IsValid = false;
+        
+        if ( string.IsNullOrWhiteSpace( ProjectName.Trim() ) )
         {
-            get => _projectPath;
-            set
-            {
-                if ( _projectPath != value )
-                {
-                    _projectPath = value;
-                    ValidateProjectPath();
-                    OnPropertyChanged( nameof( ProjectPath ) );
-                }
-            }
+            ErrorMsg = "Type in a project name";
+        }
+        else if ( ProjectName.IndexOfAny( Path.GetInvalidFileNameChars() ) != -1 )
+        {
+            ErrorMsg = "Invalid character(s) used in project name";
+        }
+        else if ( string.IsNullOrWhiteSpace( ProjectPath.Trim() ) )
+        {
+            ErrorMsg = "Select a valid project folder";
+        }
+        else if ( ProjectPath.IndexOfAny( Path.GetInvalidPathChars() ) != -1 )
+        {
+            ErrorMsg = "Invalid character(s) used in project path";
+        }
+        else if ( Directory.Exists( path ) && Directory.EnumerateFileSystemEntries( path ).Any() )
+        {
+            ErrorMsg = "Select project folder already exists and is not empty";
+        }
+        else
+        {
+            ErrorMsg = string.Empty;
+            IsValid = true;
         }
 
-        private bool _isValid;
-        public bool IsValid
-        {
-            get => _isValid;
-            set
-            {
-                if ( _isValid != value )
-                {
-                    _isValid = value;
-                    OnPropertyChanged( nameof( IsValid ) );
-                }
-            }
-        }
+        return IsValid;
+    }
 
-        private string _errorMsg;
-        public string ErrorMsg
+    //-----------------------------------------------------------------------------------------------------------------
+    /// CreateNewProject
+    //-----------------------------------------------------------------------------------------------------------------
+    public string CreateNewProject( ProjectTemplate template )
+    {
+        ValidateProjectPath();
+        
+        if ( !IsValid )
         {
-            get => _errorMsg;
-            set
-            {
-                if ( _errorMsg != value )
-                {
-                    _errorMsg = value;
-                    OnPropertyChanged( nameof( ErrorMsg ) );
-                }
-            }
+            return string.Empty;
         }
         
-        private ObservableCollection< ProjectTemplate > _projectTemplates = new ObservableCollection< ProjectTemplate >();
-        public ReadOnlyObservableCollection< ProjectTemplate > ProjectTemplates { get; }
-
-        private bool ValidateProjectPath()
+        if ( !Path.EndsInDirectorySeparator( ProjectPath ) )
         {
-            string path = ProjectPath;
-            if ( Path.EndsInDirectorySeparator( path ) )
-            {
-                path += @"\";
-            }
-            
-            path += $@"{ ProjectName }\";
-
-            IsValid = false;
-            
-            if ( string.IsNullOrWhiteSpace( ProjectName.Trim() ) )
-            {
-                ErrorMsg = "Type in a project name";
-            }
-            else if ( ProjectName.IndexOfAny( Path.GetInvalidFileNameChars() ) != -1 )
-            {
-                ErrorMsg = "Invalid character(s) used in project name";
-            }
-            else if ( string.IsNullOrWhiteSpace( ProjectPath.Trim() ) )
-            {
-                ErrorMsg = "Select a valid project folder";
-            }
-            else if ( ProjectPath.IndexOfAny( Path.GetInvalidPathChars() ) != -1 )
-            {
-                ErrorMsg = "Invalid character(s) used in project path";
-            }
-            else if ( Directory.Exists( path ) && Directory.EnumerateFileSystemEntries( path ).Any() )
-            {
-                ErrorMsg = "Select project folder already exists and is not empty";
-            }
-            else
-            {
-                ErrorMsg = string.Empty;
-                IsValid = true;
-            }
-
-            return IsValid;
+            ProjectPath += @"\";
         }
+        
+        string path = $@"{ ProjectPath }{ ProjectName }\";
 
-        public string CreateNewProject( ProjectTemplate InTemplate )
+        try
         {
-            ValidateProjectPath();
-            
-            if ( !IsValid )
+            if ( !Directory.Exists( path ) )
             {
-                return string.Empty;
+                Directory.CreateDirectory( path );
             }
             
-            if ( !Path.EndsInDirectorySeparator( ProjectPath ) )
+            string pathName = Path.GetDirectoryName( path ) ?? throw new InvalidOperationException();
+
+            foreach ( string folder in template.Folders )
             {
-                ProjectPath += @"\";
+                Directory.CreateDirectory( Path.GetFullPath( pathName, folder ) );
             }
             
-            string path = $@"{ ProjectPath }{ ProjectName }\";
+            DirectoryInfo dirInfo = new DirectoryInfo( path + @".cryproject\" );
+            dirInfo.Attributes |= FileAttributes.Hidden;
+            
+            File.Copy( template.IconFilePath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Icon.png" ) ) );
+            File.Copy( template.PreviewPath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Preview.png" ) ) );
+            
+            string projectXml = File.ReadAllText( template.ProjectFilePath );
+            projectXml = string.Format( projectXml, ProjectName, ProjectPath );
+            
+            string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{Project.Extension}" ) );
+            File.WriteAllText( projectPath, projectXml );
 
-            try
+            return path;
+        }
+        catch ( Exception e )
+        {
+            Debug.WriteLine( e.Message );
+
+            return String.Empty;
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// CreateProject
+    //-----------------------------------------------------------------------------------------------------------------
+    public CreateProject()
+    {
+        ProjectTemplates = new ReadOnlyObservableCollection< ProjectTemplate >( _projectTemplates );
+        
+        try
+        {
+            string[] templatesFiles = Directory.GetFiles( _templatePath, "template.xml", SearchOption.AllDirectories );
+
+            Debug.Assert( templatesFiles.Any() );
+
+            foreach ( string file in templatesFiles )
             {
-                if ( !Directory.Exists( path ) )
-                {
-                    Directory.CreateDirectory( path );
-                }
+                ProjectTemplate template = Serializer.FromFile< ProjectTemplate >( file );
 
-                foreach ( string folder in InTemplate.Folders )
-                {
-                    Directory.CreateDirectory( Path.GetFullPath( Path.Combine( Path.GetDirectoryName( path ), folder ) ) );
-                }
+                string filePathName = Path.GetDirectoryName( file ) ?? throw new InvalidOperationException();
                 
-                var dirInfo = new DirectoryInfo( path + @".cryproject\" );
-                dirInfo.Attributes |= FileAttributes.Hidden;
+                template.IconFilePath    = Path.GetFullPath( Path.Combine( filePathName, "Icon.png"    ) );
+                template.PreviewPath     = Path.GetFullPath( Path.Combine( filePathName, "Preview.png" ) );;
+                template.ProjectFilePath = Path.GetFullPath( Path.Combine( filePathName, template.ProjectFile ) );
                 
-                File.Copy( InTemplate.IconFilePath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Icon.png" ) ) );
-                File.Copy( InTemplate.PreviewPath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Preview.png" ) ) );
+                template.Icon    = File.ReadAllBytes( template.IconFilePath );
+                template.Preview = File.ReadAllBytes( template.PreviewPath  );
                 
-                string projectXml = File.ReadAllText( InTemplate.ProjectFilePath );
-                projectXml = string.Format( projectXml, ProjectName, ProjectPath );
-                
-                string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{Project.Extension}" ) );
-                File.WriteAllText( projectPath, projectXml );
+                _projectTemplates.Add( template );
 
-                return path;
-            }
-            catch ( Exception e )
-            {
-                Debug.WriteLine( e.Message );
-
-                return String.Empty;
+                ValidateProjectPath();
             }
         }
-
-        public CreateProject()
+        catch ( Exception e )
         {
-            ProjectTemplates = new ReadOnlyObservableCollection< ProjectTemplate >( _projectTemplates );
-            
-            try
-            {
-                string[] templatesFiles = Directory.GetFiles( _templatePath, "template.xml", SearchOption.AllDirectories );
-
-                Debug.Assert( templatesFiles.Any() );
-
-                foreach ( string file in templatesFiles )
-                {
-                    ProjectTemplate template = Serializer.FromFile< ProjectTemplate >( file );
-                    
-                    template.IconFilePath    = Path.GetFullPath( Path.Combine( Path.GetDirectoryName( file ), "Icon.png"    ) );
-                    template.PreviewPath     = Path.GetFullPath( Path.Combine( Path.GetDirectoryName( file ), "Preview.png" ) );;
-                    template.ProjectFilePath = Path.GetFullPath( Path.Combine( Path.GetDirectoryName( file ), template.ProjectFile ) );
-                    
-                    template.Icon    = File.ReadAllBytes( template.IconFilePath );
-                    template.Preview = File.ReadAllBytes( template.PreviewPath  );
-                    
-                    _projectTemplates.Add( template );
-
-                    ValidateProjectPath();
-                }
-            }
-            catch ( Exception e )
-            {
-                Debug.WriteLine( e.Message );
-            }
+            Debug.WriteLine( e.Message );
         }
-        
-        
     }
 }

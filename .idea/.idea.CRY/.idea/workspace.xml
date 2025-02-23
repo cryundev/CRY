@@ -9,19 +9,28 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )&#10;- 누락 코드 추가&#10;- DataContext가 지정되지 않은 경우 다이얼로그 윈도우가 종료될 때 메인 윈도우도 함께 종료되는 이슈가 있음">
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Common/RelayCommand.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedo.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedoView.xaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedoView.xaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Common/RelayCommand.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Common/RelayCommand.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Common/ViewModelBase.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Common/ViewModelBase.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editor_WPF.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editor_WPF.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProjectView.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProjectView.xaml.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/ProjectBrowserDialog.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/ProjectBrowserDialog.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/Scene.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Scene.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/MainWindow.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Utilities/Serializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/Serializer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedo.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/Editor_WPF.csproj.nuget.dgspec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/Editor_WPF.csproj.nuget.dgspec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.assets.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.assets.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.nuget.cache" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.nuget.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/project.packagespec.json" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/project.packagespec.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,14 +54,14 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProjectView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Project/CRY/Editor_WPF/MainWindow.xaml" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Editor_WPF/obj/Debug/MainWindow.g.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/56b895832ba1dd5dcf6eab77be40a0537da9d1bf60cfbac19515378f1ac9ca13/Debug.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6a1fb5a19c4883d19f63515be2d0cce5e0e9929bb30469a912a58ad2e1e6152/Uri.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/4296f45f75a74ea3a676ec19bb54a03d14928/29/4b41023e/ICommand.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9f3f6ac2973b52b9b246bc900a441bf6a7cc21b73be1a5faf7f363865e61/XamlReader.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 4
@@ -75,7 +84,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;RiderCSharpLiveTemplatesSettingsId&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -137,6 +146,10 @@
       <workItem from="1739841857226" duration="8688000" />
       <workItem from="1739937442817" duration="5202000" />
       <workItem from="1739948523437" duration="8576000" />
+      <workItem from="1739979223883" duration="130000" />
+      <workItem from="1739979365844" duration="116000" />
+      <workItem from="1740210460603" duration="9319000" />
+      <workItem from="1740272217481" duration="424000" />
     </task>
     <task id="LOCAL-00001" summary="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )">
       <option name="closed" value="true" />

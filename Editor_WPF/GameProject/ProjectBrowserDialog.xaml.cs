@@ -4,16 +4,25 @@
 namespace Editor_WPF.GameProject;
 
 
-public partial class ProjectBrowserDialog : Window
+//---------------------------------------------------------------------------------------------------------------------
+/// ProjectBrowserDialog
+//---------------------------------------------------------------------------------------------------------------------
+public partial class ProjectBrowserDialog
 {
+    //-----------------------------------------------------------------------------------------------------------------
+    /// ProjectBrowserDialog
+    //-----------------------------------------------------------------------------------------------------------------
     public ProjectBrowserDialog()
     {
         InitializeComponent();
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnToggleButton_Click
+    //-----------------------------------------------------------------------------------------------------------------
     private void OnToggleButton_Click( object sender, RoutedEventArgs e )
     {
-        if ( sender == OpenProjectButton )
+        if ( Equals( sender, OpenProjectButton ) )
         {
             if ( CreateProjectButton.IsChecked == true )
             {
