@@ -25,7 +25,7 @@ public class Project : ViewModelBase
     [DataMember]
     public string Path { get; private set; }
 
-    private string FullPath => $"{Path}{Name}{Extension}";
+    private string FullPath => $@"{Path}{Name}\{Name}{Extension}";
 
     [DataMember( Name = "Scenes" )]
     private ObservableCollection< Scene > _scenes = [];
@@ -49,11 +49,12 @@ public class Project : ViewModelBase
 
     public static UndoRedo UndoRedo { get; } = new UndoRedo();
 
-    public ICommand? Undo { get; private set; }
-    public ICommand? Redo { get; private set; }
+    public ICommand? UndoCommand { get; private set; }
+    public ICommand? RedoCommand { get; private set; }
 
-    public ICommand? AddScene    { get; private set; }
-    public ICommand? RemoveScene { get; private set; }
+    public ICommand? AddSceneCommand    { get; private set; }
+    public ICommand? RemoveSceneCommand { get; private set; }
+    public ICommand? SaveCommand        { get; private set; }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// AddSceneInternal
@@ -109,7 +110,7 @@ public class Project : ViewModelBase
 
         ActiveScene = Scenes.FirstOrDefault( x => x is { IsActive: true } );
 
-        AddScene = new RelayCommand< object >( x =>
+        AddSceneCommand = new RelayCommand< object >( _ =>
         {
             AddSceneInternal( $"New Scene {_scenes.Count}" );
             
@@ -126,8 +127,9 @@ public class Project : ViewModelBase
             UndoRedo.Add( action );
         } );
         
-        RemoveScene = new RelayCommand< Scene >( x =>
+        RemoveSceneCommand = new RelayCommand< Scene >( x =>
         {
+            if ( x == null ) throw new ArgumentNullException( nameof( x ) );
             int sceneIndex = _scenes.IndexOf( x );
             
             RemoveSceneInternal( x );
@@ -142,8 +144,9 @@ public class Project : ViewModelBase
             UndoRedo.Add( action );
         }, x => !x.IsActive );
 
-        Undo = new RelayCommand< object >( x => UndoRedo.Undo() );
-        Redo = new RelayCommand< object >( x => UndoRedo.Redo() );
+        UndoCommand = new RelayCommand< object >( _ => UndoRedo.Undo() );
+        RedoCommand = new RelayCommand< object >( _ => UndoRedo.Redo() );
+        SaveCommand = new RelayCommand< object >( _ => Save( this ) );
     }
 
     //-----------------------------------------------------------------------------------------------------------------

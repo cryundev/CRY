@@ -1,26 +1,24 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
-using System.Windows.Threading;
+﻿using System.Windows.Controls;
 
 
-namespace Editor_WPF;
+namespace Editor_WPF.Editors;
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// App
+/// GameEntityView
 //---------------------------------------------------------------------------------------------------------------------
-public partial class App : Application
+public partial class GameEntityView : UserControl
 {
+    public static GameEntityView Instance { get; private set; }
+
     //-----------------------------------------------------------------------------------------------------------------
-    /// App_DispatcherUnhandledException
+    /// GameEntityView
     //-----------------------------------------------------------------------------------------------------------------
-    void App_DispatcherUnhandledException( object sender, DispatcherUnhandledExceptionEventArgs args )
+    public GameEntityView()
     {
-        MessageBox.Show( args.Exception.Message );
+        InitializeComponent();
 
-        args.Handled = true;
-
-        Environment.Exit( 0 );
+        DataContext = null;
+        Instance    = this;
     }
 }
