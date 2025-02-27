@@ -166,7 +166,7 @@ public class CreateProject : ViewModelBase
 
             foreach ( string folder in template.Folders )
             {
-                Directory.CreateDirectory( Path.GetFullPath( pathName, folder ) );
+                Directory.CreateDirectory( Path.GetFullPath( Path.Combine( Path.GetDirectoryName( path ) ?? throw new InvalidOperationException(), folder ) ) );
             }
             
             DirectoryInfo dirInfo = new DirectoryInfo( path + @".cryproject\" );
