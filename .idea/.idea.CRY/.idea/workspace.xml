@@ -8,20 +8,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="[WPF]&#10;- 새로운 프로젝트 생성 안되는 버그 수정">
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Dictionaries/ControlTemplates.xaml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Editor_WPF/Dictionaries/ControlTemplates.xaml..cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/App.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/App.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Components/GameEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Components/GameEntity.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editor_WPF.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editor_WPF.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/ProjectBrowserDialog.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/ProjectBrowserDialog.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/ProjectBrowserDialog.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/ProjectBrowserDialog.xaml.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/UndoRedo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.model.nuget.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/obj/rider.project.restore.info" afterDir="false" />
+    <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="[WPF][GEP007]&#10;- UndoRedo Selection&#10;- GameEntityView&#10;- Project Browser Dialog Polishing">
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/Logger.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/LoggerView.xaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/LoggerView.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/CreateProject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/OpenProject.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/GameProject/Project.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Utilities/Serializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/Serializer.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +41,7 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock://C:/Project/CRY/Editor_WPF/App.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" root0="SKIP_HIGHLIGHTING" />
@@ -170,7 +166,7 @@
       <workItem from="1740622878726" duration="3993000" />
       <workItem from="1740627786934" duration="2864000" />
       <workItem from="1740634459990" duration="8475000" />
-      <workItem from="1741049826046" duration="8678000" />
+      <workItem from="1741049826046" duration="10425000" />
     </task>
     <task id="LOCAL-00001" summary="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )">
       <option name="closed" value="true" />
@@ -196,7 +192,15 @@
       <option name="project" value="LOCAL" />
       <updated>1740634967196</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="[WPF][GEP007]&#10;- UndoRedo Selection&#10;- GameEntityView&#10;- Project Browser Dialog Polishing">
+      <option name="closed" value="true" />
+      <created>1741073648472</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1741073648472</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,7 +223,8 @@
     <MESSAGE value="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )" />
     <MESSAGE value="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )&#10;- 누락 코드 추가&#10;- DataContext가 지정되지 않은 경우 다이얼로그 윈도우가 종료될 때 메인 윈도우도 함께 종료되는 이슈가 있음" />
     <MESSAGE value="[WPF]&#10;- 새로운 프로젝트 생성 안되는 버그 수정" />
-    <option name="LAST_COMMIT_MESSAGE" value="[WPF]&#10;- 새로운 프로젝트 생성 안되는 버그 수정" />
+    <MESSAGE value="[WPF][GEP007]&#10;- UndoRedo Selection&#10;- GameEntityView&#10;- Project Browser Dialog Polishing" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WPF][GEP007]&#10;- UndoRedo Selection&#10;- GameEntityView&#10;- Project Browser Dialog Polishing" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -133,6 +133,10 @@ public class OpenProject
         catch ( Exception e )
         {
             Debug.WriteLine( e.Message );
+
+            Logger.Log( MessageType.Error, $"Failed to read project data" );
+
+            throw;
         }
     }
 }

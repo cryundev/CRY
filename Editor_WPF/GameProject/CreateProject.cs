@@ -186,8 +186,10 @@ public class CreateProject : ViewModelBase
         catch ( Exception e )
         {
             Debug.WriteLine( e.Message );
+            
+            Logger.Log( MessageType.Error, $"Failed to create {ProjectName}" );
 
-            return String.Empty;
+            throw;
         }
     }
 
@@ -225,6 +227,10 @@ public class CreateProject : ViewModelBase
         catch ( Exception e )
         {
             Debug.WriteLine( e.Message );
+            
+            Logger.Log( MessageType.Error, "Failed to load project templates" );
+
+            throw;
         }
     }
 }

@@ -26,8 +26,11 @@ public static class Serializer
         catch ( Exception e )
         {
             Debug.WriteLine( e.Message );
+            
+            Logger.Log( MessageType.Error, "Failed to serialize {instance} to {path}" );
+
+            throw;
         }
-        
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -47,8 +50,10 @@ public static class Serializer
         catch ( Exception e )
         {
             Debug.WriteLine( e.Message );
-            
-            return default( T ) ?? throw new InvalidOperationException();
+
+            Logger.Log( MessageType.Error, "Failed to deserialize {path}" );
+
+            throw;
         }
     }
 }
