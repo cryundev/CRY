@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 using Editor_WPF.Components;
 using Editor_WPF.GameProject;
+using Editor_WPF.Utilities;
 
 
 namespace Editor_WPF.Editors;
@@ -36,8 +37,32 @@ public partial class ProjectLayoutView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void OnGameEntitiesSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
-        object? entity = ( sender as ListBox )?.SelectedItems[ 0 ];
+        GameEntityView.Instance.DataContext = null;
+        ListBox? listBox = sender as ListBox;
+        
+        if ( e.AddedItems.Count > 0 )
+        {
+            object? entity = listBox?.SelectedItems[ 0 ];
+            GameEntityView.Instance.DataContext = entity;
+        }
+        
+        List< GameEntity >? newSelection = listBox?.SelectedItems.Cast< GameEntity >().ToList();
+        List< GameEntity > previousSelection = (newSelection ?? throw new InvalidOperationException())
+            .Except( e.AddedItems.Cast< GameEntity >() ).Concat( e.RemovedItems.Cast< GameEntity >() ).ToList();
 
-        GameEntityView.Instance.DataContext = entity;
+        Project.UndoRedo.Add( new UndoRedoAction
+        (
+            () =>
+            {
+                listBox?.UnselectAll();
+                previousSelection?.ForEach( x => ( (listBox?.ItemContainerGenerator.ContainerFromItem( x ) as ListBoxItem)! ).IsSelected = true );
+            },
+            () => 
+            {
+                listBox?.UnselectAll();
+                newSelection?.ForEach( x => ( (listBox?.ItemContainerGenerator.ContainerFromItem( x ) as ListBoxItem)! ).IsSelected = true ); 
+            },
+            "Selection Changed"
+        ) );
     }
 }

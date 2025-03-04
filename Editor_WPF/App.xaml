@@ -5,6 +5,10 @@
              StartupUri="MainWindow.xaml"
              DispatcherUnhandledException="App_DispatcherUnhandledException">
     <Application.Resources>
-         
+         <ResourceDictionary>
+             <ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ControlTemplates.xaml"/>
+             </ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -15,6 +15,27 @@ public partial class ProjectBrowserDialog
     public ProjectBrowserDialog()
     {
         InitializeComponent();
+
+        Loaded += OnProjectBrowserDialogLoaded;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnProjectBrowserDialogLoaded
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnProjectBrowserDialogLoaded( object sender, RoutedEventArgs e )
+    {
+        Loaded -= OnProjectBrowserDialogLoaded;
+
+        if ( !(OpenProject.Projects ?? throw new InvalidOperationException()).Any() )
+        {
+            OpenProjectButton.IsEnabled = false;
+            OpenProjectView.Visibility = Visibility.Hidden;
+            
+            OnToggleButton_Click( CreateProjectButton, new RoutedEventArgs() );
+
+        }
+
+        CreateProjectButton.IsChecked = true;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
