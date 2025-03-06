@@ -9,7 +9,7 @@ namespace Editor_WPF.Components;
 /// Transform
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-public class Transform : Component
+class Transform : Component
 {
     private Vector3 _positionn;
     

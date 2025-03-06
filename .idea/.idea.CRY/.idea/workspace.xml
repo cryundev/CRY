@@ -8,10 +8,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="[WPF][GEP007]&#10;- Simple Logger">
+    <list default="true" id="5e4d9681-f669-4426-a013-f3b8567eb960" name="Changes" comment="[WPF][GEP008]&#10;- 로그 메시지 컬러링&#10;- 로그 메시지 비우기 및 필터 버튼을 통해 필터링">
+      <change afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/Utilities.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.CRY/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Utilities/LoggerView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/LoggerView.xaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Editor_WPF/Utilities/LoggerView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Utilities/LoggerView.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Components/Component.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Components/Component.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Components/GameEntity.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Components/GameEntity.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Components/Transform.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Components/Transform.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,13 +41,28 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock://C:/Project/CRY/Editor_WPF/App.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Components/Component.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Components/Component.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Components/GameEntity.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Components/Transform.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Components/Transform.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/GameEntityView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/ProjectLayoutView.xaml.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Editors/WorldEditor/WorldEditorView.xaml" root0="SKIP_HIGHLIGHTING" />
@@ -51,6 +71,9 @@
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/CreateProject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProject.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/OpenProject.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Project.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/ProjectBrowserDialog.xaml" root0="SKIP_HIGHLIGHTING" />
@@ -59,6 +82,7 @@
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/ProjectBrowserDialog.xaml.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/ProjectBrowserDialog.xaml.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/ProjectBrowserDialog.xaml.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Project/CRY/Editor_WPF/GameProject/Scene.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Utilities/Logger.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Utilities/LoggerView.xaml" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock://C:/Project/CRY/Editor_WPF/Utilities/LoggerView.xaml" root0="SKIP_HIGHLIGHTING" />
@@ -70,6 +94,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c9a4ecda883f42fc81388222ac412287a0928/a1/67221130/Enumerable.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e3157c720a4245958cf8a1b12c4b4a27e90928/dd/990b01c8/Action.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/54c7fa9daf3ab775e3ebabc3f3948a6e2a484886fa1196f813b98e17e36aa49/RuntimeHelpers.CoreCLR.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/54ee18a75bde1f68f12f495e99f64d3a992044899dcb64ab7857bbef4275e07f/PropertyChangedEventArgs.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/56b895832ba1dd5dcf6eab77be40a0537da9d1bf60cfbac19515378f1ac9ca13/Debug.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/6a1fb5a19c4883d19f63515be2d0cce5e0e9929bb30469a912a58ad2e1e6152/Uri.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/9f3f6ac2973b52b9b246bc900a441bf6a7cc21b73be1a5faf7f363865e61/XamlReader.cs" root0="FORCE_HIGHLIGHTING" />
@@ -177,7 +202,7 @@
       <workItem from="1740622878726" duration="3993000" />
       <workItem from="1740627786934" duration="2864000" />
       <workItem from="1740634459990" duration="8475000" />
-      <workItem from="1741049826046" duration="16677000" />
+      <workItem from="1741049826046" duration="33916000" />
     </task>
     <task id="LOCAL-00001" summary="[WPF][GEP004]&#10;- 프로젝트 열기 ( 로드 )">
       <option name="closed" value="true" />
@@ -219,7 +244,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741075239704</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="[WPF][GEP008]&#10;- 로그 메시지 컬러링&#10;- 로그 메시지 비우기 및 필터 버튼을 통해 필터링">
+      <option name="closed" value="true" />
+      <created>1741155998466</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1741155998467</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -245,7 +278,8 @@
     <MESSAGE value="[WPF][GEP007]&#10;- Simple Logger" />
     <MESSAGE value="[WPF][GEP007]&#10;- Simple Logger&#10;- Exception to Log" />
     <MESSAGE value="[WPF][GEP007]&#10;- Simple Logger" />
-    <option name="LAST_COMMIT_MESSAGE" value="[WPF][GEP007]&#10;- Simple Logger" />
+    <MESSAGE value="[WPF][GEP008]&#10;- 로그 메시지 컬러링&#10;- 로그 메시지 비우기 및 필터 버튼을 통해 필터링" />
+    <option name="LAST_COMMIT_MESSAGE" value="[WPF][GEP008]&#10;- 로그 메시지 컬러링&#10;- 로그 메시지 비우기 및 필터 버튼을 통해 필터링" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

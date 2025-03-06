@@ -37,14 +37,7 @@ public partial class ProjectLayoutView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void OnGameEntitiesSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
-        GameEntityView.Instance.DataContext = null;
         ListBox? listBox = sender as ListBox;
-        
-        if ( e.AddedItems.Count > 0 )
-        {
-            object? entity = listBox?.SelectedItems[ 0 ];
-            GameEntityView.Instance.DataContext = entity;
-        }
         
         List< GameEntity >? newSelection = listBox?.SelectedItems.Cast< GameEntity >().ToList();
         List< GameEntity > previousSelection = (newSelection ?? throw new InvalidOperationException())
@@ -64,5 +57,13 @@ public partial class ProjectLayoutView : UserControl
             },
             "Selection Changed"
         ) );
+
+        MultiSelectionEntity multiSelectionEntity = null;
+        if ( newSelection.Any() )
+        {
+            multiSelectionEntity = new MultiSelectionGameEntity( newSelection );
+        }
+        
+        GameEntityView.Instance.DataContext = multiSelectionEntity;
     }
 }
