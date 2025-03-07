@@ -11,9 +11,12 @@
 class CRActor : public CRObject 
 {
 public:
-    CRTransform Transform;
-    
-public:
     /// Constructor
     CRActor() = default;
+
+    /// Get transform
+    inline CRTransform& GetTransform() const
+    {
+        return CRTransform::Get( ObjectId );
+    };
 };

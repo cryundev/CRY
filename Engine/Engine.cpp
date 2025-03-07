@@ -1,6 +1,7 @@
 #include "Engine.h"
-#include "Source/Asset/CRPrimitiveAsset.h"\
+#include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/Object/Camera/CRCamera.h"
+#include "Source/Core/Identify/CRIdentity.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/RHI/ICRRHIRenderer.h"
@@ -24,7 +25,7 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
     
     GCamera->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, Width, Height, 0.1f, 1000.0f );
     GCamera->SetLookAtDirection( 0.f, 0.f, -1.f );
-    GCamera->Transform.SetLocation( 0.f, 0.f, 15.0f );
+    GCamera->GetTransform().SetLocation( 0.f, 0.f, 15.0f );
     
     GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera->GetViewMatrix(), GCamera->GetProjectionMatrix() );
 

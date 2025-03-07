@@ -107,7 +107,7 @@
     <ClCompile Include="Source\Asset\ICRAsset.cpp" />
     <ClCompile Include="Source\Core\CRTransform.cpp" />
     <ClCompile Include="Source\Core\CRVertex.cpp" />
-    <ClCompile Include="Source\Core\Identify\CRIdentify.cpp" />
+    <ClCompile Include="Source\Core\Identify\CRIdentity.cpp" />
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Source\Object\CRActor.cpp" />
     <ClCompile Include="Source\Object\CRObject.cpp" />
@@ -164,7 +164,7 @@
     <ClInclude Include="Source\Core\CRTransform.h" />
     <ClInclude Include="Source\Core\CRTypes.h" />
     <ClInclude Include="Source\Core\CRVertex.h" />
-    <ClInclude Include="Source\Core\Identify\CRIdentify.h" />
+    <ClInclude Include="Source\Core\Identify\CRIdentity.h" />
     <ClInclude Include="Source\Core\Math\CRMath.h" />
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />
@@ -208,6 +208,9 @@
     <ClInclude Include="Source\Utility\Time\CRTime.h" />
     <ClInclude Include="Source\Utility\UtilString.h" />
     <ClInclude Include="Source\Utility\WIC\CRWICTextureLoader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Source\Object\Component\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

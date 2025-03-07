@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include "Identify/CRIdentity.h"
 #include "Math/CRMath.h"
 
 
@@ -13,9 +14,6 @@ public:
     CRVector     Location = CRVector::Zero;
     CRQuaternion Rotation = CRQuaternion::Identity;
     CRVector     Scale    = CRVector::One;
-
-public:
-    static CRTransform Identity;
 
 public:
     /// Constructor.
@@ -62,4 +60,14 @@ public:
 
     /// Get up vector.
     CRVector GetUp() const;
+
+public:
+    static CRTransform Identity;
+
+private:
+    static CRArray< CRTransform > Transforms;
+
+public:
+    /// 
+    static CRTransform& Get( const CRIdentity::id_t& Id );
 };

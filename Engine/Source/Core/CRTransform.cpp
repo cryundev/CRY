@@ -37,3 +37,28 @@ CRVector CRTransform::GetUp() const
 {
     return CRVector::Transform( CRVector::Up, Rotation );
 }
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Statics 
+//---------------------------------------------------------------------------------------------------------------------
+
+CRArray< CRTransform > CRTransform::Transforms;
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get
+//---------------------------------------------------------------------------------------------------------------------
+CRTransform& CRTransform::Get( const CRIdentity::id_t& Id )
+{
+    CRIdentity::id_t index = CRIdentity::IndexOf( Id );
+
+    if ( Transforms.size() <= index )
+    {
+        Transforms.resize( index + 1 );
+        return Transforms[ index ];
+    }
+    else
+    {
+        return Transforms[ index ];
+    }
+}
