@@ -19,6 +19,8 @@ static constexpr u16 min_u16 = 0;
 static constexpr u16 max_u16 = 0xFFFF;
 static constexpr u32 min_u32 = 0;
 static constexpr u32 max_u32 = 0xFFFFFFFF;
+static constexpr u64 min_u64 = 0;
+static constexpr u64 max_u64 = 0xFFFFFFFFFFFFFFFF;
 
 static constexpr f32 min_f32 = -3.402823466e+38f;
 static constexpr f32 max_f32 =  3.402823466e+38f;
