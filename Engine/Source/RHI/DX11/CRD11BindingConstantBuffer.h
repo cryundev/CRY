@@ -7,6 +7,7 @@
 #include "CRD11Types.h"
 #include "Resource/CRD11ConstantBuffer.h"
 #include "Resource/CRD11Device.h"
+#include "Source/Core/CRTypes.h"
 #include "Source/Utility/Generic/CRGeneric.h"
 #include "Source/Utility/Log/CRLog.h"
 
@@ -21,14 +22,14 @@ private:
     CRName                     Name;
     CRD11ConstantBufferWPtr    ConstantBufferPtr;
     ED11RenderingPipelineStage Stage = ED11RenderingPipelineStage::Max;
-    unsigned int               Slot  = 0;
+    u32                        Slot  = 0;
 
 public:
     /// Constructor.
     CRD11BindingConstantBuffer() = default;
     
     /// Create constant buffer.
-    void Create( const CRName& InName, unsigned int InSlot, ED11RenderingPipelineStage InStage, const T* Data = nullptr );
+    void Create( const CRName& InName, u32 InSlot, ED11RenderingPipelineStage InStage, const T* Data = nullptr );
 
     /// Update constant buffer.
     void Update( const T& Data );
@@ -40,7 +41,7 @@ public:
     ED11RenderingPipelineStage GetStage() const { return Stage; }
 
     /// Get slot.
-    unsigned int GetSlot() const { return Slot; }
+    u32 GetSlot() const { return Slot; }
 
     /// Set in rendering pipeline.
     void SetInRenderingPipeline() const;
@@ -51,7 +52,7 @@ public:
 /// Create constant buffer.
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
-void CRD11BindingConstantBuffer<T>::Create( const CRName& InName, unsigned int InSlot, ED11RenderingPipelineStage InStage, const T* Data )
+void CRD11BindingConstantBuffer<T>::Create( const CRName& InName, u32 InSlot, ED11RenderingPipelineStage InStage, const T* Data )
 {
     Name  = InName;
     Slot  = InSlot;

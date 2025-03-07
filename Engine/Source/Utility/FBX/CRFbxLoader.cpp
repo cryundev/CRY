@@ -88,7 +88,7 @@ void CRFbxLoader::_LoadNode( FbxNode* Node )
 {
     if ( !Node ) return;
 
-    for ( int i = 0; i < Node->GetChildCount(); ++i )
+    for ( i32 i = 0; i < Node->GetChildCount(); ++i )
     {
         _LoadNode( Node->GetChild( i ) );
     }
@@ -115,8 +115,8 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
 
     CRPrimitiveAsset& primitiveData = Primitives.back();
     
-    int vertexCount = mesh->GetPolygonCount() * 3;
-    int vertexIndex = primitiveData.VertexCount;
+    i32 vertexCount = mesh->GetPolygonCount() * 3;
+    i32 vertexIndex = primitiveData.VertexCount;
     
     primitiveData.Initialize( primitiveData.VertexCount + vertexCount );
 
@@ -154,9 +154,9 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
     const FbxAMatrix& transformMatrix = (Node->EvaluateGlobalTransform() * trsMatrix);// * mat;
     const FbxVector4* fbxVertices     = mesh->GetControlPoints();
 
-    for ( int polygonIndex = 0; polygonIndex < mesh->GetPolygonCount(); ++polygonIndex )
+    for ( i32 polygonIndex = 0; polygonIndex < mesh->GetPolygonCount(); ++polygonIndex )
     {
-        for ( int t = 0; t < 3; ++t )
+        for ( i32 t = 0; t < 3; ++t )
         {
             int index = mesh->GetPolygonVertex( polygonIndex, t );
 

@@ -8,15 +8,15 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create index buffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11IndexBuffer::Create( D3D11_USAGE Usage, unsigned int CpuAccess, const CRArray< int >& Indice )
+void CRD11IndexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const CRArray< i32 >& Indice )
 {
-    Count = (unsigned int)( Indice.size() );
+    Count = (u32)( Indice.size() );
 
     D3D11_BUFFER_DESC bd;
     ZeroMemory( &bd, sizeof( D3D11_BUFFER_DESC ) );
 
     bd.Usage          = Usage;  
-    bd.ByteWidth      = sizeof( int ) * Count;  
+    bd.ByteWidth      = sizeof( i32 ) * Count;  
     bd.BindFlags      = D3D11_BIND_INDEX_BUFFER;  
     bd.CPUAccessFlags = CpuAccess;
 

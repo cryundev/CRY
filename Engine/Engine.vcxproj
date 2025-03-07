@@ -107,6 +107,7 @@
     <ClCompile Include="Source\Asset\ICRAsset.cpp" />
     <ClCompile Include="Source\Core\CRTransform.cpp" />
     <ClCompile Include="Source\Core\CRVertex.cpp" />
+    <ClCompile Include="Source\Core\Identify\CRIdentify.cpp" />
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Source\Object\CRActor.cpp" />
     <ClCompile Include="Source\Object\CRObject.cpp" />
@@ -144,7 +145,7 @@
     <ClCompile Include="Source\Utility\WIC\CRWICTextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CRTypes.h" />
+    <ClInclude Include="CRInclue.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Extras\ImGUI\imconfig.h" />
     <ClInclude Include="Extras\ImGUI\imgui.h" />
@@ -158,9 +159,12 @@
     <ClInclude Include="Source\Asset\CRPrimitiveAsset.h" />
     <ClInclude Include="Source\Asset\ICRAsset.h" />
     <ClInclude Include="Source\Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Source\Core\CRNumeric.h" />
     <ClInclude Include="Source\Core\CRSmartPtrMacro.h" />
     <ClInclude Include="Source\Core\CRTransform.h" />
+    <ClInclude Include="Source\Core\CRTypes.h" />
     <ClInclude Include="Source\Core\CRVertex.h" />
+    <ClInclude Include="Source\Core\Identify\CRIdentify.h" />
     <ClInclude Include="Source\Core\Math\CRMath.h" />
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />

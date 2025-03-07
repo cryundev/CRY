@@ -65,7 +65,7 @@ bool CRD11Device::Create( HWND hWnd )
 //---------------------------------------------------------------------------------------------------------------------
 /// Get maximum texture size.
 //---------------------------------------------------------------------------------------------------------------------
-unsigned int CRD11Device::GetMaxTextureSize() const
+u32 CRD11Device::GetMaxTextureSize() const
 {
     if ( !DevicePtr ) return 0;
 

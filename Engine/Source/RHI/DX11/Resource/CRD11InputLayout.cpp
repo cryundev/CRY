@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create input layout.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11InputLayout::Create( D3D11_INPUT_ELEMENT_DESC* Elments, unsigned int Count, ID3DBlob* CompiledShader )
+void CRD11InputLayout::Create( D3D11_INPUT_ELEMENT_DESC* Elments, u32 Count, ID3DBlob* CompiledShader )
 {
     if ( !CompiledShader ) return;
 

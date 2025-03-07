@@ -2,6 +2,7 @@
 
 
 #include "CRD11Object.h"
+#include "Source/Core/CRTypes.h"
 #include "Source/Core/Containers/CRContainerInc.h"
 
 
@@ -15,8 +16,8 @@ private:
 
 public:
     /// Create index buffer.
-    void Create( D3D11_USAGE Usage, unsigned int CpuAccess, const CRArray< int >& Indice );
+    void Create( D3D11_USAGE Usage, u32 CpuAccess, const CRArray< i32 >& Indice );
 
     /// Get count.
-    unsigned int GetCount() const { return Count; }
+    u32 GetCount() const { return Count; }
 };

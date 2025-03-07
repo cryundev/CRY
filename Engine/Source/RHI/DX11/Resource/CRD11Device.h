@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include "Source/Core/CRTypes.h"
 #include <d3d11.h>
 
 
@@ -25,7 +26,7 @@ public:
     bool Create( HWND hWnd );
 
     /// Get maximum texture size.
-    unsigned int GetMaxTextureSize() const;
+    u32 GetMaxTextureSize() const;
 
     //-----------------------------------------------------------------------------------------------------------------
     /// Getter

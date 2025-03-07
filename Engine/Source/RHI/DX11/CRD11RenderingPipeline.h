@@ -2,6 +2,7 @@
 
 
 #include "CRD11Types.h"
+#include "Source/Core/CRTypes.h"
 #include <d3d11.h>
 
 
@@ -52,22 +53,22 @@ private:
 
 public:
     /// Set vertex buffer.
-    void SetVertexBuffer( ID3D11Buffer* Buffer, unsigned int Slot, unsigned int Stride, unsigned int Offset, D3D_PRIMITIVE_TOPOLOGY TopologyType );
+    void SetVertexBuffer( ID3D11Buffer* Buffer, u32 Slot, u32 Stride, u32 Offset, D3D_PRIMITIVE_TOPOLOGY TopologyType );
 
     /// Set index buffer.
-    void SetIndexBuffer( ID3D11Buffer* Buffer, unsigned int Offset );
+    void SetIndexBuffer( ID3D11Buffer* Buffer, u32 Offset );
 
     /// Set input layout.
-    void SetInputLayout( ID3D11InputLayout* Layout, unsigned int Slot );
+    void SetInputLayout( ID3D11InputLayout* Layout, u32 Slot );
 
     /// Set constant buffer.
-    void SetConstantBuffer( ID3D11Buffer* Buffer, unsigned int Slot, ED11RenderingPipelineStage Stage );
+    void SetConstantBuffer( ID3D11Buffer* Buffer, u32 Slot, ED11RenderingPipelineStage Stage );
 
     /// Set shader resource view.
-    void SetShaderResourceView( ID3D11ShaderResourceView* View, unsigned int Slot, ED11RenderingPipelineStage Stage );
+    void SetShaderResourceView( ID3D11ShaderResourceView* View, u32 Slot, ED11RenderingPipelineStage Stage );
 
     /// Set sampler state.
-    void SetSamplerState( ID3D11SamplerState* State, unsigned int Slot );
+    void SetSamplerState( ID3D11SamplerState* State, u32 Slot );
 
     /// Set vertex shader.
     void SetVertexShader( ID3D11VertexShader* Shader );

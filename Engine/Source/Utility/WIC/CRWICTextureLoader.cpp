@@ -205,10 +205,10 @@ bool CRWICTextureLoader::LoadFromFile( const CRString& Path )
     if ( !_GetTextureSize()  ) return false;
     if ( !_GetFormatAndBPP() ) return false;
 
-    RowPitch  = ( TextureWidth * BPP + sizeof( unsigned char ) - 1 ) / sizeof( unsigned char );
+    RowPitch  = ( TextureWidth * BPP + sizeof( u8 ) - 1 ) / sizeof( u8 );
     ImageSize = RowPitch * TextureHeight;
 
-    Pixels = new unsigned char[ ImageSize ];
+    Pixels = new u8[ ImageSize ];
     ZeroMemory( Pixels, ImageSize );
 
 	bool sameFormat = memcmp( &ConvertToFormat, &WicFormat, sizeof( GUID ) ) == 0;
@@ -261,7 +261,7 @@ bool CRWICTextureLoader::_GetTextureSize()
 	HRESULT hr = BitmapFrameDecode->GetSize( &ImageWidth, &ImageHeight );
     if ( CRGeneric::CheckError( hr ) ) return false;
 
-	unsigned int maxSize = GD11.GetMaxTextureSize();
+	u32 maxSize = GD11.GetMaxTextureSize();
 
 	if ( maxSize == 0 )
 	{
@@ -275,13 +275,13 @@ bool CRWICTextureLoader::_GetTextureSize()
     
 		if ( ImageWidth > ImageHeight )
 		{
-			TextureWidth  = (unsigned int)( maxSize );
-			TextureHeight = (unsigned int)( (float)( maxSize ) * ar ); 
+			TextureWidth  = (u32)( maxSize );
+			TextureHeight = (u32)( (float)( maxSize ) * ar ); 
 		}
 		else
 		{
-			TextureHeight = (unsigned int)( maxSize ); 
-			TextureWidth  = (unsigned int)( (float)( maxSize ) / ar ); 
+			TextureHeight = (u32)( maxSize ); 
+			TextureWidth  = (u32)( (float)( maxSize ) / ar ); 
 		}
 
 		if ( TextureWidth > maxSize || TextureHeight > maxSize )
@@ -344,7 +344,7 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 		return false;
 	}
 
-	unsigned int support = 0;
+	u32 support = 0;
 
 	hr = GD11.GetDevice()->CheckFormatSupport( DxgiFormat, &support );
 
@@ -361,7 +361,7 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 //---------------------------------------------------------------------------------------------------------------------
 /// Get bit per pixel.
 //---------------------------------------------------------------------------------------------------------------------
-unsigned int CRWICTextureLoader::_GetBPP( REFGUID targetGUID ) const
+u32 CRWICTextureLoader::_GetBPP( REFGUID targetGUID ) const
 {
     IWICImagingFactory* wic = GetWICFactory();
 
@@ -394,7 +394,7 @@ unsigned int CRWICTextureLoader::_GetBPP( REFGUID targetGUID ) const
 		return 0;
 	}
 
-	unsigned int bpp = 0;
+	u32 bpp = 0;
 	hr = pixelFormat->GetBitsPerPixel( &bpp );
     CRGeneric::CheckError( hr );
 

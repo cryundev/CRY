@@ -29,7 +29,7 @@ CRRHI::CRRHI( ECRRHIType InRHIType )
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize RHI.
 //---------------------------------------------------------------------------------------------------------------------
-void CRRHI::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
+void CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
 {
     GD11.Create( hWnd );
     Renderer->Initialize( Width, Height );

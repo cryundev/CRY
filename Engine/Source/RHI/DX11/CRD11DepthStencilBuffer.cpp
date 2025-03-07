@@ -12,7 +12,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create depth stencil buffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11DepthStencilBuffer::Create( unsigned int Width, unsigned int Height )
+void CRD11DepthStencilBuffer::Create( u32 Width, u32 Height )
 {
     BufferPtr = GD11RM.GetTexture2D( "DepthStencilBuffer" );
     if ( !BufferPtr.expired() )

@@ -2,7 +2,7 @@
 
 
 #include "CRD11Object.h"
-
+#include "Source/Core/CRTypes.h"
 
 //---------------------------------------------------------------------------------------------------------------------
 /// CRD11VertexBuffer
@@ -15,7 +15,7 @@ private:
 
 public:
     /// Create vertex buffer.
-    void Create( D3D11_USAGE Usage, unsigned int CpuAccess, const void* BlobPtr, unsigned int Stride, unsigned int Count );
+    void Create( D3D11_USAGE Usage, u32 CpuAccess, const void* BlobPtr, u32 Stride, u32 Count );
 
     /// Get count.
     unsigned int GetCount() const { return Count; }
