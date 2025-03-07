@@ -35,12 +35,12 @@
                                     </StackPanel>
                                 </Grid>
                             </Expander.Header>
-                            <ListBox ItemsSource="{Binding GameEntities}" IsEnabled="{Binding IsActive}" SelectionMode="Extended" SelectionChanged="OnGameEntitiesSelectionChanged">
+                            <ListBox ItemsSource="{Binding Actors}" IsEnabled="{Binding IsActive}" SelectionMode="Extended" SelectionChanged="OnGameEntitiesSelectionChanged">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Name}"/>
-                                            <Button Content="Remove" Command="{Binding ParentScene.RemoveGameEntityCommand}" CommandParameter="{Binding}"/> 
+                                            <Button Content="Remove" Command="{Binding ParentScene.RemoveActorCommand}" CommandParameter="{Binding}"/> 
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>

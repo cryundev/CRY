@@ -29,7 +29,7 @@ public partial class ProjectLayoutView : UserControl
         Button? button = sender as Button;
         Scene? scene = button?.DataContext as Scene;
         
-        scene?.AddGameEntityCommand?.Execute( new GameEntity( scene ) { Name = "Empty Game Entity" } );     
+        scene?.AddActorCommand?.Execute( new Actor( scene ) { Name = "Empty Actor" } );     
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -39,9 +39,9 @@ public partial class ProjectLayoutView : UserControl
     {
         ListBox? listBox = sender as ListBox;
         
-        List< GameEntity >? newSelection = listBox?.SelectedItems.Cast< GameEntity >().ToList();
-        List< GameEntity > previousSelection = (newSelection ?? throw new InvalidOperationException())
-            .Except( e.AddedItems.Cast< GameEntity >() ).Concat( e.RemovedItems.Cast< GameEntity >() ).ToList();
+        List< Actor >? newSelection = listBox?.SelectedItems.Cast< Actor >().ToList();
+        List< Actor > previousSelection = (newSelection ?? throw new InvalidOperationException())
+            .Except( e.AddedItems.Cast< Actor >() ).Concat( e.RemovedItems.Cast< Actor >() ).ToList();
 
         Project.UndoRedo.Add( new UndoRedoAction
         (
@@ -58,12 +58,12 @@ public partial class ProjectLayoutView : UserControl
             "Selection Changed"
         ) );
 
-        MultiSelectionEntity multiSelectionEntity = null;
+        MultiSelectionActor multiSelectionActor = null;
         if ( newSelection.Any() )
         {
-            multiSelectionEntity = new MultiSelectionGameEntity( newSelection );
+            multiSelectionActor = new MultiSelectionGameActor( newSelection );
         }
         
-        GameEntityView.Instance.DataContext = multiSelectionEntity;
+        ActorView.Instance.DataContext = multiSelectionActor;
     }
 }

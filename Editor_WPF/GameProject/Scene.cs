@@ -47,31 +47,31 @@ public class Scene : ViewModelBase
         }
     }
     
-    [DataMember( Name = "GameEntities" )]
-    private ObservableCollection< GameEntity > _gameEntities = [];
-    public ReadOnlyObservableCollection< GameEntity > GameEntities { get; private set; }
+    [DataMember( Name = "Actors" )]
+    private ObservableCollection< Actor > _actors = [];
+    public ReadOnlyObservableCollection< Actor > Actors { get; private set; }
 
-    public ICommand? AddGameEntityCommand    { get; private set; }
-    public ICommand? RemoveGameEntityCommand { get; private set; }
+    public ICommand? AddActorCommand    { get; private set; }
+    public ICommand? RemoveActorCommand { get; private set; }
     
     //-----------------------------------------------------------------------------------------------------------------
-    /// AddGameEntityInternal
+    /// AddActorInternal
     //-----------------------------------------------------------------------------------------------------------------
-    private void AddGameEntityInternal( GameEntity gameEntity )
+    private void AddActorInternal( Actor actor )
     {
-        Debug.Assert( !_gameEntities.Contains( gameEntity ) );
+        Debug.Assert( !_actors.Contains( actor ) );
         
-        _gameEntities.Add( gameEntity );
+        _actors.Add( actor );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// RemoveGameEntityInternal
+    /// RemoveActorInternal
     //-----------------------------------------------------------------------------------------------------------------
-    private void RemoveGameEntityInternal( GameEntity gameEntity )
+    private void RemoveActorInternal( Actor actor )
     {
-        Debug.Assert( _gameEntities.Contains( gameEntity ) );
+        Debug.Assert( _actors.Contains( actor ) );
         
-        _gameEntities.Remove( gameEntity );
+        _actors.Remove( actor );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -80,35 +80,35 @@ public class Scene : ViewModelBase
     [OnDeserialized]
     private void OnDeserialized( StreamingContext context )
     {
-        _gameEntities ??= new ObservableCollection< GameEntity >();
+        _actors ??= new ObservableCollection< Actor >();
         
-        GameEntities = new ReadOnlyObservableCollection< GameEntity >( _gameEntities );
-        OnPropertyChanged( nameof( GameEntities ) );
+        Actors = new ReadOnlyObservableCollection< Actor >( _actors );
+        OnPropertyChanged( nameof( Actors ) );
 
-        AddGameEntityCommand = new RelayCommand< GameEntity >( x =>
+        AddActorCommand = new RelayCommand< Actor >( x =>
         {
-            AddGameEntityInternal( x );
+            AddActorInternal( x );
 
-            int entityIndex = _gameEntities.Count - 1;
+            int actorsCount = _actors.Count - 1;
             
             Project.UndoRedo.Add( new UndoRedoAction
             (
-                () => RemoveGameEntityInternal( x ),
-                () => _gameEntities.Insert( entityIndex, x ),
+                () => RemoveActorInternal( x ),
+                () => _actors.Insert( actorsCount, x ),
                 $"Add {x.Name} to {Name}"
             ) );
         } );
 
-        RemoveGameEntityCommand = new RelayCommand< GameEntity >( x =>
+        RemoveActorCommand = new RelayCommand< Actor >( x =>
         {
-            RemoveGameEntityInternal( x );
+            RemoveActorInternal( x );
 
-            int entityIndex = _gameEntities.Count;
+            int actorsCount = _actors.Count;
             
             Project.UndoRedo.Add( new UndoRedoAction
             (
-                () => _gameEntities.Insert( entityIndex, x ),
-                () => RemoveGameEntityInternal( x ),
+                () => _actors.Insert( actorsCount, x ),
+                () => RemoveActorInternal( x ),
                 $"Remove {x.Name} from {Name}"
             ) );
         } );

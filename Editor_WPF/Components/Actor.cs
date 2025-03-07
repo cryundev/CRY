@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Runtime.Serialization;
-using System.Windows.Input;
 using Editor_WPF.Common;
 using Editor_WPF.GameProject;
 using Editor_WPF.Utilities;
@@ -11,11 +10,11 @@ namespace Editor_WPF.Components;
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// GameEntity
+/// Actor
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
 [KnownType( typeof( Transform ) )]
-public class GameEntity : ViewModelBase
+public class Actor : ViewModelBase
 {
     private bool _isEnabled = true;
 
@@ -69,9 +68,9 @@ public class GameEntity : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// GameEntity
+    /// Actor
     //-----------------------------------------------------------------------------------------------------------------
-    public GameEntity( Scene scene )
+    public Actor( Scene scene )
     {
         Debug.Assert( scene != null );
 
@@ -86,9 +85,9 @@ public class GameEntity : ViewModelBase
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// MultiSelectionEntity
+/// MultiSelectionActor
 //---------------------------------------------------------------------------------------------------------------------
-abstract class MultiSelectionEntity : ViewModelBase
+abstract class MultiSelectionActor : ViewModelBase
 {
     private bool _enableUpdates = true;
     
@@ -121,7 +120,7 @@ abstract class MultiSelectionEntity : ViewModelBase
     private readonly ObservableCollection< IMultiSelectionComponent > _components = new ObservableCollection< IMultiSelectionComponent >();
     public ReadOnlyObservableCollection< IMultiSelectionComponent > Components { get; }
 
-    public List< GameEntity > SelectedEntities { get; }
+    public List< Actor > SelectedEntities { get; }
 
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -141,13 +140,13 @@ abstract class MultiSelectionEntity : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static float? GetMixedValue( List< GameEntity > entities, Func< GameEntity, float > getProperty )
+    public static float? GetMixedValue( List< Actor > actors, Func< Actor, float > getProperty )
     {
-        float value = getProperty( entities.First() );
+        float value = getProperty( actors.First() );
 
-        foreach ( GameEntity entity in entities.Skip( 1 ) )
+        foreach ( Actor actor in actors.Skip( 1 ) )
         {
-            if ( !value.IsTheSameAs( getProperty( entity ) ) )
+            if ( !value.IsTheSameAs( getProperty( actor ) ) )
             {
                 return null;
             }
@@ -159,13 +158,13 @@ abstract class MultiSelectionEntity : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static bool? GetMixedValue( List< GameEntity > entities, Func< GameEntity, bool > getProperty )
+    public static bool? GetMixedValue( List< Actor > actors, Func< Actor, bool > getProperty )
     {
-        bool value = getProperty( entities.First() );
+        bool value = getProperty( actors.First() );
 
-        foreach ( GameEntity entity in entities.Skip( 1 ) )
+        foreach ( Actor actor in actors.Skip( 1 ) )
         {
-            if ( value != getProperty( entity ) )
+            if ( value != getProperty( actor ) )
             {
                 return null;
             }
@@ -177,13 +176,13 @@ abstract class MultiSelectionEntity : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static string? GetMixedValue( List< GameEntity > entities, Func< GameEntity, string > getProperty )
+    public static string? GetMixedValue( List< Actor > actors, Func< Actor, string > getProperty )
     {
-        string value = getProperty( entities.First() );
+        string value = getProperty( actors.First() );
 
-        foreach ( GameEntity entity in entities.Skip( 1 ) )
+        foreach ( Actor actor in actors.Skip( 1 ) )
         {
-            if ( value != getProperty( entity ) )
+            if ( value != getProperty( actor ) )
             {
                 return null;
             }
@@ -193,12 +192,12 @@ abstract class MultiSelectionEntity : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// UpdateMultiSelectionEntity
+    /// UpdateMultiSelectionActor
     //-----------------------------------------------------------------------------------------------------------------
-    protected virtual bool UpdateMultiSelectionEntity()
+    protected virtual bool UpdateMultiSelectionActor()
     {
-        IsEnabled = GetMixedValue( SelectedEntities, new Func< GameEntity, bool   >( x => x.IsEnabled ) );
-        Name      = GetMixedValue( SelectedEntities, new Func< GameEntity, string >( x => x.Name      ) );
+        IsEnabled = GetMixedValue( SelectedEntities, new Func< Actor, bool   >( x => x.IsEnabled ) );
+        Name      = GetMixedValue( SelectedEntities, new Func< Actor, string >( x => x.Name      ) );
 
         return true;
     }
@@ -210,15 +209,15 @@ abstract class MultiSelectionEntity : ViewModelBase
     {
         _enableUpdates = false;
         
-        UpdateMultiSelectionEntity();
+        UpdateMultiSelectionActor();
         
         _enableUpdates = true;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// MultiSelectionEntity
+    /// MultiSelectionActor
     //-----------------------------------------------------------------------------------------------------------------
-    public MultiSelectionEntity( List< GameEntity > entities )
+    public MultiSelectionActor( List< Actor > entities )
     {
         Debug.Assert( entities?.Any() == true );
 
@@ -232,11 +231,11 @@ abstract class MultiSelectionEntity : ViewModelBase
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// MultiSelectionGameEntity
+/// MultiSelectionGameActor
 //---------------------------------------------------------------------------------------------------------------------
-class MultiSelectionGameEntity : MultiSelectionEntity
+class MultiSelectionGameActor : MultiSelectionActor
 {
-    public MultiSelectionGameEntity( List< GameEntity > entities ) : base( entities )
+    public MultiSelectionGameActor( List< Actor > entities ) : base( entities )
     {
         Refresh();
     }

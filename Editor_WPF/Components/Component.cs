@@ -21,9 +21,9 @@ interface IMultiSelectionComponent
 public class Component : ViewModelBase
 {
     [DataMember]
-    public GameEntity Owner { get; private set; }
+    public Actor Owner { get; private set; }
     
-    public Component( GameEntity owner )
+    public Component( Actor owner )
     {
         Debug.Assert( owner != null );
         

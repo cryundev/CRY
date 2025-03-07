@@ -10,19 +10,19 @@ namespace Editor_WPF.Editors;
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// GameEntityView
+/// ActorView
 //---------------------------------------------------------------------------------------------------------------------
-public partial class GameEntityView : UserControl
+public partial class ActorView : UserControl
 {
     private Action? _undoAction;
     private string? _propertyName;
     
-    public static GameEntityView Instance { get; private set; } = null!;
+    public static ActorView Instance { get; private set; } = null!;
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// GameEntityView
+    /// ActorView
     //-----------------------------------------------------------------------------------------------------------------
-    public GameEntityView()
+    public ActorView()
     {
         InitializeComponent();
 
@@ -33,10 +33,10 @@ public partial class GameEntityView : UserControl
         {
             if ( DataContext != null )
             {
-                MultiSelectionEntity? entity = DataContext as MultiSelectionEntity;
-                if ( entity == null ) return;
+                MultiSelectionActor? actor = DataContext as MultiSelectionActor;
+                if ( actor == null ) return;
                 
-                entity.PropertyChanged += ( s, e ) =>
+                actor.PropertyChanged += ( s, e ) =>
                 {
                     if ( e.PropertyName == null ) return;
                     
@@ -52,17 +52,17 @@ public partial class GameEntityView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private Action GetRenameAction()
     {
-        MultiSelectionEntity? vm = DataContext as MultiSelectionEntity;
+        MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => {} );
 
-        List< (GameEntity entity, string Name) > selection = vm.SelectedEntities.Select( entity => ( entity, entity.Name ) ).ToList();
+        List< (Actor actor, string Name) > selection = vm.SelectedEntities.Select( actor => ( actor, actor.Name ) ).ToList();
         
         return new Action( () =>
         {
-            selection.ForEach( item => item.entity.Name = item.Name );
+            selection.ForEach( item => item.actor.Name = item.Name );
             
-            MultiSelectionEntity? entity = DataContext as MultiSelectionEntity;
-            entity?.Refresh();
+            MultiSelectionActor? actor = DataContext as MultiSelectionActor;
+            actor?.Refresh();
         } );
     }
 
@@ -71,17 +71,17 @@ public partial class GameEntityView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private Action GetIsEnabledAction()
     {
-        MultiSelectionEntity? vm = DataContext as MultiSelectionEntity;
+        MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => { } );
 
-        List< (GameEntity entity, bool IsEnabled) > selection = vm.SelectedEntities.Select( entity => ( entity, entity.IsEnabled ) ).ToList();
+        List< (Actor actor, bool IsEnabled) > selection = vm.SelectedEntities.Select( actor => ( actor, actor.IsEnabled ) ).ToList();
 
         return new Action( () =>
         {
-            selection.ForEach( item => item.entity.IsEnabled = item.IsEnabled );
+            selection.ForEach( item => item.actor.IsEnabled = item.IsEnabled );
 
-            MultiSelectionEntity? entity = DataContext as MultiSelectionEntity;
-            entity?.Refresh();
+            MultiSelectionActor? actor = DataContext as MultiSelectionActor;
+            actor?.Refresh();
         } );
     }
 
@@ -98,9 +98,9 @@ public partial class GameEntityView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void OnNameTextBoxKeyboardFocusLost( object sender, KeyboardFocusChangedEventArgs e )
     {
-        if ( _propertyName == nameof( MultiSelectionEntity.Name ) && _undoAction != null )
+        if ( _propertyName == nameof( MultiSelectionActor.Name ) && _undoAction != null )
         {
-            Project.UndoRedo.Add( new UndoRedoAction( _undoAction, GetRenameAction(), "Rename game entity" ) );
+            Project.UndoRedo.Add( new UndoRedoAction( _undoAction, GetRenameAction(), "Rename actor" ) );
             
             _propertyName = null;
         }
@@ -114,12 +114,12 @@ public partial class GameEntityView : UserControl
     private void OnIsEnabledCheckBoxClicked( object sender, RoutedEventArgs e )
     {
         Action undoAction = GetIsEnabledAction();
-        MultiSelectionEntity? vm = DataContext as MultiSelectionEntity;
+        MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return;
         
         vm.IsEnabled = ( sender as CheckBox )?.IsChecked == true;
 
         Action redoAction = GetIsEnabledAction();
-        Project.UndoRedo.Add( new UndoRedoAction( undoAction, redoAction, vm.IsEnabled == true ? "Enable game entity" : "Disable game entity" ) );
+        Project.UndoRedo.Add( new UndoRedoAction( undoAction, redoAction, vm.IsEnabled == true ? "Enable actor" : "Disable actor" ) );
     }
 }
