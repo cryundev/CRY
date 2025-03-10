@@ -2,7 +2,7 @@
 
 
 #include "CRObject.h"
-#include "Source/Core/CRTransform.h"
+#include "Source/Object/Component/CRTransform.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -10,13 +10,37 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRActor : public CRObject 
 {
+protected:
+    CRArray< ICRComponent* > Components;
+    CRTransform* Transform = nullptr;
+    
 public:
-    /// Constructor
+    /// Constructor.
     CRActor() = default;
 
-    /// Get transform
-    inline CRTransform& GetTransform() const
-    {
-        return CRTransform::Get( ObjectId );
-    };
+    /// Initialize components.
+    void InitializeComponents();
+
+    /// Get transform.
+    inline CRTransform* GetTransform() const { return Transform; }
+
+    /// Add component.
+    template< typename T = CRComponent >
+    T* AddComponent();
 };
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Add component.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+T* CRActor::AddComponent()
+{
+    T* component = T::Add( ObjectId );
+
+    component->SetObjectId( ObjectId );
+
+    Components.push_back( component );
+
+    return component;
+}

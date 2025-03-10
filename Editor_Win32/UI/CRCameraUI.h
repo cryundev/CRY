@@ -13,11 +13,11 @@ class CRCamera;
 class CRCameraUI : public ICRUI
 {
 private:
-    CRWeakPtr< CRCamera > CameraPtr;
+    const CRCamera* Camera = nullptr;
     
 public:
     /// Set camera.
-    void SetCamera( const CRWeakPtr< CRCamera >& InCameraPtr ) { CameraPtr = InCameraPtr; }
+    void SetCamera( const CRCamera* InCamera ) { Camera = InCamera; }
     
     /// Draw.
     virtual void Draw() override;

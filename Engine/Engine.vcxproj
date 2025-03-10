@@ -105,10 +105,85 @@
     <ClCompile Include="Extras\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\Asset\CRPrimitiveAsset.cpp" />
     <ClCompile Include="Source\Asset\ICRAsset.cpp" />
-    <ClCompile Include="Source\Core\CRTransform.cpp" />
     <ClCompile Include="Source\Core\CRVertex.cpp" />
     <ClCompile Include="Source\Core\Identify\CRIdentity.cpp" />
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
+    <ClCompile Include="Source\Object\Component\CRComponent.cpp" />
+    <ClCompile Include="Source\Object\Component\CRTransform.cpp">
+      <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <Optimization>Disabled</Optimization>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <AssemblerOutput>NoListing</AssemblerOutput>
+      <AssemblerListingLocation>x64\Debug\</AssemblerListingLocation>
+      <UndefineAllPreprocessorDefinitions>false</UndefineAllPreprocessorDefinitions>
+      <BrowseInformation>false</BrowseInformation>
+      <BrowseInformationFile>x64\Debug\</BrowseInformationFile>
+      <CompileAs>Default</CompileAs>
+      <ConformanceMode>true</ConformanceMode>
+      <DiagnosticsFormat>Column</DiagnosticsFormat>
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+      <ErrorReporting>Prompt</ErrorReporting>
+      <ExpandAttributedSource>false</ExpandAttributedSource>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <EnableASAN>false</EnableASAN>
+      <EnableFuzzer>false</EnableFuzzer>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <FloatingPointModel>Precise</FloatingPointModel>
+      <ForceConformanceInForLoopScope>true</ForceConformanceInForLoopScope>
+      <GenerateModuleDependencies>false</GenerateModuleDependencies>
+      <GenerateSourceDependencies>false</GenerateSourceDependencies>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <InlineFunctionExpansion>Default</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <LanguageStandard_C>Default</LanguageStandard_C>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ModuleDependenciesFile>x64\Debug\</ModuleDependenciesFile>
+      <ModuleOutputFile>x64\Debug\</ModuleOutputFile>
+      <OmitDefaultLibName>false</OmitDefaultLibName>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <ObjectFileName>x64\Debug\</ObjectFileName>
+      <CallingConvention>Cdecl</CallingConvention>
+      <ProgramDataBaseFileName>C:\Project\CRY\x64/Debug/Engine.pdb</ProgramDataBaseFileName>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>x64\Debug\Engine.pch</PrecompiledHeaderOutputFile>
+      <PreprocessToFile>false</PreprocessToFile>
+      <PreprocessKeepComments>false</PreprocessKeepComments>
+      <PreprocessSuppressLineNumbers>false</PreprocessSuppressLineNumbers>
+      <RemoveUnreferencedCodeData>true</RemoveUnreferencedCodeData>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+      <ShowIncludes>false</ShowIncludes>
+      <SourceDependenciesFile>x64\Debug\</SourceDependenciesFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <SpectreMitigation>false</SpectreMitigation>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <TrackerLogDirectory>x64\Debug\Engine.tlog\</TrackerLogDirectory>
+      <TranslateIncludes>false</TranslateIncludes>
+      <MinimalRebuildFromTracking>true</MinimalRebuildFromTracking>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <UseFullPaths>true</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <XMLDocumentationFileName>x64\Debug\</XMLDocumentationFileName>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <IntelJCCErratum>false</IntelJCCErratum>
+      <BuildStlModules>false</BuildStlModules>
+      <TreatAngleIncludeAsExternal>false</TreatAngleIncludeAsExternal>
+      <ExternalWarningLevel>InheritWarningLevel</ExternalWarningLevel>
+      <TreatExternalTemplatesAsInternal>true</TreatExternalTemplatesAsInternal>
+      <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
+      <PreprocessorDefinitions>_DEBUG;_LIB;_UNICODE;UNICODE;</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories> C:\Project\CRY\Engine\/Extras;C:\Project\CRY\Engine\/Extras/Fbx/include</AdditionalIncludeDirectories>
+      <LibCompiled>true</LibCompiled>
+    </ClCompile>
     <ClCompile Include="Source\Object\CRActor.cpp" />
     <ClCompile Include="Source\Object\CRObject.cpp" />
     <ClCompile Include="Source\RHI\CRRHI.cpp" />
@@ -135,6 +210,7 @@
     <ClCompile Include="Source\RHI\DX11\CRD11RenderingPipeline.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ResourceManager.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ShaderResourceTexture.cpp" />
+    <ClCompile Include="Source\World\CRWorld.cpp" />
     <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
     <ClCompile Include="Source\Utility\FBX\CRFbxLoader.cpp" />
     <ClCompile Include="Source\Utility\Generic\CRGeneric.cpp" />
@@ -159,15 +235,18 @@
     <ClInclude Include="Source\Asset\CRPrimitiveAsset.h" />
     <ClInclude Include="Source\Asset\ICRAsset.h" />
     <ClInclude Include="Source\Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Source\Core\CRGeneric.h" />
     <ClInclude Include="Source\Core\CRNumeric.h" />
     <ClInclude Include="Source\Core\CRSmartPtrMacro.h" />
-    <ClInclude Include="Source\Core\CRTransform.h" />
     <ClInclude Include="Source\Core\CRTypes.h" />
     <ClInclude Include="Source\Core\CRVertex.h" />
     <ClInclude Include="Source\Core\Identify\CRIdentity.h" />
     <ClInclude Include="Source\Core\Math\CRMath.h" />
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />
+    <ClInclude Include="Source\Object\Component\CRComponent.h" />
+    <ClInclude Include="Source\Object\Component\CRTransform.h" />
+    <ClInclude Include="Source\Object\Component\ICRComponent.h" />
     <ClInclude Include="Source\Object\CRActor.h" />
     <ClInclude Include="Source\Object\CRObject.h" />
     <ClInclude Include="Source\RHI\CRRHI.h" />
@@ -208,9 +287,7 @@
     <ClInclude Include="Source\Utility\Time\CRTime.h" />
     <ClInclude Include="Source\Utility\UtilString.h" />
     <ClInclude Include="Source\Utility\WIC\CRWICTextureLoader.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\Object\Component\" />
+    <ClInclude Include="Source\World\CRWorld.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

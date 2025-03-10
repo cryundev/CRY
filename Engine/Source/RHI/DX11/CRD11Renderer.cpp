@@ -8,6 +8,7 @@
 #include "Resource/CRD11RenderTargetView.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/World/CRWorld.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -92,7 +93,7 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
-    UpdateViewProjectionBuffer( GCamera->GetViewMatrix(), GCamera->GetProjectionMatrix() );
+    UpdateViewProjectionBuffer( GWorld->GetCamera()->GetViewMatrix(), GWorld->GetCamera()->GetProjectionMatrix() );
     
     for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
     {

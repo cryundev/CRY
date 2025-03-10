@@ -1,6 +1,7 @@
 ﻿#include "CRInputProcessorCamera.h"
 #include "Editor_Win32.h"
 #include "Engine.h"
+#include "Source/World/CRWorld.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -12,10 +13,10 @@ void CRInputProcessorCamera::Tick( float DeltaTime )
     
     KeyboardTracker.Update( k );
     
-    if ( k.W ) GCamera->GetTransform().Location += GCamera->GetTransform().GetUp()    * MoveDistancePerSecond * DeltaTime;
-    if ( k.S ) GCamera->GetTransform().Location -= GCamera->GetTransform().GetUp()    * MoveDistancePerSecond * DeltaTime;
-    if ( k.A ) GCamera->GetTransform().Location += GCamera->GetTransform().GetRight() * MoveDistancePerSecond * DeltaTime;
-    if ( k.D ) GCamera->GetTransform().Location -= GCamera->GetTransform().GetRight() * MoveDistancePerSecond * DeltaTime;
+    if ( k.W ) GWorld->GetCamera()->GetTransform()->Location += GWorld->GetCamera()->GetTransform()->GetUp()    * MoveDistancePerSecond * DeltaTime;
+    if ( k.S ) GWorld->GetCamera()->GetTransform()->Location -= GWorld->GetCamera()->GetTransform()->GetUp()    * MoveDistancePerSecond * DeltaTime;
+    if ( k.A ) GWorld->GetCamera()->GetTransform()->Location += GWorld->GetCamera()->GetTransform()->GetRight() * MoveDistancePerSecond * DeltaTime;
+    if ( k.D ) GWorld->GetCamera()->GetTransform()->Location -= GWorld->GetCamera()->GetTransform()->GetRight() * MoveDistancePerSecond * DeltaTime;
     
     auto m = GMouse.GetState();
     
@@ -27,8 +28,8 @@ void CRInputProcessorCamera::Tick( float DeltaTime )
         {
             int i = 0;
         }
-        GCamera->GetTransform().Rotate( GCamera->GetTransform().GetUp(),    m.x * RotateDistancePerSecond * DeltaTime );
-        GCamera->GetTransform().Rotate( GCamera->GetTransform().GetRight(), m.y * RotateDistancePerSecond * DeltaTime );
+        GWorld->GetCamera()->GetTransform()->Rotate( GWorld->GetCamera()->GetTransform()->GetUp(),    m.x * RotateDistancePerSecond * DeltaTime );
+        GWorld->GetCamera()->GetTransform()->Rotate( GWorld->GetCamera()->GetTransform()->GetRight(), m.y * RotateDistancePerSecond * DeltaTime );
     }
     
     GMouse.SetMode( m.leftButton ? DirectX::Mouse::MODE_RELATIVE : DirectX::Mouse::MODE_ABSOLUTE );

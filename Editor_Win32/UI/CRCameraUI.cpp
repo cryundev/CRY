@@ -8,11 +8,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRCameraUI::Draw()
 {
-    if ( CameraPtr.expired() ) return;
-
     if ( ImGui::Button( "Reset camera transform" ) )
     {
-        CameraPtr.lock()->GetTransform().SetLocation( 0.f, 0.f, 15.0f );
-        CameraPtr.lock()->GetTransform().SetRotation( CRQuaternion::Identity );
+        Camera->GetTransform()->SetLocation( 0.f, 0.f, 15.0f );
+        Camera->GetTransform()->SetRotation( CRQuaternion::Identity );
     }
 }

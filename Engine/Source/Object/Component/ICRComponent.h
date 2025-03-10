@@ -1,9 +1,15 @@
-﻿#include "CRObject.h"
+﻿#pragma once
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Constructor
+/// ICRComponent
 //---------------------------------------------------------------------------------------------------------------------
-CRObject::CRObject()
+class ICRComponent
 {
-}
+public:
+    /// Destructor
+    virtual ~ICRComponent() = 0 {}
+
+    /// Update component.
+    virtual void UpdateComponent( float DeltaSeconds ) = 0 {}
+};

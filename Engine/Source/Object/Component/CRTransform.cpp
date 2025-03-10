@@ -5,13 +5,18 @@ CRTransform CRTransform::Identity = CRTransform();
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Return converted matrix.
+/// Update component.
 //---------------------------------------------------------------------------------------------------------------------
-CRMatrix CRTransform::ToLocalMatrix() const
+void CRTransform::UpdateComponent( float DeltaSeconds )
 {
-    return CRMatrix::CreateScale         ( Scale     ) *
-           CRMatrix::CreateFromQuaternion( Rotation  ) *
-           CRMatrix::CreateTranslation   ( Location  );
+    if ( bDirty )
+    {
+        LocalMatrix = CRMatrix::CreateScale         ( Scale     ) *
+                      CRMatrix::CreateFromQuaternion( Rotation  ) *
+                      CRMatrix::CreateTranslation   ( Location  );
+
+        bDirty = false;
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -36,29 +41,4 @@ CRVector CRTransform::GetRight() const
 CRVector CRTransform::GetUp() const
 {
     return CRVector::Transform( CRVector::Up, Rotation );
-}
-
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Statics 
-//---------------------------------------------------------------------------------------------------------------------
-
-CRArray< CRTransform > CRTransform::Transforms;
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Get
-//---------------------------------------------------------------------------------------------------------------------
-CRTransform& CRTransform::Get( const CRIdentity::id_t& Id )
-{
-    CRIdentity::id_t index = CRIdentity::IndexOf( Id );
-
-    if ( Transforms.size() <= index )
-    {
-        Transforms.resize( index + 1 );
-        return Transforms[ index ];
-    }
-    else
-    {
-        return Transforms[ index ];
-    }
 }

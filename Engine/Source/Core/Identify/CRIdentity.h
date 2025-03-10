@@ -80,21 +80,17 @@ namespace CRIdentity
     { \
         constexpr explicit name( CRIdentity::id_t InId ) : CRIdentity::Internal::IdBase( InId ) {} \
         constexpr name() : CRIdentity::Internal::IdBase( CRIdentity::IdMask ) {} \
-    }; \
-    \
-    extern CRIdentity::Generator< name > ##name##Generator; \
-
-#define IMPLEMENT_TYPE_ID( name ) CRIdentity::Generator< name > ##name##Generator;
+    }; 
     
 #else
 #define DEFINE_TYPE_ID( name ) using name = id_t;
 #endif
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// Generator
+    /// CRIDGenerator
     //-----------------------------------------------------------------------------------------------------------------
     template< typename T = Internal::IdBase >
-    class Generator
+    class CRIDGenerator
     {
     private:
         CRArray< generation_t > Generations;
@@ -148,10 +144,17 @@ namespace CRIdentity
 
             return generation < Generations.size() && Generations[ index ] == generation;
         }
+
+    public:
+        //-------------------------------------------------------------------------------------------------------------
+        /// Get
+        //-------------------------------------------------------------------------------------------------------------
+        static CRIDGenerator& Get()
+        {
+            static CRIDGenerator Instance;
+            return Instance;
+        }
     };
 };
-
-
-DECLARE_TYPE_ID( CRObjectId );
 
 

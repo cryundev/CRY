@@ -8,9 +8,11 @@
 #include "Source/RHI/DX11/CRD11Renderer.h"
 #include "Source/Utility/FBX/CRFbxLoader.h"
 #include "Source/Utility/Time/CRFrameUpdator.h"
+#include "Source/World/CRWorld.h"
 
 
-CRSharedPtr< CRCamera > GCamera = CRMakeShared< CRCamera >(new CRCamera() );
+CRSharedPtr< CRWorld > GWorld = CRMakeShared< CRWorld >(new CRWorld() );
+ ;
 
 CRTime         GFrameTime;
 CRFrameUpdator GFrameUpdator;
@@ -23,11 +25,11 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 {
     GRHI.Initialize( hWnd, Width, Height );
     
-    GCamera->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, Width, Height, 0.1f, 1000.0f );
-    GCamera->SetLookAtDirection( 0.f, 0.f, -1.f );
-    GCamera->GetTransform().SetLocation( 0.f, 0.f, 15.0f );
+    GWorld->GetCamera()->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, Width, Height, 0.1f, 1000.0f );
+    GWorld->GetCamera()->SetLookAtDirection( 0.f, 0.f, -1.f );
+    GWorld->GetCamera()->GetTransform()->SetLocation( 0.f, 0.f, 15.0f );
     
-    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera->GetViewMatrix(), GCamera->GetProjectionMatrix() );
+    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GWorld->GetCamera()->GetViewMatrix(), GWorld->GetCamera()->GetProjectionMatrix() );
 
     // const CRString& loadFbxPaht = "../Asset/Minion";
     // CRFbxLoader fbxLoader;
@@ -69,6 +71,7 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 //---------------------------------------------------------------------------------------------------------------------
 void CREngine::Tick( float DeltaSeconds )
 {
+    CRTransform::UpdateComponents( DeltaSeconds );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
