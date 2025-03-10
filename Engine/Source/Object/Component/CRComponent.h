@@ -12,6 +12,9 @@
 template< typename T >
 class CRComponent : public CRObject, public ICRComponent
 {
+public:
+    friend class CRActor;
+    
 private:
     /// Components.
     inline static CRArray< T > Components;
@@ -22,6 +25,9 @@ public:
 
     /// Remove component.
     static bool Remove( const CRIdentity::id_t& Id );
+
+    /// Get component.
+    static T* Get( const CRIdentity::id_t& Id );
 
     /// Update components.
     static void UpdateComponents( float DeltaSeconds );
@@ -40,7 +46,7 @@ T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
         Components.resize( index + 1 );
     }
 
-    return CRCast< T* >( &Components[ index ] );
+    return CRCast< T >( &Components[ index ] );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -54,6 +60,18 @@ bool CRComponent< T >::Remove( const CRIdentity::id_t& Id )
     Components.remove( Id );
 
     return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get component.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+T* CRComponent< T >::Get( const CRIdentity::id_t& Id )
+{
+    CRIdentity::id_t index = CRIdentity::IndexOf( Id );
+    if ( index >= Components.size() ) return nullptr;
+
+    return CRCast< T >( &Components[ index ] );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

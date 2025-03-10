@@ -15,7 +15,7 @@ class CRActor;
 class CRWorld
 {
 protected:
-    CRArray< CRActor* > Actors;
+    CRList< CRActor* > Actors;
     CRCamera* Camera = nullptr;
 
 public:
@@ -41,7 +41,8 @@ T* CRWorld::SpawnActor()
 
     CRObjectId actorId = CRIdentity::CRIDGenerator< CRObjectId >::Get().Create();
 
-    newActor->SetObjectId( actorId );
+    newActor->ObjectId = actorId;
+    newActor->World    = this;
     newActor->InitializeComponents();
 
     Actors.push_back( newActor );

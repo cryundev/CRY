@@ -69,6 +69,26 @@ void CRD11Renderer::AddRenderMesh( const ICRRHIMeshWPtr& Mesh )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Remove render mesh.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh )
+{
+    if ( Mesh.expired() ) return;
+    
+    auto itr = std::ranges::find_if( RenderMeshes, [ Mesh ] ( const ICRRHIMeshWPtr& MeshPtr )
+    {
+        if ( MeshPtr.expired() ) return false;
+        
+        return MeshPtr.lock() == Mesh.lock();
+    } );
+    
+    if ( itr != RenderMeshes.end() )
+    {
+        RenderMeshes.erase( itr );
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Update transform buffer.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::UpdateTransformBuffer( const CRMatrix& Matrix )

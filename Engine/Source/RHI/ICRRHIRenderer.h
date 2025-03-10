@@ -20,6 +20,9 @@ public:
     /// Add render mesh.
     virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) = 0;
 
+    /// Remove render mesh.
+    virtual void RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh ) = 0;
+
     /// Draw.
     virtual void Draw() = 0;
 

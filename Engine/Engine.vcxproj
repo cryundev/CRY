@@ -109,6 +109,7 @@
     <ClCompile Include="Source\Core\Identify\CRIdentity.cpp" />
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Source\Object\Component\CRComponent.cpp" />
+    <ClCompile Include="Source\Object\Component\CRPrimitive.cpp" />
     <ClCompile Include="Source\Object\Component\CRTransform.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -245,6 +246,7 @@
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />
     <ClInclude Include="Source\Object\Component\CRComponent.h" />
+    <ClInclude Include="Source\Object\Component\CRPrimitive.h" />
     <ClInclude Include="Source\Object\Component\CRTransform.h" />
     <ClInclude Include="Source\Object\Component\ICRComponent.h" />
     <ClInclude Include="Source\Object\CRActor.h" />

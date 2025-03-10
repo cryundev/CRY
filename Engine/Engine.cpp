@@ -2,6 +2,7 @@
 #include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/Object/Camera/CRCamera.h"
 #include "Source/Core/Identify/CRIdentity.h"
+#include "Source/Object/Component/CRPrimitive.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/RHI/ICRRHIRenderer.h"
@@ -52,16 +53,16 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
     //         ++i;
     //     }
     // }
-    
-    CRPrimitiveAsset primitive;
-    primitive.Load( "../Asset/Minion.cra" );
-    
-    const ICRRHIMeshWPtr& rhiMesh = GRHI.CreateMesh();
-    
-    rhiMesh.lock()->InitializePrimitive( "Minion", primitive );
-    rhiMesh.lock()->InitializeMaterial();
-    
-    GRHI.GetRenderer()->AddRenderMesh( rhiMesh ); 
+
+    if ( CRActor* minion = GWorld->SpawnActor< CRActor >() )
+    {
+        minion->SetName( "Minion" );
+        
+        if ( CRPrimitive* primitive = minion->AddComponent< CRPrimitive >() )
+        {
+            primitive->LoadAsset( "../Asset/Minion.cra" );
+        }
+    }
     
     GFrameUpdator.Initialize( 30 );
 }
@@ -72,6 +73,7 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 void CREngine::Tick( float DeltaSeconds )
 {
     CRTransform::UpdateComponents( DeltaSeconds );
+    CRPrimitive::UpdateComponents( DeltaSeconds );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

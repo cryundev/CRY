@@ -10,6 +10,9 @@ public:
     /// Destructor
     virtual ~ICRComponent() = 0 {}
 
+    /// Initialize component.
+    virtual void InitializeComponent() {}
+
     /// Update component.
-    virtual void UpdateComponent( float DeltaSeconds ) = 0 {}
+    virtual void UpdateComponent( float DeltaSeconds ) {}
 };

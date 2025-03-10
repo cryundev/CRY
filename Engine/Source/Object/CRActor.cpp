@@ -8,5 +8,5 @@ void CRActor::InitializeComponents()
 {
     if ( !CRIdentity::IsValid( ObjectId ) ) return;
 
-    Transform = AddComponent< CRTransform >();
+    AddComponent< CRTransform >();
 }

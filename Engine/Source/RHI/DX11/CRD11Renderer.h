@@ -50,6 +50,9 @@ public:
     /// Add render mesh.
     virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
 
+    /// Remove render mesh.
+    virtual void RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
+
     /// Draw.
     virtual void Draw() override;
 

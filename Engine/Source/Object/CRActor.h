@@ -10,9 +10,12 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRActor : public CRObject 
 {
+public:
+    friend class CRWorld;
+    
 protected:
-    CRArray< ICRComponent* > Components;
-    CRTransform* Transform = nullptr;
+    CRList< ICRComponent* > Components;
+    CRWorld*                World = nullptr;
     
 public:
     /// Constructor.
@@ -22,7 +25,10 @@ public:
     void InitializeComponents();
 
     /// Get transform.
-    inline CRTransform* GetTransform() const { return Transform; }
+    inline CRTransform* GetTransform() const { return CRTransform::Get( ObjectId ); }
+
+    /// Set world.
+    inline CRWorld* GetWorld() const { return World; }
 
     /// Add component.
     template< typename T = CRComponent >
@@ -38,7 +44,7 @@ T* CRActor::AddComponent()
 {
     T* component = T::Add( ObjectId );
 
-    component->SetObjectId( ObjectId );
+    component->ObjectId = ObjectId;
 
     Components.push_back( component );
 
