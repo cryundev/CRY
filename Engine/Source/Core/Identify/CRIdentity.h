@@ -79,7 +79,7 @@ namespace CRIdentity
     struct name final : CRIdentity::Internal::IdBase \
     { \
         constexpr explicit name( CRIdentity::id_t InId ) : CRIdentity::Internal::IdBase( InId ) {} \
-        constexpr name() : CRIdentity::Internal::IdBase( CRIdentity::IdMask ) {} \
+        constexpr name() : CRIdentity::Internal::IdBase( 0 ) {} \
     }; 
     
 #else
@@ -92,6 +92,9 @@ namespace CRIdentity
     template< typename T = Internal::IdBase >
     class CRIDGenerator
     {
+    public:
+        constexpr inline static u32 THRESHOLD_FREE_IDS_RETURN = 1000;
+        
     private:
         CRArray< generation_t > Generations;
         CRDeque< T > FreeIds;
@@ -104,7 +107,7 @@ namespace CRIdentity
         {
             T id;
         
-            if ( !FreeIds.empty() )
+            if ( FreeIds.size() > THRESHOLD_FREE_IDS_RETURN )
             {
                 id = FreeIds.front();
                 FreeIds.pop_front();
