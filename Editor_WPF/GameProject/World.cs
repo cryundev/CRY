@@ -11,10 +11,10 @@ namespace Editor_WPF.GameProject;
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Scene
+/// World
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-public class Scene : ViewModelBase
+public class World : ViewModelBase
 {
     [DataMember( Name = "Name" )]
     private string _name;
@@ -116,9 +116,9 @@ public class Scene : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// Scene
+    /// World
     //-----------------------------------------------------------------------------------------------------------------
-    public Scene( Project poject, string name )
+    public World( Project poject, string name )
     {
         Debug.Assert( poject != null );
         

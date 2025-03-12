@@ -55,7 +55,7 @@ public partial class ActorView : UserControl
         MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => {} );
 
-        List< (Actor actor, string Name) > selection = vm.SelectedEntities.Select( actor => ( actor, actor.Name ) ).ToList();
+        List< (Actor actor, string Name) > selection = vm.SelectedActors.Select( actor => ( actor, actor.Name ) ).ToList();
         
         return new Action( () =>
         {
@@ -74,7 +74,7 @@ public partial class ActorView : UserControl
         MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => { } );
 
-        List< (Actor actor, bool IsEnabled) > selection = vm.SelectedEntities.Select( actor => ( actor, actor.IsEnabled ) ).ToList();
+        List< (Actor actor, bool IsEnabled) > selection = vm.SelectedActors.Select( actor => ( actor, actor.IsEnabled ) ).ToList();
 
         return new Action( () =>
         {

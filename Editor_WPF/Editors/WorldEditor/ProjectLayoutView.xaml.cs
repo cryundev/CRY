@@ -22,20 +22,20 @@ public partial class ProjectLayoutView : UserControl
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// OnAddGameEntitiyButtonClicked
+    /// OnAddActorButtonClicked
     //-----------------------------------------------------------------------------------------------------------------
-    private void OnAddGameEntitiyButtonClicked( object sender, System.Windows.RoutedEventArgs e )
+    private void OnAddActorButtonClicked( object sender, System.Windows.RoutedEventArgs e )
     {
         Button? button = sender as Button;
-        Scene? scene = button?.DataContext as Scene;
+        World? world = button?.DataContext as World;
         
-        scene?.AddActorCommand?.Execute( new Actor( scene ) { Name = "Empty Actor" } );     
+        world?.AddActorCommand?.Execute( new Actor( world ) { Name = "Empty Actor" } );     
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// OnGameEntitiesSelectionChanged
+    /// OnActorsSelectionChanged
     //-----------------------------------------------------------------------------------------------------------------
-    private void OnGameEntitiesSelectionChanged( object sender, SelectionChangedEventArgs e )
+    private void OnActorsSelectionChanged( object sender, SelectionChangedEventArgs e )
     {
         ListBox? listBox = sender as ListBox;
         

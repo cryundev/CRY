@@ -1,12 +1,12 @@
 <Game z:Id="i1" xmlns="http://schemas.datacontract.org/2004/07/Editor_WPF.GameProject" xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns:z="http://schemas.microsoft.com/2003/10/Serialization/">
     <Name>{0}</Name>
     <Path>{1}</Path>
-    <Scenes>
-        <Scene z:Id="i2">
-            <GameEntities xmlns:a="http://schemas.datacontract.org/2004/07/Editor_WPF.Components" />
+    <Worlds>
+        <World z:Id="i2">
+            <Actors xmlns:a="http://schemas.datacontract.org/2004/07/Editor_WPF.Components" />
             <IsActive>true</IsActive>
-            <Name>Default Scene</Name>
+            <Name>Default World</Name>
             <Project z:Ref="i1"/>
-        </Scene>
-    </Scenes>
+        </World>
+    </Worlds>
 </Game>

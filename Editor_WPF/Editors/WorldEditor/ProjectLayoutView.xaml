@@ -13,10 +13,10 @@
             <RowDefinition Height="32"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Button Content="Add Scene" Width="96" VerticalAlignment="Center" Focusable="False" Grid.Row="0" HorizontalAlignment="Left" Margin="20,0,0,0"
-                Command="{Binding AddSceneCommand}"/>
+        <Button Content="Add World" Width="96" VerticalAlignment="Center" Focusable="False" Grid.Row="0" HorizontalAlignment="Left" Margin="20,0,0,0"
+                Command="{Binding AddWorldCommand}"/>
         <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Scenes}">
+            <ItemsControl ItemsSource="{Binding Worlds}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel/>
@@ -29,18 +29,18 @@
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Name}"/>
-                                        <Button Content="Remove" Command = "{Binding DataContext.RemoveSceneCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        <Button Content="Remove" Command = "{Binding DataContext.RemoveWorldCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}" Margin="20,0" Focusable="False"/>
-                                        <Button Content="+" IsEnabled="{Binding IsActive}" Click="OnAddGameEntitiyButtonClicked"/>
+                                        <Button Content="+" IsEnabled="{Binding IsActive}" Click="OnAddActorButtonClicked"/>
                                     </StackPanel>
                                 </Grid>
                             </Expander.Header>
-                            <ListBox ItemsSource="{Binding Actors}" IsEnabled="{Binding IsActive}" SelectionMode="Extended" SelectionChanged="OnGameEntitiesSelectionChanged">
+                            <ListBox ItemsSource="{Binding Actors}" IsEnabled="{Binding IsActive}" SelectionMode="Extended" SelectionChanged="OnActorsSelectionChanged">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Name}"/>
-                                            <Button Content="Remove" Command="{Binding ParentScene.RemoveActorCommand}" CommandParameter="{Binding}"/> 
+                                            <Button Content="Remove" Command="{Binding ParentWorld.RemoveActorCommand}" CommandParameter="{Binding}"/> 
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>

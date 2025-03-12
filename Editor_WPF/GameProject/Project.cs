@@ -27,21 +27,21 @@ public class Project : ViewModelBase
 
     private string FullPath => $@"{Path}{Name}\{Name}{Extension}";
 
-    [DataMember( Name = "Scenes" )]
-    private ObservableCollection< Scene > _scenes = [];
-    public ReadOnlyObservableCollection< Scene >? Scenes { get; private set; }
+    [DataMember( Name = "Worlds" )]
+    private ObservableCollection< World > _worlds = [];
+    public ReadOnlyObservableCollection< World >? Worlds { get; private set; }
 
-    [DataMember( Name = "ActiveScene" )]
-    private Scene? _activeScene;
-    public Scene? ActiveScene
+    [DataMember( Name = "ActiveWorld" )]
+    private World? _activeWorld;
+    public World? ActiveWorld
     {
-        get => _activeScene;
+        get => _activeWorld;
         set
         {
-            if ( _activeScene == value ) return;
+            if ( _activeWorld == value ) return;
             
-            _activeScene = value;
-            OnPropertyChanged( nameof( ActiveScene ) );
+            _activeWorld = value;
+            OnPropertyChanged( nameof( ActiveWorld ) );
         }
     }
     
@@ -52,26 +52,26 @@ public class Project : ViewModelBase
     public ICommand? UndoCommand { get; private set; }
     public ICommand? RedoCommand { get; private set; }
 
-    public ICommand? AddSceneCommand    { get; private set; }
-    public ICommand? RemoveSceneCommand { get; private set; }
+    public ICommand? AddWorldCommand    { get; private set; }
+    public ICommand? RemoveWorldCommand { get; private set; }
     public ICommand? SaveCommand        { get; private set; }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// AddSceneInternal
+    /// AddWorldInternal
     //-----------------------------------------------------------------------------------------------------------------
-    private void AddSceneInternal( string sceneName )
+    private void AddWorldInternal( string worldName )
     {
-        Debug.Assert( !string.IsNullOrEmpty( sceneName.Trim() ) );
-        _scenes.Add( new Scene( this, sceneName ) );
+        Debug.Assert( !string.IsNullOrEmpty( worldName.Trim() ) );
+        _worlds.Add( new World( this, worldName ) );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// RemoveSceneInternal
+    /// RemoveWorldInternal
     //-----------------------------------------------------------------------------------------------------------------
-    private void RemoveSceneInternal( Scene scene )
+    private void RemoveWorldInternal( World world )
     {
-        Debug.Assert( _scenes.Contains( scene ) );
-        _scenes.Remove( scene );
+        Debug.Assert( _worlds.Contains( world ) );
+        _worlds.Remove( world );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -107,39 +107,39 @@ public class Project : ViewModelBase
     [OnDeserialized]
     private void OnDeserialized( StreamingContext context )
     {
-        Scenes = new ReadOnlyObservableCollection< Scene >( _scenes );
-        OnPropertyChanged( nameof( Scenes ) );
+        Worlds = new ReadOnlyObservableCollection< World >( _worlds );
+        OnPropertyChanged( nameof( Worlds ) );
 
-        ActiveScene = Scenes.FirstOrDefault( x => x is { IsActive: true } );
+        ActiveWorld = Worlds.FirstOrDefault( x => x is { IsActive: true } );
 
-        AddSceneCommand = new RelayCommand< object >( _ =>
+        AddWorldCommand = new RelayCommand< object >( _ =>
         {
-            AddSceneInternal( $"New Scene {_scenes.Count}" );
+            AddWorldInternal( $"New World {_worlds.Count}" );
             
-            Scene newScene = _scenes.Last();
-            int sceneIndex = _scenes.Count - 1;
+            World newWorld = _worlds.Last();
+            int worldIndex = _worlds.Count - 1;
             
             UndoRedoAction action = new UndoRedoAction
             ( 
-                () => RemoveSceneInternal( newScene ),
-                () => _scenes.Insert( sceneIndex, newScene ),
-                $"Add {newScene.Name}"
+                () => RemoveWorldInternal( newWorld ),
+                () => _worlds.Insert( worldIndex, newWorld ),
+                $"Add {newWorld.Name}"
             ); 
             
             UndoRedo.Add( action );
         } );
         
-        RemoveSceneCommand = new RelayCommand< Scene >( x =>
+        RemoveWorldCommand = new RelayCommand< World >( x =>
         {
             if ( x == null ) throw new ArgumentNullException( nameof( x ) );
-            int sceneIndex = _scenes.IndexOf( x );
+            int worldIndex = _worlds.IndexOf( x );
             
-            RemoveSceneInternal( x );
+            RemoveWorldInternal( x );
             
             UndoRedoAction action = new UndoRedoAction
             ( 
-                () => _scenes.Insert( sceneIndex, x ),
-                () => RemoveSceneInternal( x ),
+                () => _worlds.Insert( worldIndex, x ),
+                () => RemoveWorldInternal( x ),
                 $"Remove {x.Name}"
             );
             
@@ -161,6 +161,6 @@ public class Project : ViewModelBase
         
         OnDeserialized( new StreamingContext() );
         
-        _scenes.Add( new Scene( this, "Default Scene" ) );
+        _worlds.Add( new World( this, "Default World" ) );
     }
 }

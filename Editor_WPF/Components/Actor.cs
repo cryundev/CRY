@@ -47,7 +47,7 @@ public class Actor : ViewModelBase
     }
 
     [DataMember]
-    public Scene ParentScene { get; private set; }
+    public World ParentWorld { get; private set; }
     
     [DataMember( Name = nameof( Components ) )]
     private readonly ObservableCollection< Component > _components = [];
@@ -70,14 +70,14 @@ public class Actor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// Actor
     //-----------------------------------------------------------------------------------------------------------------
-    public Actor( Scene scene )
+    public Actor( World world )
     {
-        Debug.Assert( scene != null );
+        Debug.Assert( world != null );
 
         _name = "";
         _components.Add( new Transform( this ) );
         
-        ParentScene = scene;
+        ParentWorld = world;
         
         OnDeserialized( new StreamingContext() );
     }
@@ -120,18 +120,18 @@ abstract class MultiSelectionActor : ViewModelBase
     private readonly ObservableCollection< IMultiSelectionComponent > _components = new ObservableCollection< IMultiSelectionComponent >();
     public ReadOnlyObservableCollection< IMultiSelectionComponent > Components { get; }
 
-    public List< Actor > SelectedEntities { get; }
+    public List< Actor > SelectedActors { get; }
 
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// UpdateGameEntities
+    /// UpdateActors
     //-----------------------------------------------------------------------------------------------------------------
-    protected virtual bool UpdateGameEntities( string propertyName )
+    protected virtual bool UpdateActors( string propertyName )
     {
         switch ( propertyName )
         {
-            case nameof( IsEnabled ) : SelectedEntities.ForEach( x => x.IsEnabled = IsEnabled ?? false ); return true;
-            case nameof( Name )      : SelectedEntities.ForEach( x => x.Name = Name ?? "" ); return true;
+            case nameof( IsEnabled ) : SelectedActors.ForEach( x => x.IsEnabled = IsEnabled ?? false ); return true;
+            case nameof( Name )      : SelectedActors.ForEach( x => x.Name = Name ?? "" ); return true;
         }
 
         return false;
@@ -196,8 +196,8 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     protected virtual bool UpdateMultiSelectionActor()
     {
-        IsEnabled = GetMixedValue( SelectedEntities, new Func< Actor, bool   >( x => x.IsEnabled ) );
-        Name      = GetMixedValue( SelectedEntities, new Func< Actor, string >( x => x.Name      ) );
+        IsEnabled = GetMixedValue( SelectedActors, new Func< Actor, bool   >( x => x.IsEnabled ) );
+        Name      = GetMixedValue( SelectedActors, new Func< Actor, string >( x => x.Name      ) );
 
         return true;
     }
@@ -217,15 +217,15 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// MultiSelectionActor
     //-----------------------------------------------------------------------------------------------------------------
-    public MultiSelectionActor( List< Actor > entities )
+    public MultiSelectionActor( List< Actor > actors )
     {
-        Debug.Assert( entities?.Any() == true );
+        Debug.Assert( actors?.Any() == true );
 
         Components = new ReadOnlyObservableCollection< IMultiSelectionComponent >( _components );
 
-        SelectedEntities = entities;
+        SelectedActors = actors;
 
-        PropertyChanged += ( s, e ) => { if ( _enableUpdates ) UpdateGameEntities( e.PropertyName ); };
+        PropertyChanged += ( s, e ) => { if ( _enableUpdates ) UpdateActors( e.PropertyName ); };
     }
 }
 
@@ -235,7 +235,7 @@ abstract class MultiSelectionActor : ViewModelBase
 //---------------------------------------------------------------------------------------------------------------------
 class MultiSelectionGameActor : MultiSelectionActor
 {
-    public MultiSelectionGameActor( List< Actor > entities ) : base( entities )
+    public MultiSelectionGameActor( List< Actor > actors ) : base( actors )
     {
         Refresh();
     }
