@@ -28,6 +28,9 @@ public:
     /// Spawn actor.
     template< typename T = CRActor >
     T* SpawnActor();
+
+    /// Despawn actor.
+    void DespawnActor( const CRObjectId& ActorId );
 };
 
 

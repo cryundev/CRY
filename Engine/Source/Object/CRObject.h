@@ -34,6 +34,9 @@ public:
     /// Get name.
     const CRName& GetName() const { return ObjectName; }
 
+    /// Set object id.
+    CRObjectId GetObjectId() const { return ObjectId; }
+
     /// Return objects id is valid.
     inline bool IsValid() const { return CRIdentity::CRIDGenerator< CRObjectId >::Get().IsValid( ObjectId ); }
 };

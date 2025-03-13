@@ -6,7 +6,7 @@
 #include "Resource/CRD11IndexBuffer.h"
 #include "Resource/CRD11InputLayout.h"
 #include "Resource/CRD11PixelShader.h"
-#include "Resource/CRD11RasterizerState.h""
+#include "Resource/CRD11RasterizerState.h"
 #include "Resource/CRD11RenderTargetView.h"
 #include "Resource/CRD11SamplerState.h"
 #include "Resource/CRD11ShaderResourceView.h"
