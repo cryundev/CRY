@@ -71,7 +71,7 @@ private:
     {
         u32 count = rand() % 20;
 
-        if ( Actors.empty() ) count = 1000;
+        if ( Actors.empty() ) count = 10000;
 
         while ( count )
         {
@@ -79,6 +79,7 @@ private:
 
             CRActor* actor = World.SpawnActor< CRActor >();
             assert( actor->IsValid() );
+            assert( CRIdentity::IsValid( actor->GetObjectId() ) );
 
             Actors.push_back( actor );
             
@@ -93,7 +94,7 @@ private:
     {
         u32 count = rand() % 20;
 
-        if ( Actors.size() < 1000 ) return;
+        if ( Actors.size() < 10000 ) return;
 
         while ( count > 0 )
         {
@@ -101,6 +102,7 @@ private:
 
             CRActor* actor = Actors[ index ];
             assert( actor->IsValid() );
+            assert( CRIdentity::IsValid( actor->GetObjectId() ) );
 
             actor->Destroy();
 
