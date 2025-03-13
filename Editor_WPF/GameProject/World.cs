@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using System.Windows.Input;
 using Editor_WPF.Common;
 using Editor_WPF.Components;
+using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
 
 
@@ -16,8 +17,7 @@ namespace Editor_WPF.GameProject;
 [DataContract]
 public class World : ViewModelBase
 {
-    [DataMember( Name = "Name" )]
-    private string _name;
+    [DataMember( Name = "Name" )] private string _name;
     public string Name
     {
         get => _name;
@@ -30,11 +30,9 @@ public class World : ViewModelBase
         }
     }
     
-    [DataMember]
-    public Project Project { get; private set; }
+    [DataMember] public Project Project { get; private set; }
 
-    [DataMember( Name = "IsActive" )]
-    private bool _isActive;
+    [DataMember( Name = "IsActive" )] private bool _isActive;
     public bool IsActive
     {
         get => _isActive;
@@ -48,8 +46,8 @@ public class World : ViewModelBase
     }
     
     [DataMember( Name = "Actors" )]
-    private ObservableCollection< Actor > _actors = [];
-    public ReadOnlyObservableCollection< Actor > Actors { get; private set; }
+    private ObservableCollection< CrActor > _actors = [];
+    public ReadOnlyObservableCollection< CrActor > Actors { get; private set; }
 
     public ICommand? AddActorCommand    { get; private set; }
     public ICommand? RemoveActorCommand { get; private set; }
@@ -57,17 +55,26 @@ public class World : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// AddActorInternal
     //-----------------------------------------------------------------------------------------------------------------
-    private void AddActorInternal( Actor actor )
+    private void AddActorInternal( CrActor actor, int index = -1 )
     {
         Debug.Assert( !_actors.Contains( actor ) );
         
-        _actors.Add( actor );
+        actor.IsActive = IsActive;
+
+        if ( index == -1 )
+        {
+            _actors.Add( actor );
+        }
+        else
+        {
+            _actors.Insert( index, actor );
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// RemoveActorInternal
     //-----------------------------------------------------------------------------------------------------------------
-    private void RemoveActorInternal( Actor actor )
+    private void RemoveActorInternal( CrActor actor )
     {
         Debug.Assert( _actors.Contains( actor ) );
         
@@ -80,26 +87,31 @@ public class World : ViewModelBase
     [OnDeserialized]
     private void OnDeserialized( StreamingContext context )
     {
-        _actors ??= new ObservableCollection< Actor >();
+        _actors ??= new ObservableCollection< CrActor >();
         
-        Actors = new ReadOnlyObservableCollection< Actor >( _actors );
+        Actors = new ReadOnlyObservableCollection< CrActor >( _actors );
         OnPropertyChanged( nameof( Actors ) );
 
-        AddActorCommand = new RelayCommand< Actor >( x =>
+        foreach ( CrActor actor in _actors )
+        {
+            actor.IsActive = IsActive;
+        }
+
+        AddActorCommand = new RelayCommand< CrActor >( x =>
         {
             AddActorInternal( x );
 
-            int actorsCount = _actors.Count - 1;
+            int actorIndex = _actors.Count - 1;
             
             Project.UndoRedo.Add( new UndoRedoAction
             (
                 () => RemoveActorInternal( x ),
-                () => _actors.Insert( actorsCount, x ),
+                () => AddActorInternal( x, actorIndex ),
                 $"Add {x.Name} to {Name}"
             ) );
         } );
 
-        RemoveActorCommand = new RelayCommand< Actor >( x =>
+        RemoveActorCommand = new RelayCommand< CrActor >( x =>
         {
             RemoveActorInternal( x );
 

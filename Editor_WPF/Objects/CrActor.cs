@@ -2,24 +2,62 @@
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using Editor_WPF.Common;
+using Editor_WPF.Components;
+using Editor_WPF.DllWrappers;
 using Editor_WPF.GameProject;
 using Editor_WPF.Utilities;
 
 
-namespace Editor_WPF.Components;
+namespace Editor_WPF.Objects;
 
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Actor
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-[KnownType( typeof( Transform ) )]
-public class Actor : ViewModelBase
+[KnownType( typeof( CrTransform ) )]
+public class CrActor : CrObject
 {
+    private Int64 _actorId = ID.INVALID_ID;
+    public Int64 ActorId
+    {
+        get => _actorId;
+        set
+        {
+            if ( _actorId == value ) return;
+            
+            _actorId = value;
+            OnPropertyChanged( nameof( ActorId ) );
+        }
+    }
+
+    private bool _isActive;
+    public bool IsActive
+    {
+        get => _isActive;
+        set
+        {
+            if ( _isActive == value ) return;
+
+            _isActive = value;
+
+            if ( _isActive )
+            {
+                ActorId = EngineAPI.SpawnActor( this );
+                Debug.Assert( ID.IsValid( ActorId ), "ActorId is invalid" );
+            }
+            else
+            {
+                EngineAPI.DespawnActor( this );
+            }
+
+        OnPropertyChanged( nameof( IsActive ) );
+        }
+    }
+     
     private bool _isEnabled = true;
 
-    [DataMember]
-    public bool IsEnabled
+    [DataMember] public bool IsEnabled
     {
         get => _isEnabled;
         set
@@ -29,29 +67,12 @@ public class Actor : ViewModelBase
             _isEnabled = value;
             OnPropertyChanged( nameof( IsEnabled ) );
         }
-    } 
-        
-    private string _name;
-    
-    [DataMember]
-    public string Name
-    {
-        get => _name;
-        set
-        {
-            if ( _name == value ) return;
-            
-            _name = value;
-            OnPropertyChanged( nameof( Name ) );
-        }
     }
 
-    [DataMember]
-    public World ParentWorld { get; private set; }
+    [DataMember] public World ParentWorld { get; private set; }
     
-    [DataMember( Name = nameof( Components ) )]
-    private readonly ObservableCollection< Component > _components = [];
-    public ReadOnlyObservableCollection< Component > Components { get; private set; }
+    [DataMember( Name = nameof( Components ) )] private readonly ObservableCollection< CrComponent > _components = [];
+    public ReadOnlyObservableCollection< CrComponent >? Components { get; private set; }
     
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -60,22 +81,19 @@ public class Actor : ViewModelBase
     [OnDeserialized]
     void OnDeserialized( StreamingContext context )
     {
-        if ( _components != null )
-        {
-            Components = new ReadOnlyObservableCollection< Component >( _components );
-            OnPropertyChanged( nameof( Components ) );
-        }
+        Components = new ReadOnlyObservableCollection< CrComponent >( _components );
+        OnPropertyChanged( nameof( Components ) );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// Actor
     //-----------------------------------------------------------------------------------------------------------------
-    public Actor( World world )
+    public CrActor( World world )
     {
         Debug.Assert( world != null );
 
-        _name = "";
-        _components.Add( new Transform( this ) );
+        Name = "";
+        _components.Add( new CrTransform( this ) );
         
         ParentWorld = world;
         
@@ -120,7 +138,7 @@ abstract class MultiSelectionActor : ViewModelBase
     private readonly ObservableCollection< IMultiSelectionComponent > _components = new ObservableCollection< IMultiSelectionComponent >();
     public ReadOnlyObservableCollection< IMultiSelectionComponent > Components { get; }
 
-    public List< Actor > SelectedActors { get; }
+    public List< CrActor > SelectedActors { get; }
 
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -140,11 +158,11 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static float? GetMixedValue( List< Actor > actors, Func< Actor, float > getProperty )
+    public static float? GetMixedValue( List< CrActor > actors, Func< CrActor, float > getProperty )
     {
         float value = getProperty( actors.First() );
 
-        foreach ( Actor actor in actors.Skip( 1 ) )
+        foreach ( CrActor actor in actors.Skip( 1 ) )
         {
             if ( !value.IsTheSameAs( getProperty( actor ) ) )
             {
@@ -158,11 +176,11 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static bool? GetMixedValue( List< Actor > actors, Func< Actor, bool > getProperty )
+    public static bool? GetMixedValue( List< CrActor > actors, Func< CrActor, bool > getProperty )
     {
         bool value = getProperty( actors.First() );
 
-        foreach ( Actor actor in actors.Skip( 1 ) )
+        foreach ( CrActor actor in actors.Skip( 1 ) )
         {
             if ( value != getProperty( actor ) )
             {
@@ -176,11 +194,11 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static string? GetMixedValue( List< Actor > actors, Func< Actor, string > getProperty )
+    public static string? GetMixedValue( List< CrActor > actors, Func< CrActor, string > getProperty )
     {
         string value = getProperty( actors.First() );
 
-        foreach ( Actor actor in actors.Skip( 1 ) )
+        foreach ( CrActor actor in actors.Skip( 1 ) )
         {
             if ( value != getProperty( actor ) )
             {
@@ -196,8 +214,8 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     protected virtual bool UpdateMultiSelectionActor()
     {
-        IsEnabled = GetMixedValue( SelectedActors, new Func< Actor, bool   >( x => x.IsEnabled ) );
-        Name      = GetMixedValue( SelectedActors, new Func< Actor, string >( x => x.Name      ) );
+        IsEnabled = GetMixedValue( SelectedActors, new Func< CrActor, bool   >( x => x.IsEnabled ) );
+        Name      = GetMixedValue( SelectedActors, new Func< CrActor, string >( x => x.Name      ) );
 
         return true;
     }
@@ -217,7 +235,7 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// MultiSelectionActor
     //-----------------------------------------------------------------------------------------------------------------
-    public MultiSelectionActor( List< Actor > actors )
+    public MultiSelectionActor( List< CrActor > actors )
     {
         Debug.Assert( actors?.Any() == true );
 
@@ -235,7 +253,7 @@ abstract class MultiSelectionActor : ViewModelBase
 //---------------------------------------------------------------------------------------------------------------------
 class MultiSelectionGameActor : MultiSelectionActor
 {
-    public MultiSelectionGameActor( List< Actor > actors ) : base( actors )
+    public MultiSelectionGameActor( List< CrActor > actors ) : base( actors )
     {
         Refresh();
     }

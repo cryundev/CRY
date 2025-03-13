@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 using Editor_WPF.Common;
+using Editor_WPF.Objects;
 
 
 namespace Editor_WPF.Components;
@@ -18,15 +18,13 @@ interface IMultiSelectionComponent
 /// Component
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-public class Component : ViewModelBase
+public class CrComponent : CrObject
 {
-    [DataMember]
-    public Actor Owner { get; private set; }
-    
-    public Component( Actor owner )
+    //-----------------------------------------------------------------------------------------------------------------
+    /// Component
+    //-----------------------------------------------------------------------------------------------------------------
+    public CrComponent( CrObject? owner )
     {
-        Debug.Assert( owner != null );
-        
         Owner = owner;
     }
 }
@@ -35,6 +33,6 @@ public class Component : ViewModelBase
 //---------------------------------------------------------------------------------------------------------------------
 /// MultiSelectionComponent
 //---------------------------------------------------------------------------------------------------------------------
-abstract class MultiSelectionComponent< T > : ViewModelBase, IMultiSelectionComponent where T : Component
+abstract class MultiSelectionComponent< T > : ViewModelBase, IMultiSelectionComponent where T : CrComponent
 {
 }

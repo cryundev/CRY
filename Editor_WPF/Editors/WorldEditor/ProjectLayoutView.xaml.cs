@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
-using Editor_WPF.Components;
 using Editor_WPF.GameProject;
+using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
 
 
@@ -29,7 +29,7 @@ public partial class ProjectLayoutView : UserControl
         Button? button = sender as Button;
         World? world = button?.DataContext as World;
         
-        world?.AddActorCommand?.Execute( new Actor( world ) { Name = "Empty Actor" } );     
+        world?.AddActorCommand?.Execute( new CrActor( world ) { Name = "Empty Actor" } );     
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -39,9 +39,9 @@ public partial class ProjectLayoutView : UserControl
     {
         ListBox? listBox = sender as ListBox;
         
-        List< Actor >? newSelection = listBox?.SelectedItems.Cast< Actor >().ToList();
-        List< Actor > previousSelection = (newSelection ?? throw new InvalidOperationException())
-            .Except( e.AddedItems.Cast< Actor >() ).Concat( e.RemovedItems.Cast< Actor >() ).ToList();
+        List< CrActor >? newSelection = listBox?.SelectedItems.Cast< CrActor >().ToList();
+        List< CrActor > previousSelection = (newSelection ?? throw new InvalidOperationException())
+            .Except( e.AddedItems.Cast< CrActor >() ).Concat( e.RemovedItems.Cast< CrActor >() ).ToList();
 
         Project.UndoRedo.Add( new UndoRedoAction
         (

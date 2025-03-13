@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Runtime.Serialization;
+using Editor_WPF.Objects;
 
 
 namespace Editor_WPF.Components;
@@ -9,12 +10,10 @@ namespace Editor_WPF.Components;
 /// Transform
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-class Transform : Component
+class CrTransform : CrComponent
 {
     private Vector3 _positionn;
-    
-    [DataMember]
-    public Vector3 Position
+    [DataMember] public Vector3 Position
     {
         get => _positionn;
         set
@@ -30,9 +29,7 @@ class Transform : Component
     }
     
     private Vector3 _rotation;
-    
-    [DataMember]
-    public Vector3 Rotation
+    [DataMember] public Vector3 Rotation
     {
         get => _rotation;
         set
@@ -48,9 +45,7 @@ class Transform : Component
     }
     
     private Vector3 _scale;
-    
-    [DataMember]
-    public Vector3 Scale
+    [DataMember] public Vector3 Scale
     {
         get => _scale;
         set
@@ -65,12 +60,11 @@ class Transform : Component
         }
     }
 
-
+    
     //-----------------------------------------------------------------------------------------------------------------
-    /// Transform
+    /// CrTransform
     //-----------------------------------------------------------------------------------------------------------------
-    public Transform( Actor owner ) : base( owner )
+    public CrTransform( CrObject? owner ) : base( owner )
     {
     }
-    
 }

@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Editor_WPF.Components;
 using Editor_WPF.GameProject;
+using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
 
 
@@ -55,7 +55,7 @@ public partial class ActorView : UserControl
         MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => {} );
 
-        List< (Actor actor, string Name) > selection = vm.SelectedActors.Select( actor => ( actor, actor.Name ) ).ToList();
+        List< (CrActor actor, string Name) > selection = vm.SelectedActors.Select( actor => ( actor, actor.Name ) ).ToList();
         
         return new Action( () =>
         {
@@ -74,7 +74,7 @@ public partial class ActorView : UserControl
         MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => { } );
 
-        List< (Actor actor, bool IsEnabled) > selection = vm.SelectedActors.Select( actor => ( actor, actor.IsEnabled ) ).ToList();
+        List< (CrActor actor, bool IsEnabled) > selection = vm.SelectedActors.Select( actor => ( actor, actor.IsEnabled ) ).ToList();
 
         return new Action( () =>
         {
