@@ -7,7 +7,10 @@
     <Application.Resources>
          <ResourceDictionary>
              <ResourceDictionary.MergedDictionaries>
-                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ControlTemplates.xaml"/>
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/EditorColors.xaml"              />
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ControlTemplates.xaml"          />
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/MainWindowStyle.xaml"           />
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ProjectBrowserDialogStyle.xaml" />
              </ResourceDictionary.MergedDictionaries>
          </ResourceDictionary>
     </Application.Resources>
