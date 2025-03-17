@@ -6,6 +6,8 @@
              xmlns:gameProject="clr-namespace:Editor_WPF.GameProject"
              mc:Ignorable="d" Width="800"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>        
+    </UserControl.Resources>
     <UserControl.DataContext>
         <gameProject:OpenProject />
     </UserControl.DataContext>
@@ -14,15 +16,19 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
                 <ListBox Width="195" Height="250" ItemsSource="{Binding Projects}" x:Name="projectsListBox" SelectedIndex="0">
                     <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <EventSetter Event="MouseDoubleClick" Handler="OnListBoxItemDoubleClicked"></EventSetter>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemStyle}">
+                            <EventSetter Event="MouseDoubleClick" Handler="OnListBoxItemDoubleClicked" />
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding Icon}" Width="40" Height="40" Margin="0,0,5,0"/>
-                                <TextBlock Text="{Binding ProjectName}"/>
+                            <StackPanel Width="180">
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Icon}" Width="40" Height="40" Margin="0,0,5,0"/>
+                                    <TextBlock Text="{Binding ProjectName}" FontSize="16" VerticalAlignment="Center" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding ProjectPath}" FontSize="8" TextTrimming="WordEllipsis" />
+                                <TextBlock Text="{Binding Date}" FontSize="8" />
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
