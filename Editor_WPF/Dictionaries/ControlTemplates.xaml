@@ -383,14 +383,13 @@
                             <DataTrigger Binding="{Binding Value, RelativeSource={RelativeSource Self}}" Value="{x:Null}">
                                 <Setter Property="Background" TargetName="PART_textBlock"
                                         Value="{StaticResource Editor.Disable.FontBrush}" />
-                                <Setter Property="ToolTip  " TargetName="PART_textBlock" Value="Mixed values" />
+                                <Setter Property="ToolTip"  TargetName="PART_textBlock" Value="Mixed values" />
                                 <Setter Property="MinWidth" TargetName="PART_textBlock" Value="20" />
                             </DataTrigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            
         </Style>
     
         <Style TargetType="{x:Type control:VectorBox}" x:Key="{x:Type control:VectorBox}">
@@ -427,38 +426,61 @@
                                     <RowDefinition x:Name="rowDefinition2" />
                                     <RowDefinition x:Name="rowDefinition3" />
                                 </Grid.RowDefinitions>
-                                <control:NumberBox x:Name="numberBoxX" Foreground="{StaticResource Editor.RedBrush}" 
-                                                   Value="{Binding X, RelativeSource={RelativeSource TemplatedParent}}" 
-                                                   ToolTip="X value" />
-                                <control:NumberBox x:Name="numberBoxY" Foreground="{StaticResource Editor.BlueBrush}"
-                                                   Value="{Binding Y, RelativeSource={RelativeSource TemplatedParent}}"
-                                                   ToolTip="Y value" />
-                                <control:NumberBox x:Name="numberBoxZ" Foreground="{StaticResource Editor.GreenBrush}"
-                                                    Value="{Binding Z, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    ToolTip="Z value" />
-                                <control:NumberBox x:Name="numberBoxW" Foreground="{StaticResource Editor.FontBrush}"
-                                                    Value="{Binding W, RelativeSource={RelativeSource TemplatedParent}}"
-                                                    ToolTip="W value"
-                                                    Visibility="Collapsed" />
+                                <StackPanel x:Name="panelX" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Border x:Name="outerBorderX" BorderBrush="{StaticResource Editor.RedBrush}"
+                                            Background="{StaticResource Editor.RedBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            SnapsToDevicePixels="true" Width="10" />
+                                    <control:NumberBox Foreground="{StaticResource Editor.FontBrush}"
+                                                       Value="{Binding X, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       ToolTip="X value" />
+                                </StackPanel>
+                               <StackPanel x:Name="panelY" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Border x:Name="outerBorderY" BorderBrush="{StaticResource Editor.GreenBrush}"
+                                            Background="{StaticResource Editor.GreenBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            SnapsToDevicePixels="true" Width="10" />
+                                    <control:NumberBox Foreground="{StaticResource Editor.FontBrush}"
+                                                       Value="{Binding Y, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       ToolTip="Y value" />
+                                </StackPanel>
+                                <StackPanel x:Name="panelZ" Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Border x:Name="outerBorderZ" BorderBrush="{StaticResource Editor.BlueBrush}"
+                                            Background="{StaticResource Editor.BlueBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            SnapsToDevicePixels="true" Width="10" />
+                                    <control:NumberBox Foreground="{StaticResource Editor.FontBrush}"
+                                                       Value="{Binding Z, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       ToolTip="Z value" />
+                                </StackPanel>
+                                <StackPanel x:Name="panelW" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Collapsed">
+                                    <Border x:Name="outerBorderW" BorderBrush="{StaticResource Editor.FontBrush}"
+                                            Background="{StaticResource Editor.FontBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            SnapsToDevicePixels="true" Width="10" />
+                                    <control:NumberBox Foreground="{StaticResource Editor.FontBrush}"
+                                                       Value="{Binding W, RelativeSource={RelativeSource TemplatedParent}}"
+                                                       ToolTip="W value" />
+                                </StackPanel>
                             </Grid>
                         </Border>
                         <ControlTemplate.Triggers>
                             <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}" 
                                          Value="Vertical">
-                                <Setter Property="Grid.Row" TargetName="numberBoxX" Value="0" />
-                                <Setter Property="Grid.Row" TargetName="numberBoxY" Value="1" />
-                                <Setter Property="Grid.Row" TargetName="numberBoxZ" Value="2" />
-                                <Setter Property="Grid.Row" TargetName="numberBoxW" Value="3" />
+                                <Setter Property="Grid.Row" TargetName="panelX" Value="0" />
+                                <Setter Property="Grid.Row" TargetName="panelY" Value="1" />
+                                <Setter Property="Grid.Row" TargetName="panelZ" Value="2" />
+                                <Setter Property="Grid.Row" TargetName="panelW" Value="3" />
                                 <Setter Property="Width" TargetName="columnDefinition1" Value="Auto" />
                                 <Setter Property="Width" TargetName="columnDefinition2" Value="Auto" />
                                 <Setter Property="Width" TargetName="columnDefinition3" Value="Auto" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource Self}}"
                                          Value="Horizontal">
-                                <Setter Property="Grid.Column" TargetName="numberBoxX" Value="0" />
-                                <Setter Property="Grid.Column" TargetName="numberBoxY" Value="1" />
-                                <Setter Property="Grid.Column" TargetName="numberBoxZ" Value="2" />
-                                <Setter Property="Grid.Column" TargetName="numberBoxW" Value="3" />
+                                <Setter Property="Grid.Column" TargetName="panelX" Value="0" />
+                                <Setter Property="Grid.Column" TargetName="panelY" Value="1" />
+                                <Setter Property="Grid.Column" TargetName="panelZ" Value="2" />
+                                <Setter Property="Grid.Column" TargetName="panelW" Value="3" />
                                 <Setter Property="Height" TargetName="rowDefinition1" Value="Auto" />
                                 <Setter Property="Height" TargetName="rowDefinition2" Value="Auto" />
                                 <Setter Property="Height" TargetName="rowDefinition3" Value="Auto" />
@@ -469,7 +491,7 @@
                                 <Setter Property="Width" TargetName="columnDefinition3" Value="Auto" />
                                 <Setter Property="Height" TargetName="rowDefinition2" Value="Auto" />
                                 <Setter Property="Height" TargetName="rowDefinition3" Value="Auto" />
-                                <Setter Property="Visibility" TargetName="numberBoxZ" Value="Collapsed" />
+                                <Setter Property="Visibility" TargetName="panelZ" Value="Collapsed" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding VectorType, RelativeSource={RelativeSource Self}}"
                                          Value="Vector3">
@@ -478,7 +500,7 @@
                             </DataTrigger>
                             <DataTrigger Binding="{Binding VectorType, RelativeSource={RelativeSource Self}}"
                                          Value="Vector4">
-                                <Setter Property="Visibility" TargetName="numberBoxW" Value="Visible" />
+                                <Setter Property="Visibility" TargetName="panelW" Value="Visible" />
                             </DataTrigger>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Editor.Window.GrayBrush6}" />

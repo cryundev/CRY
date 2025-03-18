@@ -13,5 +13,4 @@ public class ScalarBox : NumberBox
     {
         DefaultStyleKeyProperty.OverrideMetadata( typeof( ScalarBox ), new FrameworkPropertyMetadata( typeof( ScalarBox ) ) );
     }
-
 }
