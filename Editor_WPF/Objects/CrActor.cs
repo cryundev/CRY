@@ -46,12 +46,13 @@ public class CrActor : CrObject
                 ActorId = EngineAPI.SpawnActor( this );
                 Debug.Assert( ID.IsValid( ActorId ), "ActorId is invalid" );
             }
-            else
+            else if( ID.IsValid( ActorId ) )
             {
                 EngineAPI.DespawnActor( this );
+                ActorId = ID.INVALID_ID;
             }
 
-        OnPropertyChanged( nameof( IsActive ) );
+            OnPropertyChanged( nameof( IsActive ) );
         }
     }
      
@@ -73,7 +74,17 @@ public class CrActor : CrObject
     
     [DataMember( Name = nameof( Components ) )] private readonly ObservableCollection< CrComponent > _components = [];
     public ReadOnlyObservableCollection< CrComponent >? Components { get; private set; }
-    
+
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// GetCompnent
+    //-----------------------------------------------------------------------------------------------------------------
+    public CrComponent? GetCompnent( Type type ) => Components?.FirstOrDefault( x => x.GetType() == type ); 
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// GetComponent
+    //-----------------------------------------------------------------------------------------------------------------
+    public T? GetComponent< T >() where T : CrComponent => GetCompnent( typeof( T ) ) as T;
 
     //-----------------------------------------------------------------------------------------------------------------
     /// OnDeserialized
@@ -105,7 +116,7 @@ public class CrActor : CrObject
 //---------------------------------------------------------------------------------------------------------------------
 /// MultiSelectionActor
 //---------------------------------------------------------------------------------------------------------------------
-abstract class MultiSelectionActor : ViewModelBase
+public abstract class MultiSelectionActor : ViewModelBase
 {
     private bool _enableUpdates = true;
     
@@ -142,6 +153,40 @@ abstract class MultiSelectionActor : ViewModelBase
 
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// GetComponent
+    //-----------------------------------------------------------------------------------------------------------------
+    public T? GetComponent< T >() where T : IMultiSelectionComponent
+    {
+        return (T)Components.FirstOrDefault( x => x.GetType() == typeof( T ) );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// MakeComponentList
+    //-----------------------------------------------------------------------------------------------------------------
+    private void MakeComponentList()
+    {
+        _components.Clear();
+        
+        CrActor? firstEntity = SelectedActors.FirstOrDefault();
+        if ( firstEntity == null ) return;
+
+        if ( firstEntity.Components != null )
+        {
+            foreach ( CrComponent component in firstEntity.Components )
+            {
+                Type type = component.GetType();
+
+                if ( SelectedActors.Skip( 1 ).All( actor => actor.GetCompnent( type ) != null ) )
+                {
+                    Debug.Assert( Components.FirstOrDefault( x => x.GetType() == type ) == null );
+
+                    _components.Add( component.GetMultiSelectionComponent( this ) );
+                }
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// UpdateActors
     //-----------------------------------------------------------------------------------------------------------------
     protected virtual bool UpdateActors( string propertyName )
@@ -158,55 +203,31 @@ abstract class MultiSelectionActor : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static float? GetMixedValue( List< CrActor > actors, Func< CrActor, float > getProperty )
+    public static float? GetMixedValue< T >( List< T > objects, Func< T, float > getProperty )
     {
-        float value = getProperty( actors.First() );
+        float value = getProperty( objects.First() );
 
-        foreach ( CrActor actor in actors.Skip( 1 ) )
-        {
-            if ( !value.IsTheSameAs( getProperty( actor ) ) )
-            {
-                return null;
-            }
-        }
-
-        return value;
+        return objects.Skip( 1 ).Any( x => !getProperty( x ).IsTheSameAs( value ) ) ? (float?)null : value;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static bool? GetMixedValue( List< CrActor > actors, Func< CrActor, bool > getProperty )
+    public static bool? GetMixedValue< T >( List< T > objects, Func< T, bool > getProperty )
     {
-        bool value = getProperty( actors.First() );
+        bool value = getProperty( objects.First() );
 
-        foreach ( CrActor actor in actors.Skip( 1 ) )
-        {
-            if ( value != getProperty( actor ) )
-            {
-                return null;
-            }
-        }
-
-        return value;
+        return objects.Skip( 1 ).Any( x => value != getProperty( x ) ) ? (bool?)null : value;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// GetMixedValue
     //-----------------------------------------------------------------------------------------------------------------
-    public static string? GetMixedValue( List< CrActor > actors, Func< CrActor, string > getProperty )
+    public static string? GetMixedValue< T >( List< T > objects, Func< T, string > getProperty )
     {
-        string value = getProperty( actors.First() );
+        string value = getProperty( objects.First() );
 
-        foreach ( CrActor actor in actors.Skip( 1 ) )
-        {
-            if ( value != getProperty( actor ) )
-            {
-                return null;
-            }
-        }
-
-        return value;
+        return objects.Skip( 1 ).Any( x => value != getProperty( x ) ) ? (string?)null : value;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -228,6 +249,7 @@ abstract class MultiSelectionActor : ViewModelBase
         _enableUpdates = false;
         
         UpdateMultiSelectionActor();
+        MakeComponentList();
         
         _enableUpdates = true;
     }

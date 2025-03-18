@@ -90,6 +90,7 @@ public partial class ActorView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void OnNameTextBoxKeyboardFocusGot( object sender, KeyboardFocusChangedEventArgs e )
     {
+        _propertyName = string.Empty;
         _undoAction = GetRenameAction();
     }
 

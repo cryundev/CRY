@@ -11,7 +11,7 @@ namespace Editor_WPF.Objects;
 /// Object
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-public class CrObject : ViewModelBase
+public abstract class CrObject : ViewModelBase
 {
     private string _name = "";
 

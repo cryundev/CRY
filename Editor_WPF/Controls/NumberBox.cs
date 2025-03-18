@@ -67,6 +67,8 @@ public class NumberBox : Control
         e.Handled = true;
         
         _mouseXStart = e.GetPosition( this ).X;
+
+        Focus();
     }
 
     //-----------------------------------------------------------------------------------------------------------------

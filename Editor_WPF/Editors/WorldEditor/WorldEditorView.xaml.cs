@@ -30,7 +30,5 @@ public partial class WorldEditorView
         Loaded -= OnWorldEditorViewLoaded;
         
         Focus();
-
-        ( (INotifyCollectionChanged)Project.UndoRedo.UndoList ).CollectionChanged += ( s, e ) => Focus();
     }
 }
