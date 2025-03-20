@@ -25,12 +25,12 @@
                 <ColumnDefinition Width="Auto" /> 
             </Grid.ColumnDefinitions>
             <TextBlock Text="Position" Grid.Column="0" Grid.Row="0" />
-            <control:VectorBox X="{Binding PosX}" Y="{Binding PosY}" Z="{Binding PosZ}" Grid.Column="1" Grid.Row="0"
+            <control:VectorBox X="{Binding PositionX}" Y="{Binding PositionY}" Z="{Binding PositionZ}" Grid.Column="1" Grid.Row="0"
                                PreviewMouseLeftButtonDown="OnPositionVectorBoxPreviewMouseLeftButtonDown"
                                PreviewMouseLeftButtonUp="OnPositionVectorBoxPreviewMouseLeftButtonUp"
                                LostKeyboardFocus="OnPositionVectorBoxLostKeyboardFocus" />
             <TextBlock Text="Rotation" Grid.Column="0" Grid.Row="1" />
-            <control:VectorBox X="{Binding RotX}" Y="{Binding RotY}" Z="{Binding RotZ}" Grid.Column="1" Grid.Row="1"
+            <control:VectorBox X="{Binding RotationX}" Y="{Binding RotationY}" Z="{Binding RotationZ}" Grid.Column="1" Grid.Row="1"
                                PreviewMouseLeftButtonDown="OnRotationVectorBoxMouseLeftButtonDown"
                                PreviewMouseLeftButtonUp="OnRotationVectorBoxMouseLeftButtonUp"
                                LostKeyboardFocus="OnRotationVectorBoxLostKeyboardFocus" />

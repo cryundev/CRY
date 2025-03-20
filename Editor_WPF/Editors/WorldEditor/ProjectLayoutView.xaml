@@ -28,7 +28,7 @@
                             <Expander.Header>
                                 <Grid>
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock Text="{Binding Name}" Style="{StaticResource LightTextBlockStyle}" />
                                         <Button Content="Remove" Command = "{Binding DataContext.RemoveWorldCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                                 CommandParameter="{Binding}" Margin="20,0" Focusable="False"/>
                                         <Button Content="+" IsEnabled="{Binding IsActive}" Click="OnAddActorButtonClicked"/>
@@ -39,7 +39,7 @@
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="{Binding Name}"/>
+                                            <TextBlock Text="{Binding Name}" Style="{StaticResource LightTextBlockStyle}"/>
                                             <Button Content="Remove" Command="{Binding ParentWorld.RemoveActorCommand}" CommandParameter="{Binding}"/> 
                                         </StackPanel>
                                     </DataTemplate>

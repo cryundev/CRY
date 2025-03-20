@@ -53,10 +53,10 @@ public partial class CrTransformView : UserControl
             return null;
         }
 
-        var selection = multiSelectionTransform.SelectedComponents.Select( x => selector( x ) ).ToList();
+        var selection = multiSelectionTransform.SelectedComponents.Select( selector ).ToList();
         return new Action( () =>
         {
-            selection.ForEach( x => forEachAction( x ) );
+            selection.ForEach( forEachAction );
             ( ActorView.Instance.DataContext as MultiSelectionActor )?.GetComponent< MultiSelectionTransform >()?.Refresh();
         } );
     }

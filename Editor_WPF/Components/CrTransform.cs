@@ -78,81 +78,81 @@ class CrTransform : CrComponent
 //---------------------------------------------------------------------------------------------------------------------
 sealed class MultiSelectionTransform : MultiSelectionComponent< CrTransform >
 {
-    private float? _posX;
-    public float? PosX
+    private float? _positionX;
+    public float? PositionX
     {
-        get => _posX;
+        get => _positionX;
         set
         {
-            if ( _posX.IsTheSameAs( value ) ) return;
+            if ( _positionX.IsTheSameAs( value ) ) return;
 
-            _posX = value;
-            OnPropertyChanged( nameof( PosX ) );
+            _positionX = value;
+            OnPropertyChanged( nameof( PositionX ) );
         }
     }
     
-    private float? _posY;
-    public float? PosY
+    private float? _positionY;
+    public float? PositionY
     {
-        get => _posY;
+        get => _positionY;
         set
         {
-            if ( _posY.IsTheSameAs( value ) ) return;
+            if ( _positionY.IsTheSameAs( value ) ) return;
 
-            _posY = value;
-            OnPropertyChanged( nameof( PosY ) );
+            _positionY = value;
+            OnPropertyChanged( nameof( PositionY ) );
         }
     }
     
-    private float? _posZ;
-    public float? PosZ
+    private float? _positionZ;
+    public float? PositionZ
     {
-        get => _posZ;
+        get => _positionZ;
         set
         {
-            if ( _posZ.IsTheSameAs( value ) ) return;
+            if ( _positionZ.IsTheSameAs( value ) ) return;
 
-            _posZ = value;
-            OnPropertyChanged( nameof( PosZ ) );
+            _positionZ = value;
+            OnPropertyChanged( nameof( PositionZ ) );
         }
     }
 
-    private float? _rotX;
-    public float? RotX
+    private float? _rotationX;
+    public float? RotationX
     {
-        get => _rotX;
+        get => _rotationX;
         set
         {
-            if ( _rotX.IsTheSameAs( value ) ) return;
+            if ( _rotationX.IsTheSameAs( value ) ) return;
 
-            _rotX = value;
-            OnPropertyChanged( nameof( RotX ) );
-        }
-    }
-    
-    private float? _rotY;
-    public float? RotY
-    {
-        get => _rotY;
-        set
-        {
-            if ( _rotY.IsTheSameAs( value ) ) return;
-
-            _rotY = value;
-            OnPropertyChanged( nameof( RotY ) );
+            _rotationX = value;
+            OnPropertyChanged( nameof( RotationX ) );
         }
     }
     
-    private float? _rotZ;
-    public float? RotZ
+    private float? _rotationY;
+    public float? RotationY
     {
-        get => _rotZ;
+        get => _rotationY;
         set
         {
-            if ( _rotZ.IsTheSameAs( value ) ) return;
+            if ( _rotationY.IsTheSameAs( value ) ) return;
 
-            _rotZ = value;
-            OnPropertyChanged( nameof( RotZ ) );
+            _rotationY = value;
+            OnPropertyChanged( nameof( RotationY ) );
+        }
+    }
+    
+    private float? _rotationZ;
+    public float? RotationZ
+    {
+        get => _rotationZ;
+        set
+        {
+            if ( _rotationZ.IsTheSameAs( value ) ) return;
+
+            _rotationZ = value;
+            OnPropertyChanged( nameof( RotationZ ) );
         }
     }
     
@@ -203,29 +203,29 @@ sealed class MultiSelectionTransform : MultiSelectionComponent< CrTransform >
     {
         switch ( propertyName )
         {
-            case nameof( PosX ):
-            case nameof( PosY ):
-            case nameof( PosZ ):
+            case nameof( PositionX ):
+            case nameof( PositionY ):
+            case nameof( PositionZ ):
             {
                 SelectedComponents.ForEach
                 (
                     c => c.Position = new Vector3
                     (
-                        _posX ?? c.Position.X, _posY ?? c.Position.Y, _posZ ?? c.Position.Z
+                        _positionX ?? c.Position.X, _positionY ?? c.Position.Y, _positionZ ?? c.Position.Z
                     )
                 );
                 return true;
             }
             
-            case nameof( RotX ):
-            case nameof( RotY ):
-            case nameof( RotZ ):
+            case nameof( RotationX ):
+            case nameof( RotationY ):
+            case nameof( RotationZ ):
             {
                 SelectedComponents.ForEach
                 (
                     c => c.Rotation = new Vector3
                     (
-                        _rotX ?? c.Rotation.X, _rotY ?? c.Rotation.Y, _rotZ ?? c.Rotation.Z
+                        _rotationX ?? c.Rotation.X, _rotationY ?? c.Rotation.Y, _rotationZ ?? c.Rotation.Z
                     )
                 );
                 return true;
@@ -254,17 +254,17 @@ sealed class MultiSelectionTransform : MultiSelectionComponent< CrTransform >
     //-----------------------------------------------------------------------------------------------------------------
     protected override bool UpdateMultiSelectionComponent()
     {
-        PosX = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.X ) );
-        PosY = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.Y ) );
-        PosZ = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.Z ) );
+        PositionX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.X ) );
+        PositionY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.Y ) );
+        PositionZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.Z ) );
         
-        RotX = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.X ) );
-        RotY = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.Y ) );
-        RotZ = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.Z ) );
+        RotationX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.X ) );
+        RotationY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.Y ) );
+        RotationZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.Z ) );
         
-        ScaleX = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.X ) );
-        ScaleY = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.Y ) );
-        ScaleZ = MultiSelectionActor.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.Z ) );
+        ScaleX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.X ) );
+        ScaleY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.Y ) );
+        ScaleZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.Z ) );
 
         return true;
     }
