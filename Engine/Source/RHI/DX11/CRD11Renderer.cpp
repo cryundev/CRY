@@ -8,12 +8,13 @@
 #include "Resource/CRD11RenderTargetView.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/World/CRWorld.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize renderer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
+void CRD11Renderer::Initialize( u32 Width, u32 Height )
 {
     ViewportWidth  = Width;
     ViewportHeight = Height;
@@ -21,20 +22,20 @@ void CRD11Renderer::Initialize( unsigned int Width, unsigned int Height )
     DepthStencilBuffer.Create( Width, Height );
     
     _InitializeRenderTarget();
-    _InitializeViewport( (float)( Width ), (float)( Height ) );
+    _InitializeViewport( (f32)( Width ), (f32)( Height ) );
 
-    TransformBuffer.Create( "Transform", (unsigned int)( ECVS::Transform ), ED11RenderingPipelineStage::VS );
+    TransformBuffer.Create( "Transform", (u32)( ECVS::Transform ), ED11RenderingPipelineStage::VS );
     TransformBuffer.SetInRenderingPipeline();
     
     TransformBuffer.Update( DirectX::XMMatrixTranspose( CRMatrix::Identity ) );
 
-    ViewProjectionBuffer.Create( "ViewProjection", (unsigned int)( ECVS::ViewProjection ), ED11RenderingPipelineStage::VS );
+    ViewProjectionBuffer.Create( "ViewProjection", (u32)( ECVS::ViewProjection ), ED11RenderingPipelineStage::VS );
     ViewProjectionBuffer.SetInRenderingPipeline();
 
-    LightDirectionBuffer.Create( "LightDirection", (unsigned int)( ECPS::LightDirection ), ED11RenderingPipelineStage::PS );
+    LightDirectionBuffer.Create( "LightDirection", (u32)( ECPS::LightDirection ), ED11RenderingPipelineStage::PS );
     LightDirectionBuffer.SetInRenderingPipeline();
     
-    LightColorBuffer.Create( "LightColor", (unsigned int)( ECPS::LightColor ), ED11RenderingPipelineStage::PS );
+    LightColorBuffer.Create( "LightColor", (u32)( ECPS::LightColor ), ED11RenderingPipelineStage::PS );
     LightColorBuffer.SetInRenderingPipeline();
 
     CRVector lightDir( 1.0f, -1.0f, 1.0f );
@@ -68,6 +69,26 @@ void CRD11Renderer::AddRenderMesh( const ICRRHIMeshWPtr& Mesh )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Remove render mesh.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh )
+{
+    if ( Mesh.expired() ) return;
+    
+    auto itr = std::ranges::find_if( RenderMeshes, [ Mesh ] ( const ICRRHIMeshWPtr& MeshPtr )
+    {
+        if ( MeshPtr.expired() ) return false;
+        
+        return MeshPtr.lock() == Mesh.lock();
+    } );
+    
+    if ( itr != RenderMeshes.end() )
+    {
+        RenderMeshes.erase( itr );
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Update transform buffer.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::UpdateTransformBuffer( const CRMatrix& Matrix )
@@ -92,7 +113,7 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
-    UpdateViewProjectionBuffer( GCamera->GetViewMatrix(), GCamera->GetProjectionMatrix() );
+    UpdateViewProjectionBuffer( GWorld->GetCamera()->GetViewMatrix(), GWorld->GetCamera()->GetProjectionMatrix() );
     
     for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
     {
@@ -143,7 +164,7 @@ void CRD11Renderer::_InitializeRenderTarget()
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize viewport.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::_InitializeViewport( float Width, float Height ) const
+void CRD11Renderer::_InitializeViewport( f32 Width, f32 Height ) const
 {
     D3D11_VIEWPORT viewport;
     ZeroMemory( &viewport, sizeof( D3D11_VIEWPORT ) );

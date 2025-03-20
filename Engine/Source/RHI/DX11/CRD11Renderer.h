@@ -45,10 +45,13 @@ public:
     virtual ~CRD11Renderer() override = default;
     
     /// Initialize renderer.
-    virtual void Initialize( unsigned int Width, unsigned int Height ) override;
+    virtual void Initialize( u32 Width, u32 Height ) override;
 
     /// Add render mesh.
     virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
+
+    /// Remove render mesh.
+    virtual void RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
 
     /// Draw.
     virtual void Draw() override;
@@ -77,5 +80,5 @@ private:
     void _InitializeRenderTarget();
 
     /// Initialize viewport.
-    void _InitializeViewport( float Width, float Height ) const;
+    void _InitializeViewport( f32 Width, f32 Height ) const;
 };

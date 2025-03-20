@@ -1,21 +1,29 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using Editor_WPF.GameProject;
 
 
 namespace Editor_WPF;
 
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
+//---------------------------------------------------------------------------------------------------------------------
+/// MainWindow
+//---------------------------------------------------------------------------------------------------------------------
 public partial class MainWindow : Window
 {
+    //-----------------------------------------------------------------------------------------------------------------
+    /// MainWindow
+    //-----------------------------------------------------------------------------------------------------------------
     public MainWindow()
     {
         InitializeComponent();
-        Loaded += OnMainWindowLoaded;
+        Loaded  += OnMainWindowLoaded;
+        Closing += OnMainWindowClosing;
     }
-    
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnMainWindowLoaded
+    //-----------------------------------------------------------------------------------------------------------------
     private void OnMainWindowLoaded( object sender, RoutedEventArgs e )
     {
         Loaded -= OnMainWindowLoaded;
@@ -23,16 +31,30 @@ public partial class MainWindow : Window
         OpenProjectBrowserDialog();
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnMainWindowClosing
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnMainWindowClosing( object? sender, CancelEventArgs e )
+    {
+        Closing -= OnMainWindowClosing;
+        
+        Project.Current?.Unload();
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OpenProjectBrowserDialog
+    //-----------------------------------------------------------------------------------------------------------------
     private void OpenProjectBrowserDialog()
     {
-        var projectBrowserDialog = new ProjectBrowserDialog();
-        if ( projectBrowserDialog.ShowDialog() == false )
+        ProjectBrowserDialog projectBrowserDialog = new ProjectBrowserDialog();
+        if ( projectBrowserDialog.ShowDialog() == false || projectBrowserDialog.DataContext == null )
         {
             Application.Current.Shutdown();
         }
         else
         {
-            
+            Project.Current?.Unload();
+            DataContext = projectBrowserDialog.DataContext;
         }
     }
 }

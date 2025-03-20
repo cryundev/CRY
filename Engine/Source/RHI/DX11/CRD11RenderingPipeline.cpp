@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Set vertex buffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11RenderingPipeline::SetVertexBuffer( ID3D11Buffer* Buffer, unsigned int Slot, unsigned int Stride, unsigned int Offset, D3D_PRIMITIVE_TOPOLOGY TopologyType )
+void CRD11RenderingPipeline::SetVertexBuffer( ID3D11Buffer* Buffer, u32 Slot, u32 Stride, u32 Offset, D3D_PRIMITIVE_TOPOLOGY TopologyType )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !Buffer ) return;
@@ -20,7 +20,7 @@ void CRD11RenderingPipeline::SetVertexBuffer( ID3D11Buffer* Buffer, unsigned int
 //---------------------------------------------------------------------------------------------------------------------
 /// Set index buffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11RenderingPipeline::SetIndexBuffer( ID3D11Buffer* Buffer, unsigned int Offset )
+void CRD11RenderingPipeline::SetIndexBuffer( ID3D11Buffer* Buffer, u32 Offset )
 {
     if ( !Buffer ) return;
 
@@ -32,7 +32,7 @@ void CRD11RenderingPipeline::SetIndexBuffer( ID3D11Buffer* Buffer, unsigned int 
 //---------------------------------------------------------------------------------------------------------------------
 /// Set input layout.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11RenderingPipeline::SetInputLayout( ID3D11InputLayout* Layout, unsigned int Slot )
+void CRD11RenderingPipeline::SetInputLayout( ID3D11InputLayout* Layout, u32 Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !Layout ) return;
@@ -45,7 +45,7 @@ void CRD11RenderingPipeline::SetInputLayout( ID3D11InputLayout* Layout, unsigned
 //---------------------------------------------------------------------------------------------------------------------
 /// Set constant buffer.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11RenderingPipeline::SetConstantBuffer( ID3D11Buffer* Buffer, unsigned int Slot, ED11RenderingPipelineStage Stage )
+void CRD11RenderingPipeline::SetConstantBuffer( ID3D11Buffer* Buffer, u32 Slot, ED11RenderingPipelineStage Stage )
 {
     if ( Slot >= D3D11_COMMONSHADER_CONSTANT_BUFFER_API_SLOT_COUNT ) return;
     if ( !Buffer ) return;
@@ -67,7 +67,7 @@ void CRD11RenderingPipeline::SetConstantBuffer( ID3D11Buffer* Buffer, unsigned i
 //---------------------------------------------------------------------------------------------------------------------
 /// Set shader resource view.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11RenderingPipeline::SetShaderResourceView( ID3D11ShaderResourceView* View, unsigned int Slot, ED11RenderingPipelineStage Stage )
+void CRD11RenderingPipeline::SetShaderResourceView( ID3D11ShaderResourceView* View, u32 Slot, ED11RenderingPipelineStage Stage )
 {
     if ( Slot >= D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ) return;
     if ( !View ) return;
@@ -89,7 +89,7 @@ void CRD11RenderingPipeline::SetShaderResourceView( ID3D11ShaderResourceView* Vi
 //---------------------------------------------------------------------------------------------------------------------
 /// Set sampler state.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11RenderingPipeline::SetSamplerState( ID3D11SamplerState* State, unsigned int Slot )
+void CRD11RenderingPipeline::SetSamplerState( ID3D11SamplerState* State, u32 Slot )
 {
     if ( Slot >= D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT ) return;
     if ( !State ) return;

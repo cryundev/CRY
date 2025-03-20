@@ -2,6 +2,7 @@
 
 
 #include "CRRHITypes.h"
+#include "Source/Core/CRTypes.h"
 #include "Source/Core/Containers/CRContainerInc.h"
 #include <windows.h>
 
@@ -19,7 +20,7 @@ public:
     CRRHI( ECRRHIType InRHIType );
     
     /// Initialize RHI.
-    void Initialize( HWND hWnd, unsigned int Width, unsigned int Height );
+    void Initialize( HWND hWnd, u32 Width, u32 Height );
 
     /// Initialize shaders.
     void InitializeShaders();

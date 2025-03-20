@@ -4,7 +4,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize.
 //---------------------------------------------------------------------------------------------------------------------
-void CRCamera::Initialize( EProjectionType InProjectionType, float InFieldOfView, float InViewWidth, float InViewHeight, float InNearDistance, float InFarDistance )
+void CRCamera::Initialize( EProjectionType InProjectionType, f32 InFieldOfView, f32 InViewWidth, f32 InViewHeight, f32 InNearDistance, f32 InFarDistance )
 {
     ProjectionType = InProjectionType;
     FieldOfView    = InFieldOfView;
@@ -19,8 +19,8 @@ void CRCamera::Initialize( EProjectionType InProjectionType, float InFieldOfView
 //---------------------------------------------------------------------------------------------------------------------
 CRMatrix CRCamera::GetViewMatrix() const
 {
-    const CRVector& location = Transform.GetLocation();
-    const CRVector& lookAt   = CRVector::Transform( LookAtDirection, Transform.GetRotation() );
+    const CRVector& location = GetTransform()->GetLocation();
+    const CRVector& lookAt   = CRVector::Transform( LookAtDirection, GetTransform()->GetRotation() );
     return DirectX::XMMatrixLookAtLH( location, location + lookAt, Up );
 }
 

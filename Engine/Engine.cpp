@@ -1,15 +1,19 @@
 #include "Engine.h"
-#include "Source/Asset/CRPrimitiveAsset.h"\
+#include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/Object/Camera/CRCamera.h"
+#include "Source/Core/Identify/CRIdentity.h"
+#include "Source/Object/Component/CRPrimitive.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/RHI/DX11/CRD11Renderer.h"
 #include "Source/Utility/FBX/CRFbxLoader.h"
 #include "Source/Utility/Time/CRFrameUpdator.h"
+#include "Source/World/CRWorld.h"
 
 
-CRSharedPtr< CRCamera > GCamera = CRMakeShared< CRCamera >(new CRCamera() );
+CRSharedPtr< CRWorld > GWorld = CRMakeShared< CRWorld >(new CRWorld() );
+ ;
 
 CRTime         GFrameTime;
 CRFrameUpdator GFrameUpdator;
@@ -22,11 +26,11 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 {
     GRHI.Initialize( hWnd, Width, Height );
     
-    GCamera->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, Width, Height, 0.1f, 1000.0f );
-    GCamera->SetLookAtDirection( 0.f, 0.f, -1.f );
-    GCamera->Transform.SetLocation( 0.f, 0.f, 15.0f );
+    GWorld->GetCamera()->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, Width, Height, 0.1f, 1000.0f );
+    GWorld->GetCamera()->SetLookAtDirection( 0.f, 0.f, -1.f );
+    GWorld->GetCamera()->GetTransform()->SetLocation( 0.f, 0.f, 15.0f );
     
-    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GCamera->GetViewMatrix(), GCamera->GetProjectionMatrix() );
+    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GWorld->GetCamera()->GetViewMatrix(), GWorld->GetCamera()->GetProjectionMatrix() );
 
     // const CRString& loadFbxPaht = "../Asset/Minion";
     // CRFbxLoader fbxLoader;
@@ -49,16 +53,16 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
     //         ++i;
     //     }
     // }
-    
-    CRPrimitiveAsset primitive;
-    primitive.Load( "../Asset/Minion.cra" );
-    
-    const ICRRHIMeshWPtr& rhiMesh = GRHI.CreateMesh();
-    
-    rhiMesh.lock()->InitializePrimitive( "Minion", primitive );
-    rhiMesh.lock()->InitializeMaterial();
-    
-    GRHI.GetRenderer()->AddRenderMesh( rhiMesh ); 
+
+    if ( CRActor* minion = GWorld->SpawnActor< CRActor >() )
+    {
+        minion->SetName( "Minion" );
+        
+        if ( CRPrimitive* primitive = minion->AddComponent< CRPrimitive >() )
+        {
+            primitive->LoadAsset( "../Asset/Minion.cra" );
+        }
+    }
     
     GFrameUpdator.Initialize( 30 );
 }
@@ -68,6 +72,8 @@ void CREngine::Initialize( HWND hWnd, unsigned int Width, unsigned int Height )
 //---------------------------------------------------------------------------------------------------------------------
 void CREngine::Tick( float DeltaSeconds )
 {
+    CRTransform::UpdateComponents( DeltaSeconds );
+    CRPrimitive::UpdateComponents( DeltaSeconds );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

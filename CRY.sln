@@ -11,6 +11,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor_WPF", "Editor_WPF\Editor_WPF.csproj", "{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}"
 	ProjectSection(ProjectDependencies) = postProject
 		{8B4D84D6-CB03-431C-B087-C4DDC291477F} = {8B4D84D6-CB03-431C-B087-C4DDC291477F}
+		{937E0FF9-9984-4424-B36B-0EF0C78E7521} = {937E0FF9-9984-4424-B36B-0EF0C78E7521}
+		{551865EF-4101-4F6C-915B-53A0D0481182} = {551865EF-4101-4F6C-915B-53A0D0481182}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{8B4D84D6-CB03-431C-B087-C4DDC291477F}"
@@ -19,6 +21,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTK_Desktop_2022_Win10", "Engine\Extras\DirectXTK\DirectXTK_Desktop_2022_Win10.vcxproj", "{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineTest", "EngineTest\EngineTest.vcxproj", "{C2538C95-0FF3-409F-8BF0-D63F7C5C88E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B4D84D6-CB03-431C-B087-C4DDC291477F} = {8B4D84D6-CB03-431C-B087-C4DDC291477F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineDLL", "EngineDLL\EngineDLL.vcxproj", "{551865EF-4101-4F6C-915B-53A0D0481182}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8B4D84D6-CB03-431C-B087-C4DDC291477F} = {8B4D84D6-CB03-431C-B087-C4DDC291477F}
+	EndProjectSection
 EndProject
 
 Global
@@ -43,6 +55,14 @@ Global
 		{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}.Debug|x64.Build.0 = Debug|Any CPU
 		{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}.Release|x64.ActiveCfg = Release|Any CPU
 		{F6F4711B-9106-44C9-8CBB-BAFE8E6FA653}.Release|x64.Build.0 = Release|Any CPU
+		{C2538C95-0FF3-409F-8BF0-D63F7C5C88E6}.Debug|x64.ActiveCfg = Debug|x64
+		{C2538C95-0FF3-409F-8BF0-D63F7C5C88E6}.Debug|x64.Build.0 = Debug|x64
+		{C2538C95-0FF3-409F-8BF0-D63F7C5C88E6}.Release|x64.ActiveCfg = Release|x64
+		{C2538C95-0FF3-409F-8BF0-D63F7C5C88E6}.Release|x64.Build.0 = Release|x64
+		{551865EF-4101-4F6C-915B-53A0D0481182}.Debug|x64.ActiveCfg = Debug|x64
+		{551865EF-4101-4F6C-915B-53A0D0481182}.Debug|x64.Build.0 = Debug|x64
+		{551865EF-4101-4F6C-915B-53A0D0481182}.Release|x64.ActiveCfg = Release|x64
+		{551865EF-4101-4F6C-915B-53A0D0481182}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

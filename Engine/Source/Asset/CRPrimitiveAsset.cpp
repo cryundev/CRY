@@ -53,7 +53,7 @@ void CRPrimitiveAsset::Load( const CRString& Path )
     ifs.read( (char*)( UVs.data() ), UVs.size() * sizeof( CRVector2D ) );
 
     Indices.resize(VertexCount);
-    ifs.read( (char*)( Indices.data() ), Indices.size() * sizeof( unsigned int ) );
+    ifs.read( (char*)( Indices.data() ), Indices.size() * sizeof( u32 ) );
 
     ifs.close();
 }

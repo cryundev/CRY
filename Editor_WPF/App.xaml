@@ -2,8 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Editor_WPF"
-             StartupUri="MainWindow.xaml">
+             StartupUri="MainWindow.xaml"
+             DispatcherUnhandledException="App_DispatcherUnhandledException">
     <Application.Resources>
-         
+         <ResourceDictionary>
+             <ResourceDictionary.MergedDictionaries>
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/EditorColors.xaml"              />
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ControlTemplates.xaml"          />
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/MainWindowStyle.xaml"           />
+                 <ResourceDictionary Source="pack://application:,,,/Dictionaries/ProjectBrowserDialogStyle.xaml" />
+             </ResourceDictionary.MergedDictionaries>
+         </ResourceDictionary>
     </Application.Resources>
 </Application>

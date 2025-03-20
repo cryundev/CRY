@@ -2,6 +2,7 @@
 
 
 #include "../../Core/Strings/CRStringInc.h"
+#include "Source/Core/CRTypes.h"
 #include <dxgiformat.h>
 #include <guiddef.h>
 #include <wincodec.h>
@@ -26,19 +27,19 @@ private:
 
 private:
     CRWString              ImagePath;
-    unsigned char*         Pixels            = nullptr;
+    u8*                    Pixels            = nullptr;
     IWICBitmapDecoder*     BitmapDecoder     = nullptr;
     IWICBitmapFrameDecode* BitmapFrameDecode = nullptr;
-    unsigned int           ImageWidth        = 0;
-    unsigned int           ImageHeight       = 0;
-    unsigned int           TextureWidth      = 0;
-    unsigned int           TextureHeight     = 0;
-    unsigned int           RowPitch          = 0;
-    unsigned int           ImageSize         = 0;
+    u32                    ImageWidth        = 0;
+    u32                    ImageHeight       = 0;
+    u32                    TextureWidth      = 0;
+    u32                    TextureHeight     = 0;
+    u32                    RowPitch          = 0;
+    u32                    ImageSize         = 0;
     WICPixelFormatGUID     WicFormat         = GUID_WICPixelFormatDontCare;
     WICPixelFormatGUID     ConvertToFormat   = GUID_WICPixelFormatDontCare;
     DXGI_FORMAT            DxgiFormat        = DXGI_FORMAT_UNKNOWN;
-    unsigned int           BPP               = 0;
+    u32                    BPP               = 0;
 
 public:
     /// Destructor.
@@ -51,16 +52,16 @@ public:
     const unsigned char* GetPixels() const { return Pixels; }
 
     /// Get width.
-    unsigned int GetWidth() const { return ImageWidth; }
+    u32 GetWidth() const { return ImageWidth; }
 
     /// Get height.
-    unsigned int GetHeight() const { return ImageHeight; }
+    u32 GetHeight() const { return ImageHeight; }
 
     /// Get row pitch.
-    unsigned int GetRowPitch() const { return RowPitch; }
+    u32 GetRowPitch() const { return RowPitch; }
 
     /// Get image size.
-    unsigned int GetImageSize() const { return ImageSize; }
+    u32 GetImageSize() const { return ImageSize; }
 
     /// Get DXGI format.
     DXGI_FORMAT GetDxgiFormat() const { return DxgiFormat; }
@@ -76,7 +77,7 @@ private:
     bool _GetFormatAndBPP();
 
     /// Get bit per pixel.
-    unsigned int _GetBPP( REFGUID targetGUID ) const;
+    u32 _GetBPP( REFGUID targetGUID ) const;
 
     /// Copy pixel from scaler.
     bool _CopyPixelFromScaler() const;

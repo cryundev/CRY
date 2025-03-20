@@ -2,7 +2,7 @@
 
 
 #include "CRD11Types.h"
-
+#include "Source/Core/CRTypes.h"
 
 struct ID3D11DepthStencilState;
 struct ID3D11DepthStencilView;
@@ -20,7 +20,7 @@ private:
 
 public:
     /// Create depth stencil buffer.
-    void Create( unsigned int Width, unsigned int Height );
+    void Create( u32 Width, u32 Height );
 
     /// Get depth stencil view.
     ID3D11DepthStencilView* GetView() const;

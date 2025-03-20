@@ -7,7 +7,7 @@
 #include <windows.h>
 
 
-extern CRSharedPtr< CRCamera > GCamera;
+extern CRSharedPtr< CRWorld > GWorld;
 extern CRTime GFrameTime;
 
 

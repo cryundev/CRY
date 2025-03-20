@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include "Source/Core/CRTypes.h"
 #include "Source/Core/Math/CRMath.h"
 #include "Source/Object/CRActor.h"
 
@@ -21,18 +22,18 @@ private:
     EProjectionType ProjectionType  = EProjectionType::Perspective;
     CRVector        LookAtDirection = CRVector::Forward;
     CRVector        Up              = CRVector::Up;
-    float           FieldOfView     = 90.0f;
-    float           ViewWidth       = 1920.f;
-    float           ViewHeight      = 1080.f;
-    float           NearDistance    = 0.1f;
-    float           FarDistance     = 10000.f;
+    f32             FieldOfView     = 90.0f;
+    f32             ViewWidth       = 1920.f;
+    f32             ViewHeight      = 1080.f;
+    f32             NearDistance    = 0.1f;
+    f32             FarDistance     = 10000.f;
     
 public:
     /// Constructor
     CRCamera() = default;
 
     /// Initialize.
-    void Initialize( EProjectionType InProjectionType, float InFieldOfView, float InViewWidth, float InViewHeight, float InNearDistance, float InFarDistance );
+    void Initialize( EProjectionType InProjectionType, f32 InFieldOfView, f32 InViewWidth, f32 InViewHeight, f32 InNearDistance, f32 InFarDistance );
 
     /// Get view matrix.
     CRMatrix GetViewMatrix() const;
@@ -44,5 +45,5 @@ public:
     void SetLookAtDirection( const CRVector& InLookAtDirection ) { LookAtDirection = InLookAtDirection; }
 
     /// Set look at direction.
-    void SetLookAtDirection( float X, float Y, float Z ) { LookAtDirection = CRVector( X, Y, Z ); }
+    void SetLookAtDirection( f32 X, f32 Y, f32 Z ) { LookAtDirection = CRVector( X, Y, Z ); }
 };
