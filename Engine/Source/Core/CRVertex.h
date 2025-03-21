@@ -23,7 +23,7 @@ public:
         Vertices.clear();
         Vertices.reserve( PrimitiveData.VertexCount );
 
-        for ( unsigned int i = 0; i < PrimitiveData.VertexCount; ++i )
+        for ( u32 i = 0; i < PrimitiveData.VertexCount; ++i )
         {
             Vertices.emplace_back( PrimitiveData.Positions[ i ], PrimitiveData.UVs[ i ], PrimitiveData.Normals[ i ] );
         }

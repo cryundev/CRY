@@ -7,10 +7,10 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRTransform
+/// CRTransformComponent
 //---------------------------------------------------------------------------------------------------------------------
 DECLARE_TYPE_ID( CRTransformId );
-class CRTransform : public CRComponent< CRTransform >
+class CRTransformComponent : public CRComponent< CRTransformComponent >
 {
 public:
     CRVector     Location = CRVector::Zero;
@@ -22,7 +22,7 @@ public:
 
 public:
     /// Constructor.
-    CRTransform() = default;
+    CRTransformComponent() = default;
 
     /// Update component.
     virtual void UpdateComponent( float DeltaSeconds ) override;
@@ -74,5 +74,5 @@ private:
     void _SetDirty() { bDirty = true; }
 
 public:
-    static CRTransform Identity;
+    static CRTransformComponent Identity;
 };

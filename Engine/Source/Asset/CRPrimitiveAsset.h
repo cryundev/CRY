@@ -19,7 +19,7 @@ public:
     CRArray< CRVector2D > UVs;    
     CRArray< u32        > Indices;
 
-    int VertexCount = 0;
+    u32 VertexCount = 0;
 
 public:
     /// Constructor.
@@ -35,5 +35,5 @@ public:
     virtual void Load( const CRString& Path ) override;
     
     /// Initialize.
-    void Initialize( int InVertexCount );
+    void Initialize( u32 InVertexCount );
 };

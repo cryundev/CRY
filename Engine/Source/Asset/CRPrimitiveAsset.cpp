@@ -61,7 +61,7 @@ void CRPrimitiveAsset::Load( const CRString& Path )
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveAsset::Initialize( int InVertexCount )
+void CRPrimitiveAsset::Initialize( u32 InVertexCount )
 {
     VertexCount = InVertexCount;
         

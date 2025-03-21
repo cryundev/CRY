@@ -1,4 +1,4 @@
-﻿#include "CRPrimitive.h"
+﻿#include "CRPrimitiveComponent.h"
 #include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIMesh.h"
@@ -8,7 +8,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Update component.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitive::UpdateComponent( float DeltaSeconds )
+void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 {
     if ( RHI.expired() ) return;
     
@@ -33,7 +33,7 @@ void CRPrimitive::UpdateComponent( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 /// Load asset.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitive::LoadAsset( const CRString& InAssetPath )
+void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
 {
     AssetPath = InAssetPath;
     

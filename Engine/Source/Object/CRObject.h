@@ -22,6 +22,9 @@ public:
     /// Constructor
     CRObject();
 
+    /// Constructor
+    constexpr CRObject( const CRIdentity::id_t Id ) : ObjectId( Id ) {}
+
     /// Destructor
     virtual ~CRObject() = default;
 

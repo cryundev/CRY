@@ -14,10 +14,13 @@ class CRComponent : public CRObject, public ICRComponent
 {
 public:
     friend class CRActor;
-    
+
 private:
     /// Components.
-    inline static CRArray< T > Components;
+    inline static CRArray< T > Components = {};
+
+    /// Id map.
+    inline static CRArray< CRIdentity::id_t > IdMap = {};
     
 public:
     /// Add component.
@@ -34,19 +37,30 @@ public:
 };
 
 
+template< typename T >
+concept ComponentType = std::is_base_of_v< CRComponent< T >, T >;
+
+
 //---------------------------------------------------------------------------------------------------------------------
 /// Add component.
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
 T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
 {
+    assert( CRIdentity::IsValid( Id ) );
+
     CRIdentity::id_t index = CRIdentity::IndexOf( Id );
-    if ( index >= Components.size() )
+
+    Components.emplace_back();
+
+    if ( index >= IdMap.size() )
     {
-        Components.resize( index + 1 );
+        IdMap.resize( index + 1 );
     }
 
-    return CRCast< T >( &Components[ index ] );
+    IdMap[ index ] = Components.size() - 1;
+
+    return CRCast< T >( &Components[ IdMap[ index ] ] );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -55,9 +69,18 @@ T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
 template < typename T >
 bool CRComponent< T >::Remove( const CRIdentity::id_t& Id )
 {
-    if ( Id >= Components.size() ) return false;
+    CRIdentity::id_t index = CRIdentity::IndexOf( Id );
 
-    Components.remove( Id );
+    assert( index < IdMap.size() );
+    assert( IdMap[ index ] < Components.size() );
+
+    CRIdentity::id_t lastedIndex = CRIdentity::IndexOf( Components.back().GetObjectId() );
+
+    IdMap[ lastedIndex ] = IdMap[ index ];
+
+    UtilContainer::EraseUnordered( Components, IdMap[ index ] );
+
+    IdMap[ index ] = CRIdentity::InvalidId;
 
     return true;
 }
@@ -68,10 +91,16 @@ bool CRComponent< T >::Remove( const CRIdentity::id_t& Id )
 template < typename T >
 T* CRComponent< T >::Get( const CRIdentity::id_t& Id )
 {
+    assert( CRIdentity::IsValid( Id ) );
+    
     CRIdentity::id_t index = CRIdentity::IndexOf( Id );
-    if ( index >= Components.size() ) return nullptr;
+    
+    assert( index < IdMap.size() );
+    assert( IdMap[ index ] < Components.size() );
 
-    return CRCast< T >( &Components[ index ] );
+    if ( IdMap[ index ] == CRIdentity::InvalidId ) return nullptr;
+
+    return CRCast< T >( &Components[ IdMap[ index ] ] );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

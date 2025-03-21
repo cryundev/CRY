@@ -19,6 +19,7 @@ namespace CRIdentity
     constexpr id_t GenerationMask = ( id_t{ 1 } << GenerationBits  ) - 1; // 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 1111 1111 1111 1111
     constexpr id_t IndexMask      = ( id_t{ 1 } << IndexBits ) - 1;       // 0000 0000 0000 0000 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111
     constexpr id_t IdMask         = -1;
+    constexpr id_t InvalidId      = IdMask;
 
 
     using generation_t = std::conditional_t< GenerationBits <= 16, std::conditional_t<GenerationBits <= 8, u8, u16 >, u32 >;

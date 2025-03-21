@@ -1,13 +1,13 @@
-﻿#include "CRTransform.h"
+﻿#include "CRTransformComponent.h"
 
 
-CRTransform CRTransform::Identity = CRTransform();
+CRTransformComponent CRTransformComponent::Identity = CRTransformComponent();
 
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Update component.
 //---------------------------------------------------------------------------------------------------------------------
-void CRTransform::UpdateComponent( float DeltaSeconds )
+void CRTransformComponent::UpdateComponent( float DeltaSeconds )
 {
     if ( bDirty )
     {
@@ -22,7 +22,7 @@ void CRTransform::UpdateComponent( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 /// Get forward vector.
 //---------------------------------------------------------------------------------------------------------------------
-CRVector CRTransform::GetForward() const
+CRVector CRTransformComponent::GetForward() const
 {
     return CRVector::Transform( CRVector::Forward, Rotation );
 }
@@ -30,7 +30,7 @@ CRVector CRTransform::GetForward() const
 //---------------------------------------------------------------------------------------------------------------------
 /// Get right vector.
 //---------------------------------------------------------------------------------------------------------------------
-CRVector CRTransform::GetRight() const
+CRVector CRTransformComponent::GetRight() const
 {
     return CRVector::Transform( CRVector::Right, Rotation );
 }
@@ -38,7 +38,7 @@ CRVector CRTransform::GetRight() const
 //---------------------------------------------------------------------------------------------------------------------
 /// Get up vector.
 //---------------------------------------------------------------------------------------------------------------------
-CRVector CRTransform::GetUp() const
+CRVector CRTransformComponent::GetUp() const
 {
     return CRVector::Transform( CRVector::Up, Rotation );
 }

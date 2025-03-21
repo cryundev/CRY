@@ -1,12 +1,14 @@
 ﻿#pragma once
 
 
-#include <string>
+#include "CRComponent.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Strings
+/// CRScriptComponent
 //---------------------------------------------------------------------------------------------------------------------
-using CRString  = std::string;
-using CRWString = std::wstring;
-using CRName    = std::string;
+class CRScriptComponent : public CRComponent< CRScriptComponent >
+{
+public:
+    
+};

@@ -16,6 +16,9 @@ CRSharedPtr< T > CRMakeShared( T* New )
     return std::shared_ptr< T >( New );
 }
 
+template< typename T >
+using CRUniquePtr = std::unique_ptr< T >;
+
 
 #define DECLARE_SMART_PTR( ClassName ) \
 class ClassName; \

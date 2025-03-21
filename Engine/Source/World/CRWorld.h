@@ -26,7 +26,7 @@ public:
     CRCamera* GetCamera() const { return Camera; }
     
     /// Spawn actor.
-    template< typename T = CRActor >
+    template< ActorType T >
     T* SpawnActor();
 
     /// Despawn actor.
@@ -37,12 +37,12 @@ public:
 //---------------------------------------------------------------------------------------------------------------------
 /// Spawn actor.
 //---------------------------------------------------------------------------------------------------------------------
-template < typename T >
+template < ActorType T >
 T* CRWorld::SpawnActor()
 {
-    T* newActor = new T();
-
     CRObjectId actorId = CRIdentity::CRIDGenerator< CRObjectId >::Get().Create();
+
+    T* newActor = new T();
 
     newActor->ObjectId = actorId;
     newActor->World    = this;

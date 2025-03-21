@@ -86,5 +86,5 @@ void CRD11DepthStencilBuffer::ClearBuffer() const
 {
     if ( ViewPtr.expired() ) return;
     
-    GD11.GetDeviceContext()->ClearDepthStencilView( ViewPtr.lock()->GetObjectPtr(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0.f );
+    GD11.GetDeviceContext()->ClearDepthStencilView( ViewPtr.lock()->GetObjectPtr(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f, 0 );
 }

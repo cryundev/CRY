@@ -6,9 +6,9 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRPrimitive
+/// CRPrimitiveComponent
 //---------------------------------------------------------------------------------------------------------------------
-class CRPrimitive : public CRComponent< CRPrimitive >
+class CRPrimitiveComponent : public CRComponent< CRPrimitiveComponent >
 {
 private:
     CRString       AssetPath;
@@ -18,7 +18,7 @@ private:
 
 public:
     /// Constructor
-    CRPrimitive() = default;
+    CRPrimitiveComponent() = default;
     
     /// Update component.
     virtual void UpdateComponent( float DeltaSeconds ) override;

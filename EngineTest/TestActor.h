@@ -104,7 +104,7 @@ private:
             assert( actor->IsValid() );
             assert( CRIdentity::IsValid( actor->GetObjectId() ) );
 
-            actor->Destroy();
+            World.DespawnActor( actor->GetObjectId() );
 
             Actors.erase( Actors.begin() + index );
             ++Removed;
@@ -113,6 +113,10 @@ private:
         }
     }
 
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// PrintResult
+    //-----------------------------------------------------------------------------------------------------------------
     void PrintResult()
     {
         std::cout << "Actors created: " << Added   << std::endl;
