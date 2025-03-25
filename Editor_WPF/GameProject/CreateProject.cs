@@ -24,6 +24,7 @@ public class ProjectTemplate
     public required string IconFilePath    { get; set; }
     public required string PreviewPath     { get; set; }
     public required string ProjectFilePath { get; set; }
+    public required string TemplatePath    { get; set; }
 }
 
 
@@ -181,6 +182,8 @@ public class CreateProject : ViewModelBase
             string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{Project.Extension}" ) );
             File.WriteAllText( projectPath, projectXml );
 
+            CreateMSVCSolution( template, path );
+
             return path;
         }
         catch ( Exception e )
@@ -191,6 +194,36 @@ public class CreateProject : ViewModelBase
 
             throw;
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// CreateMSVCSolution
+    //-----------------------------------------------------------------------------------------------------------------
+    private void CreateMSVCSolution( ProjectTemplate template, string path )
+    {
+        string msvcSolutionPath = Path.Combine( template.TemplatePath, "MSVCSolution" );
+        string msvcProjectPath  = Path.Combine( template.TemplatePath, "MSVCProject"  );
+        
+        Debug.Assert( File.Exists( msvcSolutionPath ) );
+        Debug.Assert( File.Exists( msvcProjectPath  ) );
+        
+        string engineSourcePath = Path.Combine( MainWindow.EnginePath, @"Engine\Source\" );
+        Debug.Assert( Directory.Exists( engineSourcePath ) );
+
+        string _0 = ProjectName;
+        string _1 = "{" + Guid.NewGuid().ToString().ToUpper() + "}";
+        string _2 = engineSourcePath;
+        string _3 = MainWindow.EnginePath;
+
+        string solution = File.ReadAllText( msvcSolutionPath );
+        solution = string.Format( solution, _0, _1, "{" + Guid.NewGuid().ToString().ToUpper() + "}" );
+        
+        File.WriteAllText( Path.GetFullPath( Path.Combine( path, $"{_0}.sln" ) ), solution );
+
+        string project = File.ReadAllText( msvcProjectPath );
+        project = string.Format( project, _0, _1, _2, _3 );
+        
+        File.WriteAllText( Path.GetFullPath( Path.Combine( path, $@"Source\{_0}.vcxproj" ) ), project );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -215,6 +248,7 @@ public class CreateProject : ViewModelBase
                 template.IconFilePath    = Path.GetFullPath( Path.Combine( filePathName, "Icon.png"    ) );
                 template.PreviewPath     = Path.GetFullPath( Path.Combine( filePathName, "Preview.png" ) );;
                 template.ProjectFilePath = Path.GetFullPath( Path.Combine( filePathName, template.ProjectFile ) );
+                template.TemplatePath    = Path.GetDirectoryName( file ) ?? throw new InvalidOperationException();
                 
                 template.Icon    = File.ReadAllBytes( template.IconFilePath );
                 template.Preview = File.ReadAllBytes( template.PreviewPath  );
