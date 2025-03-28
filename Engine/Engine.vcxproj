@@ -188,7 +188,7 @@
     </ClCompile>
     <ClCompile Include="Source\Object\CRActor.cpp" />
     <ClCompile Include="Source\Object\CRObject.cpp" />
-    <ClCompile Include="Source\Object\CRScriptObject.cpp">
+    <ClCompile Include="Source\Object\CRScript.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <Optimization>Disabled</Optimization>
@@ -264,6 +264,8 @@
       <AdditionalIncludeDirectories> C:\Project\CRY\Engine\/Extras;C:\Project\CRY\Engine\/Extras/Fbx/include</AdditionalIncludeDirectories>
       <LibCompiled>true</LibCompiled>
     </ClCompile>
+    <ClCompile Include="Source\Object\Game\CRGameInstance.cpp" />
+    <ClCompile Include="Source\Object\Game\CRGameMode.cpp" />
     <ClCompile Include="Source\RHI\CRRHI.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11CompiledShader.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.cpp" />
@@ -329,7 +331,9 @@
     <ClInclude Include="Source\Object\Component\ICRComponent.h" />
     <ClInclude Include="Source\Object\CRActor.h" />
     <ClInclude Include="Source\Object\CRObject.h" />
-    <ClInclude Include="Source\Object\CRScriptObject.h" />
+    <ClInclude Include="Source\Object\CRScript.h" />
+    <ClInclude Include="Source\Object\Game\CRGameInstance.h" />
+    <ClInclude Include="Source\Object\Game\CRGameMode.h" />
     <ClInclude Include="Source\RHI\CRRHI.h" />
     <ClInclude Include="Source\RHI\CRRHITypes.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h" />

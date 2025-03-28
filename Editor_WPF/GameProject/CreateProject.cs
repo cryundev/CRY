@@ -177,7 +177,7 @@ public class CreateProject : ViewModelBase
             File.Copy( template.PreviewPath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Preview.png" ) ) );
             
             string projectXml = File.ReadAllText( template.ProjectFilePath );
-            projectXml = string.Format( projectXml, ProjectName, ProjectPath );
+            projectXml = string.Format( projectXml, ProjectName, path );
             
             string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{Project.Extension}" ) );
             File.WriteAllText( projectPath, projectXml );
@@ -207,7 +207,7 @@ public class CreateProject : ViewModelBase
         Debug.Assert( File.Exists( msvcSolutionPath ) );
         Debug.Assert( File.Exists( msvcProjectPath  ) );
         
-        string engineSourcePath = Path.Combine( MainWindow.EnginePath, @"Engine\Source\" );
+        string engineSourcePath = Path.Combine( MainWindow.EnginePath, @"Engine\" );
         Debug.Assert( Directory.Exists( engineSourcePath ) );
 
         string _0 = ProjectName;
@@ -244,11 +244,12 @@ public class CreateProject : ViewModelBase
                 ProjectTemplate template = Serializer.FromFile< ProjectTemplate >( file );
 
                 string filePathName = Path.GetDirectoryName( file ) ?? throw new InvalidOperationException();
-                
+
+                template.TemplatePath    = filePathName;
                 template.IconFilePath    = Path.GetFullPath( Path.Combine( filePathName, "Icon.png"    ) );
                 template.PreviewPath     = Path.GetFullPath( Path.Combine( filePathName, "Preview.png" ) );;
                 template.ProjectFilePath = Path.GetFullPath( Path.Combine( filePathName, template.ProjectFile ) );
-                template.TemplatePath    = Path.GetDirectoryName( file ) ?? throw new InvalidOperationException();
+                
                 
                 template.Icon    = File.ReadAllBytes( template.IconFilePath );
                 template.Preview = File.ReadAllBytes( template.PreviewPath  );

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
+using Editor_WPF.GameDev;
 using Editor_WPF.GameProject;
 
 
@@ -30,5 +31,13 @@ public partial class WorldEditorView
         Loaded -= OnWorldEditorViewLoaded;
         
         Focus();
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnNewScriptButtonClicked
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnNewScriptButtonClicked( object sender, RoutedEventArgs e )
+    {
+        new CreateScriptDialog().ShowDialog();
     }
 }

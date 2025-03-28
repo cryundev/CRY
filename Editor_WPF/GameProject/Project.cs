@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Input;
 using Editor_WPF.Common;
+using Editor_WPF.GameDev;
 using Editor_WPF.Utilities;
 
 
@@ -25,7 +26,8 @@ public class Project : ViewModelBase
     [DataMember]
     public string Path { get; private set; }
 
-    private string FullPath => $@"{Path}{Name}\{Name}{Extension}";
+    public string FullPath => $@"{Path}{Name}{Extension}";
+    public string Solution => $@"{Path}{Name}.sln";
 
     [DataMember( Name = "Worlds" )]
     private ObservableCollection< World > _worlds = [];
@@ -88,6 +90,7 @@ public class Project : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     public void Unload()
     {
+        VisualStudio.CloseVisualStudio();
         UndoRedo.Reset();
     }
 

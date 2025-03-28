@@ -31,6 +31,12 @@ public:
     /// Destroy.
     virtual void Destroy();
 
+    /// Begin play.
+    virtual void BeginPlay() {}
+
+    /// Update.
+    virtual void Update( float DeltaSeconds ) {}
+
     /// Set name.
     void SetName( const CRName& InName ) { ObjectName = InName; }
 
