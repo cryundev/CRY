@@ -33,7 +33,7 @@ public class ProjectTemplate
 //---------------------------------------------------------------------------------------------------------------------
 public class CreateProject : ViewModelBase
 {
-    private readonly string _templatePath = @"../../Editor_WPF/ProjectTemplates/";
+    private readonly string _templatePath = @"../../Editor_WPF/ProjectTemplates";
 
     private string _projectName = "CreateProject";
     public  string ProjectName

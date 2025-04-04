@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
+using Editor_WPF.GameProject;
 using Editor_WPF.Utilities;
 using EnvDTE80;
 using Path = System.IO.Path;
@@ -24,13 +25,16 @@ public static class VisualStudio
     private static DTE2? _vsInstance;
     private const string ProgramId = "VisualStudio.DTE.17.0";
 
+    public static bool BuildSucceeded { get; private set; } = true;
+    public static bool BuildDone { get; private set; } = true;
+
 
     [DllImport( "ole32.dll" )]
     private static extern int CreateBindCtx( uint reserved, out IBindCtx? ppBindCtx );
 
     [DllImport( "ole32.dll" )]
     private static extern int GetRunningObjectTable( uint reserved, out IRunningObjectTable? ppRunningObjectTable );
-    
+
     //-----------------------------------------------------------------------------------------------------------------
     /// OpenVisualStudio
     //-----------------------------------------------------------------------------------------------------------------
@@ -39,7 +43,7 @@ public static class VisualStudio
         IRunningObjectTable? runningObjectTable = null;
         IEnumMoniker? monikerTable = null;
         IBindCtx? bindCtx = null;
-        
+
         try
         {
             if ( _vsInstance == null )
@@ -52,7 +56,7 @@ public static class VisualStudio
 
                 runningObjectTable.EnumRunning( out monikerTable );
                 monikerTable.Reset();
-                
+
                 result = CreateBindCtx( 0, out bindCtx );
                 if ( result < 0 || bindCtx == null )
                 {
@@ -144,7 +148,7 @@ public static class VisualStudio
                         }
                     }
                 }
-                
+
                 string? cpp = files.FirstOrDefault( x => Path.GetExtension( x ) == ".cpp" );
 
                 if ( !string.IsNullOrEmpty( cpp ) )
@@ -166,5 +170,101 @@ public static class VisualStudio
         }
 
         return true;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// BuildSolution
+    //-----------------------------------------------------------------------------------------------------------------
+    internal static void BuildSolution( Project project, string configName, bool showWindow = true )
+    {
+        if ( IsDebugging() )
+        {
+            Logger.Log( MessageType.Error, "Visual studio is currenty running a process." );
+            return;
+        }
+
+        OpenVisualStudio( project.Solution );
+        BuildDone = BuildSucceeded = false;
+
+        for ( int i = 0; i < 3; ++i )
+        {
+            try
+            {
+                if ( _vsInstance != null && !_vsInstance.Solution.IsOpen )
+                {
+                    _vsInstance.Solution.Open( project.Solution );
+                }
+
+                if ( _vsInstance != null )
+                {
+                    _vsInstance.MainWindow.Visible = showWindow;
+
+                    _vsInstance.Events.BuildEvents.OnBuildProjConfigBegin += OnBuildSolutionBegin;
+                    _vsInstance.Events.BuildEvents.OnBuildProjConfigDone += OnBuildSolutionDone;
+
+                    _vsInstance.Solution.SolutionBuild.SolutionConfigurations.Item( configName ).Activate();
+                    _vsInstance.ExecuteCommand( "Build.BuildSolution" );
+                }
+            }
+            catch ( Exception exception )
+            {
+                Debug.WriteLine( exception.Message );
+                Debug.WriteLine( $"Attempt {i}: failed to build {project.Name}" );
+
+                System.Threading.Thread.Sleep( 1000 );
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// IsDebugging
+    //-----------------------------------------------------------------------------------------------------------------
+    public static bool IsDebugging()
+    {
+        bool result = false;
+
+        try
+        {
+            result = _vsInstance != null && ( _vsInstance.Debugger.CurrentProgram != null || _vsInstance.Debugger.CurrentMode == EnvDTE.dbgDebugMode.dbgRunMode );
+        }
+        catch ( Exception exception )
+        {
+            Debug.Write( exception.Message );
+
+            if ( !result )
+            {
+                System.Threading.Thread.Sleep( 1000 );
+            }
+        }
+
+        return result;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnBuildSolutionDone
+    //-----------------------------------------------------------------------------------------------------------------
+    private static void OnBuildSolutionDone( string project, string projectconfig, string platform, string solutionconfig, bool success )
+    {
+        if ( BuildDone ) return;
+
+        if ( success )
+        {
+            Logger.Log( MessageType.Info, $"Building {projectconfig} configuration succeeded" );
+        }
+        else
+        {
+            Logger.Log( MessageType.Error, $"Building {projectconfig} configuration failed" );
+        }
+
+        BuildDone = true;
+        BuildSucceeded = success;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnBuildSolutionBegin
+    //-----------------------------------------------------------------------------------------------------------------
+    private static void OnBuildSolutionBegin( string project, string projectconfig, string platform, string solutionconfig )
+    {
+        Logger.Log( MessageType.Info, $"Building {project}, {projectconfig}, {platform}, {solutionconfig}" );
     }
 }

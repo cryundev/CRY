@@ -57,6 +57,7 @@ namespace CRIdentity
     inline id_t NewGeneration( const id_t& id )
     {
         id_t generation = GenerationOf( id );
+        
         assert( generation ^ GenerationMask );
         
         return ( generation + 1 ) << IndexBits | IndexOf( id );
@@ -84,13 +85,13 @@ namespace CRIdentity
     }; 
     
 #else
-#define DEFINE_TYPE_ID( name ) using name = id_t;
+#define DECLARE_TYPE_ID( name ) using name = CRIdentity::id_t;
 #endif
 
     //-----------------------------------------------------------------------------------------------------------------
     /// CRIDGenerator
     //-----------------------------------------------------------------------------------------------------------------
-    template< typename T = Internal::IdBase >
+    template< typename T >
     class CRIDGenerator
     {
     public:

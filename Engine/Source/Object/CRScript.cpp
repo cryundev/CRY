@@ -16,7 +16,7 @@ ScriptRegistry& Registry()
 //---------------------------------------------------------------------------------------------------------------------
 /// RegisterScript
 //---------------------------------------------------------------------------------------------------------------------
-bool RegisterScript( const CRName& Name, const CRScriptCreator& Creator )
+bool CRScript::RegisterScript( const CRName& Name, const CRScriptCreator& Creator )
 {
     bool result = Registry().insert( ScriptRegistry::value_type( Name, Creator ) ).second;
 

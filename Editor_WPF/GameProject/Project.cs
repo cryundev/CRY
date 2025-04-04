@@ -12,6 +12,15 @@ using Editor_WPF.Utilities;
 namespace Editor_WPF.GameProject;
 
 
+public enum BuildConfiguration
+{
+    Debug,
+    DebugEditor,
+    Release,
+    ReleaseEditor
+}
+
+
 //---------------------------------------------------------------------------------------------------------------------
 /// Project
 //---------------------------------------------------------------------------------------------------------------------
@@ -28,6 +37,8 @@ public class Project : ViewModelBase
 
     public string FullPath => $@"{Path}{Name}{Extension}";
     public string Solution => $@"{Path}{Name}.sln";
+    
+    private static readonly string[] _buildConfigurationNames = new string[] { "Debug", "DebugEditor", "Release", "ReleaseEditor" };
 
     [DataMember( Name = "Worlds" )]
     private ObservableCollection< World > _worlds = [];
@@ -57,6 +68,28 @@ public class Project : ViewModelBase
     public ICommand? AddWorldCommand    { get; private set; }
     public ICommand? RemoveWorldCommand { get; private set; }
     public ICommand? SaveCommand        { get; private set; }
+    public ICommand? BuildCommand       { get; private set; } 
+
+
+    private static string GetConfigurationName( BuildConfiguration configuration ) => _buildConfigurationNames[ (int)configuration ];
+
+    private int _buildConfig;
+    [DataMember]
+    public int BuildConfig
+    {
+        get => _buildConfig;
+        set
+        {
+            if ( _buildConfig == value ) return;
+            
+            _buildConfig = value;
+            OnPropertyChanged( nameof( BuildConfig ) );
+        }
+    }
+    
+    public BuildConfiguration StandAloneBuildConfig => BuildConfig == 0 ? BuildConfiguration.Debug       : BuildConfiguration.Release;
+    public BuildConfiguration DllBuildConfig        => BuildConfig == 0 ? BuildConfiguration.DebugEditor : BuildConfiguration.ReleaseEditor;
+
 
     //-----------------------------------------------------------------------------------------------------------------
     /// AddWorldInternal
@@ -105,6 +138,44 @@ public class Project : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// BuildGameCodeDll
+    //-----------------------------------------------------------------------------------------------------------------
+    private void BuildGameCodeDll( bool showWindow = true )
+    {
+        try
+        {
+            UnloadGameCodeDll();
+
+            VisualStudio.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
+            if ( VisualStudio.BuildSucceeded )
+            {
+                LoadGameCodeDll();
+            }
+        }
+        catch ( Exception exception )
+        {
+            Debug.WriteLine( exception.Message );
+            throw;
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// LoadGameCodeDll
+    //-----------------------------------------------------------------------------------------------------------------
+    private void LoadGameCodeDll()
+    {
+        
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// UnloadGameCodeDll
+    //-----------------------------------------------------------------------------------------------------------------
+    private void UnloadGameCodeDll()
+    {
+        
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// OnDeserialized
     //-----------------------------------------------------------------------------------------------------------------
     [OnDeserialized]
@@ -149,9 +220,10 @@ public class Project : ViewModelBase
             UndoRedo.Add( action );
         }, x => !x.IsActive );
 
-        UndoCommand = new RelayCommand< object >( _ => UndoRedo.Undo() );
-        RedoCommand = new RelayCommand< object >( _ => UndoRedo.Redo() );
-        SaveCommand = new RelayCommand< object >( _ => Save( this ) );
+        UndoCommand  = new RelayCommand< object >( x => UndoRedo.Undo(), x => UndoRedo.UndoList.Any() );
+        RedoCommand  = new RelayCommand< object >( _ => UndoRedo.Redo(), x => UndoRedo.RedoList.Any() );
+        SaveCommand  = new RelayCommand< object >( _ => Save( this ) );
+        BuildCommand = new RelayCommand< bool   >( x => BuildGameCodeDll( x ), x => !VisualStudio.IsDebugging() && VisualStudio.BuildDone );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
