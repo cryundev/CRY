@@ -76,27 +76,27 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Engine\Extras\</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</ExternalIncludePath>
     <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Engine\Extras\</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;</LibraryPath>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</ExternalIncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</ExternalIncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Engine\Extras\</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseEditor|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
     <ExternalIncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)</ExternalIncludePath>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;$(SolutionDir)Engine\Extras\</LibraryPath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)$(Platform)\$(Configuration)\;</LibraryPath>
     <PreLinkEventUseInBuild>true</PreLinkEventUseInBuild>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -123,6 +123,9 @@
       <Command>
       </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+    </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\$(Configuration)\</AdditionalLibraryDirectories>
@@ -152,6 +155,9 @@
       <Command>
       </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+    </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\Debug\</AdditionalLibraryDirectories>
@@ -185,6 +191,9 @@
       <Command>
       </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+    </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\$(Configuration)\</AdditionalLibraryDirectories>
@@ -218,6 +227,9 @@
       <Command>
       </Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+    </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\Release\</AdditionalLibraryDirectories>

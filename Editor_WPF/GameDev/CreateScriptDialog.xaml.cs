@@ -221,7 +221,7 @@ public:
 
         for ( int i = 0; i < 3; ++i )
         {
-            if ( !VisualStudio.AddFilesToSolution( solution, projectName, files ) )
+            if ( !CodeEditorManager.AddFilesToSolution( solution, projectName, files ) )
             {
                 System.Threading.Thread.Sleep( 1000 );
             }

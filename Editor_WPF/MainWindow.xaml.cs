@@ -12,7 +12,7 @@ namespace Editor_WPF;
 //---------------------------------------------------------------------------------------------------------------------
 public partial class MainWindow : Window
 {
-    public static string EnginePath { get; private set; } = @"C:\Projects\CRY\";
+    public static string EnginePath { get; private set; } = @"C:\Project\CRY\";
     
     //-----------------------------------------------------------------------------------------------------------------
     /// MainWindow

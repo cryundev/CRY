@@ -123,7 +123,7 @@ public class Project : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     public void Unload()
     {
-        VisualStudio.CloseVisualStudio();
+        CodeEditorManager.CloseEditor();
         UndoRedo.Reset();
     }
 
@@ -146,8 +146,8 @@ public class Project : ViewModelBase
         {
             UnloadGameCodeDll();
 
-            VisualStudio.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
-            if ( VisualStudio.BuildSucceeded )
+            CodeEditorManager.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
+            if ( CodeEditorManager.BuildSucceeded )
             {
                 LoadGameCodeDll();
             }
@@ -223,7 +223,7 @@ public class Project : ViewModelBase
         UndoCommand  = new RelayCommand< object >( x => UndoRedo.Undo(), x => UndoRedo.UndoList.Any() );
         RedoCommand  = new RelayCommand< object >( _ => UndoRedo.Redo(), x => UndoRedo.RedoList.Any() );
         SaveCommand  = new RelayCommand< object >( _ => Save( this ) );
-        BuildCommand = new RelayCommand< bool   >( x => BuildGameCodeDll( x ), x => !VisualStudio.IsDebugging() && VisualStudio.BuildDone );
+        BuildCommand = new RelayCommand< bool   >( x => BuildGameCodeDll( x ), x => !CodeEditorManager.IsDebugging() && CodeEditorManager.BuildDone );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
