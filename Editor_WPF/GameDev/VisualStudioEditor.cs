@@ -11,12 +11,19 @@ using Path = System.IO.Path;
 
 namespace Editor_WPF.GameDev;
 
+
+//---------------------------------------------------------------------------------------------------------------------
+/// EnvDTEConstants
+//---------------------------------------------------------------------------------------------------------------------
 internal abstract class EnvDTEConstants
 {
     public const string vsViewKindTextView = "{7651A703-06E5-11D1-8EBD-00A0C90F26EA}";
 }
 
 
+//---------------------------------------------------------------------------------------------------------------------
+/// VisualStudioEditor
+//---------------------------------------------------------------------------------------------------------------------
 public class VisualStudioEditor : ICodeEditor
 {
     private DTE2? _vsInstance;
@@ -31,6 +38,9 @@ public class VisualStudioEditor : ICodeEditor
     [DllImport( "ole32.dll" )]
     private static extern int GetRunningObjectTable( uint reserved, out IRunningObjectTable? ppRunningObjectTable );
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OpenEditor
+    //-----------------------------------------------------------------------------------------------------------------
     public void OpenEditor( string solutionPath )
     {
         try
@@ -55,6 +65,9 @@ public class VisualStudioEditor : ICodeEditor
         }
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// CloseEditor
+    //-----------------------------------------------------------------------------------------------------------------
     public void CloseEditor()
     {
         try
@@ -74,6 +87,9 @@ public class VisualStudioEditor : ICodeEditor
         }
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// AddFilesToSolution
+    //-----------------------------------------------------------------------------------------------------------------
     public bool AddFilesToSolution( string solution, string projectName, string[] files )
     {
         OpenEditor( solution );
@@ -117,6 +133,9 @@ public class VisualStudioEditor : ICodeEditor
         return true;
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// BuildSolution
+    //-----------------------------------------------------------------------------------------------------------------
     public void BuildSolution( Editor_WPF.GameProject.Project project, string configName, bool showWindow = true )
     {
         if ( IsDebugging() )
@@ -158,6 +177,9 @@ public class VisualStudioEditor : ICodeEditor
         }
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// IsDebugging
+    //-----------------------------------------------------------------------------------------------------------------
     public bool IsDebugging()
     {
         bool result = false;
@@ -179,6 +201,9 @@ public class VisualStudioEditor : ICodeEditor
         return result;
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnBuildSolutionDone
+    //-----------------------------------------------------------------------------------------------------------------
     private void OnBuildSolutionDone( string project, string projectconfig, string platform, string solutionconfig, bool success )
     {
         if ( BuildDone ) return;
@@ -196,11 +221,17 @@ public class VisualStudioEditor : ICodeEditor
         BuildSucceeded = success;
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnBuildSolutionBegin
+    //-----------------------------------------------------------------------------------------------------------------
     private void OnBuildSolutionBegin( string project, string projectconfig, string platform, string solutionconfig )
     {
         Logger.Log( MessageType.Info, $"Building {project}, {projectconfig}, {platform}, {solutionconfig}" );
     }
 
+    //-----------------------------------------------------------------------------------------------------------------
+    /// FindOrCreateVSInstance
+    //-----------------------------------------------------------------------------------------------------------------
     private void FindOrCreateVSInstance()
     {
         if ( _vsInstance != null ) return;

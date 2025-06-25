@@ -9,7 +9,7 @@ namespace Editor_WPF.GameDev;
 public static class CodeEditorManager
 {
     private static ICodeEditor? _currentEditor;
-    private static CodeEditorType _currentEditorType = CodeEditorType.VisualStudio; // Default to Rider
+    private static CodeEditorType _currentEditorType = CodeEditorType.Rider; // Default to Rider
     
     static CodeEditorManager()
     {
