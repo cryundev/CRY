@@ -124,7 +124,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"
+copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
@@ -156,7 +157,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"
+copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
@@ -192,7 +194,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"
+copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
@@ -228,7 +231,8 @@
       </Command>
     </PreBuildEvent>
     <PostBuildEvent>
-      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"</Command>
+      <Command>copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.lib" "$(OutDir)"
+copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
