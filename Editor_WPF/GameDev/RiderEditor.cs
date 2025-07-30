@@ -110,8 +110,9 @@ public class RiderEditor : ICodeEditor
     {
         try
         {
-            // Rider는 MSBuild 프로젝트 파일을 직접 수정하지 않고
-            // 프로젝트를 열면 자동으로 파일을 인식합니다.
+            // Visual Studio와 동일하게 프로젝트 파일에 소스 파일들을 추가
+            AddFilesToProject( solution, projectName, files );
+            
             OpenEditor( solution );
 
             // CPP 파일이 있으면 열어줍니다
@@ -544,6 +545,105 @@ public class RiderEditor : ICodeEditor
         catch ( Exception ex )
         {
             Debug.WriteLine( $"OpenFileInRider error: {ex.Message}" );
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// AddFilesToProject
+    //-----------------------------------------------------------------------------------------------------------------
+    private void AddFilesToProject( string solutionPath, string projectName, string[] files )
+    {
+        try
+        {
+            string? solutionDir = Path.GetDirectoryName( solutionPath );
+            if ( string.IsNullOrEmpty( solutionDir ) )
+            {
+                Logger.Log( MessageType.Error, "Invalid solution path." );
+                return;
+            }
+
+            string projectFilePath = Path.Combine( solutionDir, "Source", $"{projectName}.vcxproj" );
+            if ( !File.Exists( projectFilePath ) )
+            {
+                Logger.Log( MessageType.Error, $"Project file not found: {projectFilePath}" );
+                return;
+            }
+
+            string projectContent = File.ReadAllText( projectFilePath );
+            string updatedContent = projectContent;
+
+            string[] cppFiles    = files.Where( f => Path.GetExtension( f ).Equals( ".cpp", StringComparison.OrdinalIgnoreCase ) ).ToArray();
+            string[] headerFiles = files.Where( f => Path.GetExtension( f ).Equals( ".h",   StringComparison.OrdinalIgnoreCase ) ).ToArray();
+
+            if ( cppFiles.Length > 0 )
+            {
+                string cppItemGroup = "  <ItemGroup>\r\n";
+                foreach ( string cppFile in cppFiles )
+                {
+                    string relativePath = GetRelativePath( Path.GetDirectoryName( projectFilePath ), cppFile );
+                    cppItemGroup += $"    <ClCompile Include=\"{relativePath}\" />\r\n";
+                }
+                cppItemGroup += "  </ItemGroup>\r\n";
+
+                int projectEndIndex = updatedContent.LastIndexOf( "</Project>" );
+                if ( projectEndIndex > 0 )
+                {
+                    updatedContent = updatedContent.Insert( projectEndIndex, cppItemGroup );
+                }
+            }
+
+            if ( headerFiles.Length > 0 )
+            {
+                string headerItemGroup = "  <ItemGroup>\r\n";
+                foreach ( string headerFile in headerFiles )
+                {
+                    string relativePath = GetRelativePath( Path.GetDirectoryName( projectFilePath ), headerFile );
+                    headerItemGroup += $"    <ClInclude Include=\"{relativePath}\" />\r\n";
+                }
+                headerItemGroup += "  </ItemGroup>\r\n";
+
+                // </Project> 태그 바로 앞에 삽입
+                int projectEndIndex = updatedContent.LastIndexOf( "</Project>" );
+                if ( projectEndIndex > 0 )
+                {
+                    updatedContent = updatedContent.Insert( projectEndIndex, headerItemGroup );
+                }
+            }
+
+            // 변경사항이 있으면 파일에 저장
+            if ( updatedContent != projectContent )
+            {
+                File.WriteAllText( projectFilePath, updatedContent );
+                Logger.Log( MessageType.Info, $"Added {files.Length} files to project: {projectName}" );
+            }
+        }
+        catch ( Exception ex )
+        {
+            Debug.WriteLine( ex.Message );
+            Logger.Log( MessageType.Error, $"Failed to add files to project: {ex.Message}" );
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// GetRelativePath
+    //-----------------------------------------------------------------------------------------------------------------
+    private static string GetRelativePath( string? fromPath, string toPath )
+    {
+        if ( string.IsNullOrEmpty( fromPath ) )
+        {
+            return toPath;
+        }
+
+        try
+        {
+            Uri fromUri = new Uri( fromPath + Path.DirectorySeparatorChar );
+            Uri toUri = new Uri( toPath );
+            Uri relativeUri = fromUri.MakeRelativeUri( toUri );
+            return Uri.UnescapeDataString( relativeUri.ToString() ).Replace( '/', Path.DirectorySeparatorChar );
+        }
+        catch
+        {
+            return toPath;
         }
     }
 }
