@@ -10,21 +10,33 @@ namespace Editor_WPF.DllWrappers;
 //---------------------------------------------------------------------------------------------------------------------
 public static class EngineAPI
 {
-    private const string DllName = "EngineDLL.dll";
-
-    [DllImport( DllName )]
-    private static extern Int64 SpawnActor();
-
-    public static Int64 SpawnActor( CrActor crActor )
-    {
-        return SpawnActor();
-    }
-
-    [DllImport( DllName )]
-    private static extern void DespawnActor( Int64 id );
+    private const string EngineDllName = "EngineDLL.dll";
     
-    public static void DespawnActor( CrActor crActor )
+    [ DllImport( EngineDllName, CharSet = CharSet.Ansi ) ]
+    public static extern int LoadGameCodeDLL( string dllPath );
+    
+    [ DllImport( EngineDllName ) ]
+    public static extern int UnloadGameCodeDLL();
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// World
+    //-----------------------------------------------------------------------------------------------------------------
+    internal static class World
     {
-        DespawnActor( crActor.ActorId );
+        [DllImport( EngineDllName )]
+        private static extern Int64 SpawnActor();
+
+        public static Int64 SpawnActor( CrActor crActor )
+        {
+            return SpawnActor();
+        }
+
+        [DllImport( EngineDllName )]
+        private static extern void DespawnActor( Int64 id );
+        
+        public static void DespawnActor( CrActor crActor )
+        {
+            DespawnActor( crActor.ActorId );
+        }
     }
 }

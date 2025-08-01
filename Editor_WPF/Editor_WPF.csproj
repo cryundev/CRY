@@ -12,7 +12,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'DebugEditor|x64' ">
-      <OutputPath>../x64/Debug/</OutputPath>
+      <OutputPath>../$(Platform)/$(Configuration)/</OutputPath>
       <PlatformTarget>x64</PlatformTarget>
       <DebugType>full</DebugType>
       <WarningLevel>3</WarningLevel>
@@ -21,17 +21,17 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleaseEditor|x64' ">
-      <OutputPath>../x64/Release/</OutputPath>
+      <OutputPath>../$(Platform)/$(Configuration)/</OutputPath>
       <PlatformTarget>x64</PlatformTarget>
       <Optimize Condition=" '$(Optimize)' == '' ">true</Optimize>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-      <OutputPath>../x64/Debug/</OutputPath>
+      <OutputPath>../$(Platform)/$(Configuration)/</OutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-      <OutputPath>../x64/Release/</OutputPath>
+      <OutputPath>../$(Platform)/$(Configuration)/</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>

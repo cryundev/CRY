@@ -43,12 +43,12 @@ public class CrActor : CrObject
 
             if ( _isActive )
             {
-                ActorId = EngineAPI.SpawnActor( this );
+                ActorId = EngineAPI.World.SpawnActor( this );
                 Debug.Assert( ID.IsValid( ActorId ), "ActorId is invalid" );
             }
             else if( ID.IsValid( ActorId ) )
             {
-                EngineAPI.DespawnActor( this );
+                EngineAPI.World.DespawnActor( this );
                 ActorId = ID.INVALID_ID;
             }
 

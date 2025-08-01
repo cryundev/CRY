@@ -172,6 +172,10 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="EngineAPI.cpp" />
+    <ClCompile Include="WorldAPI.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EngineDLL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

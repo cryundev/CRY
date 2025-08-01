@@ -9,7 +9,9 @@ namespace Editor_WPF.GameDev;
 public static class CodeEditorManager
 {
     private static ICodeEditor? _currentEditor;
-    private static CodeEditorType _currentEditorType = CodeEditorType.Rider; // Default to Rider
+    private static CodeEditorType _currentEditorType = CodeEditorType.VisualStudio; // Default to VisualStudio
+    
+    public static event EventHandler< bool >? BuildCompleted;
     
     static CodeEditorManager()
     {
@@ -24,6 +26,10 @@ public static class CodeEditorManager
         {
             if ( _currentEditorType != value )
             {
+                if ( _currentEditor != null )
+                {
+                    _currentEditor.BuildCompleted -= OnEditorBuildCompleted;
+                }
                 _currentEditorType = value;
                 _currentEditor = null; // Force recreation with new type
             }
@@ -37,9 +43,15 @@ public static class CodeEditorManager
             if ( _currentEditor == null )
             {
                 _currentEditor = CodeEditorFactory.CreateEditor( _currentEditorType );
+                _currentEditor.BuildCompleted += OnEditorBuildCompleted;
             }
             return _currentEditor;
         }
+    }
+    
+    private static void OnEditorBuildCompleted( object? sender, bool success )
+    {
+        BuildCompleted?.Invoke( sender, success );
     }
 
     public static bool BuildSucceeded 

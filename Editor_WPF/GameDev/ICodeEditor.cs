@@ -18,6 +18,8 @@ public interface ICodeEditor
 {
     bool BuildSucceeded { get; }
     bool BuildDone { get; }
+    
+    event EventHandler< bool >? BuildCompleted;
 
     void OpenEditor( string solutionPath );
     void CloseEditor();

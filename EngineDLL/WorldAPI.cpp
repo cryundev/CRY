@@ -1,38 +1,27 @@
 ﻿#include "Engine.h"
 #include "EngineDLL.h"
-
-
-namespace
-{
-    HMODULE GameCodeDLL = nullptr;
-}
+#include "Source/Core/Identify/CRIdentity.h"
+#include "Source/World/CRWorld.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// LoadGameCodeDLL
+/// SpawnActor
 //---------------------------------------------------------------------------------------------------------------------
-CR_ENGINE_API i32 LoadGameCodeDLL( const char* DllPath )
-{
-    if ( GameCodeDLL ) return 0;
+CR_ENGINE_API CRIdentity::id_t SpawnActor()
 
-    GameCodeDLL = LoadLibraryA( DllPath );
-    assert( GameCodeDLL );
-    
-    return GameCodeDLL ? 1 : 0;
+{
+    if ( CRActor* actor = GWorld.get()->SpawnActor< CRActor >() )
+    {
+        return actor->GetObjectId();
+    }
+
+    return CRIdentity::IdMask;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// UnloadGameCodeDLL
+/// DespawnActor
 //---------------------------------------------------------------------------------------------------------------------
-CR_ENGINE_API i32 UnloadGameCodeDLL()
+CR_ENGINE_API void DespawnActor( CRIdentity::id_t Id )
 {
-    if ( !GameCodeDLL ) return 0;
-
-    assert( GameCodeDLL );
-    i32 result = FreeLibrary( GameCodeDLL );
-    assert( result );
-
-    GameCodeDLL = nullptr;
-    
-    return 1;
+    GWorld.get()->DespawnActor( CRObjectId( Id ) );
 }

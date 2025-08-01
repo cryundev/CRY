@@ -20,6 +20,8 @@ public class RiderEditor : ICodeEditor
 
     public bool BuildSucceeded { get; private set; } = true;
     public bool BuildDone { get; private set; } = true;
+    
+    public event EventHandler< bool >? BuildCompleted;
 
     [DllImport( "user32.dll" )]
     private static extern bool ShowWindow( IntPtr hWnd, int nCmdShow );
@@ -205,12 +207,15 @@ public class RiderEditor : ICodeEditor
                             Logger.Log( MessageType.Info, $"Build output: {output.Trim()}" );
                         }
                     }
+                    
+                    BuildCompleted?.Invoke( this, BuildSucceeded );
                 }
                 else
                 {
                     Logger.Log( MessageType.Error, "Failed to start MSBuild process." );
                     BuildDone = true;
                     BuildSucceeded = false;
+                    BuildCompleted?.Invoke( this, false );
                 }
             }
             else
@@ -218,6 +223,7 @@ public class RiderEditor : ICodeEditor
                 Logger.Log( MessageType.Error, "MSBuild executable not found." );
                 BuildDone = true;
                 BuildSucceeded = false;
+                BuildCompleted?.Invoke( this, false );
             }
         }
         catch ( Exception ex )
@@ -226,6 +232,7 @@ public class RiderEditor : ICodeEditor
             Logger.Log( MessageType.Error, $"Failed to build project in Rider: {ex.Message}" );
             BuildDone = true;
             BuildSucceeded = false;
+            BuildCompleted?.Invoke( this, false );
         }
     }
 

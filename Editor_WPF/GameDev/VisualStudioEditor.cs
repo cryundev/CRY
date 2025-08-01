@@ -31,6 +31,8 @@ public class VisualStudioEditor : ICodeEditor
 
     public bool BuildSucceeded { get; private set; } = true;
     public bool BuildDone { get; private set; } = true;
+    
+    public event EventHandler<bool>? BuildCompleted;
 
     [DllImport( "ole32.dll" )]
     private static extern int CreateBindCtx( uint reserved, out IBindCtx? ppBindCtx );
@@ -147,7 +149,11 @@ public class VisualStudioEditor : ICodeEditor
         OpenEditor( project.Solution );
         BuildDone = BuildSucceeded = false;
 
-        for ( int i = 0; i < 3; ++i )
+        TimeSpan timeout    = TimeSpan.FromMinutes( 2 );
+        DateTime startTime  = DateTime.Now;
+        TimeSpan retryDelay = TimeSpan.FromSeconds( 1 );
+
+        while ( DateTime.Now - startTime < timeout )
         {
             try
             {
@@ -161,20 +167,29 @@ public class VisualStudioEditor : ICodeEditor
                     _vsInstance.MainWindow.Visible = showWindow;
 
                     _vsInstance.Events.BuildEvents.OnBuildProjConfigBegin += OnBuildSolutionBegin;
-                    _vsInstance.Events.BuildEvents.OnBuildProjConfigDone += OnBuildSolutionDone;
+                    _vsInstance.Events.BuildEvents.OnBuildProjConfigDone  += OnBuildSolutionDone;
 
                     _vsInstance.Solution.SolutionBuild.SolutionConfigurations.Item( configName ).Activate();
                     _vsInstance.ExecuteCommand( "Build.BuildSolution" );
-                    break;
+                    return;
                 }
             }
             catch ( Exception exception )
             {
-                Debug.WriteLine( exception.Message );
-                Debug.WriteLine( $"Attempt {i}: failed to build {project.Name}" );
-                System.Threading.Thread.Sleep( 1000 );
+                TimeSpan elapsed = DateTime.Now - startTime;
+                Debug.WriteLine( $"Build attempt failed after {elapsed.TotalSeconds:F1}s: {exception.Message}" );
+                
+                if ( DateTime.Now - startTime >= timeout )
+                {
+                    Logger.Log( MessageType.Error, $"Failed to build {project.Name} - timeout after {timeout.TotalMinutes} minutes" );
+                    return;
+                }
+                
+                System.Threading.Thread.Sleep( retryDelay );
             }
         }
+
+        Logger.Log( MessageType.Error, $"Failed to build {project.Name} - timeout reached" );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -219,6 +234,8 @@ public class VisualStudioEditor : ICodeEditor
 
         BuildDone = true;
         BuildSucceeded = success;
+        
+        BuildCompleted?.Invoke( this, success );
     }
 
     //-----------------------------------------------------------------------------------------------------------------

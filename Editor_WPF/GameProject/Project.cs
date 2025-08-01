@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Windows;
 using System.Windows.Input;
 using Editor_WPF.Common;
+using Editor_WPF.DllWrappers;
 using Editor_WPF.GameDev;
 using Editor_WPF.Utilities;
 
@@ -146,8 +147,29 @@ public class Project : ViewModelBase
         {
             UnloadGameCodeDll();
 
+            // Subscribe to build completion event
+            CodeEditorManager.BuildCompleted += OnBuildCompleted;
+            
             CodeEditorManager.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
-            if ( CodeEditorManager.BuildSucceeded )
+        }
+        catch ( Exception exception )
+        {
+            Debug.WriteLine( exception.Message );
+            throw;
+        }
+    }
+    
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnBuildCompleted
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnBuildCompleted( object? sender, bool success )
+    {
+        try
+        {
+            // Unsubscribe from the event to avoid multiple calls
+            CodeEditorManager.BuildCompleted -= OnBuildCompleted;
+            
+            if ( success )
             {
                 LoadGameCodeDll();
             }
@@ -155,7 +177,6 @@ public class Project : ViewModelBase
         catch ( Exception exception )
         {
             Debug.WriteLine( exception.Message );
-            throw;
         }
     }
 
@@ -164,7 +185,17 @@ public class Project : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     private void LoadGameCodeDll()
     {
+        string configName = GetConfigurationName( DllBuildConfig );
+        string dll = $@"{Path}x64\{configName}\{Name}.dll";
         
+        if ( File.Exists( dll ) && EngineAPI.LoadGameCodeDLL( dll ) != 0 )
+        {
+            Logger.Log( MessageType.Info, "Game code DLL loaded successfully" );        
+        }
+        else
+        {
+            Logger.Log( MessageType.Warning, "Failed to load game code DLL file. Try to build the project first." );
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -172,7 +203,10 @@ public class Project : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     private void UnloadGameCodeDll()
     {
-        
+        if ( EngineAPI.UnloadGameCodeDLL() != 0 )
+        {
+            Logger.Log( MessageType.Info, "Game code DLL unloaded" );
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -185,6 +219,8 @@ public class Project : ViewModelBase
         OnPropertyChanged( nameof( Worlds ) );
 
         ActiveWorld = Worlds.FirstOrDefault( x => x is { IsActive: true } );
+        
+        BuildGameCodeDll( false );
 
         AddWorldCommand = new RelayCommand< object >( _ =>
         {
