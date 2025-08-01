@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
@@ -168,6 +169,18 @@ public class VisualStudioEditor : ICodeEditor
 
                     _vsInstance.Events.BuildEvents.OnBuildProjConfigBegin += OnBuildSolutionBegin;
                     _vsInstance.Events.BuildEvents.OnBuildProjConfigDone  += OnBuildSolutionDone;
+                    
+                    try
+                    {
+                        foreach ( var pdbFile in Directory.GetFiles( Path.Combine( $"{project.Path}", $@"x64\{configName}" ), "*.pbd" ) )
+                        {
+                            File.Delete( pdbFile );    
+                        }
+                    }
+                    catch ( Exception ex )
+                    {
+                        Debug.WriteLine( ex.Message );
+                    }
 
                     _vsInstance.Solution.SolutionBuild.SolutionConfigurations.Item( configName ).Activate();
                     _vsInstance.ExecuteCommand( "Build.BuildSolution" );
