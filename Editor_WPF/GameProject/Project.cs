@@ -143,19 +143,29 @@ public class Project : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     private void BuildGameCodeDll( bool showWindow = true )
     {
+        _ = BuildGameCodeDllAsync( showWindow );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// BuildGameCodeDllAsync
+    //-----------------------------------------------------------------------------------------------------------------
+    private async Task BuildGameCodeDllAsync( bool showWindow = true )
+    {
         try
         {
-            UnloadGameCodeDll();
+            await Task.Run( () =>
+            {
+                UnloadGameCodeDll();
 
-            // Subscribe to build completion event
-            CodeEditorManager.BuildCompleted += OnBuildCompleted;
-            
-            CodeEditorManager.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
+                // Subscribe to build completion event
+                CodeEditorManager.BuildCompleted += OnBuildCompleted;
+                
+                CodeEditorManager.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
+            } );
         }
         catch ( Exception exception )
         {
             Debug.WriteLine( exception.Message );
-            throw;
         }
     }
     
