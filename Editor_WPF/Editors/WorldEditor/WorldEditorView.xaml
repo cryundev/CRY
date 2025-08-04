@@ -14,9 +14,10 @@
         <sys:Boolean x:Key="False">False</sys:Boolean>
     </UserControl.Resources>
     <UserControl.InputBindings>
-        <KeyBinding Command="{Binding UndoCommand}" Key="Z" Modifiers="Control"/>
-        <KeyBinding Command="{Binding RedoCommand}" Key="Y" Modifiers="Control"/>
-        <KeyBinding Command="{Binding SaveCommand}" Key="S" Modifiers="Control"/>
+        <KeyBinding Command="{Binding UndoCommand}"  Key="Z" Modifiers="Ctrl"/>
+        <KeyBinding Command="{Binding RedoCommand}"  Key="Y" Modifiers="Ctrl+Shift"/>
+        <KeyBinding Command="{Binding SaveCommand}"  Key="S" Modifiers="Ctrl"/>
+        <KeyBinding Command="{Binding BuildCommand}" Key="F7" />
     </UserControl.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
@@ -26,7 +27,7 @@
         <StackPanel Orientation="Horizontal">
             <Button Content="Undo" Command="{Binding UndoCommand}" />
             <Button Content="Redo" Command="{Binding RedoCommand}" Margin="5,0,0,0" />
-            <Button Content="New Script" Click="OnNewScriptButtonClicked" Margin="5, 0, 0, 0" />
+            <Button Content="New Script" Click="OnNewScriptButtonClicked" IsEnabled="{Binding Path=IsEnabled, ElementName=BuildButton}" Margin="5, 0, 0, 0" />
             <Button x:Name="BuildButton" Content="Build" Margin="5,0,0,0"
                     Command="{Binding BuildCommand}" CommandParameter="{StaticResource True}" />
             <ComboBox x:Name="RunConfig" VerticalAlignment="Center" Margin="5,0" Width="72"

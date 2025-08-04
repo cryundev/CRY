@@ -33,7 +33,7 @@ public class VisualStudioEditor : ICodeEditor
     public bool BuildSucceeded { get; private set; } = true;
     public bool BuildDone { get; private set; } = true;
     
-    public event EventHandler<bool>? BuildCompleted;
+    public event EventHandler< bool >? BuildCompleted;
 
     [DllImport( "ole32.dll" )]
     private static extern int CreateBindCtx( uint reserved, out IBindCtx? ppBindCtx );

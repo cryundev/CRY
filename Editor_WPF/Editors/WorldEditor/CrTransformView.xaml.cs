@@ -68,7 +68,7 @@ public partial class CrTransformView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     /// RecordAction
     //-----------------------------------------------------------------------------------------------------------------
-    private void RecordAction( Action? redoAction, string name )
+    private void RecordActions( Action? redoAction, string name )
     {
         if ( _propertyChanged )
         {
@@ -95,7 +95,7 @@ public partial class CrTransformView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void OnPositionVectorBoxPreviewMouseLeftButtonUp( object sender, MouseButtonEventArgs? e )
     {
-        RecordAction( GetPositionAction(), "Position changed" );
+        RecordActions( GetPositionAction(), "Position changed" );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public partial class CrTransformView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void OnRotationVectorBoxMouseLeftButtonUp( object sender, MouseButtonEventArgs? e )
     {
-        RecordAction( GetRotationAction(), "Rotation changed" );
+        RecordActions( GetRotationAction(), "Rotation changed" );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ public partial class CrTransformView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void OnScaleVectorBoxMouseLeftButtonUp( object sender, MouseButtonEventArgs? e )
     {
-        RecordAction( GetScaleAction(), "Scale changed" );
+        RecordActions( GetScaleAction(), "Scale changed" );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
