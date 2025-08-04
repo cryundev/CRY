@@ -40,14 +40,14 @@ public class RiderEditor : ICodeEditor
         {
             if ( _riderInstance == null || _riderInstance.HasExited )
             {
-                var riderPath = GetRiderExecutablePath();
+                string? riderPath = GetRiderExecutablePath();
                 if ( string.IsNullOrEmpty( riderPath ) )
                 {
                     Logger.Log( MessageType.Error, "Cannot open Rider: Rider installation not found." );
                     return;
                 }
 
-                var startInfo = new ProcessStartInfo
+                ProcessStartInfo startInfo = new ProcessStartInfo
                 {
                     FileName = riderPath,
                     Arguments = $"\"{solutionPath}\"",
@@ -158,10 +158,10 @@ public class RiderEditor : ICodeEditor
             Logger.Log( MessageType.Info, $"Building {project.Name} with {configName} configuration using MSBuild" );
 
             // MSBuild를 직접 호출하여 빌드 실행
-            var msbuildPath = GetMSBuildPath();
+            string? msbuildPath = GetMSBuildPath();
             if ( !string.IsNullOrEmpty( msbuildPath ) )
             {
-                var buildStartInfo = new ProcessStartInfo
+                ProcessStartInfo buildStartInfo = new ProcessStartInfo
                 {
                     FileName = msbuildPath,
                     Arguments = $"\"{project.Solution}\" /p:Configuration={configName} /p:Platform=x64",
@@ -174,12 +174,12 @@ public class RiderEditor : ICodeEditor
                     StandardErrorEncoding = System.Text.Encoding.Default
                 };
 
-                using var buildProcess = Process.Start( buildStartInfo );
+                using Process? buildProcess = Process.Start( buildStartInfo );
                 if ( buildProcess != null )
                 {
                     // 출력 로그 읽기
-                    var output = buildProcess.StandardOutput.ReadToEnd();
-                    var error = buildProcess.StandardError.ReadToEnd();
+                    string output = buildProcess.StandardOutput.ReadToEnd();
+                    string error = buildProcess.StandardError.ReadToEnd();
 
                     buildProcess.WaitForExit();
 
@@ -251,36 +251,36 @@ public class RiderEditor : ICodeEditor
     //-----------------------------------------------------------------------------------------------------------------
     private static string? GetRiderExecutablePath()
     {
-        var possiblePaths = new[]
+        string[] possiblePaths = new[]
         {
             @"C:\Users\%USERNAME%\AppData\Local\JetBrains\Toolbox\apps\Rider\ch-0\*\bin\rider64.exe",
             @"C:\Program Files\JetBrains\JetBrains Rider *\bin\rider64.exe",
             @"C:\Program Files (x86)\JetBrains\JetBrains Rider *\bin\rider64.exe"
         };
 
-        foreach ( var pathPattern in possiblePaths )
+        foreach ( string pathPattern in possiblePaths )
         {
-            var expandedPath = Environment.ExpandEnvironmentVariables( pathPattern );
+            string expandedPath = Environment.ExpandEnvironmentVariables( pathPattern );
 
             if ( pathPattern.Contains( "*" ) )
             {
                 if ( pathPattern.Contains( @"JetBrains\JetBrains Rider *" ) )
                 {
-                    var jetbrainsDirs = new[]
+                    string[] jetbrainsDirs = new[]
                     {
                         @"C:\Program Files\JetBrains",
                         @"C:\Program Files (x86)\JetBrains"
                     };
 
-                    foreach ( var jetbrainsDir in jetbrainsDirs )
+                    foreach ( string jetbrainsDir in jetbrainsDirs )
                     {
                         if ( Directory.Exists( jetbrainsDir ) )
                         {
-                            var riderDirs = Directory.GetDirectories( jetbrainsDir, "JetBrains Rider *" );
+                            string[] riderDirs = Directory.GetDirectories( jetbrainsDir, "JetBrains Rider *" );
 
-                            foreach ( var dir in riderDirs )
+                            foreach ( string dir in riderDirs )
                             {
-                                var binPath = Path.Combine( dir, "bin", "rider64.exe" );
+                                string binPath = Path.Combine( dir, "bin", "rider64.exe" );
                                 if ( File.Exists( binPath ) )
                                 {
                                     return binPath;
@@ -291,12 +291,12 @@ public class RiderEditor : ICodeEditor
                 }
                 else
                 {
-                    var directory = Path.GetDirectoryName( expandedPath );
-                    var fileName = Path.GetFileName( expandedPath );
+                    string? directory = Path.GetDirectoryName( expandedPath );
+                    string? fileName = Path.GetFileName( expandedPath );
 
                     if ( !string.IsNullOrEmpty( directory ) && Directory.Exists( directory ) )
                     {
-                        var matchingFiles = Directory.GetFiles( directory, fileName, SearchOption.AllDirectories );
+                        string[] matchingFiles = Directory.GetFiles( directory, fileName, SearchOption.AllDirectories );
 
                         if ( matchingFiles.Length > 0 )
                         {
@@ -322,20 +322,20 @@ public class RiderEditor : ICodeEditor
         try
         {
             // 1. 환경변수에서 MSBuild 경로 확인
-            var msbuildFromEnv = Environment.GetEnvironmentVariable( "MSBUILD_EXE_PATH" );
+            string? msbuildFromEnv = Environment.GetEnvironmentVariable( "MSBUILD_EXE_PATH" );
             if ( !string.IsNullOrEmpty( msbuildFromEnv ) && File.Exists( msbuildFromEnv ) )
             {
                 return msbuildFromEnv;
             }
 
             // 2. VS Developer Command Prompt에서 설정되는 경로
-            var vsToolsVersion = Environment.GetEnvironmentVariable( "VisualStudioVersion" );
+            string? vsToolsVersion = Environment.GetEnvironmentVariable( "VisualStudioVersion" );
             if ( !string.IsNullOrEmpty( vsToolsVersion ) )
             {
-                var vsInstallDir = Environment.GetEnvironmentVariable( "VSINSTALLDIR" );
+                string? vsInstallDir = Environment.GetEnvironmentVariable( "VSINSTALLDIR" );
                 if ( !string.IsNullOrEmpty( vsInstallDir ) )
                 {
-                    var msbuildPath = Path.Combine( vsInstallDir, "MSBuild", "Current", "Bin", "MSBuild.exe" );
+                    string msbuildPath = Path.Combine( vsInstallDir, "MSBuild", "Current", "Bin", "MSBuild.exe" );
                     if ( File.Exists( msbuildPath ) )
                     {
                         return msbuildPath;
@@ -344,15 +344,15 @@ public class RiderEditor : ICodeEditor
             }
 
             // 3. vswhere.exe를 사용하여 Visual Studio 설치 경로 찾기
-            var vswherePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ProgramFilesX86 ),
+            string vswherePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ProgramFilesX86 ),
                 "Microsoft Visual Studio", "Installer", "vswhere.exe" );
 
             if ( File.Exists( vswherePath ) )
             {
-                var vsPath = GetVSInstallPathFromVSWhere( vswherePath );
+                string? vsPath = GetVSInstallPathFromVSWhere( vswherePath );
                 if ( !string.IsNullOrEmpty( vsPath ) )
                 {
-                    var msbuildPath = Path.Combine( vsPath, "MSBuild", "Current", "Bin", "MSBuild.exe" );
+                    string msbuildPath = Path.Combine( vsPath, "MSBuild", "Current", "Bin", "MSBuild.exe" );
                     if ( File.Exists( msbuildPath ) )
                     {
                         return msbuildPath;
@@ -361,7 +361,7 @@ public class RiderEditor : ICodeEditor
             }
 
             // 4. Registry에서 찾기 (Windows Registry)
-            var msbuildFromRegistry = GetMSBuildPathFromRegistry();
+            string? msbuildFromRegistry = GetMSBuildPathFromRegistry();
             if ( !string.IsNullOrEmpty( msbuildFromRegistry ) )
             {
                 return msbuildFromRegistry;
@@ -384,7 +384,7 @@ public class RiderEditor : ICodeEditor
     {
         try
         {
-            var startInfo = new ProcessStartInfo
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = vswherePath,
                 Arguments = "-latest -products * -requires Microsoft.Component.MSBuild -property installationPath",
@@ -393,10 +393,10 @@ public class RiderEditor : ICodeEditor
                 CreateNoWindow = true
             };
 
-            using var process = Process.Start( startInfo );
+            using Process? process = Process.Start( startInfo );
             if ( process != null )
             {
-                var output = process.StandardOutput.ReadToEnd().Trim();
+                string output = process.StandardOutput.ReadToEnd().Trim();
                 process.WaitForExit();
 
                 if ( process.ExitCode == 0 && !string.IsNullOrEmpty( output ) )
@@ -421,12 +421,12 @@ public class RiderEditor : ICodeEditor
         try
         {
             // .NET Framework MSBuild 경로 (하위 호환)
-            using var key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey( @"SOFTWARE\Microsoft\MSBuild\ToolsVersions\Current" );
-            var msbuildToolsPath = key?.GetValue( "MSBuildToolsPath" ) as string;
+            using Microsoft.Win32.RegistryKey? key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey( @"SOFTWARE\Microsoft\MSBuild\ToolsVersions\Current" );
+            string? msbuildToolsPath = key?.GetValue( "MSBuildToolsPath" ) as string;
 
             if ( !string.IsNullOrEmpty( msbuildToolsPath ) )
             {
-                var msbuildPath = Path.Combine( msbuildToolsPath, "MSBuild.exe" );
+                string msbuildPath = Path.Combine( msbuildToolsPath, "MSBuild.exe" );
                 if ( File.Exists( msbuildPath ) )
                 {
                     return msbuildPath;
@@ -448,33 +448,33 @@ public class RiderEditor : ICodeEditor
     {
         try
         {
-            var programFiles = new[]
+            string[] programFiles = new[]
             {
                 Environment.GetFolderPath( Environment.SpecialFolder.ProgramFiles ),
                 Environment.GetFolderPath( Environment.SpecialFolder.ProgramFilesX86 )
             };
 
-            var searchPatterns = new[]
+            string[] searchPatterns = new[]
             {
                 @"Microsoft Visual Studio\*\*\MSBuild\Current\Bin\MSBuild.exe",
                 @"JetBrains\JetBrains Rider*\tools\MSBuild\Current\Bin\MSBuild.exe"
             };
 
-            foreach ( var programFile in programFiles )
+            foreach ( string programFile in programFiles )
             {
                 if ( !Directory.Exists( programFile ) ) continue;
 
-                foreach ( var pattern in searchPatterns )
+                foreach ( string pattern in searchPatterns )
                 {
-                    var searchPath = Path.Combine( programFile, pattern );
-                    var directoryPart = Path.GetDirectoryName( searchPath );
-                    var filePart = Path.GetFileName( searchPath );
+                    string searchPath = Path.Combine( programFile, pattern );
+                    string? directoryPart = Path.GetDirectoryName( searchPath );
+                    string? filePart = Path.GetFileName( searchPath );
 
                     if ( !string.IsNullOrEmpty( directoryPart ) )
                     {
                         try
                         {
-                            var matchingFiles = Directory.GetFiles( directoryPart, filePart, SearchOption.AllDirectories );
+                            string[] matchingFiles = Directory.GetFiles( directoryPart, filePart, SearchOption.AllDirectories );
                             if ( matchingFiles.Length > 0 )
                             {
                                 // 가장 최신 버전 반환 (파일 경로 기준 정렬)
@@ -507,7 +507,7 @@ public class RiderEditor : ICodeEditor
         {
             if ( _riderInstance != null && !_riderInstance.HasExited )
             {
-                var handle = _riderInstance.MainWindowHandle;
+                IntPtr handle = _riderInstance.MainWindowHandle;
                 if ( handle != IntPtr.Zero )
                 {
                     ShowWindow( handle, SW_RESTORE );
@@ -533,14 +533,14 @@ public class RiderEditor : ICodeEditor
                 return;
             }
 
-            var riderPath = GetRiderExecutablePath();
+            string? riderPath = GetRiderExecutablePath();
             if ( string.IsNullOrEmpty( riderPath ) )
             {
                 Logger.Log( MessageType.Error, "Cannot open file in Rider: Rider installation not found." );
                 return;
             }
 
-            var startInfo = new ProcessStartInfo
+            ProcessStartInfo startInfo = new ProcessStartInfo
             {
                 FileName = riderPath,
                 Arguments = $"--line 1 \"{filePath}\"",
