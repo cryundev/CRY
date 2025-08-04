@@ -58,7 +58,7 @@ public static class CodeEditorManager
     { 
         get 
         { 
-            var result = CurrentEditor.BuildSucceeded;
+            bool result = CurrentEditor.BuildSucceeded;
             System.Diagnostics.Debug.WriteLine($"CodeEditorManager.BuildSucceeded: {result}");
             return result;
         } 
@@ -68,7 +68,7 @@ public static class CodeEditorManager
     { 
         get 
         { 
-            var result = CurrentEditor.BuildDone;
+            bool result = CurrentEditor.BuildDone;
             System.Diagnostics.Debug.WriteLine($"CodeEditorManager.BuildDone: {result}");
             return result;
         } 
@@ -87,7 +87,7 @@ public static class CodeEditorManager
     }
     public static bool IsDebugging() 
     { 
-        var result = CurrentEditor.IsDebugging();
+        bool result = CurrentEditor.IsDebugging();
         System.Diagnostics.Debug.WriteLine($"CodeEditorManager.IsDebugging: {result}");
         return result;
     }

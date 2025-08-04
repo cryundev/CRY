@@ -270,6 +270,13 @@ public class Project : ViewModelBase
         RedoCommand  = new RelayCommand< object >( _ => UndoRedo.Redo(), x => UndoRedo.RedoList.Any() );
         SaveCommand  = new RelayCommand< object >( _ => Save( this ) );
         BuildCommand = new RelayCommand< bool   >( x => BuildGameCodeDll( x ), x => !CodeEditorManager.IsDebugging() && CodeEditorManager.BuildDone );
+        
+        OnPropertyChanged( nameof( AddWorldCommand ) );
+        OnPropertyChanged( nameof( RemoveWorldCommand ) );
+        OnPropertyChanged( nameof( UndoCommand ) );
+        OnPropertyChanged( nameof( RedoCommand ) );
+        OnPropertyChanged( nameof( SaveCommand ) );
+        OnPropertyChanged( nameof( BuildCommand ) );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
