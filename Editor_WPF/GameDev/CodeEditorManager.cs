@@ -9,13 +9,12 @@ namespace Editor_WPF.GameDev;
 public static class CodeEditorManager
 {
     private static ICodeEditor? _currentEditor;
-    private static CodeEditorType _currentEditorType = CodeEditorType.VisualStudio; // Default to VisualStudio
+    private static CodeEditorType _currentEditorType = CodeEditorType.VisualStudio;
     
     public static event EventHandler< bool >? BuildCompleted;
     
     static CodeEditorManager()
     {
-        // Ensure editor is initialized
         _ = CurrentEditor;
     }
 
@@ -31,7 +30,7 @@ public static class CodeEditorManager
                     _currentEditor.BuildCompleted -= OnEditorBuildCompleted;
                 }
                 _currentEditorType = value;
-                _currentEditor = null; // Force recreation with new type
+                _currentEditor = null;
             }
         }
     }
@@ -54,27 +53,9 @@ public static class CodeEditorManager
         BuildCompleted?.Invoke( sender, success );
     }
 
-    public static bool BuildSucceeded 
-    { 
-        get 
-        { 
-            bool result = CurrentEditor.BuildSucceeded;
-            System.Diagnostics.Debug.WriteLine($"CodeEditorManager.BuildSucceeded: {result}");
-            return result;
-        } 
-    }
-    
-    public static bool BuildDone 
-    { 
-        get 
-        { 
-            bool result = CurrentEditor.BuildDone;
-            System.Diagnostics.Debug.WriteLine($"CodeEditorManager.BuildDone: {result}");
-            return result;
-        } 
-    }
+    public static bool BuildSucceeded => CurrentEditor.BuildSucceeded;
+    public static bool BuildDone => CurrentEditor.BuildDone;
 
-    // Convenience methods that delegate to the current editor
     public static void OpenEditor( string solutionPath ) => CurrentEditor.OpenEditor( solutionPath );
     public static void CloseEditor() => CurrentEditor.CloseEditor();
     public static bool AddFilesToSolution( string solution, string projectName, string[] files ) => 
@@ -82,13 +63,7 @@ public static class CodeEditorManager
     public static void BuildSolution( Project project, string configName, bool showWindow = true )
     {
         CurrentEditor.BuildSolution( project, configName, showWindow );
-        // Force Command CanExecute to re-evaluate
         CommandManager.InvalidateRequerySuggested();
     }
-    public static bool IsDebugging() 
-    { 
-        bool result = CurrentEditor.IsDebugging();
-        System.Diagnostics.Debug.WriteLine($"CodeEditorManager.IsDebugging: {result}");
-        return result;
-    }
+    public static bool IsDebugging() => CurrentEditor.IsDebugging();
 }

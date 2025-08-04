@@ -3,17 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Editor_WPF.GameProject;
-using GameProject = Editor_WPF.GameProject;
 using Editor_WPF.Utilities;
 using Path = System.IO.Path;
 
-
 namespace Editor_WPF.GameDev;
-
-
-//---------------------------------------------------------------------------------------------------------------------
-/// RiderEditor
-//---------------------------------------------------------------------------------------------------------------------
 public class RiderEditor : ICodeEditor
 {
     private Process? _riderInstance;
@@ -112,16 +105,13 @@ public class RiderEditor : ICodeEditor
     {
         try
         {
-            // Visual Studio와 동일하게 프로젝트 파일에 소스 파일들을 추가
             AddFilesToProject( solution, projectName, files );
             
             OpenEditor( solution );
 
-            // CPP 파일이 있으면 열어줍니다
             string? cpp = files.FirstOrDefault( x => Path.GetExtension( x ) == ".cpp" );
             if ( !string.IsNullOrEmpty( cpp ) )
             {
-                // 잠시 대기 후 파일 열기
                 System.Threading.Thread.Sleep( 2000 );
                 OpenFileInRider( cpp );
             }
@@ -139,7 +129,7 @@ public class RiderEditor : ICodeEditor
     //-----------------------------------------------------------------------------------------------------------------
     /// BuildSolution
     //-----------------------------------------------------------------------------------------------------------------
-    public void BuildSolution( GameProject.Project project, string configName, bool showWindow = true )
+    public void BuildSolution( Project project, string configName, bool showWindow = true )
     {
         if ( IsDebugging() )
         {
@@ -151,13 +141,10 @@ public class RiderEditor : ICodeEditor
         {
             BuildDone = BuildSucceeded = false;
 
-            // Rider를 열고 솔루션을 로드
             OpenEditor( project.Solution );
 
-            // Rider를 열고 솔루션을 로드한 후 MSBuild로 빌드 실행
             Logger.Log( MessageType.Info, $"Building {project.Name} with {configName} configuration using MSBuild" );
 
-            // MSBuild를 직접 호출하여 빌드 실행
             string? msbuildPath = GetMSBuildPath();
             if ( !string.IsNullOrEmpty( msbuildPath ) )
             {
@@ -177,7 +164,6 @@ public class RiderEditor : ICodeEditor
                 using Process? buildProcess = Process.Start( buildStartInfo );
                 if ( buildProcess != null )
                 {
-                    // 출력 로그 읽기
                     string output = buildProcess.StandardOutput.ReadToEnd();
                     string error = buildProcess.StandardError.ReadToEnd();
 
@@ -186,64 +172,48 @@ public class RiderEditor : ICodeEditor
                     BuildDone = true;
                     BuildSucceeded = buildProcess.ExitCode == 0;
 
-                    if ( BuildSucceeded )
-                    {
-                        Logger.Log( MessageType.Info, $"Building {configName} configuration succeeded" );
-                        if ( !string.IsNullOrEmpty( output ) && output.Trim().Length > 0 )
-                        {
-                            Logger.Log( MessageType.Info, $"Build output: {output.Trim()}" );
-                        }
-                    }
-                    else
-                    {
-                        Logger.Log( MessageType.Error, $"Building {configName} configuration failed" );
-                        if ( !string.IsNullOrEmpty( error ) && error.Trim().Length > 0 )
-                        {
-                            Logger.Log( MessageType.Error, $"Build error: {error.Trim()}" );
-                        }
-
-                        if ( !string.IsNullOrEmpty( output ) && output.Trim().Length > 0 )
-                        {
-                            Logger.Log( MessageType.Info, $"Build output: {output.Trim()}" );
-                        }
-                    }
+                    Logger.Log( BuildSucceeded ? MessageType.Info : MessageType.Error, 
+                              $"Building {configName} configuration {(BuildSucceeded ? "succeeded" : "failed")}" );
+                    
+                    if ( !string.IsNullOrEmpty( error?.Trim() ) )
+                        Logger.Log( MessageType.Error, $"Build error: {error.Trim()}" );
+                    
+                    if ( !string.IsNullOrEmpty( output?.Trim() ) )
+                        Logger.Log( MessageType.Info, $"Build output: {output.Trim()}" );
                     
                     BuildCompleted?.Invoke( this, BuildSucceeded );
                 }
                 else
                 {
-                    Logger.Log( MessageType.Error, "Failed to start MSBuild process." );
-                    BuildDone = true;
-                    BuildSucceeded = false;
-                    BuildCompleted?.Invoke( this, false );
+                    HandleBuildFailure( "Failed to start MSBuild process." );
                 }
             }
             else
             {
-                Logger.Log( MessageType.Error, "MSBuild executable not found." );
-                BuildDone = true;
-                BuildSucceeded = false;
-                BuildCompleted?.Invoke( this, false );
+                HandleBuildFailure( "MSBuild executable not found." );
             }
         }
         catch ( Exception ex )
         {
             Debug.WriteLine( ex.Message );
-            Logger.Log( MessageType.Error, $"Failed to build project in Rider: {ex.Message}" );
-            BuildDone = true;
-            BuildSucceeded = false;
-            BuildCompleted?.Invoke( this, false );
+            HandleBuildFailure( $"Failed to build project in Rider: {ex.Message}" );
         }
     }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// IsDebugging
     //-----------------------------------------------------------------------------------------------------------------
-    public bool IsDebugging()
+    public bool IsDebugging() => !BuildDone;
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// HandleBuildFailure
+    //-----------------------------------------------------------------------------------------------------------------
+    private void HandleBuildFailure( string message )
     {
-        // Rider에서는 디버깅 상태를 쉽게 감지할 수 없으므로
-        // 빌드가 진행 중인지만 확인
-        return !BuildDone;
+        Logger.Log( MessageType.Error, message );
+        BuildDone = true;
+        BuildSucceeded = false;
+        BuildCompleted?.Invoke( this, false );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -321,14 +291,12 @@ public class RiderEditor : ICodeEditor
     {
         try
         {
-            // 1. 환경변수에서 MSBuild 경로 확인
             string? msbuildFromEnv = Environment.GetEnvironmentVariable( "MSBUILD_EXE_PATH" );
             if ( !string.IsNullOrEmpty( msbuildFromEnv ) && File.Exists( msbuildFromEnv ) )
             {
                 return msbuildFromEnv;
             }
 
-            // 2. VS Developer Command Prompt에서 설정되는 경로
             string? vsToolsVersion = Environment.GetEnvironmentVariable( "VisualStudioVersion" );
             if ( !string.IsNullOrEmpty( vsToolsVersion ) )
             {
@@ -343,7 +311,6 @@ public class RiderEditor : ICodeEditor
                 }
             }
 
-            // 3. vswhere.exe를 사용하여 Visual Studio 설치 경로 찾기
             string vswherePath = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.ProgramFilesX86 ),
                 "Microsoft Visual Studio", "Installer", "vswhere.exe" );
 
@@ -360,14 +327,12 @@ public class RiderEditor : ICodeEditor
                 }
             }
 
-            // 4. Registry에서 찾기 (Windows Registry)
             string? msbuildFromRegistry = GetMSBuildPathFromRegistry();
             if ( !string.IsNullOrEmpty( msbuildFromRegistry ) )
             {
                 return msbuildFromRegistry;
             }
 
-            // 5. 동적으로 일반적인 설치 경로 검색
             return SearchMSBuildInCommonPaths();
         }
         catch ( Exception ex )
@@ -420,7 +385,6 @@ public class RiderEditor : ICodeEditor
     {
         try
         {
-            // .NET Framework MSBuild 경로 (하위 호환)
             using Microsoft.Win32.RegistryKey? key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey( @"SOFTWARE\Microsoft\MSBuild\ToolsVersions\Current" );
             string? msbuildToolsPath = key?.GetValue( "MSBuildToolsPath" ) as string;
 
@@ -477,13 +441,11 @@ public class RiderEditor : ICodeEditor
                             string[] matchingFiles = Directory.GetFiles( directoryPart, filePart, SearchOption.AllDirectories );
                             if ( matchingFiles.Length > 0 )
                             {
-                                // 가장 최신 버전 반환 (파일 경로 기준 정렬)
-                                return matchingFiles.OrderByDescending( f => f ).First();
+                                                return matchingFiles.OrderByDescending( f => f ).First();
                             }
                         }
                         catch ( DirectoryNotFoundException )
                         {
-                            // 디렉토리가 없으면 다음 패턴으로 계속
                             continue;
                         }
                     }
@@ -609,7 +571,6 @@ public class RiderEditor : ICodeEditor
                 }
                 headerItemGroup += "  </ItemGroup>\r\n";
 
-                // </Project> 태그 바로 앞에 삽입
                 int projectEndIndex = updatedContent.LastIndexOf( "</Project>" );
                 if ( projectEndIndex > 0 )
                 {
@@ -617,7 +578,6 @@ public class RiderEditor : ICodeEditor
                 }
             }
 
-            // 변경사항이 있으면 파일에 저장
             if ( updatedContent != projectContent )
             {
                 File.WriteAllText( projectFilePath, updatedContent );
