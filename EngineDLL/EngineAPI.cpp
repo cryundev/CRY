@@ -1,10 +1,17 @@
 ﻿#include "Engine.h"
 #include "EngineDLL.h"
+#include "Source/Object/CRScript.h"
 
 
 namespace
 {
     HMODULE GameCodeDLL = nullptr;
+
+    using GetScriptCreatorT = CRScriptCreator(*)( CRName );
+    GetScriptCreatorT GetScriptCreator = nullptr;
+
+    using GetScriptNamesT = LPSAFEARRAY(*)( void );
+    GetScriptNamesT GetScriptNames = nullptr; 
 }
 
 
@@ -17,8 +24,11 @@ CR_ENGINE_API i32 LoadGameCodeDLL( const char* DllPath )
 
     GameCodeDLL = LoadLibraryA( DllPath );
     assert( GameCodeDLL );
+
+    GetScriptCreator = (GetScriptCreatorT)GetProcAddress( GameCodeDLL, "GetScriptCreator" );
+    GetScriptNames   = (GetScriptNamesT  )GetProcAddress( GameCodeDLL, "GetScriptNames"   );
     
-    return GameCodeDLL ? 1 : 0;
+    return ( GameCodeDLL && GetScriptCreator && GetScriptNames ) ? 1 : 0;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -35,4 +45,20 @@ CR_ENGINE_API i32 UnloadGameCodeDLL()
     GameCodeDLL = nullptr;
     
     return 1;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// ScriptCreator
+//---------------------------------------------------------------------------------------------------------------------
+CR_ENGINE_API CRScriptCreator ScriptCreator( const CRName& Name )
+{
+    return ( GameCodeDLL && GetScriptCreator ) ? GetScriptCreator( Name ) : nullptr;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// ScriptNames
+//---------------------------------------------------------------------------------------------------------------------
+CR_ENGINE_API LPSAFEARRAY ScriptNames()
+{
+    return ( GameCodeDLL && GetScriptNames ) ? GetScriptNames() : nullptr;
 }

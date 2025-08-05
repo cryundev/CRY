@@ -17,6 +17,13 @@ public static class EngineAPI
     
     [ DllImport( EngineDllName ) ]
     public static extern int UnloadGameCodeDLL();
+    
+    [ DllImport( EngineDllName ) ]
+    public static extern int GetScriptCreator( string name );
+    
+    [ DllImport( EngineDllName ) ]
+    [return: MarshalAs( UnmanagedType.SafeArray )]
+    public static extern string[] GetScriptNames();
 
     //-----------------------------------------------------------------------------------------------------------------
     /// World

@@ -5,6 +5,11 @@
 #include "Source/Core/CRSmartPtrMacro.h"
 
 
+#ifdef WITH_EDITOR
+    #include <atlsafe.h>
+#endif
+
+
 class CRScript;
 
 
@@ -27,6 +32,11 @@ protected:
     : CRObject( Object.GetObjectId() )
     {}
 
+private:
+#ifdef WITH_EDITOR
+    static CRArray< CRName > ScriptNames;
+#endif
+
 public:
     /// Register script.
     static bool RegisterScript( const CRName& Name, const CRScriptCreator& Creator );
@@ -39,6 +49,17 @@ public:
 
         return std::make_unique< T >( Object );
     }
+
+    /// Get script creator.
+    static CRScriptCreator GetScriptCreator( const CRName& Name );
+
+#ifdef WITH_EDITOR
+    /// Add a script name.
+    static bool AddScriptName( const CRName& Name );
+
+    /// Get script names.
+    static const CRArray< CRName >& GetScriptNames();
+#endif
 };
 
 
@@ -46,7 +67,6 @@ public:
 /// REGISTER_SCRIPT Macro
 //---------------------------------------------------------------------------------------------------------------------
 #define REGISTER_SCRIPT( T ) \
-class T; \
 namespace \
 { \
     const bool register##T \
@@ -54,3 +74,12 @@ namespace \
         CRScript::RegisterScript( CRName( #T ), &CRScript::CreateScript< T > ) \
     }; \
 }
+
+
+#ifdef WITH_EDITOR
+/// Get script creator.
+extern "C" __declspec( dllexport ) CRScriptCreator GetScriptCreator( const CRName& Name );
+
+/// Get script names.
+extern "C" __declspec( dllexport ) LPSAFEARRAY GetScriptNames();
+#endif
