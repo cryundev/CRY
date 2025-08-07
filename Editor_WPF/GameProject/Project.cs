@@ -40,6 +40,21 @@ public class Project : ViewModelBase
     public string Solution => $@"{Path}{Name}.sln";
     
     private static readonly string[] _buildConfigurationNames = new string[] { "Debug", "DebugEditor", "Release", "ReleaseEditor" };
+    
+    private string[] _availableScripts;
+    
+    public string[] AvailableScripts
+    {
+        get => _availableScripts;
+        set
+        {
+            if ( _availableScripts != value )
+            {
+                _availableScripts = value;
+                OnPropertyChanged( nameof( AvailableScripts ) );
+            }
+        }
+    }
 
     [DataMember( Name = "Worlds" )]
     private ObservableCollection< World > _worlds = [];
@@ -200,6 +215,8 @@ public class Project : ViewModelBase
         
         if ( File.Exists( dll ) && EngineAPI.LoadGameCodeDLL( dll ) != 0 )
         {
+            AvailableScripts = EngineAPI.GetScriptNames();
+            
             Logger.Log( MessageType.Info, "Game code DLL loaded successfully" );        
         }
         else
