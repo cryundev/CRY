@@ -16,6 +16,7 @@ namespace Editor_WPF.Objects;
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
 [KnownType( typeof( CrTransform ) )]
+[KnownType( typeof( CrScript    ) )]
 public class CrActor : CrObject
 {
     private Int64 _actorId = ID.INVALID_ID;
@@ -85,6 +86,44 @@ public class CrActor : CrObject
     /// GetComponent
     //-----------------------------------------------------------------------------------------------------------------
     public T? GetComponent< T >() where T : CrComponent => GetCompnent( typeof( T ) ) as T;
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// AddComponent
+    //-----------------------------------------------------------------------------------------------------------------
+    public bool AddComponent( CrComponent component )
+    {
+        Debug.Assert( component != null );
+        
+        if ( !Components.Any( x => x.GetType() == component.GetType() ) )
+        {
+            Logger.Log( MessageType.Warning, $"Entity {Name} already has a {component.GetType().Name} component" );
+            return false;
+        }
+
+        IsActive = false;
+        _components.Add( component );
+        IsActive = true;
+        
+        return true;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// RemoveComponent
+    //-----------------------------------------------------------------------------------------------------------------
+    public void RemoveComponent( CrComponent component )
+    {
+        Debug.Assert( component != null );
+        
+        if ( component is CrTransform ) return;
+
+        if ( _components.Contains( component ) )
+        {
+            IsActive = false;
+            _components.Remove( component );
+            IsActive = true;
+        }
+
+    }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// OnDeserialized

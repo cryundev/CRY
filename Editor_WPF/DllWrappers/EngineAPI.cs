@@ -21,7 +21,7 @@ public static class EngineAPI
     [ DllImport( EngineDllName ) ]
     public static extern int GetScriptCreator( string name );
     
-    [ DllImport( EngineDllName ) ]
+    [ DllImport( EngineDllName, EntryPoint = "ScriptNames" ) ]
     [return: MarshalAs( UnmanagedType.SafeArray )]
     public static extern string[] GetScriptNames();
 

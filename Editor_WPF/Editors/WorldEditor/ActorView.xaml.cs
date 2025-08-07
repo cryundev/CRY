@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Editor_WPF.Components;
 using Editor_WPF.GameProject;
 using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
@@ -122,5 +124,70 @@ public partial class ActorView : UserControl
 
         Action redoAction = GetIsEnabledAction();
         Project.UndoRedo.Add( new UndoRedoAction( undoAction, redoAction, vm.IsEnabled == true ? "Enable actor" : "Disable actor" ) );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// AddComponent
+    //-----------------------------------------------------------------------------------------------------------------
+    private void AddComponent( ComponentType componentType, object data )
+    {
+        Func< CrActor, object, CrComponent > creationFuction = CrComponentFactory.GetCreationFunction( componentType );
+        
+        List< (CrActor actor, CrComponent compnent) > changedActors = new List< ( CrActor actor, CrComponent compnent ) >();
+        
+        MultiSelectionActor? vm = DataContext as MultiSelectionActor;
+
+        foreach ( CrActor actor in vm.SelectedActors )
+        {
+            var component = creationFuction( actor, data );
+            if ( actor.AddComponent( component ) )
+            {
+                changedActors.Add( ( actor, component ) );
+            }
+        }
+
+        if ( changedActors.Any() )
+        {
+            vm.Refresh();
+            
+            Project.UndoRedo.Add( new UndoRedoAction
+            ( 
+                () =>
+                {
+                    changedActors.ForEach( x => x.actor.RemoveComponent( x.compnent ) );
+                    (DataContext as MultiSelectionActor).Refresh();
+                },
+                () => 
+                {
+                    changedActors.ForEach( x => x.actor.AddComponent( x.compnent ) );
+                    (DataContext as MultiSelectionActor).Refresh();
+                },
+                $"Add {componentType} component" 
+            ) );
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnAddScriptComponent
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnAddScriptComponent( object sender, RoutedEventArgs e )
+    {
+        AddComponent( ComponentType.Script, (sender as MenuItem).Header.ToString() );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnAddComponentPreviewMouseLeftButtonDowned
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnAddComponentPreviewMouseLeftButtonDowned( object sender, MouseButtonEventArgs e )
+    {
+        ContextMenu? menu = FindResource( "addComponentMenu" ) as ContextMenu;
+        ToggleButton? button = sender as ToggleButton;
+        
+        button.IsChecked = true;
+        
+        menu.Placement = PlacementMode.Bottom;
+        menu.PlacementTarget = button;
+        menu.MinWidth = button.ActualWidth;
+        menu.IsOpen = true;
     }
 }

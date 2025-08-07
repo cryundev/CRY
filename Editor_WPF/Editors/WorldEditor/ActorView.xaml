@@ -5,12 +5,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Editor_WPF.Editors"
              xmlns:component="clr-namespace:Editor_WPF.Components"
+             xmlns:objects="clr-namespace:Editor_WPF.Objects"
              mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=objects:MultiSelectionActor, IsDesignTimeCreatable=True}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <DataTemplate DataType="{x:Type component:MultiSelectionTransform}">
             <local:CrTransformView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type component:MultiSelectionScript}">
+            <local:ScriptView />
+        </DataTemplate>
+        <ContextMenu x:Key="addComponentMenu"
+                     IsOpen="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}}">
+            <MenuItem Header="Geometry" />
+            <MenuItem Header="Physics">
+                <MenuItem Header="Rigidbody" />
+            </MenuItem>
+            <MenuItem Header="Script" ItemsSource="{Binding SelectedActors[0].ParentWorld.Project.AvailableScripts }">
+                <MenuItem.Style>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Padding" Value="5,3,2,3" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedActors[0].ParentWorld.Project.AvailableScripts}" Value="{x:Null}">
+                                <Setter Property="IsEnabled" Value="False" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </MenuItem.Style>
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <Setter Property="Padding" Value="5,3,2,3" />
+                        <Setter Property="Header" Value="{Binding}" />
+                        <EventSetter Event="Click" Handler="OnAddScriptComponent" />
+                    </Style>
+                </MenuItem.ItemContainerStyle>
+            </MenuItem>
+        </ContextMenu>
     </UserControl.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <ScrollViewer.Style>
@@ -22,9 +53,11 @@
                 </Style.Triggers>
             </Style>
         </ScrollViewer.Style>
-        <StackPanel>
-            <Border Height="32">
-                <ToggleButton x:Name="addComponent" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5,0,0,0">
+        <StackPanel Background="{StaticResource Editor.Window.GrayBrush4}">
+            <Border Height="32" Background="{StaticResource Editor.Window.GrayBrush3}">
+                <ToggleButton x:Name="addComponent" VerticalAlignment="Center" HorizontalAlignment="Left" 
+                              ClickMode="Press" Focusable="False" 
+                              PreviewMouseLeftButtonDown="OnAddComponentPreviewMouseLeftButtonDowned" Margin="5,0,0,0">
                     <ToggleButton.Content>
                         <DockPanel>
                             <TextBlock Text="Add Compnent" Margin="5,0"/>
@@ -33,7 +66,7 @@
                     </ToggleButton.Content>
                 </ToggleButton>
             </Border>
-            <Grid>
+            <Grid Margin="0,1" Background="{StaticResource Editor.Window.GrayBrush3}" SnapsToDevicePixels="True" Height="32">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="78"/>
                     <ColumnDefinition/>
