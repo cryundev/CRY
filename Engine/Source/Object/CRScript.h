@@ -32,11 +32,6 @@ protected:
     : CRObject( Object.GetObjectId() )
     {}
 
-private:
-#ifdef WITH_EDITOR
-    static CRArray< CRName > ScriptNames;
-#endif
-
 public:
     /// Register script.
     static bool RegisterScript( const CRName& Name, const CRScriptCreator& Creator );
@@ -52,14 +47,6 @@ public:
 
     /// Get script creator.
     static CRScriptCreator GetScriptCreator( const CRName& Name );
-
-#ifdef WITH_EDITOR
-    /// Add a script name.
-    static bool AddScriptName( const CRName& Name );
-
-    /// Get script names.
-    static const CRArray< CRName >& GetScriptNames();
-#endif
 };
 
 

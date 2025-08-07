@@ -4,9 +4,6 @@
 using ScriptRegistry = CRMap< CRName, CRScriptCreator >;
 
 
-CRArray< CRString > CRScript::ScriptNames;
-
-
 //---------------------------------------------------------------------------------------------------------------------
 /// Registry
 //---------------------------------------------------------------------------------------------------------------------
@@ -44,28 +41,6 @@ CRScriptCreator CRScript::GetScriptCreator( const CRName& Name )
 #ifdef WITH_EDITOR
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Add a script name.
-//---------------------------------------------------------------------------------------------------------------------
-bool CRScript::AddScriptName( const CRName& Name )
-{
-    ScriptNames.emplace_back( Name );
-    return true;
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Get script names.
-//---------------------------------------------------------------------------------------------------------------------
-const CRArray<CRName>& CRScript::GetScriptNames()
-{
-    return ScriptNames;
-}
-
-#endif
-
-
-#ifdef WITH_EDITOR
-
-//---------------------------------------------------------------------------------------------------------------------
 /// Get script creator.
 //---------------------------------------------------------------------------------------------------------------------
 CRScriptCreator GetScriptCreator( const CRName& Name )
@@ -78,13 +53,14 @@ CRScriptCreator GetScriptCreator( const CRName& Name )
 //---------------------------------------------------------------------------------------------------------------------
 LPSAFEARRAY GetScriptNames()
 {
-    const u32 size = CRScript::GetScriptNames().size();
+    const u32 size = Registry().size();
     if ( size == 0 ) return nullptr;
 
     CComSafeArray< BSTR > names( size );
-    for ( u32 i = 0; i < size; ++i )
+    i32 i = 0;
+    for ( auto itr = Registry().begin(); itr != Registry().end(); ++itr, ++i )
     {
-        names.SetAt( i, A2BSTR_EX( CRScript::GetScriptNames()[ i ].c_str() ), false );
+        names.SetAt( i, A2BSTR_EX( itr->first.c_str() ), false );
     }
 
     return names.Detach();
