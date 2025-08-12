@@ -14,7 +14,7 @@
             <local:CrTransformView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type component:MultiSelectionScript}">
-            <local:ScriptView />
+            <local:CrScriptView />
         </DataTemplate>
         <ContextMenu x:Key="addComponentMenu"
                      IsOpen="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ToggleButton}}}">

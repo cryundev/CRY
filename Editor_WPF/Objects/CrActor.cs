@@ -94,7 +94,7 @@ public class CrActor : CrObject
     {
         Debug.Assert( component != null );
         
-        if ( !Components.Any( x => x.GetType() == component.GetType() ) )
+        if ( Components.Any( x => x.GetType() == component.GetType() ) )
         {
             Logger.Log( MessageType.Warning, $"Entity {Name} already has a {component.GetType().Name} component" );
             return false;
