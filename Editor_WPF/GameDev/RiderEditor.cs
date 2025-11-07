@@ -129,7 +129,7 @@ public class RiderEditor : ICodeEditor
     //-----------------------------------------------------------------------------------------------------------------
     /// BuildSolution
     //-----------------------------------------------------------------------------------------------------------------
-    public void BuildSolution( Project project, string configName, bool showWindow = true )
+    public void BuildSolution( ProjectViewModel project, string configName, bool showWindow = true )
     {
         if ( IsDebugging() )
         {

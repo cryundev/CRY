@@ -139,7 +139,7 @@ public class VisualStudioEditor : ICodeEditor
     //-----------------------------------------------------------------------------------------------------------------
     /// BuildSolution
     //-----------------------------------------------------------------------------------------------------------------
-    public void BuildSolution( Editor_WPF.GameProject.Project project, string configName, bool showWindow = true )
+    public void BuildSolution( Editor_WPF.GameProject.ProjectViewModel project, string configName, bool showWindow = true )
     {
         if ( IsDebugging() )
         {

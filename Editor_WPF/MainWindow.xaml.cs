@@ -65,8 +65,8 @@ public partial class MainWindow : Window
     private void OnMainWindowClosing( object? sender, CancelEventArgs e )
     {
         Closing -= OnMainWindowClosing;
-        
-        Project.Current?.Unload();
+
+        ProjectViewModel.Current?.Unload();
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -81,7 +81,7 @@ public partial class MainWindow : Window
         }
         else
         {
-            Project.Current?.Unload();
+            ProjectViewModel.Current?.Unload();
             DataContext = projectBrowserDialog.DataContext;
         }
     }

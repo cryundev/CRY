@@ -73,10 +73,10 @@ public partial class CrTransformView : UserControl
         {
             Debug.Assert( _undoAction != null );
             Debug.Assert(  redoAction != null );
-            
+
             _propertyChanged = false;
-            
-            Project.UndoRedo.Add( new UndoRedoAction( _undoAction, redoAction, name ) );
+
+            ProjectViewModel.UndoRedo.Add( new UndoRedoAction( _undoAction, redoAction, name ) );
         }
     }
 

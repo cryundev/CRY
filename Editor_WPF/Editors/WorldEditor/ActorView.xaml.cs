@@ -103,8 +103,8 @@ public partial class ActorView : UserControl
     {
         if ( _propertyName == nameof( MultiSelectionActor.Name ) && _undoAction != null )
         {
-            Project.UndoRedo.Add( new UndoRedoAction( _undoAction, GetRenameAction(), "Rename actor" ) );
-            
+            ProjectViewModel.UndoRedo.Add( new UndoRedoAction( _undoAction, GetRenameAction(), "Rename actor" ) );
+
             _propertyName = null;
         }
 
@@ -123,7 +123,7 @@ public partial class ActorView : UserControl
         vm.IsEnabled = ( sender as CheckBox )?.IsChecked == true;
 
         Action redoAction = GetIsEnabledAction();
-        Project.UndoRedo.Add( new UndoRedoAction( undoAction, redoAction, vm.IsEnabled == true ? "Enable actor" : "Disable actor" ) );
+        ProjectViewModel.UndoRedo.Add( new UndoRedoAction( undoAction, redoAction, vm.IsEnabled == true ? "Enable actor" : "Disable actor" ) );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -149,20 +149,20 @@ public partial class ActorView : UserControl
         if ( changedActors.Any() )
         {
             vm.Refresh();
-            
-            Project.UndoRedo.Add( new UndoRedoAction
-            ( 
+
+            ProjectViewModel.UndoRedo.Add( new UndoRedoAction
+            (
                 () =>
                 {
                     changedActors.ForEach( x => x.actor.RemoveComponent( x.compnent ) );
                     (DataContext as MultiSelectionActor).Refresh();
                 },
-                () => 
+                () =>
                 {
                     changedActors.ForEach( x => x.actor.AddComponent( x.compnent ) );
                     (DataContext as MultiSelectionActor).Refresh();
                 },
-                $"Add {componentType} component" 
+                $"Add {componentType} component"
             ) );
         }
     }

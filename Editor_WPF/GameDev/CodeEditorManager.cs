@@ -60,7 +60,7 @@ public static class CodeEditorManager
     public static void CloseEditor() => CurrentEditor.CloseEditor();
     public static bool AddFilesToSolution( string solution, string projectName, string[] files ) => 
         CurrentEditor.AddFilesToSolution( solution, projectName, files );
-    public static void BuildSolution( Project project, string configName, bool showWindow = true )
+    public static void BuildSolution( ProjectViewModel project, string configName, bool showWindow = true )
     {
         CurrentEditor.BuildSolution( project, configName, showWindow );
         CommandManager.InvalidateRequerySuggested();

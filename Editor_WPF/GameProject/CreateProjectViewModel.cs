@@ -29,9 +29,9 @@ public class ProjectTemplate
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CreateProject
+/// CreateProjectViewModel
 //---------------------------------------------------------------------------------------------------------------------
-public class CreateProject : ViewModelBase
+public class CreateProjectViewModel : ViewModelBase
 {
     private readonly string _templatePath = @"../../Editor_WPF/ProjectTemplates";
 
@@ -178,8 +178,8 @@ public class CreateProject : ViewModelBase
             
             string projectXml = File.ReadAllText( template.ProjectFilePath );
             projectXml = string.Format( projectXml, ProjectName, path );
-            
-            string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{Project.Extension}" ) );
+
+            string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{ProjectViewModel.Extension}" ) );
             File.WriteAllText( projectPath, projectXml );
 
             CreateMSVCSolution( template, path );
@@ -227,9 +227,9 @@ public class CreateProject : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// CreateProject
+    /// CreateProjectViewModel
     //-----------------------------------------------------------------------------------------------------------------
-    public CreateProject()
+    public CreateProjectViewModel()
     {
         ProjectTemplates = new ReadOnlyObservableCollection< ProjectTemplate >( _projectTemplates );
         

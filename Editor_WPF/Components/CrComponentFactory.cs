@@ -22,7 +22,7 @@ public class CrComponentFactory
     private static readonly Func< CrActor, object, CrComponent >[] _function = new Func< CrActor, object, CrComponent >[]
     {
         ( actor, data ) => new CrTransform( actor ),
-        ( actor, data ) => new CrScript( actor ) { Name = (string)data },
+        ( actor, data ) => new CrScript   ( actor ) { Name = (string)data },
     };
 
     public static Func< CrActor, object, CrComponent > GetCreationFunction( ComponentType componentType )

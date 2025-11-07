@@ -30,7 +30,7 @@ public class World : ViewModelBase
         }
     }
     
-    [DataMember] public Project Project { get; private set; }
+    [DataMember] public ProjectViewModel Project { get; private set; }
 
     [DataMember( Name = "IsActive" )] private bool _isActive;
     public bool IsActive
@@ -102,8 +102,8 @@ public class World : ViewModelBase
             AddActorInternal( x );
 
             int actorIndex = _actors.Count - 1;
-            
-            Project.UndoRedo.Add( new UndoRedoAction
+
+            ProjectViewModel.UndoRedo.Add( new UndoRedoAction
             (
                 () => RemoveActorInternal( x ),
                 () => AddActorInternal( x, actorIndex ),
@@ -116,8 +116,8 @@ public class World : ViewModelBase
             RemoveActorInternal( x );
 
             int actorsCount = _actors.Count;
-            
-            Project.UndoRedo.Add( new UndoRedoAction
+
+            ProjectViewModel.UndoRedo.Add( new UndoRedoAction
             (
                 () => _actors.Insert( actorsCount, x ),
                 () => RemoveActorInternal( x ),
@@ -130,13 +130,13 @@ public class World : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// World
     //-----------------------------------------------------------------------------------------------------------------
-    public World( Project poject, string name )
+    public World( ProjectViewModel poject, string name )
     {
         Debug.Assert( poject != null );
-        
+
         Project = poject;
         _name   = name;
-        
+
         OnDeserialized( new StreamingContext() );
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
@@ -23,26 +23,65 @@ public enum BuildConfiguration
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Project
+/// ProjectViewModel
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract( Name = "Game" )]
-public class Project : ViewModelBase
+public class ProjectViewModel : ViewModelBase
 {
-    public static string Extension { get; } = ".cryproject";
+    /// Static Members
+    private static readonly string[] _buildConfigurationNames = new string[] { "Debug", "DebugEditor", "Release", "ReleaseEditor" };
 
-    [DataMember]
-    public string Name { get; private set; }
+    public static string            Extension { get; } = ".cryproject";
+    public static UndoRedo          UndoRedo  { get; } = new UndoRedo();
+    public static ProjectViewModel? Current   => Application.Current.MainWindow?.DataContext as ProjectViewModel;
 
-    [DataMember]
-    public string Path { get; private set; }
+
+    /// Basic Info Properties
+    [DataMember] public string Name { get; private set; }
+    [DataMember] public string Path { get; private set; }
 
     public string FullPath => $@"{Path}{Name}{Extension}";
     public string Solution => $@"{Path}{Name}.sln";
+
+
+    /// World Management Properties
+    [DataMember( Name = "Worlds"      )] private ObservableCollection< World > _worlds      = [];
+    [DataMember( Name = "ActiveWorld" )] private World?                        _activeWorld;
+
+    public ReadOnlyObservableCollection< World >? Worlds { get; private set; }
+    public World? ActiveWorld
+    {
+        get => _activeWorld;
+        set
+        {
+            if ( _activeWorld == value ) return;
+            _activeWorld = value;
+            OnPropertyChanged( nameof( ActiveWorld ) );
+        }
+    }
+
+
+    /// Build Configuration Properties
+    [DataMember] private int _buildConfig;
+
+    public int BuildConfig
+    {
+        get => _buildConfig;
+        set
+        {
+            if ( _buildConfig == value ) return;
+            _buildConfig = value;
+            OnPropertyChanged( nameof( BuildConfig ) );
+        }
+    }
     
-    private static readonly string[] _buildConfigurationNames = new string[] { "Debug", "DebugEditor", "Release", "ReleaseEditor" };
-    
+    public BuildConfiguration StandAloneBuildConfig => BuildConfig == 0 ? BuildConfiguration.Debug       : BuildConfiguration.Release;
+    public BuildConfiguration DllBuildConfig        => BuildConfig == 0 ? BuildConfiguration.DebugEditor : BuildConfiguration.ReleaseEditor;
+
+
+    /// Script Management Properties
     private string[] _availableScripts;
-    
+
     public string[] AvailableScripts
     {
         get => _availableScripts;
@@ -56,56 +95,19 @@ public class Project : ViewModelBase
         }
     }
 
-    [DataMember( Name = "Worlds" )]
-    private ObservableCollection< World > _worlds = [];
-    public ReadOnlyObservableCollection< World >? Worlds { get; private set; }
 
-    [DataMember( Name = "ActiveWorld" )]
-    private World? _activeWorld;
-    public World? ActiveWorld
-    {
-        get => _activeWorld;
-        set
-        {
-            if ( _activeWorld == value ) return;
-            
-            _activeWorld = value;
-            OnPropertyChanged( nameof( ActiveWorld ) );
-        }
-    }
-    
-    public static Project? Current => Application.Current.MainWindow?.DataContext as Project;
-
-    public static UndoRedo UndoRedo { get; } = new UndoRedo();
-
-    public ICommand? UndoCommand { get; private set; }
-    public ICommand? RedoCommand { get; private set; }
-
+    /// Commands
+    public ICommand? UndoCommand        { get; private set; }
+    public ICommand? RedoCommand        { get; private set; }
     public ICommand? AddWorldCommand    { get; private set; }
     public ICommand? RemoveWorldCommand { get; private set; }
     public ICommand? SaveCommand        { get; private set; }
-    public ICommand? BuildCommand       { get; private set; } 
+    public ICommand? BuildCommand       { get; private set; }
 
 
-    private static string GetConfigurationName( BuildConfiguration configuration ) => _buildConfigurationNames[ (int)configuration ];
-
-    private int _buildConfig;
-    [DataMember]
-    public int BuildConfig
-    {
-        get => _buildConfig;
-        set
-        {
-            if ( _buildConfig == value ) return;
-            
-            _buildConfig = value;
-            OnPropertyChanged( nameof( BuildConfig ) );
-        }
-    }
+    /// Methods 
     
-    public BuildConfiguration StandAloneBuildConfig => BuildConfig == 0 ? BuildConfiguration.Debug       : BuildConfiguration.Release;
-    public BuildConfiguration DllBuildConfig        => BuildConfig == 0 ? BuildConfiguration.DebugEditor : BuildConfiguration.ReleaseEditor;
-
+    private static string GetConfigurationName( BuildConfiguration configuration ) => _buildConfigurationNames[ (int)configuration ];
 
     //-----------------------------------------------------------------------------------------------------------------
     /// AddWorldInternal
@@ -128,10 +130,10 @@ public class Project : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// Load
     //-----------------------------------------------------------------------------------------------------------------
-    public static Project Load( string? file )
+    public static ProjectViewModel Load( string? file )
     {
         Debug.Assert( File.Exists( file ) );
-        return Serializer.FromFile< Project >( file );
+        return Serializer.FromFile< ProjectViewModel >( file );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -146,10 +148,10 @@ public class Project : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// Save
     //-----------------------------------------------------------------------------------------------------------------
-    public static void Save( Project project )
+    public static void Save( ProjectViewModel project )
     {
         Serializer.ToFile( project, project.FullPath );
-        
+
         Logger.Log( MessageType.Info, $"Project saved to {project.FullPath}" );
     }
 
@@ -297,15 +299,15 @@ public class Project : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// Project
+    /// ProjectViewModel
     //-----------------------------------------------------------------------------------------------------------------
-    public Project( string name, string path )
+    public ProjectViewModel( string name, string path )
     {
         Name = name;
         Path = path;
-        
+
         OnDeserialized( new StreamingContext() );
-        
+
         _worlds.Add( new World( this, "Default World" ) );
     }
 }

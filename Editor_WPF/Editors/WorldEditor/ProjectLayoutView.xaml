@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Editor_WPF.Editors"
              xmlns:proj="clr-namespace:Editor_WPF.GameProject"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance Type=proj:Project, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance Type=proj:ProjectViewModel, IsDesignTimeCreatable=True}"
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>

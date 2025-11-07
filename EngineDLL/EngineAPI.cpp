@@ -8,10 +8,10 @@ namespace
     HMODULE GameCodeDLL = nullptr;
 
     using GetScriptCreatorT = CRScriptCreator(*)( CRName );
-    GetScriptCreatorT GetScriptCreator = nullptr;
+    using GetScriptNamesT   = LPSAFEARRAY    (*)( void );
 
-    using GetScriptNamesT = LPSAFEARRAY(*)( void );
-    GetScriptNamesT GetScriptNames = nullptr; 
+    GetScriptCreatorT GetScriptCreator = nullptr;
+    GetScriptNamesT   GetScriptNames   = nullptr; 
 }
 
 
@@ -56,7 +56,7 @@ CR_ENGINE_API CRScriptCreator ScriptCreator( const CRName& Name )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// ScriptNames
+/// ScriptNames 
 //---------------------------------------------------------------------------------------------------------------------
 CR_ENGINE_API LPSAFEARRAY ScriptNames()
 {

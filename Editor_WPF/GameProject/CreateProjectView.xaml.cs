@@ -19,8 +19,8 @@ public partial class CreateProjectView
     //-----------------------------------------------------------------------------------------------------------------
     private void OnCreateButtonClick( object sender, RoutedEventArgs e )
     {
-        if ( DataContext is not CreateProject vm ) return;
-        
+        if ( DataContext is not CreateProjectViewModel vm ) return;
+
         string projectPath = vm.CreateNewProject( templateListBox.SelectedItem as ProjectTemplate ?? throw new InvalidOperationException() );
         
         bool dialogResult = false;
@@ -29,8 +29,8 @@ public partial class CreateProjectView
         if( !string.IsNullOrEmpty( projectPath ) )
         {
             dialogResult = true;
-            
-            Project project = OpenProject.Open( new ProjectData() { ProjectName = vm.ProjectName, ProjectPath = projectPath } );
+
+            ProjectViewModel project = OpenProject.Open( new ProjectData() { ProjectName = vm.ProjectName, ProjectPath = projectPath } );
             if ( win != null ) win.DataContext = project;
         }
 

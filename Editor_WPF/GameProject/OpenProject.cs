@@ -23,7 +23,7 @@ public class ProjectData
     [DataMember]
     public DateTime Date { get; set; }
     
-    public string? FullPath => $"{ProjectPath}{ProjectName}{Project.Extension}";
+    public string? FullPath => $"{ProjectPath}{ProjectName}{ProjectViewModel.Extension}";
     public byte[]? Icon { get; set; }
     public byte[]? Preview { get; set; }
 }
@@ -89,10 +89,10 @@ public class OpenProject
     //-----------------------------------------------------------------------------------------------------------------
     /// Open
     //-----------------------------------------------------------------------------------------------------------------
-    public static Project Open( ProjectData data )
+    public static ProjectViewModel Open( ProjectData data )
     {
         ReadProjectData();
-        
+
         ProjectData? project = _projects.FirstOrDefault( x => x.FullPath == data.FullPath );
 
         if ( project != null )
@@ -103,13 +103,13 @@ public class OpenProject
         {
             project = data;
             project.Date = DateTime.Now;
-            
+
             _projects.Add( project );
         }
 
         WriteProjectData();
 
-        return Project.Load( project.FullPath );
+        return ProjectViewModel.Load( project.FullPath );
     }
 
     //-----------------------------------------------------------------------------------------------------------------

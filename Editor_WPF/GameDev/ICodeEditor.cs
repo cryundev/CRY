@@ -24,7 +24,7 @@ public interface ICodeEditor
     void OpenEditor( string solutionPath );
     void CloseEditor();
     bool AddFilesToSolution( string solution, string projectName, string[] files );
-    void BuildSolution( Project project, string configName, bool showWindow = true );
+    void BuildSolution( ProjectViewModel project, string configName, bool showWindow = true );
     bool IsDebugging();
 }
 

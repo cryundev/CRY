@@ -8,7 +8,6 @@
 /// SpawnActor
 //---------------------------------------------------------------------------------------------------------------------
 CR_ENGINE_API CRIdentity::id_t SpawnActor()
-
 {
     if ( CRActor* actor = GWorld.get()->SpawnActor< CRActor >() )
     {

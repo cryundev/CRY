@@ -7,7 +7,7 @@ using System.Windows.Media.Animation;
 using Editor_WPF.Utilities;
 using EnvDTE;
 using Window = System.Windows.Window;
-using Project = Editor_WPF.GameProject.Project;
+using Project = Editor_WPF.GameProject.ProjectViewModel;
 
 
 namespace Editor_WPF.GameDev;

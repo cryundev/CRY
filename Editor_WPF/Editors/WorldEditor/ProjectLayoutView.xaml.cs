@@ -43,17 +43,17 @@ public partial class ProjectLayoutView : UserControl
         List< CrActor > previousSelection = (newSelection ?? throw new InvalidOperationException())
             .Except( e.AddedItems.Cast< CrActor >() ).Concat( e.RemovedItems.Cast< CrActor >() ).ToList();
 
-        Project.UndoRedo.Add( new UndoRedoAction
+        ProjectViewModel.UndoRedo.Add( new UndoRedoAction
         (
             () =>
             {
                 listBox?.UnselectAll();
                 previousSelection?.ForEach( x => ( (listBox?.ItemContainerGenerator.ContainerFromItem( x ) as ListBoxItem)! ).IsSelected = true );
             },
-            () => 
+            () =>
             {
                 listBox?.UnselectAll();
-                newSelection?.ForEach( x => ( (listBox?.ItemContainerGenerator.ContainerFromItem( x ) as ListBoxItem)! ).IsSelected = true ); 
+                newSelection?.ForEach( x => ( (listBox?.ItemContainerGenerator.ContainerFromItem( x ) as ListBoxItem)! ).IsSelected = true );
             },
             "Selection Changed"
         ) );

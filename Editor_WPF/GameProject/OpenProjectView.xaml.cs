@@ -44,18 +44,18 @@ public partial class OpenProjectView
     //-----------------------------------------------------------------------------------------------------------------
     /// OpenSelectedProject
     //-----------------------------------------------------------------------------------------------------------------
-    private void OpenSelectedProject() 
+    private void OpenSelectedProject()
     {
-        Project project = GameProject.OpenProject.Open( projectsListBox.SelectedItem as ProjectData ?? throw new InvalidOperationException() );
-        
+        ProjectViewModel project = GameProject.OpenProject.Open( projectsListBox.SelectedItem as ProjectData ?? throw new InvalidOperationException() );
+
         bool dialogResult = false;
 
         Window? win = Window.GetWindow( this );
 
         dialogResult = true;
-        
+
         if ( win == null ) return;
-        
+
         win.DataContext  = project;
         win.DialogResult = dialogResult;
         win.Close();
