@@ -45,11 +45,11 @@ public class ProjectViewModel : ViewModelBase
 
 
     /// World Management Properties
-    [DataMember( Name = "Worlds"      )] private ObservableCollection< World > _worlds      = [];
-    [DataMember( Name = "ActiveWorld" )] private World?                        _activeWorld;
+    [DataMember( Name = "Worlds"      )] private ObservableCollection< WorldViewModel > _worlds      = [];
+    [DataMember( Name = "ActiveWorld" )] private WorldViewModel?                        _activeWorld;
 
-    public ReadOnlyObservableCollection< World >? Worlds { get; private set; }
-    public World? ActiveWorld
+    public ReadOnlyObservableCollection< WorldViewModel >? Worlds { get; private set; }
+    public WorldViewModel? ActiveWorld
     {
         get => _activeWorld;
         set
@@ -115,13 +115,13 @@ public class ProjectViewModel : ViewModelBase
     private void AddWorldInternal( string worldName )
     {
         Debug.Assert( !string.IsNullOrEmpty( worldName.Trim() ) );
-        _worlds.Add( new World( this, worldName ) );
+        _worlds.Add( new WorldViewModel( this, worldName ) );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// RemoveWorldInternal
     //-----------------------------------------------------------------------------------------------------------------
-    private void RemoveWorldInternal( World world )
+    private void RemoveWorldInternal( WorldViewModel world )
     {
         Debug.Assert( _worlds.Contains( world ) );
         _worlds.Remove( world );
@@ -244,18 +244,18 @@ public class ProjectViewModel : ViewModelBase
     [OnDeserialized]
     private void OnDeserialized( StreamingContext context )
     {
-        Worlds = new ReadOnlyObservableCollection< World >( _worlds );
+        Worlds = new ReadOnlyObservableCollection< WorldViewModel >( _worlds );
         OnPropertyChanged( nameof( Worlds ) );
 
         ActiveWorld = Worlds.FirstOrDefault( x => x is { IsActive: true } );
-        
+
         BuildGameCodeDll( false );
 
         AddWorldCommand = new RelayCommand< object >( _ =>
         {
             AddWorldInternal( $"New World {_worlds.Count}" );
-            
-            World newWorld = _worlds.Last();
+
+            WorldViewModel newWorld = _worlds.Last();
             int worldIndex = _worlds.Count - 1;
             
             UndoRedoAction action = new UndoRedoAction
@@ -268,7 +268,7 @@ public class ProjectViewModel : ViewModelBase
             UndoRedo.Add( action );
         } );
         
-        RemoveWorldCommand = new RelayCommand< World >( x =>
+        RemoveWorldCommand = new RelayCommand< WorldViewModel >( x =>
         {
             if ( x == null ) throw new ArgumentNullException( nameof( x ) );
             int worldIndex = _worlds.IndexOf( x );
@@ -308,6 +308,6 @@ public class ProjectViewModel : ViewModelBase
 
         OnDeserialized( new StreamingContext() );
 
-        _worlds.Add( new World( this, "Default World" ) );
+        _worlds.Add( new WorldViewModel( this, "Default World" ) );
     }
 }

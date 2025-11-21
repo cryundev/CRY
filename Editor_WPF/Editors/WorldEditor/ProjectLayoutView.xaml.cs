@@ -27,9 +27,9 @@ public partial class ProjectLayoutView : UserControl
     private void OnAddActorButtonClicked( object sender, System.Windows.RoutedEventArgs e )
     {
         Button? button = sender as Button;
-        World? world = button?.DataContext as World;
-        
-        world?.AddActorCommand?.Execute( new CrActor( world ) { Name = "Empty Actor" } );     
+        WorldViewModel? world = button?.DataContext as WorldViewModel;
+
+        world?.AddActorCommand?.Execute( new CrActorViewModel( world ) { Name = "Empty Actor" } );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -39,9 +39,9 @@ public partial class ProjectLayoutView : UserControl
     {
         ListBox? listBox = sender as ListBox;
         
-        List< CrActor >? newSelection = listBox?.SelectedItems.Cast< CrActor >().ToList();
-        List< CrActor > previousSelection = (newSelection ?? throw new InvalidOperationException())
-            .Except( e.AddedItems.Cast< CrActor >() ).Concat( e.RemovedItems.Cast< CrActor >() ).ToList();
+        List< CrActorViewModel >? newSelection = listBox?.SelectedItems.Cast< CrActorViewModel >().ToList();
+        List< CrActorViewModel > previousSelection = (newSelection ?? throw new InvalidOperationException())
+            .Except( e.AddedItems.Cast< CrActorViewModel >() ).Concat( e.RemovedItems.Cast< CrActorViewModel >() ).ToList();
 
         ProjectViewModel.UndoRedo.Add( new UndoRedoAction
         (

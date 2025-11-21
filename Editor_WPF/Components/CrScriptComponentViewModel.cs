@@ -10,7 +10,7 @@ namespace Editor_WPF.Components;
 /// Script
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-class CrScript : CrComponent
+class CrScriptComponentViewModel : CrComponentViewModel
 {
     private string _name;
     [DataMember] public string Name
@@ -32,9 +32,9 @@ class CrScript : CrComponent
         => new MultiSelectionScript( multiSelectionActor );
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// CrScript
+    /// CrScriptComponentViewModel
     //-----------------------------------------------------------------------------------------------------------------
-    public CrScript( CrObject? owner ) : base( owner )
+    public CrScriptComponentViewModel( CrObjectViewModel? owner ) : base( owner )
     {
     }
 }
@@ -43,7 +43,7 @@ class CrScript : CrComponent
 //---------------------------------------------------------------------------------------------------------------------
 /// MultiSelectionScript
 //---------------------------------------------------------------------------------------------------------------------
-sealed class MultiSelectionScript : MultiSelectionComponent< CrScript >
+sealed class MultiSelectionScript : MultiSelectionComponent< CrScriptComponentViewModel >
 {
     private string? _name;
     public string? Name
@@ -83,7 +83,7 @@ sealed class MultiSelectionScript : MultiSelectionComponent< CrScript >
     //-----------------------------------------------------------------------------------------------------------------
     protected override bool UpdateMultiSelectionComponent()
     {
-        Name = UtilObject.GetMixedValue( SelectedComponents, new Func< CrScript, string >( x => x.Name ) );
+        Name = UtilObject.GetMixedValue( SelectedComponents, new Func< CrScriptComponentViewModel, string >( x => x.Name ) );
 
         return true;
     }

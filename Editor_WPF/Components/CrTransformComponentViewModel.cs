@@ -11,7 +11,7 @@ namespace Editor_WPF.Components;
 /// Transform
 //---------------------------------------------------------------------------------------------------------------------
 [DataContract]
-class CrTransform : CrComponent
+class CrTransformComponentViewModel : CrComponentViewModel
 {
     private Vector3 _positionn;
     [DataMember] public Vector3 Position
@@ -65,9 +65,9 @@ class CrTransform : CrComponent
         => new MultiSelectionTransform( multiSelectionActor );
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// CrTransform
+    /// CrTransformComponentViewModel
     //-----------------------------------------------------------------------------------------------------------------
-    public CrTransform( CrObject? owner ) : base( owner )
+    public CrTransformComponentViewModel( CrObjectViewModel? owner ) : base( owner )
     {
     }
 }
@@ -76,7 +76,7 @@ class CrTransform : CrComponent
 //---------------------------------------------------------------------------------------------------------------------
 /// MultiSelectionTransform
 //---------------------------------------------------------------------------------------------------------------------
-sealed class MultiSelectionTransform : MultiSelectionComponent< CrTransform >
+sealed class MultiSelectionTransform : MultiSelectionComponent< CrTransformComponentViewModel >
 {
     private float? _positionX;
     public float? PositionX
@@ -254,17 +254,17 @@ sealed class MultiSelectionTransform : MultiSelectionComponent< CrTransform >
     //-----------------------------------------------------------------------------------------------------------------
     protected override bool UpdateMultiSelectionComponent()
     {
-        PositionX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.X ) );
-        PositionY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.Y ) );
-        PositionZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Position.Z ) );
+        PositionX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Position.X ) );
+        PositionY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Position.Y ) );
+        PositionZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Position.Z ) );
         
-        RotationX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.X ) );
-        RotationY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.Y ) );
-        RotationZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Rotation.Z ) );
+        RotationX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Rotation.X ) );
+        RotationY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Rotation.Y ) );
+        RotationZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Rotation.Z ) );
         
-        ScaleX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.X ) );
-        ScaleY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.Y ) );
-        ScaleZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransform, float >( x => x.Scale.Z ) );
+        ScaleX = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Scale.X ) );
+        ScaleY = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Scale.Y ) );
+        ScaleZ = UtilObject.GetMixedValue( SelectedComponents, new Func< CrTransformComponentViewModel, float >( x => x.Scale.Z ) );
 
         return true;
     }

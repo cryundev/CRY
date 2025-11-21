@@ -43,7 +43,7 @@ public partial class CrTransformView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     /// GetAction
     //-----------------------------------------------------------------------------------------------------------------
-    private Action? GetAction( Func< CrTransform, ( CrTransform transform, Vector3 ) > selector, Action< ( CrTransform transform, Vector3 ) > forEachAction )
+    private Action? GetAction( Func< CrTransformComponentViewModel, ( CrTransformComponentViewModel transform, Vector3 ) > selector, Action< ( CrTransformComponentViewModel transform, Vector3 ) > forEachAction )
     {
         if ( !( DataContext is MultiSelectionTransform multiSelectionTransform ) )
         {

@@ -33,7 +33,7 @@ public static class EngineAPI
         [DllImport( EngineDllName )]
         private static extern Int64 SpawnActor();
 
-        public static Int64 SpawnActor( CrActor crActor )
+        public static Int64 SpawnActor( CrActorViewModel crActor )
         {
             return SpawnActor();
         }
@@ -41,7 +41,7 @@ public static class EngineAPI
         [DllImport( EngineDllName )]
         private static extern void DespawnActor( Int64 id );
         
-        public static void DespawnActor( CrActor crActor )
+        public static void DespawnActor( CrActorViewModel crActor )
         {
             DespawnActor( crActor.ActorId );
         }

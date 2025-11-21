@@ -57,7 +57,7 @@ public partial class ActorView : UserControl
         MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => {} );
 
-        List< (CrActor actor, string Name) > selection = vm.SelectedActors.Select( actor => ( actor, actor.Name ) ).ToList();
+        List< (CrActorViewModel actor, string Name) > selection = vm.SelectedActors.Select( actor => ( actor, actor.Name ) ).ToList();
         
         return new Action( () =>
         {
@@ -76,7 +76,7 @@ public partial class ActorView : UserControl
         MultiSelectionActor? vm = DataContext as MultiSelectionActor;
         if ( vm == null ) return new Action( () => { } );
 
-        List< (CrActor actor, bool IsEnabled) > selection = vm.SelectedActors.Select( actor => ( actor, actor.IsEnabled ) ).ToList();
+        List< (CrActorViewModel actor, bool IsEnabled) > selection = vm.SelectedActors.Select( actor => ( actor, actor.IsEnabled ) ).ToList();
 
         return new Action( () =>
         {
@@ -131,13 +131,13 @@ public partial class ActorView : UserControl
     //-----------------------------------------------------------------------------------------------------------------
     private void AddComponent( ComponentType componentType, object data )
     {
-        Func< CrActor, object, CrComponent > creationFuction = CrComponentFactory.GetCreationFunction( componentType );
-        
-        List< (CrActor actor, CrComponent compnent) > changedActors = new List< ( CrActor actor, CrComponent compnent ) >();
+        Func< CrActorViewModel, object, CrComponentViewModel > creationFuction = CrComponentFactory.GetCreationFunction( componentType );
+
+        List< (CrActorViewModel actor, CrComponentViewModel compnent) > changedActors = new List< ( CrActorViewModel actor, CrComponentViewModel compnent ) >();
         
         MultiSelectionActor? vm = DataContext as MultiSelectionActor;
 
-        foreach ( CrActor actor in vm.SelectedActors )
+        foreach ( CrActorViewModel actor in vm.SelectedActors )
         {
             var component = creationFuction( actor, data );
             if ( actor.AddComponent( component ) )

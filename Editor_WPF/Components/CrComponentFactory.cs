@@ -19,13 +19,13 @@ public enum ComponentType
 //---------------------------------------------------------------------------------------------------------------------
 public class CrComponentFactory
 {
-    private static readonly Func< CrActor, object, CrComponent >[] _function = new Func< CrActor, object, CrComponent >[]
+    private static readonly Func< CrActorViewModel, object, CrComponentViewModel >[] _function = new Func< CrActorViewModel, object, CrComponentViewModel >[]
     {
-        ( actor, data ) => new CrTransform( actor ),
-        ( actor, data ) => new CrScript   ( actor ) { Name = (string)data },
+        ( actor, data ) => new CrTransformComponentViewModel( actor ),
+        ( actor, data ) => new CrScriptComponentViewModel( actor ) { Name = (string)data },
     };
 
-    public static Func< CrActor, object, CrComponent > GetCreationFunction( ComponentType componentType )
+    public static Func< CrActorViewModel, object, CrComponentViewModel > GetCreationFunction( ComponentType componentType )
     {
         Debug.Assert( (int)componentType < _function.Length );
 
