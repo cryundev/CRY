@@ -239,49 +239,56 @@ public class ProjectViewModel : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
-    /// OnDeserialized
+    /// Initialize
     //-----------------------------------------------------------------------------------------------------------------
-    [OnDeserialized]
-    private void OnDeserialized( StreamingContext context )
+    private void Initialize()
     {
         Worlds = new ReadOnlyObservableCollection< WorldViewModel >( _worlds );
         OnPropertyChanged( nameof( Worlds ) );
 
         ActiveWorld = Worlds.FirstOrDefault( x => x is { IsActive: true } );
 
-        BuildGameCodeDll( false );
+        InitializeCommands();
 
+        BuildGameCodeDll( false );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// InitializeCommands
+    //-----------------------------------------------------------------------------------------------------------------
+    private void InitializeCommands()
+    {
         AddWorldCommand = new RelayCommand< object >( _ =>
         {
             AddWorldInternal( $"New World {_worlds.Count}" );
 
             WorldViewModel newWorld = _worlds.Last();
             int worldIndex = _worlds.Count - 1;
-            
+
             UndoRedoAction action = new UndoRedoAction
-            ( 
+            (
                 () => RemoveWorldInternal( newWorld ),
                 () => _worlds.Insert( worldIndex, newWorld ),
                 $"Add {newWorld.Name}"
-            ); 
-            
+            );
+
             UndoRedo.Add( action );
         } );
-        
+
         RemoveWorldCommand = new RelayCommand< WorldViewModel >( x =>
         {
             if ( x == null ) throw new ArgumentNullException( nameof( x ) );
             int worldIndex = _worlds.IndexOf( x );
-            
+
             RemoveWorldInternal( x );
-            
+
             UndoRedoAction action = new UndoRedoAction
-            ( 
+            (
                 () => _worlds.Insert( worldIndex, x ),
                 () => RemoveWorldInternal( x ),
                 $"Remove {x.Name}"
             );
-            
+
             UndoRedo.Add( action );
         }, x => !x.IsActive );
 
@@ -289,13 +296,22 @@ public class ProjectViewModel : ViewModelBase
         RedoCommand  = new RelayCommand< object >( _ => UndoRedo.Redo(), x => UndoRedo.RedoList.Any() );
         SaveCommand  = new RelayCommand< object >( _ => Save( this ) );
         BuildCommand = new RelayCommand< bool   >( x => BuildGameCodeDll( x ), x => !CodeEditorManager.IsDebugging() && CodeEditorManager.BuildDone );
-        
+
         OnPropertyChanged( nameof( AddWorldCommand ) );
         OnPropertyChanged( nameof( RemoveWorldCommand ) );
         OnPropertyChanged( nameof( UndoCommand ) );
         OnPropertyChanged( nameof( RedoCommand ) );
         OnPropertyChanged( nameof( SaveCommand ) );
         OnPropertyChanged( nameof( BuildCommand ) );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnDeserialized
+    //-----------------------------------------------------------------------------------------------------------------
+    [OnDeserialized]
+    private void OnDeserialized( StreamingContext context )
+    {
+        Initialize();
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -306,7 +322,7 @@ public class ProjectViewModel : ViewModelBase
         Name = name;
         Path = path;
 
-        OnDeserialized( new StreamingContext() );
+        Initialize();
 
         _worlds.Add( new WorldViewModel( this, "Default World" ) );
     }
