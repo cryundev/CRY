@@ -20,6 +20,9 @@ Editor_Win32/x64/
 Editor_WPF/bin/
 Editor_WPF/obj/
 
+# Auto-generated resource files (regenerated from .resx on build)
+*.Designer.cs
+
 # DirectXTK build output
 Engine/Extras/DirectXTK/Bin/
 Engine/Extras/DirectXTK/Src/Shaders/Compiled/
