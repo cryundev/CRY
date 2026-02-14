@@ -6,6 +6,13 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRActor::Destroy()
 {
+    for ( const CRComponentRemover& remover : ComponentRemovers )
+    {
+        remover( ObjectId );
+    }
+
+    ComponentRemovers.clear();
+
     CRObject::Destroy();
 }
 

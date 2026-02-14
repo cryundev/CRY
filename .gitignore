@@ -12,6 +12,7 @@
 
 # Per-project intermediate/output directories
 Engine/x64/
+Engine/Engine/x64/
 EngineDLL/x64/
 EngineTest/x64/
 Editor_Win32/x64/
@@ -25,6 +26,7 @@ Editor_WPF/obj/
 
 # DirectXTK build output
 Engine/Extras/DirectXTK/Bin/
+Engine/Extras/DirectXTK/x64/
 Engine/Extras/DirectXTK/Src/Shaders/Compiled/
 
 # Built libraries (copied by build events)

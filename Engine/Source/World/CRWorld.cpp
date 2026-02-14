@@ -21,8 +21,6 @@ void CRWorld::DespawnActor( const CRObjectId& ActorId )
 
     if ( itr != Actors.end() )
     {
-        CRTransformComponent::Remove( (*itr)->GetObjectId() );
-
         (*itr)->Destroy();
 
         delete *itr;

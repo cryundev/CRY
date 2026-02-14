@@ -129,7 +129,7 @@ copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Extras\Fbx\debug\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'">
@@ -162,7 +162,7 @@ copy "$(ProjectDir)Extras\Fbx\Debug\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\Debug\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Extras\Fbx\debug\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -199,7 +199,7 @@ copy "$(ProjectDir)Extras\Fbx\$(Configuration)\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Extras\Fbx\release\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseEditor|x64'">
@@ -236,7 +236,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>libfbxsdk.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\Extras\Fbx\Release\</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Extras\Fbx\release\</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>

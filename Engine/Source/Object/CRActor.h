@@ -3,6 +3,7 @@
 
 #include "CRObject.h"
 #include "Source/Object/Component/CRTransformComponent.h"
+#include <algorithm>
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -14,8 +15,11 @@ public:
     friend class CRWorld;
     
 protected:
-    CRList< ICRComponent* > Components;
-    CRWorld*                World = nullptr;
+    using CRComponentRemover = void(*)( const CRIdentity::id_t& Id );
+
+protected:
+    CRArray< CRComponentRemover > ComponentRemovers;
+    CRWorld*                      World = nullptr;
     
 public:
     /// Constructor.
@@ -46,6 +50,14 @@ public:
     {
         return T::Get( ObjectId );
     }
+
+private:
+    /// Remove component internal.
+    template< ComponentType T >
+    static void _RemoveComponent( const CRIdentity::id_t& Id )
+    {
+        T::Remove( Id );
+    }
 };
 
 
@@ -63,7 +75,12 @@ T* CRActor::AddComponent()
 
     component->ObjectId = ObjectId;
 
-    Components.push_back( component );
+    const CRComponentRemover remover = &CRActor::_RemoveComponent< T >;
+
+    if ( std::ranges::find( ComponentRemovers, remover ) == ComponentRemovers.end() )
+    {
+        ComponentRemovers.push_back( remover );
+    }
 
     return component;
 }
@@ -74,4 +91,5 @@ T* CRActor::AddComponent()
 template < ComponentType T >
 void CRActor::RemoveComponent()
 {
+    T::Remove( ObjectId );
 }
