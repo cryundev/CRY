@@ -283,6 +283,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\RHI\DX11\CRD11BindingConstantBuffer.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11DepthStencilBuffer.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11RenderTarget2D.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11RenderingPipeline.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ResourceManager.cpp" />
@@ -354,6 +355,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\DX11\CRD11DepthStencilBuffer.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Include.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11RenderTarget2D.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Renderer.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11RenderingPipeline.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11ResourceManager.h" />
