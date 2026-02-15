@@ -13,6 +13,9 @@ public:
     /// Initialize component.
     virtual void InitializeComponent() {}
 
+    /// Destroy component.
+    virtual void DestroyComponent() {}
+
     /// Update component.
     virtual void UpdateComponent( float DeltaSeconds ) {}
 };

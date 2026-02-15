@@ -74,6 +74,8 @@ bool CRComponent< T >::Remove( const CRIdentity::id_t& Id )
     assert( index < IdMap.size() );
     assert( IdMap[ index ] < Components.size() );
 
+    Components[ IdMap[ index ] ].DestroyComponent();
+
     CRIdentity::id_t lastedIndex = CRIdentity::IndexOf( Components.back().GetObjectId() );
 
     IdMap[ lastedIndex ] = IdMap[ index ];

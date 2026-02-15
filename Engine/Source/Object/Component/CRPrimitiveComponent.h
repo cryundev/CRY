@@ -25,7 +25,10 @@ private:
 public:
     /// Constructor
     CRPrimitiveComponent() = default;
-    
+
+    /// Destroy component.
+    virtual void DestroyComponent() override;
+
     /// Update component.
     virtual void UpdateComponent( float DeltaSeconds ) override;
 
