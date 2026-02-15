@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include "CRRenderElement.h"
 #include "Source/Core/Math/CRMath.h"
 
 
@@ -17,11 +18,11 @@ public:
     /// Initialize renderer.
     virtual void Initialize( unsigned int Width, unsigned int Height ) = 0;
 
-    /// Add render mesh.
-    virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) = 0;
+    /// Add render element.
+    virtual CRRenderElementHandle AddRenderElement( const CRRenderElement& RenderElement ) = 0;
 
-    /// Remove render mesh.
-    virtual void RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh ) = 0;
+    /// Remove render element.
+    virtual void RemoveRenderElement( const CRRenderElementHandle& Handle ) = 0;
 
     /// Draw.
     virtual void Draw() = 0;

@@ -25,7 +25,7 @@ private:
     unsigned int ViewportWidth  = 1920;
     unsigned int ViewportHeight = 1080;
 
-    CRArray< ICRRHIMeshWPtr > RenderMeshes;
+    CRPackedArray< CRRenderElement > RenderElements;
 
     CRD11BindingConstantBuffer< CRMatrix         > TransformBuffer;
     CRD11BindingConstantBuffer< CRViewProjection > ViewProjectionBuffer;
@@ -47,11 +47,11 @@ public:
     /// Initialize renderer.
     virtual void Initialize( u32 Width, u32 Height ) override;
 
-    /// Add render mesh.
-    virtual void AddRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
+    /// Add render element.
+    virtual CRRenderElementHandle AddRenderElement( const CRRenderElement& RenderElement ) override;
 
-    /// Remove render mesh.
-    virtual void RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh ) override;
+    /// Remove render element.
+    virtual void RemoveRenderElement( const CRRenderElementHandle& Handle ) override;
 
     /// Draw.
     virtual void Draw() override;

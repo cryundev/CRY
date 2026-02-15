@@ -2,6 +2,7 @@
 
 
 #include "CRComponent.h"
+#include "Source/RHI/CRRenderElement.h"
 #include "Source/RHI/CRRHITypes.h"
 
 
@@ -11,10 +12,15 @@
 class CRPrimitiveComponent : public CRComponent< CRPrimitiveComponent >
 {
 private:
-    CRString       AssetPath;
-    bool           bPrevRender = false;
-    bool           bRender     = true;
-    ICRRHIMeshWPtr RHI;
+    CRString              AssetPath;
+    
+    bool                  bPrevRender = false;
+    bool                  bRender     = true;
+    
+    ICRRHIMeshWPtr        Mesh;
+    ICRRHIMaterialWPtr    Material;
+    
+    CRRenderElementHandle RenderElementHandle;
 
 public:
     /// Constructor

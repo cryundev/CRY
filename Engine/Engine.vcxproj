@@ -282,6 +282,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\RHI\DX11\CRD11.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11BindingConstantBuffer.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11DepthStencilBuffer.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11Material.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11RenderTarget2D.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp" />
@@ -313,6 +314,8 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Asset\CRPrimitiveAsset.h" />
     <ClInclude Include="Source\Asset\ICRAsset.h" />
     <ClInclude Include="Source\Core\Containers\CRContainerInc.h" />
+    <ClInclude Include="Source\Core\Containers\CRPackedArray.h" />
+    <ClInclude Include="Source\Core\Containers\CRPackedArray.hpp" />
     <ClInclude Include="Source\Core\CRGeneric.h" />
     <ClInclude Include="Source\Core\CRNumeric.h" />
     <ClInclude Include="Source\Core\CRSmartPtrMacro.h" />
@@ -333,6 +336,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Object\Game\CRGameInstance.h" />
     <ClInclude Include="Source\Object\Game\CRGameMode.h" />
     <ClInclude Include="Source\RHI\CRRHI.h" />
+    <ClInclude Include="Source\RHI\CRRenderElement.h" />
     <ClInclude Include="Source\RHI\CRRHITypes.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.h" />
@@ -354,6 +358,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\DX11\CRD11BindingConstantBuffer.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11DepthStencilBuffer.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Include.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11Material.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11RenderTarget2D.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Renderer.h" />
@@ -361,6 +366,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\DX11\CRD11ResourceManager.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11ShaderResourceTexture.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Types.h" />
+    <ClInclude Include="Source\RHI\ICRRHIMaterial.h" />
     <ClInclude Include="Source\RHI\ICRRHIMesh.h" />
     <ClInclude Include="Source\RHI\ICRRHIRenderer.h" />
     <ClInclude Include="Source\Utility\FBX\CRFbxInclude.h" />

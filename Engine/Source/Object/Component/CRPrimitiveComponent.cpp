@@ -1,6 +1,7 @@
 ﻿#include "CRPrimitiveComponent.h"
 #include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/RHI/CRRHI.h"
+#include "Source/RHI/ICRRHIMaterial.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 
@@ -10,24 +11,43 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 {
-    if ( RHI.expired() ) return;
+    if ( Mesh.expired() || Material.expired() )
+    {
+        if ( RenderElementHandle.IsValid() )
+        {
+            GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
+            RenderElementHandle = {};
+        }
+
+        bPrevRender = false;
+        
+        return;
+    }
     
     if ( bPrevRender )
     {
         if ( !bRender )
         {
-            GRHI.GetRenderer()->RemoveRenderMesh( RHI );
+            GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
+            RenderElementHandle = {};
         }
     }
     else
     {
         if ( bRender )
         {
-            GRHI.GetRenderer()->AddRenderMesh( RHI );
+            if ( !RenderElementHandle.IsValid() )
+            {
+                CRRenderElement renderElement;
+                renderElement.Mesh     = Mesh;
+                renderElement.Material = Material;
+                
+                RenderElementHandle = GRHI.GetRenderer()->AddRenderElement( renderElement );
+            }
         }
     }
 
-    bPrevRender = bRender;
+    bPrevRender = bRender && RenderElementHandle.IsValid();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -35,14 +55,35 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
 {
+    if ( RenderElementHandle.IsValid() )
+    {
+        GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
+        RenderElementHandle = {};
+    }
+
     AssetPath = InAssetPath;
     
     CRPrimitiveAsset asset;
     asset.Load( AssetPath );
 
-    RHI = GRHI.CreateMesh();
-    if ( RHI.expired() ) return;
-    
-    RHI.lock()->InitializePrimitive( ObjectName, asset );
-    RHI.lock()->InitializeMaterial();
+    Mesh = GRHI.CreateMesh();
+    if ( Mesh.expired() ) return;
+
+    Mesh.lock()->InitializePrimitive( ObjectName, asset );
+
+    Material = GRHI.CreateMaterial();
+    if ( Material.expired() ) return;
+
+    Material.lock()->Initialize( ObjectName );
+
+    if ( bRender )
+    {
+        CRRenderElement renderElement;
+        renderElement.Mesh     = Mesh;
+        renderElement.Material = Material;
+        
+        RenderElementHandle = GRHI.GetRenderer()->AddRenderElement( renderElement );
+    }
+
+    bPrevRender = bRender && RenderElementHandle.IsValid();
 }

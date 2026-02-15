@@ -13,7 +13,8 @@ private:
     ECRRHIType      RHIType  = ECRRHIType::DirectX11;
     ICRRHIRenderer* Renderer = nullptr;
 
-    CRArray< ICRRHIMeshSPtr > Meshes;
+    CRArray< ICRRHIMeshSPtr >     Meshes;
+    CRArray< ICRRHIMaterialSPtr > Materials;
     
 public:
     /// Constructor
@@ -33,6 +34,9 @@ public:
 
     /// Create mesh.
     ICRRHIMeshSPtr CreateMesh();
+
+    /// Create material.
+    ICRRHIMaterialSPtr CreateMaterial();
 
     /// Get renderer.
     ICRRHIRenderer* GetRenderer() const { return Renderer; }

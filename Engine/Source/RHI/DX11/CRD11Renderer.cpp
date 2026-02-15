@@ -6,6 +6,7 @@
 #include "Resource/CRD11Device.h"
 #include "Resource/CRD11RasterizerState.h"
 #include "Resource/CRD11RenderTargetView.h"
+#include "Source/RHI/ICRRHIMaterial.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/Utility/Log/CRLog.h"
 #include "Source/World/CRWorld.h"
@@ -18,6 +19,8 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
 {
     ViewportWidth  = Width;
     ViewportHeight = Height;
+
+    RenderElements.Clear();
 
     DepthStencilBuffer.Create( Width, Height );
     
@@ -61,31 +64,22 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Add render mesh.
+/// Add render element.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::AddRenderMesh( const ICRRHIMeshWPtr& Mesh )
+CRRenderElementHandle CRD11Renderer::AddRenderElement( const CRRenderElement& RenderElement )
 {
-    RenderMeshes.push_back( Mesh );
+    if ( RenderElement.Mesh.expired() ) return {};
+    if ( RenderElement.Material.expired() ) return {};
+
+    return RenderElements.Insert( RenderElement );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Remove render mesh.
+/// Remove render element.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::RemoveRenderMesh( const ICRRHIMeshWPtr& Mesh )
+void CRD11Renderer::RemoveRenderElement( const CRRenderElementHandle& Handle )
 {
-    if ( Mesh.expired() ) return;
-    
-    auto itr = std::ranges::find_if( RenderMeshes, [ Mesh ] ( const ICRRHIMeshWPtr& MeshPtr )
-    {
-        if ( MeshPtr.expired() ) return false;
-        
-        return MeshPtr.lock() == Mesh.lock();
-    } );
-    
-    if ( itr != RenderMeshes.end() )
-    {
-        RenderMeshes.erase( itr );
-    }
+    RenderElements.Remove( Handle );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -114,13 +108,27 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 void CRD11Renderer::Draw()
 {
     UpdateViewProjectionBuffer( GWorld->GetCamera()->GetViewMatrix(), GWorld->GetCamera()->GetProjectionMatrix() );
-    
-    for ( const ICRRHIMeshWPtr& renderMesh : RenderMeshes )
+
+    CRArray< CRRenderElementHandle > staleHandles;
+
+    RenderElements.ForEachActive( [ &staleHandles ] ( const CRRenderElementHandle& Handle, CRRenderElement& Element )
     {
-        if ( renderMesh.expired() ) continue;
-        
-        renderMesh.lock()->SetInRenderingPipeline();
-        renderMesh.lock()->Draw();
+        ICRRHIMeshSPtr     mesh     = Element.Mesh.lock();
+        ICRRHIMaterialSPtr material = Element.Material.lock();
+        if ( !mesh || !material )
+        {
+            staleHandles.push_back( Handle );
+            return;
+        }
+
+        mesh->SetInRenderingPipeline();
+        material->SetInRenderingPipeline();
+        mesh->Draw();
+    } );
+
+    for ( const CRRenderElementHandle& handle : staleHandles )
+    {
+        RenderElements.Remove( handle );
     }
 }
 
@@ -137,7 +145,7 @@ void CRD11Renderer::ClearRenderTarget() const
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Present.
-//---------------------------------------------------------------------------------------------------------------------%
+//---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Present() const
 {
     GD11.GetSwapChain()->Present( 0, 0 );

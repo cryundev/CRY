@@ -141,6 +141,9 @@
     <ClCompile Include="Source\RHI\DX11\CRD11DepthStencilBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RHI\DX11\CRD11Material.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -224,6 +227,12 @@
     <ClInclude Include="Source\Core\Containers\CRContainerInc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\Containers\CRPackedArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Containers\CRPackedArray.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Core\CRGeneric.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -282,6 +291,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\CRRHI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\CRRenderElement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\CRRHITypes.h">
@@ -347,6 +359,9 @@
     <ClInclude Include="Source\RHI\DX11\CRD11Include.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\CRD11Material.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -363,6 +378,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\DX11\CRD11Types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\ICRRHIMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\ICRRHIMesh.h">

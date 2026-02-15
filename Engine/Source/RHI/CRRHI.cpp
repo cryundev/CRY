@@ -1,6 +1,7 @@
 ﻿#include "CRRHI.h"
 #include "ICRRHIRenderer.h"
 #include "DX11/CRD11.h"
+#include "DX11/CRD11Material.h"
 #include "DX11/CRD11Mesh.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/Resource/CRD11CompiledShader.h"
@@ -137,6 +138,23 @@ ICRRHIMeshSPtr CRRHI::CreateMesh()
     Meshes.push_back( CRMakeShared( newMesh ) );
 
     return Meshes.back();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Create material.
+//---------------------------------------------------------------------------------------------------------------------
+ICRRHIMaterialSPtr CRRHI::CreateMaterial()
+{
+    ICRRHIMaterial* newMaterial = nullptr;
+
+    switch ( RHIType )
+    {
+    case ECRRHIType::DirectX11: newMaterial = new CRD11Material(); break;
+    }
+
+    Materials.push_back( CRMakeShared( newMaterial ) );
+
+    return Materials.back();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
