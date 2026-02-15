@@ -29,6 +29,9 @@ public:
     /// Destroy component.
     virtual void DestroyComponent() override;
 
+    /// Called when component is disabled.
+    virtual void OnDisabled() override;
+
     /// Update component.
     virtual void UpdateComponent( float DeltaSeconds ) override;
 

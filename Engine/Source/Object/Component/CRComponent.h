@@ -115,6 +115,17 @@ void CRComponent< T >::UpdateComponents( float DeltaSeconds )
     {
         if ( !component.IsValid() ) continue;
 
+        if ( !component.IsEnabled() )
+        {
+            if ( component.bWasEnabled )
+            {
+                component.OnDisabled();
+                component.bWasEnabled = false;
+            }
+            continue;
+        }
+
+        component.bWasEnabled = true;
         component.UpdateComponent( DeltaSeconds );
     }
 }

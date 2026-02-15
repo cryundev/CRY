@@ -19,6 +19,20 @@ void CRPrimitiveComponent::DestroyComponent()
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Called when component is disabled.
+//---------------------------------------------------------------------------------------------------------------------
+void CRPrimitiveComponent::OnDisabled()
+{
+    if ( RenderElementHandle.IsValid() )
+    {
+        GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
+        RenderElementHandle = {};
+    }
+
+    bPrevRender = false;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Update component.
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
