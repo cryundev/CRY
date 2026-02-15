@@ -53,5 +53,16 @@ See [detailed coding style guide](coding-style.md)
 - **C# 정렬**: 관련 변수 타입/이름 정렬
 - **빈 줄**: 섹션 간 2줄, 섹션 내 1줄
 
+## DX11 Learning Curriculum
+- 커리큘럼 문서: `DX11_LEARNING_CURRICULUM.md` (8 Phase, 24 소단원)
+- 렌더링 구조 리뷰: [dx11-rendering-review.md](dx11-rendering-review.md)
+- **커리큘럼 진행 전 필수 리팩토링**:
+  1. Mesh/Material 분리 (CRD11Mesh → 지오메트리만 + CRD11Material 신규)
+  2. shader.hlsl Normal 월드 변환 추가
+- **Phase별 추가 리팩토링**:
+  3. Renderer→World 디커플링 (Phase 3.1 전)
+  4. MRT 지원 (Phase 3.1 전)
+  5. ResourceManager Find/Create 분리
+
 ## Detailed Analysis
 See [full analysis report](analysis-report.md)
