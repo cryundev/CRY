@@ -80,7 +80,7 @@ void CRD11BindingConstantBuffer<T>::Update( const T& Data )
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
     HRESULT hr = GD11.GetDeviceContext()->Map( bufferPtr, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-    CRGeneric::CheckError( hr );
+    if ( CRGeneric::CheckError( hr ) ) return;
     {
         memcpy_s( mappedResource.pData, sizeof( T ), &Data, sizeof( T ) );
     }
