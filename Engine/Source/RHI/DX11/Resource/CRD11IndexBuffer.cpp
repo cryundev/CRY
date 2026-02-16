@@ -25,6 +25,9 @@ void CRD11IndexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const CRArray< 
 
     sd.pSysMem = Indice.data();
 
-    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &ObjectPtr );
+    ID3D11Buffer* createdBuffer = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &createdBuffer );
+    CommitCreatedObject( createdBuffer, hr );
+
     CRGeneric::CheckError( hr );
 }

@@ -28,6 +28,14 @@ CRRHI::CRRHI( ECRRHIType InRHIType )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Destructor
+//---------------------------------------------------------------------------------------------------------------------
+CRRHI::~CRRHI()
+{
+    Shutdown();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Initialize RHI.
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
@@ -121,6 +129,28 @@ void CRRHI::Present() const
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
     
     Renderer->Present();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Shutdown RHI and release resources.
+//---------------------------------------------------------------------------------------------------------------------
+void CRRHI::Shutdown()
+{
+    // ImGui shutdown is idempotent-safe when backend/context is not initialized.
+    if ( ImGui::GetCurrentContext() )
+    {
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+    }
+
+    Meshes.clear();
+    Materials.clear();
+
+    GD11RM.Clear();
+
+    delete Renderer;
+    Renderer = nullptr;
 }
 
 //---------------------------------------------------------------------------------------------------------------------

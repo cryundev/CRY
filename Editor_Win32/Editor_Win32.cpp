@@ -209,7 +209,12 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 		    EndPaint( hWnd, &ps );
 	    }
 	    break;
-    case WM_DESTROY: PostQuitMessage( 0 ); break;
+    case WM_DESTROY:
+        {
+            CREngine::Shutdown();
+            PostQuitMessage( 0 );
+        }
+        break;
     default:         return DefWindowProc( hWnd, message, wParam, lParam );
     }
     

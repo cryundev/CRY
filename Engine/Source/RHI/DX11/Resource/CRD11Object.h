@@ -25,4 +25,20 @@ public:
 
     /// Set object.
     void SetObjectPtr( T* InObjectPtr ) { if( ObjectPtr ) { ObjectPtr->Release(); } ObjectPtr = InObjectPtr; }
+
+protected:
+    /// Commit newly created D3D object and release old object safely.
+    void CommitCreatedObject( T* InCreatedObject, HRESULT Hr )
+    {
+        if ( SUCCEEDED( Hr ) )
+        {
+            SetObjectPtr( InCreatedObject );
+            return;
+        }
+
+        if ( InCreatedObject )
+        {
+            InCreatedObject->Release();
+        }
+    }
 };

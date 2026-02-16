@@ -19,11 +19,7 @@ void CRPrimitiveComponent::DestroyComponent()
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::OnDisabled()
 {
-    if ( RenderElementHandle.IsValid() )
-    {
-        GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-        RenderElementHandle = {};
-    }
+    _UnregisterRenderElement();
 
     bPrevRender = false;
 }
@@ -35,11 +31,7 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 {
     if ( Mesh.expired() || Material.expired() )
     {
-        if ( RenderElementHandle.IsValid() )
-        {
-            GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-            RenderElementHandle = {};
-        }
+        _UnregisterRenderElement();
 
         bPrevRender = false;
         
@@ -50,8 +42,7 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
     {
         if ( !bRender )
         {
-            GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-            RenderElementHandle = {};
+            _UnregisterRenderElement();
         }
     }
     else
@@ -77,11 +68,13 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
 {
-    if ( RenderElementHandle.IsValid() )
-    {
-        GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-        RenderElementHandle = {};
-    }
+    // P0: Always unregister previous render element before mesh/material replacement.
+    _UnregisterRenderElement();
+
+    Mesh.reset();
+    Material.reset();
+
+    bPrevRender = false;
 
     AssetPath = InAssetPath;
     
@@ -108,4 +101,15 @@ void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
     }
 
     bPrevRender = bRender && RenderElementHandle.IsValid();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Unregister render element.
+//---------------------------------------------------------------------------------------------------------------------
+void CRPrimitiveComponent::_UnregisterRenderElement()
+{
+    if ( !RenderElementHandle.IsValid() ) return;
+
+    GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
+    RenderElementHandle = {};
 }

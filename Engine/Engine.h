@@ -27,4 +27,7 @@ namespace CREngine
 
     /// Post-render.
     void PostRender( float DeltaSeconds );
+
+    /// Shutdown.
+    void Shutdown();
 }

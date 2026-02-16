@@ -9,6 +9,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11ShaderResourceView::Create( ID3D11Resource* Resource, const D3D11_SHADER_RESOURCE_VIEW_DESC& Description )
 {
-    HRESULT hr = GD11.GetDevice()->CreateShaderResourceView( Resource, &Description, &ObjectPtr );
+    ID3D11ShaderResourceView* createdView = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateShaderResourceView( Resource, &Description, &createdView );
+    CommitCreatedObject( createdView, hr );
+
     CRGeneric::CheckError( hr );
 }
