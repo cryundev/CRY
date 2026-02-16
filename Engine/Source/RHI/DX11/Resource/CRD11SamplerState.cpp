@@ -1,7 +1,6 @@
-﻿#include "CRD11SamplerState.h"
+#include "CRD11SamplerState.h"
 #include "CRD11Device.h"
 #include "Source/RHI/DX11//CRD11.h"
-#include "Source/Utility/Generic/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -9,6 +8,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11SamplerState::Create( const D3D11_SAMPLER_DESC& Description )
 {
-    HRESULT hr = GD11.GetDevice()->CreateSamplerState( &Description, &ObjectPtr );
-    CRGeneric::CheckError( hr );
+    ID3D11SamplerState* createdState = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateSamplerState( &Description, &createdState );
+
+    CommitCreatedObject( createdState, hr );
 }

@@ -1,4 +1,4 @@
-﻿#include "CRRHI.h"
+#include "CRRHI.h"
 #include "ICRRHIRenderer.h"
 #include "DX11/CRD11.h"
 #include "DX11/CRD11Material.h"
@@ -12,6 +12,7 @@
 #include "Extras/ImGUI/imgui.h"
 #include "Extras/ImGUI/imgui_impl_dx11.h"
 #include "Extras/ImGUI/imgui_impl_win32.h"
+#include "Source/Utility/Log/CRLog.h"
 #include <filesystem>
 
 
@@ -25,6 +26,14 @@ CRRHI::CRRHI( ECRRHIType InRHIType )
 : RHIType( InRHIType )
 {
     _CreateRenderer();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Destructor
+//---------------------------------------------------------------------------------------------------------------------
+CRRHI::~CRRHI()
+{
+    Shutdown();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -58,16 +67,26 @@ void CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::InitializeShaders()
 {
-    std::string currentFilePath = __FILE__;
+    std::filesystem::path hlslFilePath = std::filesystem::path( __FILE__ ).parent_path() / "DX11/HLSL/shader.hlsl";
 
-    // Get the directory of the current source file
-    std::filesystem::path currentDir = std::filesystem::path( currentFilePath ).parent_path();
+    if ( !std::filesystem::exists( hlslFilePath ) )
+    {
+        hlslFilePath = std::filesystem::path( "Engine/Source/RHI/DX11/HLSL/shader.hlsl" );
 
-    // Construct the HLSL file path relative to the current directory
-    std::filesystem::path hlslFilePath = currentDir / "DX11/HLSL" / "shader.hlsl";
-    
+        if ( !std::filesystem::exists( hlslFilePath ) )
+        {
+            GLog.AddLog( "[CRRHI::InitializeShaders] Failed to find shader file." );
+            return;
+        }
+    }
+
     CRD11CompiledShader compiledVS;
     compiledVS.Create( hlslFilePath.wstring(), "VS", "vs_5_0" );
+    if ( !compiledVS.GetObjectPtr() )
+    {
+        GLog.AddLog( "[CRRHI::InitializeShaders] Failed to compile vertex shader." );
+        return;
+    }
 
     CRD11VertexShaderWPtr vertexShader = GD11RM.GetVertexShader( "Diffuse" );
     if ( !vertexShader.expired() )
@@ -90,6 +109,11 @@ void CRRHI::InitializeShaders()
     
     CRD11CompiledShader compiledPS;
     compiledPS.Create( hlslFilePath.wstring(), "PS", "ps_5_0" );
+    if ( !compiledPS.GetObjectPtr() )
+    {
+        GLog.AddLog( "[CRRHI::InitializeShaders] Failed to compile pixel shader." );
+        return;
+    }
 
     CRD11PixelShaderWPtr pixelShader = GD11RM.GetPixelShader( "Diffuse" );
     if ( !pixelShader.expired() )
@@ -121,6 +145,28 @@ void CRRHI::Present() const
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
     
     Renderer->Present();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Shutdown RHI and release resources.
+//---------------------------------------------------------------------------------------------------------------------
+void CRRHI::Shutdown()
+{
+    // ImGui shutdown is idempotent-safe when backend/context is not initialized.
+    if ( ImGui::GetCurrentContext() )
+    {
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+    }
+
+    Meshes.clear();
+    Materials.clear();
+
+    GD11RM.Clear();
+
+    delete Renderer;
+    Renderer = nullptr;
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -5,8 +5,10 @@
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/Utility/FBX/CRFbxLoader.h"
+#include "Source/Utility/Log/CRLog.h"
 #include "Source/Utility/Time/CRFrameUpdator.h"
 #include "Source/World/CRWorld.h"
+#include <filesystem>
 
 
 CRSharedPtr< CRWorld > GWorld = CRMakeShared< CRWorld >(new CRWorld() );
@@ -57,7 +59,20 @@ void CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
         
         if ( CRPrimitiveComponent* primitive = minion->AddComponent< CRPrimitiveComponent >() )
         {
-            primitive->LoadAsset( "../Asset/Minion.cra" );
+            std::filesystem::path assetPath = std::filesystem::path( __FILE__ ).parent_path() / "../Asset/Minion.cra";
+            if ( !std::filesystem::exists( assetPath ) )
+            {
+                assetPath = std::filesystem::path( "../Asset/Minion.cra" );
+            }
+
+            if ( std::filesystem::exists( assetPath ) )
+            {
+                primitive->LoadAsset( assetPath.lexically_normal().string() );
+            }
+            else
+            {
+                GLog.AddLog( "[CREngine::Initialize] Failed to find Minion.cra." );
+            }
         }
     }
     
@@ -97,6 +112,14 @@ void CREngine::Render( float DeltaSeconds )
 void CREngine::PostRender( float DeltaSeconds )
 {
     GRHI.Present();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Shutdown.
+//---------------------------------------------------------------------------------------------------------------------
+void CREngine::Shutdown()
+{
+    GRHI.Shutdown();
 }
 
 

@@ -7,6 +7,8 @@
 #include "Resource/CRD11SamplerState.h"
 #include "Resource/CRD11ShaderResourceView.h"
 #include "Resource/CRD11VertexShader.h"
+#include "Source/Utility/Log/CRLog.h"
+#include <filesystem>
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -20,8 +22,19 @@ void CRD11Material::Initialize( const CRName& )
 
     Textures.clear();
 
+    std::filesystem::path texturePath = std::filesystem::path( __FILE__ ).parent_path() / "../../../../Asset/cryun_icon.png";
+    if ( !std::filesystem::exists( texturePath ) )
+    {
+        texturePath = std::filesystem::path( "../Asset/cryun_icon.png" );
+    }
+
+    if ( !std::filesystem::exists( texturePath ) )
+    {
+        GLog.AddLog( "[CRD11Material::Initialize] Failed to find cryun_icon.png." );
+    }
+
     CRD11ShaderResourceTexture texture;
-    texture.Create( "../Asset/cryun_icon.png" );
+    texture.Create( texturePath.lexically_normal().string() );
 
     Textures.push_back( texture );
 }

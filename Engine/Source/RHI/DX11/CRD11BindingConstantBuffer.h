@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #include "CRD11.h"
@@ -78,12 +78,17 @@ void CRD11BindingConstantBuffer<T>::Update( const T& Data )
     ID3D11Buffer* bufferPtr = ConstantBufferPtr.lock()->GetObjectPtr();
     if ( !bufferPtr ) return;
 
-    D3D11_MAPPED_SUBRESOURCE mappedResource;
+    D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+    
     HRESULT hr = GD11.GetDeviceContext()->Map( bufferPtr, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-    CRGeneric::CheckError( hr );
+    if ( CRGeneric::CheckError( hr ) ) return;
+
+    if ( mappedResource.pData )
     {
-        memcpy_s( mappedResource.pData, sizeof( T ), &Data, sizeof( T ) );
+         memcpy_s( mappedResource.pData, sizeof( T ), &Data, sizeof( T ) );
     }
+
+   
     GD11.GetDeviceContext()->Unmap( bufferPtr, 0 );
 }
 

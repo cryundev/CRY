@@ -1,4 +1,4 @@
-﻿#include "CRD11RenderingPipeline.h"
+#include "CRD11RenderingPipeline.h"
 #include "CRD11.h"
 #include "Resource/CRD11Device.h"
 
@@ -70,7 +70,6 @@ void CRD11RenderingPipeline::SetConstantBuffer( ID3D11Buffer* Buffer, u32 Slot, 
 void CRD11RenderingPipeline::SetShaderResourceView( ID3D11ShaderResourceView* View, u32 Slot, ED11RenderingPipelineStage Stage )
 {
     if ( Slot >= D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT ) return;
-    if ( !View ) return;
 
     ShaderResourceViews[ Slot ][ (int)( Stage ) ] = View;
 
@@ -92,7 +91,6 @@ void CRD11RenderingPipeline::SetShaderResourceView( ID3D11ShaderResourceView* Vi
 void CRD11RenderingPipeline::SetSamplerState( ID3D11SamplerState* State, u32 Slot )
 {
     if ( Slot >= D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT ) return;
-    if ( !State ) return;
 
     SamplerStates[ Slot ] = State;
 

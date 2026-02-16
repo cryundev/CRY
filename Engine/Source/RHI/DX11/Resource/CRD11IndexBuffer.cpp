@@ -1,7 +1,6 @@
-﻿#include "CRD11IndexBuffer.h"
+#include "CRD11IndexBuffer.h"
 #include "CRD11Device.h"
 #include "Source/RHI/DX11/CRD11.h"
-#include "Source/Utility/Generic/CRGeneric.h"
 #include "Source/Utility/Log/CRLog.h"
 
 
@@ -10,6 +9,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11IndexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const CRArray< i32 >& Indice )
 {
+    SetObjectPtr( nullptr );
+
     Count = (u32)( Indice.size() );
 
     D3D11_BUFFER_DESC bd;
@@ -25,6 +26,8 @@ void CRD11IndexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const CRArray< 
 
     sd.pSysMem = Indice.data();
 
-    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &ObjectPtr );
-    CRGeneric::CheckError( hr );
+    ID3D11Buffer* createdBuffer = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &createdBuffer );
+
+    CommitCreatedObject( createdBuffer, hr );
 }

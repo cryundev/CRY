@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #include "Source/Core/CRSmartPtrMacro.h"
@@ -27,4 +27,7 @@ namespace CREngine
 
     /// Post-render.
     void PostRender( float DeltaSeconds );
+
+    /// Shutdown.
+    void Shutdown();
 }

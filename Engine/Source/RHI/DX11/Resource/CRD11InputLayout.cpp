@@ -1,7 +1,6 @@
-﻿#include "CRD11InputLayout.h"
+#include "CRD11InputLayout.h"
 #include "CRD11Device.h"
 #include "Source/RHI/DX11/CRD11.h"
-#include "Source/Utility/Generic/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -11,6 +10,8 @@ void CRD11InputLayout::Create( D3D11_INPUT_ELEMENT_DESC* Elments, u32 Count, ID3
 {
     if ( !CompiledShader ) return;
 
-    HRESULT hr = GD11.GetDevice()->CreateInputLayout( Elments, Count, CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), &ObjectPtr );
-    CRGeneric::CheckError( hr );
+    ID3D11InputLayout* createdInputLayout = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateInputLayout( Elments, Count, CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), &createdInputLayout );
+
+    CommitCreatedObject( createdInputLayout, hr );
 }

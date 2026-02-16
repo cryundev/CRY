@@ -1,4 +1,4 @@
-﻿#include "CRPrimitiveComponent.h"
+#include "CRPrimitiveComponent.h"
 #include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIMaterial.h"
@@ -7,17 +7,31 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Destroy component.
+//---------------------------------------------------------------------------------------------------------------------
+void CRPrimitiveComponent::DestroyComponent()
+{
+    OnDisabled();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Called when component is disabled.
+//---------------------------------------------------------------------------------------------------------------------
+void CRPrimitiveComponent::OnDisabled()
+{
+    _UnregisterRenderElement();
+
+    bPrevRender = false;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Update component.
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 {
     if ( Mesh.expired() || Material.expired() )
     {
-        if ( RenderElementHandle.IsValid() )
-        {
-            GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-            RenderElementHandle = {};
-        }
+        _UnregisterRenderElement();
 
         bPrevRender = false;
         
@@ -28,8 +42,7 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
     {
         if ( !bRender )
         {
-            GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-            RenderElementHandle = {};
+            _UnregisterRenderElement();
         }
     }
     else
@@ -55,11 +68,12 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
 {
-    if ( RenderElementHandle.IsValid() )
-    {
-        GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-        RenderElementHandle = {};
-    }
+    _UnregisterRenderElement();
+
+    Mesh.reset();
+    Material.reset();
+
+    bPrevRender = false;
 
     AssetPath = InAssetPath;
     
@@ -86,4 +100,22 @@ void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
     }
 
     bPrevRender = bRender && RenderElementHandle.IsValid();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Unregister render element.
+//---------------------------------------------------------------------------------------------------------------------
+void CRPrimitiveComponent::_UnregisterRenderElement()
+{
+    if ( !RenderElementHandle.IsValid() ) return;
+
+    ICRRHIRenderer* renderer = GRHI.GetRenderer();
+    if ( !renderer )
+    {
+        RenderElementHandle = {};
+        return;
+    }
+
+    renderer->RemoveRenderElement( RenderElementHandle );
+    RenderElementHandle = {};
 }

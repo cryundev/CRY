@@ -1,5 +1,4 @@
-﻿#include "CRD11CompiledShader.h"
-#include "Source/Utility/Generic/CRGeneric.h"
+#include "CRD11CompiledShader.h"
 #include "Source/Utility/Log/CRLog.h"
 #include <d3dcompiler.h>
 
@@ -9,16 +8,16 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11CompiledShader::Create( const CRWString& Path, const CRString& EntryPoint, const CRString& ShaderModel )
 {
+    SetObjectPtr( nullptr );
+
     ID3DBlob* error = nullptr;
+    ID3DBlob* compiledShader = nullptr;
 
-    HRESULT hr = D3DCompileFromFile( Path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryPoint.c_str(), ShaderModel.c_str(), D3DCOMPILE_ENABLE_STRICTNESS, 0, &ObjectPtr, &error );
-
-    if ( CRGeneric::CheckError( hr ) )
+    HRESULT hr = D3DCompileFromFile( Path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryPoint.c_str(), ShaderModel.c_str(), D3DCOMPILE_ENABLE_STRICTNESS, 0, &compiledShader, &error );
+    
+    if ( !CommitCreatedObject( compiledShader, hr ) && error )
     {
-        if ( error )
-        {
-            GLog.AddLog( (char*)error->GetBufferPointer() );
-        }
+        GLog.AddLog( (char*)error->GetBufferPointer() );
     }
 
     if ( error )

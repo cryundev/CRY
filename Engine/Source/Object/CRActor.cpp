@@ -1,4 +1,4 @@
-﻿#include "CRActor.h"
+#include "CRActor.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -6,12 +6,14 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRActor::Destroy()
 {
-    for ( const CRComponentRemover& remover : ComponentRemovers )
-    {
-        remover( ObjectId );
-    }
-
+    const CRArray< CRComponentRemover > removers = ComponentRemovers;
     ComponentRemovers.clear();
+    ComponentRemoverTypes.clear();
+
+    for ( const CRComponentRemover& remover : removers )
+    {
+        remover();
+    }
 
     CRObject::Destroy();
 }

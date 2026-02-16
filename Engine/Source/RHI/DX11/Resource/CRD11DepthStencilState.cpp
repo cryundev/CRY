@@ -1,7 +1,6 @@
-﻿#include "CRD11DepthStencilState.h"
+#include "CRD11DepthStencilState.h"
 #include "CRD11Device.h"
 #include "Source/RHI/DX11/CRD11.h"
-#include "Source/Utility/Generic/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -9,6 +8,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11DepthStencilState::Create( const D3D11_DEPTH_STENCIL_DESC& Description )
 {
-    HRESULT hr = GD11.GetDevice()->CreateDepthStencilState( &Description, &ObjectPtr );
-    CRGeneric::CheckError( hr );
+    ID3D11DepthStencilState* createdState = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateDepthStencilState( &Description, &createdState );
+
+    CommitCreatedObject( createdState, hr );
 }

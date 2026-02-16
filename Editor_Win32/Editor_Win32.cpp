@@ -1,4 +1,4 @@
-﻿#include "framework.h"
+#include "framework.h"
 #include "Editor_Win32.h"
 #include "Input/CRInputProcessorCamera.h"
 #include "UI/CREditorUI.h"
@@ -62,7 +62,7 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		    TranslateMessage( &msg );
 		    DispatchMessage ( &msg );
 
-		    if( msg.message == WM_QUIT ) break;
+		    if ( msg.message == WM_QUIT || msg.message == WM_DESTROY ) break;
 	    }
 
         
@@ -209,7 +209,12 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 		    EndPaint( hWnd, &ps );
 	    }
 	    break;
-    case WM_DESTROY: PostQuitMessage( 0 ); break;
+    case WM_DESTROY:
+        {
+            CREngine::Shutdown();
+            PostQuitMessage( 0 );
+        }
+        break;
     default:         return DefWindowProc( hWnd, message, wParam, lParam );
     }
     

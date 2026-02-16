@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #include "CRComponent.h"
@@ -25,10 +25,20 @@ private:
 public:
     /// Constructor
     CRPrimitiveComponent() = default;
-    
+
+    /// Destroy component.
+    virtual void DestroyComponent() override;
+
+    /// Called when component is disabled.
+    virtual void OnDisabled() override;
+
     /// Update component.
     virtual void UpdateComponent( float DeltaSeconds ) override;
 
     /// Load asset.
     void LoadAsset( const CRString& InAssetPath );
+
+private:
+    /// Remove this component's render element from renderer.
+    void _UnregisterRenderElement();
 };

@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #include "Source/Core/CRTypes.h"
@@ -24,6 +24,9 @@ public:
 
     /// Create Dx11 device ojects.
     bool Create( HWND hWnd );
+
+    /// Clear Dx11 device objects.
+    void Clear();
 
     /// Get maximum texture size.
     u32 GetMaxTextureSize() const;

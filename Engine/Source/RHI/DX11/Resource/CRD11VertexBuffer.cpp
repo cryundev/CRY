@@ -1,7 +1,6 @@
-﻿#include "CRD11VertexBuffer.h"
+#include "CRD11VertexBuffer.h"
 #include "CRD11Device.h"
 #include "Source/RHI/DX11/CRD11.h"
-#include "Source/Utility/Generic/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -9,6 +8,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11VertexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const void* BlobPtr, u32 InStride, u32 InCount )
 {
+    SetObjectPtr( nullptr );
+
     Stride = InStride;
     Count  = InCount;
 
@@ -25,6 +26,8 @@ void CRD11VertexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const void* Bl
 
     sd.pSysMem = BlobPtr;
 
-    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &ObjectPtr );
-    CRGeneric::CheckError( hr );
+    ID3D11Buffer* createdBuffer = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, &sd, &createdBuffer );
+
+    CommitCreatedObject( createdBuffer, hr );
 }

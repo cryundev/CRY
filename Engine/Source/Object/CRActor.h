@@ -1,9 +1,11 @@
-﻿#pragma once
+#pragma once
 
 
 #include "CRObject.h"
 #include "Source/Object/Component/CRTransformComponent.h"
 #include <algorithm>
+#include <functional>
+#include <typeinfo>
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -15,10 +17,12 @@ public:
     friend class CRWorld;
     
 protected:
-    using CRComponentRemover = void(*)( const CRIdentity::id_t& Id );
+    using CRComponentRemover = std::function< void() >;
+    using CRComponentTypeHash = size_t;
 
 protected:
     CRArray< CRComponentRemover > ComponentRemovers;
+    CRArray< CRComponentTypeHash > ComponentRemoverTypes;
     CRWorld*                      World = nullptr;
     
 public:
@@ -52,12 +56,11 @@ public:
     }
 
 private:
-    /// Remove component internal.
     template< ComponentType T >
-    static void _RemoveComponent( const CRIdentity::id_t& Id )
-    {
-        T::Remove( Id );
-    }
+    void _RegisterComponentRemover();
+
+    template< ComponentType T >
+    void _UnregisterComponentRemover();
 };
 
 
@@ -75,12 +78,7 @@ T* CRActor::AddComponent()
 
     component->ObjectId = ObjectId;
 
-    const CRComponentRemover remover = &CRActor::_RemoveComponent< T >;
-
-    if ( std::ranges::find( ComponentRemovers, remover ) == ComponentRemovers.end() )
-    {
-        ComponentRemovers.push_back( remover );
-    }
+    _RegisterComponentRemover< T >();
 
     return component;
 }
@@ -91,5 +89,50 @@ T* CRActor::AddComponent()
 template < ComponentType T >
 void CRActor::RemoveComponent()
 {
-    T::Remove( ObjectId );
+    const bool bRemoved = T::Remove( ObjectId );
+    if ( !bRemoved ) return;
+
+    _UnregisterComponentRemover< T >();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Register component remover.
+//---------------------------------------------------------------------------------------------------------------------
+template < ComponentType T >
+void CRActor::_RegisterComponentRemover()
+{
+    const CRComponentTypeHash typeHash = typeid( T ).hash_code();
+    if ( std::ranges::find( ComponentRemoverTypes, typeHash ) != ComponentRemoverTypes.end() ) return;
+
+    ComponentRemoverTypes.push_back( typeHash );
+
+    ComponentRemovers.emplace_back( [ this ]()
+    {
+        RemoveComponent< T >();
+    } );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Unregister component remover.
+//---------------------------------------------------------------------------------------------------------------------
+template < ComponentType T >
+void CRActor::_UnregisterComponentRemover()
+{
+    const CRComponentTypeHash typeHash = typeid( T ).hash_code();
+
+    size_t removeIndex = ComponentRemoverTypes.size();
+    for ( size_t i = 0; i < ComponentRemoverTypes.size(); ++i )
+    {
+        if ( ComponentRemoverTypes[ i ] != typeHash ) continue;
+
+        removeIndex = i;
+        break;
+    }
+
+    if ( removeIndex >= ComponentRemoverTypes.size() ) return;
+
+    ComponentRemoverTypes.erase( ComponentRemoverTypes.begin() + removeIndex );
+
+    if ( removeIndex >= ComponentRemovers.size() ) return;
+    ComponentRemovers.erase( ComponentRemovers.begin() + removeIndex );
 }

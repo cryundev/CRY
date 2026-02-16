@@ -1,7 +1,6 @@
-﻿#include "CRD11ConstantBuffer.h"
+#include "CRD11ConstantBuffer.h"
 #include "CRD11Device.h"
 #include "Source/RHI/DX11//CRD11.h"
-#include "Source/Utility/Generic/CRGeneric.h"
 #include "Source/Utility/Log/CRLog.h"
 
 
@@ -10,6 +9,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11ConstantBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, u32 Size )
 {
+    SetObjectPtr( nullptr );
+
     D3D11_BUFFER_DESC bd;
     ZeroMemory( &bd, sizeof( D3D11_BUFFER_DESC ) );
 	
@@ -18,6 +19,8 @@ void CRD11ConstantBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, u32 Size )
     bd.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;  
     bd.CPUAccessFlags = CpuAccess;
 
-    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, nullptr, &ObjectPtr );
-    CRGeneric::CheckError( hr );
+    ID3D11Buffer* createdBuffer = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, nullptr, &createdBuffer );
+
+    CommitCreatedObject( createdBuffer, hr );
 }
