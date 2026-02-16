@@ -1,4 +1,4 @@
-﻿#include "CRFbxLoader.h"
+#include "CRFbxLoader.h"
 #include "Source/Utility/Log/CRLog.h"
 
 

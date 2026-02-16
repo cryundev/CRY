@@ -1,4 +1,4 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
 using Editor_WPF.GameProject;
 using Editor_WPF.Objects;
 using Editor_WPF.Utilities;

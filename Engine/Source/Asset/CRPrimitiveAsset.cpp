@@ -1,4 +1,4 @@
-﻿#include "CRPrimitiveAsset.h"
+#include "CRPrimitiveAsset.h"
 #include <fstream>
 #include <ios>
 

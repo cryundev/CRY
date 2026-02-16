@@ -1,4 +1,4 @@
-﻿#include "CRD11RenderTarget2D.h"
+#include "CRD11RenderTarget2D.h"
 #include "CRD11.h"
 #include "CRD11ResourceManager.h"
 #include "Resource/CRD11RenderTargetView.h"

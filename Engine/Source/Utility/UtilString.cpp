@@ -1,4 +1,4 @@
-﻿#include "UtilString.h"
+#include "UtilString.h"
 #include <Windows.h>
 
 

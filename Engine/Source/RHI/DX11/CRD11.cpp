@@ -1,4 +1,4 @@
-﻿#include "CRD11.h"
+#include "CRD11.h"
 #include "Resource/CRD11Device.h"
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"

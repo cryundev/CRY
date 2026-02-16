@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #ifndef CR_ENGINE_API

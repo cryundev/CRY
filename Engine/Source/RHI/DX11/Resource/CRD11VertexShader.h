@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #include "CRD11Object.h"

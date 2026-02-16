@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 
 #include "Extras/DirectXTK/Inc/Keyboard.h"

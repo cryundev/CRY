@@ -1,4 +1,4 @@
-﻿#include "CRInputProcessorCamera.h"
+#include "CRInputProcessorCamera.h"
 #include "Editor_Win32.h"
 #include "Engine.h"
 #include "Source/World/CRWorld.h"

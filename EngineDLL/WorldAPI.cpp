@@ -1,4 +1,4 @@
-﻿#include "Engine.h"
+#include "Engine.h"
 #include "EngineDLL.h"
 #include "Source/Core/Identify/CRIdentity.h"
 #include "Source/World/CRWorld.h"

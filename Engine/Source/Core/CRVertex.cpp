@@ -1,4 +1,4 @@
-﻿#include "CRVertex.h"
+#include "CRVertex.h"
 
 
 CRVertex GCRVTriangle[ 3 ] =

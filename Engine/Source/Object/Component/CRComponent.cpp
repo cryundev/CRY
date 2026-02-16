@@ -1,2 +1,2 @@
-﻿#include "CRComponent.h"
+#include "CRComponent.h"
 

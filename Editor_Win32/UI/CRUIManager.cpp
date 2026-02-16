@@ -1,4 +1,4 @@
-﻿#include "CRUIManager.h"
+#include "CRUIManager.h"
 #include "ICRUI.h"
 
 

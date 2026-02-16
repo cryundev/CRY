@@ -1,4 +1,4 @@
-﻿#include "CRLogUI.h"
+#include "CRLogUI.h"
 #include "Extras/ImGUI/imgui.h"
 #include <Source/Utility/Log/CRLog.h>
 

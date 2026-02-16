@@ -1,4 +1,4 @@
-﻿#include "CRLog.h"
+#include "CRLog.h"
 #include "Source/Utility/UtilString.h"
 #include <comdef.h>
 

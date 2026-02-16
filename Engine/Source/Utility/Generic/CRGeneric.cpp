@@ -1,4 +1,4 @@
-﻿#include "CRGeneric.h"
+#include "CRGeneric.h"
 #include "../Log/CRLog.h"
 
 

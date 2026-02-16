@@ -1,4 +1,4 @@
-﻿using System.Numerics;
+using System.Numerics;
 using System.Runtime.Serialization;
 using Editor_WPF.Objects;
 using Editor_WPF.Utilities;

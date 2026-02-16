@@ -1,4 +1,4 @@
-﻿#include "CRCameraUI.h"
+#include "CRCameraUI.h"
 #include "Extras/ImGUI/imgui.h"
 #include <Source/Object/Camera/CRCamera.h>
 

@@ -1,4 +1,4 @@
-﻿#include "CRWICTextureLoader.h"
+#include "CRWICTextureLoader.h"
 #include "../UtilString.h"
 #include "../../RHI/DX11/CRD11.h"
 #include "../../RHI/DX11/Resource/CRD11Device.h"

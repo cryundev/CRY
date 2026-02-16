@@ -1,4 +1,4 @@
-﻿#include "CRD11ResourceManager.h"
+#include "CRD11ResourceManager.h"
 #include "Resource/CRD11CompiledShader.h"
 #include "Resource/CRD11ConstantBuffer.h"
 #include "Resource/CRD11DepthStencilState.h"

@@ -1,4 +1,4 @@
-﻿#include "CRD11DepthStencilBuffer.h"
+#include "CRD11DepthStencilBuffer.h"
 #include "CRD11.h"
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"

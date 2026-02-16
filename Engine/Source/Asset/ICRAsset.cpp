@@ -1,1 +1,1 @@
-﻿#include "ICRAsset.h"
+#include "ICRAsset.h"

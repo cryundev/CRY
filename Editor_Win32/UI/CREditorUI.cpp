@@ -1,4 +1,4 @@
-﻿#include "CREditorUI.h"
+#include "CREditorUI.h"
 #include "Engine.h"
 #include "Extras/ImGUI/imgui.h"
 #include "Source/World/CRWorld.h"

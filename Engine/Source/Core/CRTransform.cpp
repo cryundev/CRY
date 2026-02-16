@@ -1,4 +1,4 @@
-﻿#include "CRTransform.h"
+#include "CRTransform.h"
 
 
 CRTransform CRTransform::Identity = CRTransform();

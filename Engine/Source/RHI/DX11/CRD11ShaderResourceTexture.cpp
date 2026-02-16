@@ -1,4 +1,4 @@
-﻿#include "CRD11ShaderResourceTexture.h"
+#include "CRD11ShaderResourceTexture.h"
 #include "CRD11.h"
 #include "CRD11ResourceManager.h"
 #include "Resource/CRD11SamplerState.h"

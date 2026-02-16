@@ -1,4 +1,4 @@
-﻿#include "CRScript.h"
+#include "CRScript.h"
 
 
 using ScriptRegistry = CRMap< CRName, CRScriptCreator >;
