@@ -14,7 +14,7 @@ extern CRTime GFrameTime;
 namespace CREngine
 {
     /// Initialize.
-    void Initialize( HWND hWnd, unsigned int Width, unsigned int Height );
+    bool Initialize( HWND hWnd, unsigned int Width, unsigned int Height );
 
     /// Tick.
     void Tick( float DeltaSeconds );

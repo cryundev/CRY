@@ -7,12 +7,12 @@
 #include "Source/Utility/FBX/CRFbxLoader.h"
 #include "Source/Utility/Log/CRLog.h"
 #include "Source/Utility/Time/CRFrameUpdator.h"
+#include "Source/Utility/WIC/CRWICTextureLoader.h"
 #include "Source/World/CRWorld.h"
 #include <filesystem>
 
 
 CRSharedPtr< CRWorld > GWorld = CRMakeShared< CRWorld >(new CRWorld() );
- ;
 
 CRTime         GFrameTime;
 CRFrameUpdator GFrameUpdator;
@@ -21,15 +21,46 @@ CRFrameUpdator GFrameUpdator;
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize.
 //---------------------------------------------------------------------------------------------------------------------
-void CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
+bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
 {
-    GRHI.Initialize( hWnd, Width, Height );
+    if ( !GWorld )
+    {
+        GWorld = CRMakeShared< CRWorld >( new CRWorld() );
+    }
+
+    if ( !GRHI.Initialize( hWnd, Width, Height ) )
+    {
+        GLog.AddLog( "[CREngine::Initialize] Failed to initialize RHI." );
+        return false;
+    }
+
+    CRCamera* camera = GWorld->GetCamera();
+    if ( !camera )
+    {
+        GLog.AddLog( "[CREngine::Initialize] Failed to get camera." );
+        return false;
+    }
     
-    GWorld->GetCamera()->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, (f32)Width, (f32)Height, 0.1f, 1000.0f );
-    GWorld->GetCamera()->SetLookAtDirection( 0.f, 0.f, -1.f );
-    GWorld->GetCamera()->GetTransform()->SetLocation( 0.f, 0.f, 15.0f );
+    camera->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, (f32)Width, (f32)Height, 0.1f, 1000.0f );
+    camera->SetLookAtDirection( 0.f, 0.f, -1.f );
+
+    CRTransformComponent* cameraTransform = camera->GetTransform();
+    if ( !cameraTransform )
+    {
+        GLog.AddLog( "[CREngine::Initialize] Failed to get camera transform." );
+        return false;
+    }
+
+    cameraTransform->SetLocation( 0.f, 0.f, 15.0f );
     
-    GRHI.GetRenderer()->UpdateViewProjectionBuffer( GWorld->GetCamera()->GetViewMatrix(), GWorld->GetCamera()->GetProjectionMatrix() );
+    ICRRHIRenderer* renderer = GRHI.GetRenderer();
+    if ( !renderer )
+    {
+        GLog.AddLog( "[CREngine::Initialize] Failed to get renderer." );
+        return false;
+    }
+
+    renderer->UpdateViewProjectionBuffer( camera->GetViewMatrix(), camera->GetProjectionMatrix() );
 
     // const CRString& loadFbxPaht = "../Asset/Minion";
     // CRFbxLoader fbxLoader;
@@ -77,6 +108,8 @@ void CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
     }
     
     GFrameUpdator.Initialize( 30 );
+
+    return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -119,7 +152,13 @@ void CREngine::PostRender( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 void CREngine::Shutdown()
 {
+    if ( GWorld )
+    {
+        GWorld.reset();
+    }
+
     GRHI.Shutdown();
+    CRWICTextureLoader::ShutdownWICFactory();
 }
 
 

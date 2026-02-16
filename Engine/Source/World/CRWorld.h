@@ -22,6 +22,9 @@ public:
     /// Constructor.
     CRWorld();
 
+    /// Destructor.
+    ~CRWorld();
+
     /// Get camera.
     CRCamera* GetCamera() const { return Camera; }
     

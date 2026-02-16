@@ -51,11 +51,32 @@ T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
 
     CRIdentity::id_t index = CRIdentity::IndexOf( Id );
 
+    if ( index < IdMap.size() )
+    {
+        const CRIdentity::id_t componentIndex = IdMap[ index ];
+        if ( componentIndex != CRIdentity::InvalidId )
+        {
+            if ( componentIndex < Components.size() )
+            {
+                return CRCast< T >( &Components[ componentIndex ] );
+            }
+
+            assert( false && "Invalid component index in IdMap." );
+            return nullptr;
+        }
+    }
+
     Components.emplace_back();
 
     if ( index >= IdMap.size() )
     {
+        const size_t oldSize = IdMap.size();
         IdMap.resize( index + 1 );
+
+        for ( size_t i = oldSize; i < IdMap.size(); ++i )
+        {
+            IdMap[ i ] = CRIdentity::InvalidId;
+        }
     }
 
     IdMap[ index ] = Components.size() - 1;
@@ -99,11 +120,12 @@ T* CRComponent< T >::Get( const CRIdentity::id_t& Id )
     assert( CRIdentity::IsValid( Id ) );
     
     CRIdentity::id_t index = CRIdentity::IndexOf( Id );
-    
-    assert( index < IdMap.size() );
-    assert( IdMap[ index ] < Components.size() );
 
+    if ( index >= IdMap.size() ) return nullptr;
     if ( IdMap[ index ] == CRIdentity::InvalidId ) return nullptr;
+
+    assert( IdMap[ index ] < Components.size() );
+    if ( IdMap[ index ] >= Components.size() ) return nullptr;
 
     return CRCast< T >( &Components[ IdMap[ index ] ] );
 }

@@ -16,7 +16,7 @@ class CRObject
 {    
 protected:
     CRName     ObjectName;  
-    CRObjectId ObjectId;
+    CRObjectId ObjectId = CRObjectId( CRIdentity::InvalidId );
     
 public:
     /// Constructor

@@ -12,6 +12,7 @@ class CRRHI
 private:
     ECRRHIType      RHIType  = ECRRHIType::DirectX11;
     ICRRHIRenderer* Renderer = nullptr;
+    bool            bInitialized = false;
 
     CRArray< ICRRHIMeshSPtr >     Meshes;
     CRArray< ICRRHIMaterialSPtr > Materials;
@@ -24,7 +25,7 @@ public:
     ~CRRHI();
     
     /// Initialize RHI.
-    void Initialize( HWND hWnd, u32 Width, u32 Height );
+    bool Initialize( HWND hWnd, u32 Width, u32 Height );
 
     /// Initialize shaders.
     void InitializeShaders();
@@ -46,6 +47,9 @@ public:
 
     /// Get renderer.
     ICRRHIRenderer* GetRenderer() const { return Renderer; }
+
+    /// Return true when RHI is fully initialized.
+    bool IsInitialized() const { return bInitialized; }
 
 private:
     /// Create renderer. 

@@ -107,7 +107,12 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
-    UpdateViewProjectionBuffer( GWorld->GetCamera()->GetViewMatrix(), GWorld->GetCamera()->GetProjectionMatrix() );
+    if ( !GWorld ) return;
+
+    CRCamera* camera = GWorld->GetCamera();
+    if ( !camera ) return;
+
+    UpdateViewProjectionBuffer( camera->GetViewMatrix(), camera->GetProjectionMatrix() );
 
     CRArray< CRRenderElementHandle > staleHandles;
 

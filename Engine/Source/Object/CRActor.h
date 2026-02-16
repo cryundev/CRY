@@ -75,6 +75,7 @@ template < ComponentType T >
 T* CRActor::AddComponent()
 {
     T* component = T::Add( ObjectId );
+    if ( !component ) return nullptr;
 
     component->ObjectId = ObjectId;
 

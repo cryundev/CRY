@@ -4,6 +4,7 @@
 #include "../../RHI/DX11/Resource/CRD11Device.h"
 #include "../Generic/CRGeneric.h"
 #include "../Log/CRLog.h"
+#include <objbase.h>
 
 
 struct WICTranslate
@@ -144,6 +145,7 @@ static DXGI_FORMAT ConvertWICToDXGI( const GUID& WicFormat )
 
 
 IWICImagingFactory* CRWICTextureLoader::sWICFactory = nullptr;
+bool CRWICTextureLoader::sCoInitialized = false;
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -153,13 +155,49 @@ IWICImagingFactory* CRWICTextureLoader::GetWICFactory()
 {
 	if ( !sWICFactory )
 	{
-	    CoInitialize( nullptr );
+        HRESULT initHr = CoInitializeEx( nullptr, COINIT_MULTITHREADED );
+        if ( SUCCEEDED( initHr ) )
+        {
+            sCoInitialized = true;
+        }
+        else if ( initHr != RPC_E_CHANGED_MODE )
+        {
+            CRGeneric::CheckError( initHr );
+            return nullptr;
+        }
 
 	    HRESULT hr = CoCreateInstance( CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, __uuidof( IWICImagingFactory ), ( LPVOID* )&sWICFactory );
-        if ( CRGeneric::CheckError( hr ) ) return nullptr;
+        if ( CRGeneric::CheckError( hr ) )
+        {
+            if ( sCoInitialized )
+            {
+                CoUninitialize();
+                sCoInitialized = false;
+            }
+
+            return nullptr;
+        }
 	}
 
 	return sWICFactory;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Shutdown WIC factory.
+//---------------------------------------------------------------------------------------------------------------------
+void CRWICTextureLoader::ShutdownWICFactory()
+{
+    if ( sWICFactory )
+    {
+        sWICFactory->Release();
+        sWICFactory = nullptr;
+    }
+
+    if ( sCoInitialized )
+    {
+        CoUninitialize();
+        sCoInitialized = false;
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -422,23 +460,34 @@ bool CRWICTextureLoader::_CopyPixelFromScaler() const
     if ( CRGeneric::CheckError( hr ) ) return false;
 
 	hr = scaler->Initialize( BitmapFrameDecode, TextureWidth, TextureHeight, WICBitmapInterpolationModeFant );
-    if( CRGeneric::CheckError( hr ) ) return false;
+    if( CRGeneric::CheckError( hr ) )
+    {
+        scaler->Release();
+        return false;
+    }
 
 	WICPixelFormatGUID scaledWicFormat;
 	hr = scaler->GetPixelFormat( &scaledWicFormat );
-    if ( CRGeneric::CheckError( hr ) ) return false;
+    if ( CRGeneric::CheckError( hr ) )
+    {
+        scaler->Release();
+        return false;
+    }
+
+    bool bResult = true;
 
 	if ( memcmp( &ConvertToFormat, &scaledWicFormat, sizeof(GUID) ) == 0 )
 	{
 		hr = scaler->CopyPixels( 0, RowPitch, ImageSize, Pixels );
-        if ( CRGeneric::CheckError( hr ) ) return false;
+        bResult = !CRGeneric::CheckError( hr );
 	}
 	else
 	{
-	    return _CopyPixelFromConverter( scaler );
+	    bResult = _CopyPixelFromConverter( scaler );
 	}
 
-    return true;
+    scaler->Release();
+    return bResult;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -459,10 +508,20 @@ bool CRWICTextureLoader::_CopyPixelFromConverter( IWICBitmapSource* BitmapSource
 	if ( CRGeneric::CheckError( hr ) ) return false;
 
     hr = converter->Initialize( BitmapSource, ConvertToFormat, WICBitmapDitherTypeErrorDiffusion, 0, 0, WICBitmapPaletteTypeCustom );
-    if ( CRGeneric::CheckError( hr ) ) return false;
+    if ( CRGeneric::CheckError( hr ) )
+    {
+        converter->Release();
+        return false;
+    }
 
     hr = converter->CopyPixels( nullptr, RowPitch, ImageSize, Pixels );  
-    if ( CRGeneric::CheckError( hr ) ) return false;
+    if ( CRGeneric::CheckError( hr ) )
+    {
+        converter->Release();
+        return false;
+    }
+
+    converter->Release();
 
     return true;
 }

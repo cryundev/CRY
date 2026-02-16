@@ -126,7 +126,12 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 
     GMouse.SetWindow( hWnd );
 
-    CREngine::Initialize( hWnd, width, height );
+    if ( !CREngine::Initialize( hWnd, width, height ) )
+    {
+        MessageBoxW( hWnd, L"엔진 초기화에 실패했습니다.", L"CRY Engine", MB_OK | MB_ICONERROR );
+        DestroyWindow( hWnd );
+        return FALSE;
+    }
 
     GUIManager.AddUI( new CREditorUI() );
 

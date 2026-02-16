@@ -10,6 +10,23 @@ CRWorld::CRWorld()
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Destructor.
+//---------------------------------------------------------------------------------------------------------------------
+CRWorld::~CRWorld()
+{
+    for ( CRActor* actor : Actors )
+    {
+        if ( !actor ) continue;
+
+        actor->Destroy();
+        delete actor;
+    }
+
+    Actors.clear();
+    Camera = nullptr;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Despawn actor.
 //---------------------------------------------------------------------------------------------------------------------
 void CRWorld::DespawnActor( const CRObjectId& ActorId )
@@ -21,6 +38,11 @@ void CRWorld::DespawnActor( const CRObjectId& ActorId )
 
     if ( itr != Actors.end() )
     {
+        if ( *itr == Camera )
+        {
+            Camera = nullptr;
+        }
+
         (*itr)->Destroy();
 
         delete *itr;

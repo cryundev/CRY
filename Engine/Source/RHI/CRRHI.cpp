@@ -39,15 +39,41 @@ CRRHI::~CRRHI()
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize RHI.
 //---------------------------------------------------------------------------------------------------------------------
-void CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
+bool CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
 {
-    GD11.Create( hWnd );
+    Shutdown();
+
+    if ( !Renderer )
+    {
+        _CreateRenderer();
+    }
+
+    if ( !Renderer )
+    {
+        GLog.AddLog( "[CRRHI::Initialize] Failed to create renderer." );
+        return false;
+    }
+
+    if ( !GD11.Create( hWnd ) )
+    {
+        GLog.AddLog( "[CRRHI::Initialize] Failed to create D3D11 device." );
+        Shutdown();
+        return false;
+    }
+
     Renderer->Initialize( Width, Height );
 
     InitializeShaders();
 
     /// Initialize ImGUI
     {
+        if ( ImGui::GetCurrentContext() )
+        {
+            ImGui_ImplDX11_Shutdown();
+            ImGui_ImplWin32_Shutdown();
+            ImGui::DestroyContext();
+        }
+
         IMGUI_CHECKVERSION();
 
         ImGui::CreateContext();
@@ -57,9 +83,23 @@ void CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
 
         ImGui::StyleColorsDark();
 
-        ImGui_ImplWin32_Init( hWnd );
-        ImGui_ImplDX11_Init( GD11.GetDevice(), GD11.GetDeviceContext() );
+        if ( !ImGui_ImplWin32_Init( hWnd ) )
+        {
+            GLog.AddLog( "[CRRHI::Initialize] Failed to initialize ImGui Win32 backend." );
+            Shutdown();
+            return false;
+        }
+
+        if ( !ImGui_ImplDX11_Init( GD11.GetDevice(), GD11.GetDeviceContext() ) )
+        {
+            GLog.AddLog( "[CRRHI::Initialize] Failed to initialize ImGui DX11 backend." );
+            Shutdown();
+            return false;
+        }
     }
+
+    bInitialized = true;
+    return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -127,6 +167,11 @@ void CRRHI::InitializeShaders()
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::RenderFrame() const
 {
+    if ( !bInitialized ) return;
+    if ( !Renderer ) return;
+    if ( !GD11.GetDeviceContext() ) return;
+    if ( !ImGui::GetCurrentContext() ) return;
+
     Renderer->ClearRenderTarget();
     Renderer->Draw();
     
@@ -141,6 +186,11 @@ void CRRHI::RenderFrame() const
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::Present() const
 {
+    if ( !bInitialized ) return;
+    if ( !Renderer ) return;
+    if ( !GD11.GetSwapChain() ) return;
+    if ( !ImGui::GetCurrentContext() ) return;
+
     ImGui::Render();
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
     
@@ -152,6 +202,8 @@ void CRRHI::Present() const
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::Shutdown()
 {
+    bInitialized = false;
+
     // ImGui shutdown is idempotent-safe when backend/context is not initialized.
     if ( ImGui::GetCurrentContext() )
     {
@@ -165,8 +217,13 @@ void CRRHI::Shutdown()
 
     GD11RM.Clear();
 
-    delete Renderer;
-    Renderer = nullptr;
+    if ( Renderer )
+    {
+        delete Renderer;
+        Renderer = nullptr;
+    }
+
+    GD11.Clear();
 }
 
 //---------------------------------------------------------------------------------------------------------------------

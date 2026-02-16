@@ -20,10 +20,15 @@ class CRWICTextureLoader
 {
 public:
     static IWICImagingFactory* sWICFactory;
+    static bool                sCoInitialized;
 
 private:
     /// Get WIC.
     static IWICImagingFactory* GetWICFactory();
+
+public:
+    /// Shutdown static WIC factory and COM initialization done by this loader.
+    static void ShutdownWICFactory();
 
 private:
     CRWString              ImagePath;

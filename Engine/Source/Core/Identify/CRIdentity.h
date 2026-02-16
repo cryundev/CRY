@@ -113,11 +113,8 @@ namespace CRIdentity
             {
                 id = FreeIds.front();
                 FreeIds.pop_front();
-            
-                id = T( CRIdentity::NewGeneration( id ) );
-
                 id_t index = IndexOf( id );
-                ++Generations[ index ];
+                id = T( ( (id_t)( Generations[ index ] ) << IndexBits ) | index );
             }
             else
             {
@@ -135,7 +132,11 @@ namespace CRIdentity
         {
             if ( IsValid( Id ) )
             {
-                FreeIds.push_back( Id );
+                id_t index = IndexOf( Id );
+                ++Generations[ index ];
+
+                const T freeId = T( ( (id_t)( Generations[ index ] ) << IndexBits ) | index );
+                FreeIds.push_back( freeId );
             }
         }
 
@@ -147,7 +148,7 @@ namespace CRIdentity
             id_t generation = CRIdentity::GenerationOf( Id );
             id_t index      = CRIdentity::IndexOf( Id );
 
-            return generation < Generations.size() && Generations[ index ] == generation;
+            return index < Generations.size() && Generations[ index ] == generation;
         }
 
     public:
