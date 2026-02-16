@@ -11,11 +11,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRPrimitiveComponent::DestroyComponent()
 {
-    if ( RenderElementHandle.IsValid() )
-    {
-        GRHI.GetRenderer()->RemoveRenderElement( RenderElementHandle );
-        RenderElementHandle = {};
-    }
+    OnDisabled();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
