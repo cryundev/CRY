@@ -9,6 +9,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11SamplerState::Create( const D3D11_SAMPLER_DESC& Description )
 {
-    HRESULT hr = GD11.GetDevice()->CreateSamplerState( &Description, &ObjectPtr );
+    ID3D11SamplerState* createdState = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateSamplerState( &Description, &createdState );
+    CommitCreatedObject( createdState, hr );
+
     CRGeneric::CheckError( hr );
 }
