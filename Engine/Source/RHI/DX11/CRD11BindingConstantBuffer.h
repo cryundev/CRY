@@ -79,17 +79,16 @@ void CRD11BindingConstantBuffer<T>::Update( const T& Data )
     if ( !bufferPtr ) return;
 
     D3D11_MAPPED_SUBRESOURCE mappedResource = {};
+    
     HRESULT hr = GD11.GetDeviceContext()->Map( bufferPtr, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource );
-    // P0: If Map() fails, do not touch mapped memory and do not call Unmap().
     if ( CRGeneric::CheckError( hr ) ) return;
 
-    if ( !mappedResource.pData )
+    if ( mappedResource.pData )
     {
-        GD11.GetDeviceContext()->Unmap( bufferPtr, 0 );
-        return;
+         memcpy_s( mappedResource.pData, sizeof( T ), &Data, sizeof( T ) );
     }
 
-    memcpy_s( mappedResource.pData, sizeof( T ), &Data, sizeof( T ) );
+   
     GD11.GetDeviceContext()->Unmap( bufferPtr, 0 );
 }
 
