@@ -9,6 +9,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11VertexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const void* BlobPtr, u32 InStride, u32 InCount )
 {
+    SetObjectPtr( nullptr );
+
     Stride = InStride;
     Count  = InCount;
 

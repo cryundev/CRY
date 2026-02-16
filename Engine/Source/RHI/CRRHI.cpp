@@ -12,6 +12,7 @@
 #include "Extras/ImGUI/imgui.h"
 #include "Extras/ImGUI/imgui_impl_dx11.h"
 #include "Extras/ImGUI/imgui_impl_win32.h"
+#include "Source/Utility/Log/CRLog.h"
 #include <filesystem>
 
 
@@ -25,6 +26,14 @@ CRRHI::CRRHI( ECRRHIType InRHIType )
 : RHIType( InRHIType )
 {
     _CreateRenderer();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Destructor
+//---------------------------------------------------------------------------------------------------------------------
+CRRHI::~CRRHI()
+{
+    Shutdown();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -58,14 +67,14 @@ void CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::InitializeShaders()
 {
-    std::string currentFilePath = __FILE__;
+    std::filesystem::path hlslFilePath = std::filesystem::path( "Engine/Source/RHI/DX11/HLSL/shader.hlsl" );
 
-    // Get the directory of the current source file
-    std::filesystem::path currentDir = std::filesystem::path( currentFilePath ).parent_path();
+    if ( !std::filesystem::exists( hlslFilePath ) )
+    {
+        GLog.AddLog( "[CRRHI::InitializeShaders] Failed to find shader file." );
+        return;
+    }
 
-    // Construct the HLSL file path relative to the current directory
-    std::filesystem::path hlslFilePath = currentDir / "DX11/HLSL" / "shader.hlsl";
-    
     CRD11CompiledShader compiledVS;
     compiledVS.Create( hlslFilePath.wstring(), "VS", "vs_5_0" );
 
@@ -121,6 +130,31 @@ void CRRHI::Present() const
     ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
     
     Renderer->Present();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Shutdown RHI.
+//---------------------------------------------------------------------------------------------------------------------
+void CRRHI::Shutdown()
+{
+    if ( ImGui::GetCurrentContext() )
+    {
+        ImGui_ImplDX11_Shutdown();
+        ImGui_ImplWin32_Shutdown();
+        ImGui::DestroyContext();
+    }
+
+    Meshes.clear();
+    Materials.clear();
+
+    GD11RM.Clear();
+    GD11.Clear();
+
+    if ( Renderer )
+    {
+        delete Renderer;
+        Renderer = nullptr;
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------

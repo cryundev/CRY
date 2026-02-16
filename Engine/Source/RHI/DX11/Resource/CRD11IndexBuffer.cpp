@@ -10,6 +10,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11IndexBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, const CRArray< i32 >& Indice )
 {
+    SetObjectPtr( nullptr );
+
     Count = (u32)( Indice.size() );
 
     D3D11_BUFFER_DESC bd;

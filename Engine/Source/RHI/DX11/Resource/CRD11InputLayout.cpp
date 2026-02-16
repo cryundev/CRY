@@ -11,6 +11,8 @@ void CRD11InputLayout::Create( D3D11_INPUT_ELEMENT_DESC* Elments, u32 Count, ID3
 {
     if ( !CompiledShader ) return;
 
+    SetObjectPtr( nullptr );
+
     HRESULT hr = GD11.GetDevice()->CreateInputLayout( Elments, Count, CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), &ObjectPtr );
     CRGeneric::CheckError( hr );
 }

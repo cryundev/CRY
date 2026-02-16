@@ -9,6 +9,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11DepthStencilState::Create( const D3D11_DEPTH_STENCIL_DESC& Description )
 {
+    SetObjectPtr( nullptr );
+
     HRESULT hr = GD11.GetDevice()->CreateDepthStencilState( &Description, &ObjectPtr );
     CRGeneric::CheckError( hr );
 }

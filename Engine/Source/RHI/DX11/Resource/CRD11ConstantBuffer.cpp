@@ -10,6 +10,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11ConstantBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, u32 Size )
 {
+    SetObjectPtr( nullptr );
+
     D3D11_BUFFER_DESC bd;
     ZeroMemory( &bd, sizeof( D3D11_BUFFER_DESC ) );
 	

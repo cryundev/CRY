@@ -19,6 +19,9 @@ private:
 public:
     /// Constructor
     CRRHI( ECRRHIType InRHIType );
+
+    /// Destructor
+    ~CRRHI();
     
     /// Initialize RHI.
     void Initialize( HWND hWnd, u32 Width, u32 Height );
@@ -31,6 +34,9 @@ public:
 
     /// Present.
     void Present() const;
+
+    /// Shutdown RHI.
+    void Shutdown();
 
     /// Create mesh.
     ICRRHIMeshSPtr CreateMesh();

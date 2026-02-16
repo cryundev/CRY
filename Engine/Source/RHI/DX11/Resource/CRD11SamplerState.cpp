@@ -9,6 +9,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11SamplerState::Create( const D3D11_SAMPLER_DESC& Description )
 {
+    SetObjectPtr( nullptr );
+
     HRESULT hr = GD11.GetDevice()->CreateSamplerState( &Description, &ObjectPtr );
     CRGeneric::CheckError( hr );
 }
