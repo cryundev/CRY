@@ -9,10 +9,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11RenderTargetView::Create( ID3D11Resource* Resource, const D3D11_RENDER_TARGET_VIEW_DESC* Description )
 {
-    if ( !Resource ) return;
+    ID3D11RenderTargetView* createdView = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateRenderTargetView( Resource, Description, &createdView );
+    CommitCreatedObject( createdView, hr );
 
-    SetObjectPtr( nullptr );
-
-    HRESULT hr = GD11.GetDevice()->CreateRenderTargetView( Resource, Description, &ObjectPtr );
     CRGeneric::CheckError( hr );
 }

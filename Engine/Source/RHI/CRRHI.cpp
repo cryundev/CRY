@@ -133,10 +133,11 @@ void CRRHI::Present() const
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Shutdown RHI.
+/// Shutdown RHI and release resources.
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::Shutdown()
 {
+    // ImGui shutdown is idempotent-safe when backend/context is not initialized.
     if ( ImGui::GetCurrentContext() )
     {
         ImGui_ImplDX11_Shutdown();
@@ -148,13 +149,9 @@ void CRRHI::Shutdown()
     Materials.clear();
 
     GD11RM.Clear();
-    GD11.Clear();
 
-    if ( Renderer )
-    {
-        delete Renderer;
-        Renderer = nullptr;
-    }
+    delete Renderer;
+    Renderer = nullptr;
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -20,6 +20,9 @@ void CRD11ConstantBuffer::Create( D3D11_USAGE Usage, u32 CpuAccess, u32 Size )
     bd.BindFlags      = D3D11_BIND_CONSTANT_BUFFER;  
     bd.CPUAccessFlags = CpuAccess;
 
-    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, nullptr, &ObjectPtr );
+    ID3D11Buffer* createdBuffer = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateBuffer( &bd, nullptr, &createdBuffer );
+    CommitCreatedObject( createdBuffer, hr );
+
     CRGeneric::CheckError( hr );
 }

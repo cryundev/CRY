@@ -35,7 +35,7 @@ public:
     /// Present.
     void Present() const;
 
-    /// Shutdown RHI.
+    /// Shutdown RHI and release resources.
     void Shutdown();
 
     /// Create mesh.

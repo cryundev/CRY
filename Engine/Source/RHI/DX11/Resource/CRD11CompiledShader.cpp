@@ -12,8 +12,10 @@ void CRD11CompiledShader::Create( const CRWString& Path, const CRString& EntryPo
     SetObjectPtr( nullptr );
 
     ID3DBlob* error = nullptr;
+    ID3DBlob* compiledShader = nullptr;
 
-    HRESULT hr = D3DCompileFromFile( Path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryPoint.c_str(), ShaderModel.c_str(), D3DCOMPILE_ENABLE_STRICTNESS, 0, &ObjectPtr, &error );
+    HRESULT hr = D3DCompileFromFile( Path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryPoint.c_str(), ShaderModel.c_str(), D3DCOMPILE_ENABLE_STRICTNESS, 0, &compiledShader, &error );
+    CommitCreatedObject( compiledShader, hr );
 
     if ( CRGeneric::CheckError( hr ) )
     {

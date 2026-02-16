@@ -12,8 +12,9 @@ void CRD11PixelShader::Create( ID3DBlob* CompiledShader )
 {
     if ( !CompiledShader ) return;
 
-    SetObjectPtr( nullptr );
+    ID3D11PixelShader* createdShader = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreatePixelShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &createdShader );
+    CommitCreatedObject( createdShader, hr );
 
-    HRESULT hr = GD11.GetDevice()->CreatePixelShader( CompiledShader->GetBufferPointer(), CompiledShader->GetBufferSize(), nullptr, &ObjectPtr );
     CRGeneric::CheckError( hr );
 }

@@ -37,4 +37,8 @@ public:
 
     /// Load asset.
     void LoadAsset( const CRString& InAssetPath );
+
+private:
+    /// Remove this component's render element from renderer.
+    void _UnregisterRenderElement();
 };

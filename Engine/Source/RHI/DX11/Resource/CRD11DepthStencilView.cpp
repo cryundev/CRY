@@ -9,10 +9,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11DepthStencilView::Create( ID3D11Resource* Resource, const D3D11_DEPTH_STENCIL_VIEW_DESC& Description )
 {
-    if ( !Resource ) return;
+    ID3D11DepthStencilView* createdView = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateDepthStencilView( Resource, &Description, &createdView );
+    CommitCreatedObject( createdView, hr );
 
-    SetObjectPtr( nullptr );
-
-    HRESULT hr = GD11.GetDevice()->CreateDepthStencilView( Resource, &Description, &ObjectPtr );
     CRGeneric::CheckError( hr );
 }

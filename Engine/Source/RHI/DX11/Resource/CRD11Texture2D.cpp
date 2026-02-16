@@ -9,8 +9,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Texture2D::Create( const D3D11_TEXTURE2D_DESC& Description, const D3D11_SUBRESOURCE_DATA* Data )
 {
-    SetObjectPtr( nullptr );
+    ID3D11Texture2D* createdTexture = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateTexture2D( &Description, Data, &createdTexture );
+    CommitCreatedObject( createdTexture, hr );
 
-    HRESULT hr = GD11.GetDevice()->CreateTexture2D( &Description, Data, &ObjectPtr );
     CRGeneric::CheckError( hr );
 }

@@ -9,8 +9,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11RasterizerState::Create( const D3D11_RASTERIZER_DESC& Description )
 {
-    SetObjectPtr( nullptr );
+    ID3D11RasterizerState* createdState = nullptr;
+    HRESULT hr = GD11.GetDevice()->CreateRasterizerState( &Description, &createdState );
+    CommitCreatedObject( createdState, hr );
 
-    HRESULT hr = GD11.GetDevice()->CreateRasterizerState( &Description, &ObjectPtr );
     CRGeneric::CheckError( hr );
 }

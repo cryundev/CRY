@@ -52,6 +52,12 @@ public:
     }
 
 private:
+    template< ComponentType T >
+    void _RegisterComponentRemover();
+
+    template< ComponentType T >
+    void _UnregisterComponentRemover();
+
     /// Remove component internal.
     template< ComponentType T >
     static void _RemoveComponent( const CRIdentity::id_t& Id )
@@ -75,12 +81,7 @@ T* CRActor::AddComponent()
 
     component->ObjectId = ObjectId;
 
-    const CRComponentRemover remover = &CRActor::_RemoveComponent< T >;
-
-    if ( std::ranges::find( ComponentRemovers, remover ) == ComponentRemovers.end() )
-    {
-        ComponentRemovers.push_back( remover );
-    }
+    _RegisterComponentRemover< T >();
 
     return component;
 }
@@ -91,5 +92,33 @@ T* CRActor::AddComponent()
 template < ComponentType T >
 void CRActor::RemoveComponent()
 {
-    T::Remove( ObjectId );
+    const bool bRemoved = T::Remove( ObjectId );
+    if ( !bRemoved ) return;
+
+    _UnregisterComponentRemover< T >();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Register component remover.
+//---------------------------------------------------------------------------------------------------------------------
+template < ComponentType T >
+void CRActor::_RegisterComponentRemover()
+{
+    const CRComponentRemover remover = &CRActor::_RemoveComponent< T >;
+    if ( std::ranges::find( ComponentRemovers, remover ) != ComponentRemovers.end() ) return;
+
+    ComponentRemovers.push_back( remover );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Unregister component remover.
+//---------------------------------------------------------------------------------------------------------------------
+template < ComponentType T >
+void CRActor::_UnregisterComponentRemover()
+{
+    const CRComponentRemover remover = &CRActor::_RemoveComponent< T >;
+    const auto iter = std::ranges::find( ComponentRemovers, remover );
+    if ( iter == ComponentRemovers.end() ) return;
+
+    ComponentRemovers.erase( iter );
 }
