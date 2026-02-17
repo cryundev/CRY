@@ -338,6 +338,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\CRRHI.h" />
     <ClInclude Include="Source\RHI\CRRenderElement.h" />
     <ClInclude Include="Source\RHI\CRRHITypes.h" />
+    <ClInclude Include="Source\RHI\CRConstBufferStructures.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.h" />
@@ -356,6 +357,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11VertexShader.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11BindingConstantBuffer.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11PendingUpdateConstantBuffer.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11DepthStencilBuffer.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Include.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Material.h" />

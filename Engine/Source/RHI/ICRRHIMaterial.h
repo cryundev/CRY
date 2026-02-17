@@ -1,9 +1,14 @@
 #pragma once
 
 
+#include "Source/Core/Math/CRMath.h"
 #include "Source/Core/Strings/CRStringInc.h"
+#include "Source/RHI/CRConstBufferStructures.h"
 
 
+//---------------------------------------------------------------------------------------------------------------------
+/// ICRRHIMaterial
+//---------------------------------------------------------------------------------------------------------------------
 class ICRRHIMaterial
 {
 public:
@@ -19,4 +24,13 @@ public:
 
     /// Set in the rendering pipeline.
     virtual void SetInRenderingPipeline() const = 0;
+
+    /// Set diffuse color (RGB) and alpha (A).
+    virtual void SetDiffuseColor( const CRVector4D& Color ) = 0;
+
+    /// Set specular color (RGB) and shininess (A).
+    virtual void SetSpecularColor( const CRVector4D& Color ) = 0;
+
+    /// Get material properties.
+    virtual const CRMaterialProperties& GetMaterialProperties() const = 0;
 };

@@ -37,9 +37,9 @@ enum class ED11RenderingPipelineStage
 };
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Enum Constantbuffers Vertexshader Stage
+/// Constant buffer slots for the vertex shader stage.
 //---------------------------------------------------------------------------------------------------------------------
-enum class ECVS
+enum class EConstBufferSlotVS
 {
     Transform,
     ViewProjection,
@@ -47,12 +47,12 @@ enum class ECVS
 };
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Enum Constantbuffers Pertexshader Stage
+/// Constant buffer slots for the pixel shader stage.
 //---------------------------------------------------------------------------------------------------------------------
-enum class ECPS
+enum class EConstBufferSlotPS
 {
-    LightDirection,
-    LightColor,
+    LightProperties,
+    MaterialProperties,
     Max,
 };
 

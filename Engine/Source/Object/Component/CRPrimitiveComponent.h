@@ -4,6 +4,7 @@
 #include "CRComponent.h"
 #include "Source/RHI/CRRenderElement.h"
 #include "Source/RHI/CRRHITypes.h"
+#include "Source/RHI/ICRRHIMaterial.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -37,6 +38,9 @@ public:
 
     /// Load asset.
     void LoadAsset( const CRString& InAssetPath );
+
+    /// Get material.
+    ICRRHIMaterialSPtr GetMaterial() const;
 
 private:
     /// Remove this component's render element from renderer.

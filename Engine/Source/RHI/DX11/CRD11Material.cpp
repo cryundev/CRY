@@ -14,11 +14,14 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize material.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11Material::Initialize( const CRName& )
+void CRD11Material::Initialize( const CRName& Name )
 {
     VertexShader = GD11RM.GetVertexShader( "Diffuse" );
     PixelShader  = GD11RM.GetPixelShader ( "Diffuse" );
     InputLayout  = GD11RM.GetInputLayout ( "Diffuse" );
+
+    CRName bufferName = Name + "_MaterialProperties";
+    PropertiesBuffer.Create( bufferName, (u32)( EConstBufferSlotPS::MaterialProperties ), ED11RenderingPipelineStage::PS );
 
     Textures.clear();
 
@@ -71,4 +74,22 @@ void CRD11Material::SetInRenderingPipeline() const
     {
         GD11RP.SetPixelShader( PixelShader.lock()->GetObjectPtr() );
     }
+
+    PropertiesBuffer.SetInRenderingPipeline();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set diffuse color (RGB) and alpha (A).
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Material::SetDiffuseColor( const CRVector4D& Color )
+{
+    PropertiesBuffer.Edit().DiffuseColor = Color;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set specular color (RGB) and shininess (A).
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Material::SetSpecularColor( const CRVector4D& Color )
+{
+    PropertiesBuffer.Edit().SpecularColor = Color;
 }

@@ -6,6 +6,7 @@
 #include "CRD11Include.h"
 #include "CRD11Types.h"
 #include "Source/RHI/CRRHITypes.h"
+#include "Source/RHI/CRConstBufferStructures.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 
 
@@ -14,23 +15,15 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRD11Renderer : public ICRRHIRenderer
 {
-public:
-    struct CRViewProjection
-    {
-        CRMatrix View;
-        CRMatrix Projection;
-    };
-
 private:
     unsigned int ViewportWidth  = 1920;
     unsigned int ViewportHeight = 1080;
 
     CRPackedArray< CRRenderElement > RenderElements;
 
-    CRD11BindingConstantBuffer< CRMatrix         > TransformBuffer;
-    CRD11BindingConstantBuffer< CRViewProjection > ViewProjectionBuffer;
-    CRD11BindingConstantBuffer< CRVector4D       > LightDirectionBuffer;
-    CRD11BindingConstantBuffer< CRVector4D       > LightColorBuffer;    
+    CRD11BindingConstantBuffer< CRMatrix          > TransformBuffer;
+    CRD11BindingConstantBuffer< CRViewProjection  > ViewProjectionBuffer;
+    CRD11BindingConstantBuffer< CRLightProperties > LightPropertiesBuffer;
     
     CRD11RenderTargetViewSPtr RenderTargetView;
     CRD11RasterizerStateWPtr  RasterizerState;

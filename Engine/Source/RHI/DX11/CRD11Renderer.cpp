@@ -27,25 +27,25 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
     _InitializeRenderTarget();
     _InitializeViewport( (f32)( Width ), (f32)( Height ) );
 
-    TransformBuffer.Create( "Transform", (u32)( ECVS::Transform ), ED11RenderingPipelineStage::VS );
+    TransformBuffer.Create( "Transform", (u32)( EConstBufferSlotVS::Transform ), ED11RenderingPipelineStage::VS );
     TransformBuffer.SetInRenderingPipeline();
     
     TransformBuffer.Update( DirectX::XMMatrixTranspose( CRMatrix::Identity ) );
 
-    ViewProjectionBuffer.Create( "ViewProjection", (u32)( ECVS::ViewProjection ), ED11RenderingPipelineStage::VS );
+    ViewProjectionBuffer.Create( "ViewProjection", (u32)( EConstBufferSlotVS::ViewProjection ), ED11RenderingPipelineStage::VS );
     ViewProjectionBuffer.SetInRenderingPipeline();
 
-    LightDirectionBuffer.Create( "LightDirection", (u32)( ECPS::LightDirection ), ED11RenderingPipelineStage::PS );
-    LightDirectionBuffer.SetInRenderingPipeline();
-    
-    LightColorBuffer.Create( "LightColor", (u32)( ECPS::LightColor ), ED11RenderingPipelineStage::PS );
-    LightColorBuffer.SetInRenderingPipeline();
+    LightPropertiesBuffer.Create( "LightProperties", (u32)( EConstBufferSlotPS::LightProperties ), ED11RenderingPipelineStage::PS );
+    LightPropertiesBuffer.SetInRenderingPipeline();
 
     CRVector lightDir( 1.0f, -1.0f, 1.0f );
     lightDir.Normalize();
 
-    LightDirectionBuffer.Update( CRVector4D( lightDir.x, lightDir.y, lightDir.z, 1.0f ) );
-    LightColorBuffer    .Update( CRVector4D( 1.0f, 1.0f,  1.0f, 1.0f ) );
+    CRLightProperties lightProperties;
+    lightProperties.Direction = CRVector4D( lightDir.x, lightDir.y, lightDir.z, 1.0f );
+    lightProperties.Color     = CRVector4D( 1.0f, 1.0f,  1.0f, 1.0f );
+
+    LightPropertiesBuffer.Update( lightProperties );
 
     RasterizerState = GD11RM.GetRasterizerState( "Default" );
     if ( !RasterizerState.expired() )

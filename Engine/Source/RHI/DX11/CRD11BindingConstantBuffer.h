@@ -52,7 +52,7 @@ public:
 /// Create constant buffer.
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
-void CRD11BindingConstantBuffer<T>::Create( const CRName& InName, u32 InSlot, ED11RenderingPipelineStage InStage, const T* Data )
+void CRD11BindingConstantBuffer< T >::Create( const CRName& InName, u32 InSlot, ED11RenderingPipelineStage InStage, const T* Data )
 {
     Name  = InName;
     Slot  = InSlot;
@@ -71,7 +71,7 @@ void CRD11BindingConstantBuffer<T>::Create( const CRName& InName, u32 InSlot, ED
 /// Update constant buffer.
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
-void CRD11BindingConstantBuffer<T>::Update( const T& Data )
+void CRD11BindingConstantBuffer< T >::Update( const T& Data )
 {
     if ( ConstantBufferPtr.expired() ) return;
 
@@ -96,7 +96,7 @@ void CRD11BindingConstantBuffer<T>::Update( const T& Data )
 /// Set in rendering pipeline.
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
-void CRD11BindingConstantBuffer<T>::SetInRenderingPipeline() const
+void CRD11BindingConstantBuffer< T >::SetInRenderingPipeline() const
 {
     if ( ConstantBufferPtr.expired() ) return;
     

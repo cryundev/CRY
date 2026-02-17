@@ -23,9 +23,9 @@ PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 norma
 	output.position = mul( position, transform );
     output.position = mul( output.position, view );
     output.position = mul( output.position, projection );
-    
+
 	output.texCoord = texCoord;
-    output.normal   = normal; 
+    output.normal   = normal;
 
 	return output;
 }
@@ -35,14 +35,16 @@ Texture2D    psTexture  : register( t0 );
 SamplerState SampleType : register( s0 );
 
 
-cbuffer LightDirectionBuffer : register( b0 )
+cbuffer LightPropertiesBuffer : register( b0 )
 {
     float4 lightDirection;
+    float4 lightColor;
 };
 
-cbuffer LightColorBuffer : register( b1 ) 
+cbuffer MaterialPropertiesBuffer : register( b1 )
 {
-    float4 lightColor;
+    float4 materialDiffuse;   // xyz = diffuse color, w = alpha
+    float4 materialSpecular;  // xyz = specular color, w = shininess (reserved for Phase 1.2)
 };
 
 
@@ -50,11 +52,14 @@ float4 PS( PixelIn input ) : SV_TARGET
 {
 	float4 textureColor = psTexture.Sample( SampleType, input.texCoord );
 
-    float3 lightDir = normalize( lightDirection );
+    float3 lightDir = normalize( lightDirection.xyz );
     float lightIntensity = saturate( dot( lightDir, input.normal ) );
-    
+
     lightIntensity = lightIntensity * 0.5 + 0.5;
     lightIntensity = pow( lightIntensity, 2.f );
-    
-	return textureColor * saturate( lightColor * lightIntensity );
+
+    // Apply material diffuse color
+    float3 diffuse = textureColor.rgb * materialDiffuse.rgb * lightColor.rgb * lightIntensity;
+
+	return float4( saturate( diffuse ), textureColor.a * materialDiffuse.w );
 }

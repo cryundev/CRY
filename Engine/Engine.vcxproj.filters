@@ -299,6 +299,9 @@
     <ClInclude Include="Source\RHI\CRRHITypes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RHI\CRConstBufferStructures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -351,6 +354,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\DX11\CRD11BindingConstantBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\CRD11PendingUpdateConstantBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\DX11\CRD11DepthStencilBuffer.h">

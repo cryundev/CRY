@@ -120,7 +120,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Engine\x64\Debug\;$(ProjectDir)..\Engine\x64\Debug\;$(SolutionDir)x64\Debug\;$(ProjectDir)..\x64\Debug\;$(SolutionDir)Engine\Extras\;$(ProjectDir)..\Engine\Extras\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)Engine\$(Platform)\$(Configuration)\;$(ProjectDir)..\Engine\$(Platform)\$(Configuration)\;$(SolutionDir)$(Platform)\$(Configuration)\;$(ProjectDir)..\$(Platform)\$(Configuration)\;$(SolutionDir)Engine\Extras\;$(ProjectDir)..\Engine\Extras\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command></Command>
