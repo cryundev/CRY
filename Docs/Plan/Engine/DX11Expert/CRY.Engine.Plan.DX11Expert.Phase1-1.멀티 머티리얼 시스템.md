@@ -27,15 +27,15 @@ aliases:
 ## TODO
 ---
 
-- [ ] `CRMaterialProperties` 구조체 정의
+- [x] `CRMaterialProperties` 구조체 정의
     - Diffuse Color, Specular Color, Shininess, Emissive
-- [ ] Material용 Constant Buffer 생성
+- [x] Material용 Constant Buffer 생성
     - `ECPS` enum에 `Material` 슬롯 추가 ( `CRD11Types.h` )
-- [ ] `CRD11Material::SetInRenderingPipeline()`에서 머티리얼 CB 바인딩 추가
-- [ ] `shader.hlsl` PS에 `MaterialBuffer` cbuffer 추가
+- [x] `CRD11Material::SetInRenderingPipeline()`에서 머티리얼 CB 바인딩 추가
+- [x] `shader.hlsl` PS에 `MaterialBuffer` cbuffer 추가
     - 디퓨즈 계산에 머티리얼 색상 적용
-- [ ] `CRPrimitiveComponent`에서 머티리얼 프로퍼티 설정 API 추가
-- [ ] 여러 오브젝트에 서로 다른 머티리얼 적용하여 렌더링 테스트
+- [x] `CRPrimitiveComponent`에서 머티리얼 프로퍼티 설정 API 추가
+- [x] 여러 오브젝트에 서로 다른 머티리얼 적용하여 렌더링 테스트
 
 ^todo
 

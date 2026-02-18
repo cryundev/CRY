@@ -23,42 +23,50 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
     RenderElements.Clear();
 
     DepthStencilBuffer.Create( Width, Height );
-    
+
     _InitializeRenderTarget();
     _InitializeViewport( (f32)( Width ), (f32)( Height ) );
 
     TransformBuffer.Create( "Transform", (u32)( EConstBufferSlotVS::Transform ), ED11RenderingPipelineStage::VS );
     TransformBuffer.SetInRenderingPipeline();
-    
+
     TransformBuffer.Update( DirectX::XMMatrixTranspose( CRMatrix::Identity ) );
 
     ViewProjectionBuffer.Create( "ViewProjection", (u32)( EConstBufferSlotVS::ViewProjection ), ED11RenderingPipelineStage::VS );
     ViewProjectionBuffer.SetInRenderingPipeline();
 
-    LightPropertiesBuffer.Create( "LightProperties", (u32)( EConstBufferSlotPS::LightProperties ), ED11RenderingPipelineStage::PS );
-    LightPropertiesBuffer.SetInRenderingPipeline();
+    LightsBuffer.Create( "LightsBuffer", (u32)( EConstBufferSlotPS::LightProperties ), ED11RenderingPipelineStage::PS );
+    LightsBuffer.SetInRenderingPipeline();
 
-    CRVector lightDir( 1.0f, -1.0f, 1.0f );
-    lightDir.Normalize();
+    CRDirectionalLightData sun;
+    CRVector sunDir( 1.0f, -1.0f, 1.0f );
+    sunDir.Normalize();
+    sun.Direction = CRVector4D( sunDir.x, sunDir.y, sunDir.z, 0.0f );
+    sun.Color     = CRVector4D( 1.0f, 1.0f, 1.0f, 1.0f );
 
-    CRLightProperties lightProperties;
-    lightProperties.Direction = CRVector4D( lightDir.x, lightDir.y, lightDir.z, 1.0f );
-    lightProperties.Color     = CRVector4D( 1.0f, 1.0f,  1.0f, 1.0f );
+    LightsData.AmbientColor           = CRVector4D( 0.1f, 0.1f, 0.1f, 1.0f );
+    LightsData.DirectionalCount       = 1;
+    LightsData.PointCount             = 0;
+    LightsData.SpotCount              = 0;
+    LightsData.DirectionalLights[ 0 ] = sun;
 
-    LightPropertiesBuffer.Update( lightProperties );
+    _FlushLightsBuffer();
+
+    CameraPropertiesBuffer.Create( "CameraProperties", (u32)( EConstBufferSlotPS::CameraProperties ), ED11RenderingPipelineStage::PS );
+    CameraPropertiesBuffer.SetInRenderingPipeline();
 
     RasterizerState = GD11RM.GetRasterizerState( "Default" );
     if ( !RasterizerState.expired() )
     {
         D3D11_RASTERIZER_DESC rd;
         ZeroMemory( &rd, sizeof( D3D11_RASTERIZER_DESC ) );
-        
+
         rd.CullMode = D3D11_CULL_BACK;
         rd.FillMode = D3D11_FILL_SOLID;
         rd.FrontCounterClockwise = false;
-        
+
         RasterizerState.lock()->Create( rd );
-    
+
         GD11RP.SetRasterizerState( RasterizerState.lock()->GetObjectPtr() );
     }
 }
@@ -103,6 +111,114 @@ void CRD11Renderer::UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, cons
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Set ambient light.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetAmbientLight( const CRVector4D& ColorAndIntensity )
+{
+    LightsData.AmbientColor = ColorAndIntensity;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Replace active directional lights.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetDirectionalLights( const CRArray< CRDirectionalLightData >& Lights )
+{
+    const u32 clampedCount = ( (u32)Lights.size() < CRMaxDirectionalLights ) ? (u32)Lights.size() : CRMaxDirectionalLights;
+
+    LightsData.DirectionalCount = 0;
+
+    for ( u32 i = 0; i < clampedCount; ++i )
+    {
+        LightsData.DirectionalLights[ i ] = Lights[ i ];
+        ++LightsData.DirectionalCount;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set one directional light at index.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetDirectionalLight( u32 Index, const CRDirectionalLightData& Light )
+{
+    if ( Index >= CRMaxDirectionalLights ) return;
+
+    LightsData.DirectionalLights[ Index ] = Light;
+    if ( LightsData.DirectionalCount <= Index )
+    {
+        LightsData.DirectionalCount = Index + 1;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Replace active point lights.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetPointLights( const CRArray< CRPointLightData >& Lights )
+{
+    const u32 clampedCount = ( (u32)Lights.size() < CRMaxPointLights ) ? (u32)Lights.size() : CRMaxPointLights;
+
+    LightsData.PointCount = 0;
+
+    for ( u32 i = 0; i < clampedCount; ++i )
+    {
+        LightsData.PointLights[ i ] = Lights[ i ];
+        ++LightsData.PointCount;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set one point light at index.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetPointLight( u32 Index, const CRPointLightData& Light )
+{
+    if ( Index >= CRMaxPointLights ) return;
+
+    LightsData.PointLights[ Index ] = Light;
+    if ( LightsData.PointCount <= Index )
+    {
+        LightsData.PointCount = Index + 1;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Replace active spot lights.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetSpotLights( const CRArray< CRSpotLightData >& Lights )
+{
+    const u32 clampedCount = ( (u32)Lights.size() < CRMaxSpotLights ) ? (u32)Lights.size() : CRMaxSpotLights;
+
+    LightsData.SpotCount = 0;
+
+    for ( u32 i = 0; i < clampedCount; ++i )
+    {
+        LightsData.SpotLights[ i ] = Lights[ i ];
+        ++LightsData.SpotCount;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set one spot light at index.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::SetSpotLight( u32 Index, const CRSpotLightData& Light )
+{
+    if ( Index >= CRMaxSpotLights ) return;
+
+    LightsData.SpotLights[ Index ] = Light;
+    if ( LightsData.SpotCount <= Index )
+    {
+        LightsData.SpotCount = Index + 1;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Clear all active lights.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::ClearLights()
+{
+    LightsData.DirectionalCount = 0;
+    LightsData.PointCount       = 0;
+    LightsData.SpotCount        = 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Draw.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
@@ -113,6 +229,18 @@ void CRD11Renderer::Draw()
     if ( !camera ) return;
 
     UpdateViewProjectionBuffer( camera->GetViewMatrix(), camera->GetProjectionMatrix() );
+
+    if ( CRTransformComponent* cameraTransform = camera->GetTransform() )
+    {
+        const CRVector& camPos = cameraTransform->GetLocation();
+
+        CRCameraProperties cameraProperties;
+        cameraProperties.Position = CRVector4D( camPos.x, camPos.y, camPos.z, 1.0f );
+
+        CameraPropertiesBuffer.Update( cameraProperties );
+    }
+\
+    _FlushLightsBuffer();
 
     CRArray< CRRenderElementHandle > staleHandles;
 
@@ -190,4 +318,12 @@ void CRD11Renderer::_InitializeViewport( f32 Width, f32 Height ) const
     viewport.Height   = Height;
 
     GD11.GetDeviceContext()->RSSetViewports( 1, &viewport );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Flush CPU-side LightsData to the GPU constant buffer.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::_FlushLightsBuffer()
+{
+    LightsBuffer.Update( LightsData );
 }

@@ -1,7 +1,9 @@
 #pragma once
 
 
+#include "CRConstBufferStructures.h"
 #include "CRRenderElement.h"
+#include "Source/Core/Containers/CRContainerInc.h"
 #include "Source/Core/Math/CRMath.h"
 
 
@@ -45,4 +47,28 @@ public:
 
     /// Update view projection buffer.
     virtual void UpdateViewProjectionBuffer( const CRMatrix& ViewMatrix, const CRMatrix& ProjectionMatrix ) {}
+
+    /// Set ambient light color and intensity (xyz = color, w = intensity).
+    virtual void SetAmbientLight( const CRVector4D& ColorAndIntensity ) {}
+
+    /// Replace active directional lights.
+    virtual void SetDirectionalLights( const CRArray< CRDirectionalLightData >& Lights ) {}
+
+    /// Set one directional light at index.
+    virtual void SetDirectionalLight( u32 Index, const CRDirectionalLightData& Light ) {}
+
+    /// Replace active point lights.
+    virtual void SetPointLights( const CRArray< CRPointLightData >& Lights ) {}
+
+    /// Set one point light at index.
+    virtual void SetPointLight( u32 Index, const CRPointLightData& Light ) {}
+
+    /// Replace active spot lights.
+    virtual void SetSpotLights( const CRArray< CRSpotLightData >& Lights ) {}
+
+    /// Set one spot light at index.
+    virtual void SetSpotLight( u32 Index, const CRSpotLightData& Light ) {}
+
+    /// Clear all active lights (keeps ambient).
+    virtual void ClearLights() {}
 };

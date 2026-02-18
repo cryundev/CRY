@@ -34,10 +34,10 @@ CRY 엔진 프로젝트를 통한 DirectX 11 마스터 커리큘럼.
 - 드로우 콜별 스테이트 변경 최소화 전략
 
 **구현 항목**:
-- [ ] `CRMaterial` 클래스 (diffuse color, specular, shininess, texture 참조)
-- [ ] 머티리얼 상수 버퍼 (PS slot 추가)
-- [ ] `CRPrimitiveComponent`에 머티리얼 바인딩
-- [ ] 셰이더에 머티리얼 프로퍼티 반영
+- [x] `CRMaterial` 클래스 (diffuse color, specular, shininess, texture 참조)
+- [x] 머티리얼 상수 버퍼 (PS slot 추가)
+- [x] `CRPrimitiveComponent`에 머티리얼 바인딩
+- [x] 셰이더에 머티리얼 프로퍼티 반영
 
 **핵심 DX11 API**: `ID3D11Buffer`, `Map/Unmap`, `PSSetConstantBuffers`
 
@@ -51,10 +51,10 @@ CRY 엔진 프로젝트를 통한 DirectX 11 마스터 커리큘럼.
 - 카메라 위치를 셰이더에 전달하는 패턴
 
 **구현 항목**:
-- [ ] Ambient light 상수 추가
-- [ ] Specular highlight 계산 (Blinn-Phong half-vector)
-- [ ] 카메라 위치 상수 버퍼
-- [ ] 머티리얼별 specular power/intensity
+- [x] Ambient light 상수 추가
+- [x] Specular highlight 계산 (Blinn-Phong half-vector)
+- [x] 카메라 위치 상수 버퍼
+- [x] 머티리얼별 specular power/intensity
 
 **핵심 DX11 API**: HLSL `reflect()`, `pow()`, `normalize()`
 
@@ -68,11 +68,11 @@ CRY 엔진 프로젝트를 통한 DirectX 11 마스터 커리큘럼.
 - 상수 버퍼 크기 제한과 설계 전략
 
 **구현 항목**:
-- [ ] Light 구조체 정의 (Type, Position, Direction, Color, Range, Cone 등)
-- [ ] 라이트 배열 상수 버퍼 (최대 N개)
-- [ ] Point light 감쇠 계산
-- [ ] Spot light 콘 각도 계산
-- [ ] 셰이더에서 동적 라이트 루프
+- [x] Light 구조체 정의 (Type, Position, Direction, Color, Range, Cone 등)
+- [x] 라이트 배열 상수 버퍼 (최대 N개)
+- [x] Point light 감쇠 계산
+- [x] Spot light 콘 각도 계산
+- [x] 셰이더에서 동적 라이트 루프
 
 **핵심 DX11 API**: HLSL `StructuredBuffer`, 패킹 규칙 (`packoffset`)
 

@@ -51,8 +51,9 @@ enum class EConstBufferSlotVS
 //---------------------------------------------------------------------------------------------------------------------
 enum class EConstBufferSlotPS
 {
-    LightProperties,
-    MaterialProperties,
+    LightProperties,      // b0: CRLightsBuffer        (ambient + type-separated light arrays)
+    MaterialProperties,   // b1: CRMaterialProperties  (diffuse, specular)
+    CameraProperties,     // b2: CRCameraProperties    (camera world position)
     Max,
 };
 
