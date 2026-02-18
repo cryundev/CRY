@@ -5,4 +5,4 @@ aliases:
 ---
 #### TODO
 ---
-![[CRY.Engine.Plan.DX11Expert.Phase1-2.Blinn-Phong 라이팅 모델#^todo]]
+![[CRY.Engine.Plan.DX11Expert.Phase2-1.Normal Mapping#^todo]]

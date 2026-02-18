@@ -27,11 +27,11 @@ Specular 계산 없음.
 ## TODO
 ---
 
-- [ ] PS에 카메라 위치 전달을 위한 CB 추가
+- [x] PS에 카메라 위치 전달을 위한 CB 추가
     - `ECPS` enum에 `CameraPosition` 추가 ( `CRD11Types.h`, `CRD11Renderer.cpp` )
-- [ ] `CRD11Renderer::Draw()`에서 카메라 위치 CB 갱신
-- [ ] `shader.hlsl`에 Blinn-Phong Specular 계산 구현
-- [ ] Ambient + Diffuse + Specular 조합 구현 
+- [x] `CRD11Renderer::Draw()`에서 카메라 위치 CB 갱신
+- [x] `shader.hlsl`에 Blinn-Phong Specular 계산 구현
+- [x] Ambient + Diffuse + Specular 조합 구현 
     - `MaterialBuffer`의 색상 값 활용
 - [ ] Shininess 값 변경 테스트
 
