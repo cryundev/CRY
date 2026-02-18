@@ -16,6 +16,9 @@ Engine/Engine/x64/
 EngineDLL/x64/
 EngineTest/x64/
 Editor_Win32/x64/
+Editor_Win32/Editor_Win32/
+EngineDLL/EngineDLL/
+EngineTest/EngineTest/
 
 # C# build output
 Editor_WPF/bin/
@@ -43,6 +46,9 @@ Engine/Extras/Libs/
 # JetBrains Rider / IntelliJ
 .idea/
 
+# Obsidian workspace/cache
+Docs/.obsidian/
+
 
 # -----------------------------------------------------------------------------
 # User-specific Files
@@ -68,6 +74,7 @@ Editor_WPF/*_wpftmp.csproj
 # Misc / Temp Files
 # -----------------------------------------------------------------------------
 
+msbuild_debug.log
 *.py
 *.vssettings
 nul
