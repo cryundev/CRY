@@ -49,8 +49,9 @@ public:
     template< ComponentType T >
     void RemoveComponent();
 
+    /// Get component.
     template< ComponentType T >
-    T* GetComponent() const 
+    T* GetComponent() const
     {
         return T::Get( ObjectId );
     }

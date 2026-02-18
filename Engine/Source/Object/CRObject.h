@@ -43,7 +43,7 @@ public:
     /// Get name.
     const CRName& GetName() const { return ObjectName; }
 
-    /// Set object id.
+    /// Get object id.
     CRObjectId GetObjectId() const { return ObjectId; }
 
     /// Return objects id is valid.
