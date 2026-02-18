@@ -1,5 +1,6 @@
 ---
 aliases:
+tags:
 ---
 **오프스크린 렌더 타겟 1장을 안전하게 관리하기 위한 래퍼**클래스이다. 
 
@@ -44,3 +45,10 @@ aliases:
 - 같은 텍스처를 **RTV로 사용한 직후 SRV로 바로 사용하면 충돌**이 발생할 수 있다.
 - 패스 전환 시 RTV 언바인드가 필요하다.
 
+<br />
+
+<br />
+
+## 함수
+---
+- [[CRD11RenderTarget2D.Create|CRD11RenderTarget2D::Create()]]
