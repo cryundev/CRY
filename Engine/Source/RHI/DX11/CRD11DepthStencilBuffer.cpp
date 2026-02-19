@@ -14,6 +14,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11DepthStencilBuffer::Create( u32 Width, u32 Height )
 {
+    Release();
+
     BufferPtr = GD11RM.GetTexture2D( "DepthStencilBuffer" );
     if ( !BufferPtr.expired() )
     {
@@ -57,6 +59,16 @@ void CRD11DepthStencilBuffer::Create( u32 Width, u32 Height )
 
         StatePtr.lock()->Create( dsd );
     }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Release depth stencil resources.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11DepthStencilBuffer::Release() const
+{
+    if ( !BufferPtr.expired() ) BufferPtr.lock()->SetObjectPtr( nullptr );
+    if ( !ViewPtr  .expired() ) ViewPtr  .lock()->SetObjectPtr( nullptr );
+    if ( !StatePtr .expired() ) StatePtr .lock()->SetObjectPtr( nullptr );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -3,14 +3,21 @@
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
 #include "Engine.h"
+#include "Passes/CRD11CompositePass.h"
+#include "Passes/CRD11ScenePass.h"
 #include "Resource/CRD11Device.h"
 #include "Resource/CRD11RasterizerState.h"
-#include "Resource/CRD11RenderTargetView.h"
-#include "Source/RHI/ICRRHIMaterial.h"
-#include "Source/RHI/ICRRHIMesh.h"
-#include "Source/Utility/Log/CRLog.h"
 #include "Source/World/CRWorld.h"
+#include <utility>
 
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Destructor.
+//---------------------------------------------------------------------------------------------------------------------
+CRD11Renderer::~CRD11Renderer()
+{
+    _ReleaseRenderPasses();
+}
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize renderer.
@@ -21,10 +28,20 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
     ViewportHeight = Height;
 
     RenderElements.Clear();
+    _ReleaseRenderPasses();
 
-    DepthStencilBuffer.Create( Width, Height );
+    if ( CRRenderPassPtr scenePass = CRMakeUnique( new CRD11ScenePass() ) )
+    {
+        scenePass->Initialize( Width, Height );
+        RenderPasses.push_back( std::move( scenePass ) );
+    }
 
-    _InitializeRenderTarget();
+    if ( CRRenderPassPtr compositePass = CRMakeUnique( new CRD11CompositePass() ) )
+    {
+        compositePass->Initialize( Width, Height );
+        RenderPasses.push_back( std::move( compositePass ) );
+    }
+
     _InitializeViewport( (f32)( Width ), (f32)( Height ) );
 
     TransformBuffer.Create( "Transform", (u32)( EConstBufferSlotVS::Transform ), ED11RenderingPipelineStage::VS );
@@ -76,7 +93,7 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
 //---------------------------------------------------------------------------------------------------------------------
 CRRenderElementHandle CRD11Renderer::AddRenderElement( const CRRenderElement& RenderElement )
 {
-    if ( RenderElement.Mesh.expired() ) return {};
+    if ( RenderElement.Mesh    .expired() ) return {};
     if ( RenderElement.Material.expired() ) return {};
 
     return RenderElements.Insert( RenderElement );
@@ -223,45 +240,29 @@ void CRD11Renderer::ClearLights()
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
-    if ( !GWorld ) return;
-
-    CRCamera* camera = GWorld->GetCamera();
-    if ( !camera ) return;
-
-    UpdateViewProjectionBuffer( camera->GetViewMatrix(), camera->GetProjectionMatrix() );
-
-    if ( CRTransformComponent* cameraTransform = camera->GetTransform() )
+    for ( const CRUniquePtr< ICRRHIRenderPass >& renderPass : RenderPasses )
     {
-        const CRVector& camPos = cameraTransform->GetLocation();
-
-        CRCameraProperties cameraProperties;
-        cameraProperties.Position = CRVector4D( camPos.x, camPos.y, camPos.z, 1.0f );
-
-        CameraPropertiesBuffer.Update( cameraProperties );
+        if ( !renderPass ) continue;
+        
+        renderPass->OnPreDraw();
     }
-\
+
+    _UpdateCameraBuffers();    
     _FlushLightsBuffer();
+    _RemoveStaleRenderElements();
 
-    CRArray< CRRenderElementHandle > staleHandles;
-
-    RenderElements.ForEachActive( [ &staleHandles ] ( const CRRenderElementHandle& Handle, CRRenderElement& Element )
+    for ( const CRRenderPassPtr& renderPass : RenderPasses )
     {
-        ICRRHIMeshSPtr     mesh     = Element.Mesh.lock();
-        ICRRHIMaterialSPtr material = Element.Material.lock();
-        if ( !mesh || !material )
-        {
-            staleHandles.push_back( Handle );
-            return;
-        }
+        if ( !renderPass ) continue;
 
-        mesh->SetInRenderingPipeline();
-        material->SetInRenderingPipeline();
-        mesh->Draw();
-    } );
+        renderPass->OnDrawRenderElements( RenderElements );
+    }
 
-    for ( const CRRenderElementHandle& handle : staleHandles )
+    for ( const CRUniquePtr< ICRRHIRenderPass >& renderPass : RenderPasses )
     {
-        RenderElements.Remove( handle );
+        if ( !renderPass ) continue;
+        
+        renderPass->OnPostDraw();
     }
 }
 
@@ -270,36 +271,14 @@ void CRD11Renderer::Draw()
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::ClearRenderTarget() const
 {
-    float color[ 4 ] = { 0.0f, 0.4f, 0.7f, 1.0f };
-    GD11.GetDeviceContext()->ClearRenderTargetView( RenderTargetView->GetObjectPtr(), color );
+    const float clearColor[ 4 ] = { 0.0f, 0.4f, 0.7f, 1.0f };
 
-    DepthStencilBuffer.ClearBuffer();
-}
+    for ( const CRRenderPassPtr& renderPass : RenderPasses )
+    {
+        if ( !renderPass ) continue;
 
-//---------------------------------------------------------------------------------------------------------------------
-/// Present.
-//---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::Present() const
-{
-    GD11.GetSwapChain()->Present( 0, 0 );
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Initialize render target.
-//---------------------------------------------------------------------------------------------------------------------
-void CRD11Renderer::_InitializeRenderTarget()
-{
-    ID3D11Texture2D* texture = nullptr;
-    GD11.GetSwapChain()->GetBuffer( 0, __uuidof( ID3D11Texture2D ), ( LPVOID* )&texture );
-
-    if ( !texture ) return;
-
-    RenderTargetView = GD11RM.GetRenderTargetView( "BackBuffer" );
-    RenderTargetView->Create( texture, nullptr );
-
-    GD11RP.SetRenderTargetView( RenderTargetView->GetObjectPtr(), DepthStencilBuffer.GetView() );
-
-    texture->Release();
+        renderPass->OnClearRenderTarget( clearColor );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -318,6 +297,81 @@ void CRD11Renderer::_InitializeViewport( f32 Width, f32 Height ) const
     viewport.Height   = Height;
 
     GD11.GetDeviceContext()->RSSetViewports( 1, &viewport );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Update camera-related constant buffers from world/camera state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::_UpdateCameraBuffers()
+{
+    CRMatrix viewMatrix       = CRMatrix::Identity;
+    CRMatrix projectionMatrix = CRMatrix::Identity;
+
+    CRCameraProperties cameraProperties;
+    cameraProperties.Position = CRVector4D( 0.0f, 0.0f, 0.0f, 1.0f );
+
+    if ( GWorld )
+    {
+        if ( CRCamera* camera = GWorld->GetCamera() )
+        {
+            viewMatrix       = camera->GetViewMatrix();
+            projectionMatrix = camera->GetProjectionMatrix();
+
+            if ( CRTransformComponent* cameraTransform = camera->GetTransform() )
+            {
+                const CRVector& camPos = cameraTransform->GetLocation();
+                cameraProperties.Position = CRVector4D( camPos.x, camPos.y, camPos.z, 1.0f );
+            }
+        }
+    }
+
+    UpdateViewProjectionBuffer( viewMatrix, projectionMatrix );
+    CameraPropertiesBuffer.Update( cameraProperties );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Remove stale render elements whose mesh/material resources are no longer valid.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::_RemoveStaleRenderElements()
+{
+    CRArray< CRRenderElementHandle > staleHandles;
+
+    RenderElements.ForEachActive( [ &staleHandles ] ( const CRRenderElementHandle& Handle, const CRRenderElement& Element )
+    {
+        if ( Element.Mesh.expired() || Element.Material.expired() )
+        {
+            staleHandles.push_back( Handle );
+        }
+    } );
+
+    for ( const CRRenderElementHandle& staleHandle : staleHandles )
+    {
+        RenderElements.Remove( staleHandle );
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Release and clear render passes.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::_ReleaseRenderPasses()
+{
+    for ( const CRUniquePtr< ICRRHIRenderPass >& renderPass : RenderPasses )
+    {
+        if ( renderPass )
+        {
+            renderPass->Release();
+        }
+    }
+
+    RenderPasses.clear();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Present.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::Present() const
+{
+    GD11.GetSwapChain()->Present( 0, 0 );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

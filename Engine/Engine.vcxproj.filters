@@ -147,6 +147,12 @@
     <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RHI\DX11\Passes\CRD11CompositePass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RHI\DX11\Passes\CRD11ScenePass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -371,6 +377,15 @@
     <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\Passes\CRD11CompositePass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\Passes\CRD11RenderPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\Passes\CRD11ScenePass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\RHI\DX11\CRD11Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -390,6 +405,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\ICRRHIMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\ICRRHIRenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\ICRRHIRenderer.h">
@@ -424,6 +442,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Source\RHI\DX11\HLSL\composite.hlsl" />
     <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
   </ItemGroup>
 </Project>

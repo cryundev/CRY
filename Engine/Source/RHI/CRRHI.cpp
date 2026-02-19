@@ -108,16 +108,11 @@ bool CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
 void CRRHI::InitializeShaders()
 {
     std::filesystem::path hlslFilePath = std::filesystem::path( __FILE__ ).parent_path() / "DX11/HLSL/shader.hlsl";
-
     if ( !std::filesystem::exists( hlslFilePath ) )
     {
-        hlslFilePath = std::filesystem::path( "Engine/Source/RHI/DX11/HLSL/shader.hlsl" );
-
-        if ( !std::filesystem::exists( hlslFilePath ) )
-        {
-            GLog.AddLog( "[CRRHI::InitializeShaders] Failed to find shader file." );
-            return;
-        }
+        GLog.AddLog( "[CRRHI::InitializeShaders] Failed to find shader file." );
+        
+        return;
     }
 
     CRD11CompiledShader compiledVS;
@@ -125,6 +120,7 @@ void CRRHI::InitializeShaders()
     if ( !compiledVS.GetObjectPtr() )
     {
         GLog.AddLog( "[CRRHI::InitializeShaders] Failed to compile vertex shader." );
+        
         return;
     }
 
@@ -152,6 +148,7 @@ void CRRHI::InitializeShaders()
     if ( !compiledPS.GetObjectPtr() )
     {
         GLog.AddLog( "[CRRHI::InitializeShaders] Failed to compile pixel shader." );
+        
         return;
     }
 

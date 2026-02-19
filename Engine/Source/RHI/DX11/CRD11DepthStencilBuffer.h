@@ -22,6 +22,9 @@ public:
     /// Create depth stencil buffer.
     void Create( u32 Width, u32 Height );
 
+    /// Release depth stencil resources.
+    void Release() const;
+
     /// Get depth stencil view.
     ID3D11DepthStencilView* GetView() const;
 

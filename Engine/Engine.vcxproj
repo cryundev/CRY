@@ -284,12 +284,15 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\RHI\DX11\CRD11DepthStencilBuffer.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Material.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Passes\CRD11CompositePass.cpp" />
+    <ClCompile Include="Source\RHI\DX11\Passes\CRD11ScenePass.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11RenderTarget2D.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11RenderingPipeline.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ResourceManager.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ShaderResourceTexture.cpp" />
     <ClCompile Include="Source\World\CRWorld.cpp" />
+    <None Include="Source\RHI\DX11\HLSL\composite.hlsl" />
     <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
     <ClCompile Include="Source\Utility\FBX\CRFbxLoader.cpp" />
     <ClCompile Include="Source\Utility\Generic\CRGeneric.cpp" />
@@ -339,6 +342,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\CRRenderElement.h" />
     <ClInclude Include="Source\RHI\CRRHITypes.h" />
     <ClInclude Include="Source\RHI\CRConstBufferStructures.h" />
+    <ClInclude Include="Source\RHI\ICRRHIRenderPass.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.h" />
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.h" />
@@ -362,6 +366,9 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\DX11\CRD11Include.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Material.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h" />
+    <ClInclude Include="Source\RHI\DX11\Passes\CRD11CompositePass.h" />
+    <ClInclude Include="Source\RHI\DX11\Passes\CRD11RenderPass.h" />
+    <ClInclude Include="Source\RHI\DX11\Passes\CRD11ScenePass.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11RenderTarget2D.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Renderer.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11RenderingPipeline.h" />

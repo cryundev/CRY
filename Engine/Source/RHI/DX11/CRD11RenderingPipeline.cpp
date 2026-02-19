@@ -35,7 +35,6 @@ void CRD11RenderingPipeline::SetIndexBuffer( ID3D11Buffer* Buffer, u32 Offset )
 void CRD11RenderingPipeline::SetInputLayout( ID3D11InputLayout* Layout, u32 Slot )
 {
     if ( Slot >= D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT ) return;
-    if ( !Layout ) return;
 
     InputLayouts[ Slot ] = Layout;
 

@@ -386,7 +386,7 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 
 	hr = GD11.GetDevice()->CheckFormatSupport( DxgiFormat, &support );
 
-	if ( FAILED( hr ) || !( support & D3D11_FORMAT_SUPPORT_TEXTURE2D ) )
+	if ( CRGeneric::CheckError( hr ) || !( support & D3D11_FORMAT_SUPPORT_TEXTURE2D ) )
 	{
 		memcpy( &ConvertToFormat, &GUID_WICPixelFormat32bppRGBA, sizeof(WICPixelFormatGUID) );
 		DxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;

@@ -2,10 +2,10 @@
 
 
 #include "CRD11BindingConstantBuffer.h"
-#include "CRD11DepthStencilBuffer.h"
 #include "CRD11Include.h"
 #include "CRD11Types.h"
-#include "Source/RHI/CRRHITypes.h"
+#include "Source/Core/CRSmartPtrMacro.h"
+#include "Source/RHI/ICRRHIRenderPass.h"
 #include "Source/RHI/CRConstBufferStructures.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 
@@ -15,6 +15,10 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRD11Renderer : public ICRRHIRenderer
 {
+public:
+    using CRRenderPassPtr   = CRUniquePtr< class ICRRHIRenderPass >;
+    using CRRenderPassArray = CRArray< CRRenderPassPtr >;
+    
 private:
     unsigned int ViewportWidth  = 1920;
     unsigned int ViewportHeight = 1080;
@@ -28,17 +32,15 @@ private:
 
     CRLightsBuffer LightsData;
 
-    CRD11RenderTargetViewSPtr RenderTargetView;
-    CRD11RasterizerStateWPtr  RasterizerState;
-
-    CRD11DepthStencilBuffer DepthStencilBuffer;
+    CRRenderPassArray        RenderPasses;
+    CRD11RasterizerStateWPtr RasterizerState;
 
 public:
     /// Constructor
     CRD11Renderer() = default;
 
     /// Destructor
-    virtual ~CRD11Renderer() override = default;
+    virtual ~CRD11Renderer() override;
 
     /// Initialize renderer.
     virtual void Initialize( u32 Width, u32 Height ) override;
@@ -96,11 +98,17 @@ public:
     virtual void ClearLights() override;
 
 private:
-    /// Initialize render target.
-    void _InitializeRenderTarget();
-
     /// Initialize viewport.
     void _InitializeViewport( f32 Width, f32 Height ) const;
+
+    /// Update camera-related constant buffers from world/camera state.
+    void _UpdateCameraBuffers();
+
+    /// Remove stale render elements whose mesh/material resources are no longer valid.
+    void _RemoveStaleRenderElements();
+
+    /// Release and clear render passes.
+    void _ReleaseRenderPasses();
 
     /// Flush CPU-side LightsData to the GPU constant buffer.
     void _FlushLightsBuffer();
