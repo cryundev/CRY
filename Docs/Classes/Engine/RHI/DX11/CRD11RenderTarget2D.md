@@ -51,4 +51,9 @@ tags:
 
 ## 함수
 ---
-- [[CRD11RenderTarget2D.Create|CRD11RenderTarget2D::Create()]]
+- [[CRD11RenderTarget2D.Create|Create]]
+- [[CRD11RenderTarget2D.Release|Release]]
+- [[CRD11RenderTarget2D.Resize|Resize]]
+- [[CRD11RenderTarget2D.GetRTV|GetRTV]]
+- [[CRD11RenderTarget2D.GetSRV|GetSRV]]
+- [[CRD11RenderTarget2D.IsValid|IsValid]]
