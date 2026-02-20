@@ -172,6 +172,7 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="EngineAPI.cpp" />
+    <ClCompile Include="ViewportAPI.cpp" />
     <ClCompile Include="WorldAPI.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,5 @@
-using System.Collections.Specialized;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Media;
 using Editor_WPF.GameDev;
 using Editor_WPF.GameProject;
 
@@ -13,24 +12,51 @@ namespace Editor_WPF.Editors;
 //---------------------------------------------------------------------------------------------------------------------
 public partial class WorldEditorView
 {
+    private DateTime _lastRenderTime;
+
     //-----------------------------------------------------------------------------------------------------------------
     /// WorldEditorView
     //-----------------------------------------------------------------------------------------------------------------
     public WorldEditorView()
     {
         InitializeComponent();
-        
-        Loaded += OnWorldEditorViewLoaded;
+
+        Loaded   += OnWorldEditorViewLoaded;
+        Unloaded += OnWorldEditorViewUnloaded;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// OnWorldEditorViewLoaded
     //-----------------------------------------------------------------------------------------------------------------
-    private void OnWorldEditorViewLoaded( object sender, RoutedEventArgs eventArgs )
+    private void OnWorldEditorViewLoaded( object sender, RoutedEventArgs e )
     {
         Loaded -= OnWorldEditorViewLoaded;
-        
+
         Focus();
+
+        _lastRenderTime = DateTime.UtcNow;
+        CompositionTarget.Rendering += OnRendering;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnWorldEditorViewUnloaded
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnWorldEditorViewUnloaded( object sender, RoutedEventArgs e )
+    {
+        CompositionTarget.Rendering -= OnRendering;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnRendering
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnRendering( object? sender, EventArgs e )
+    {
+        DateTime now = DateTime.UtcNow;
+        float deltaSeconds = (float)( now - _lastRenderTime ).TotalSeconds;
+        
+        _lastRenderTime = now;
+
+        EngineViewport.RenderFrame( deltaSeconds );
     }
 
     //-----------------------------------------------------------------------------------------------------------------

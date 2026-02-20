@@ -35,6 +35,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.106" PrivateAssets="all" />
       <COMReference Include="EnvDTE80">
         <WrapperTool>tlbimp</WrapperTool>
         <VersionMinor>0</VersionMinor>
@@ -60,5 +61,9 @@
         <DependentUpon>ControlTemplates.xaml</DependentUpon>
       </Compile>
     </ItemGroup>
+
+    <PropertyGroup>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
 
 </Project>

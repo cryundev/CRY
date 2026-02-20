@@ -1,0 +1,3 @@
+CreateWindowEx
+DestroyWindow
+SetWindowPos
