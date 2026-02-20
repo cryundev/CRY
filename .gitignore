@@ -75,6 +75,7 @@ Editor_WPF/*_wpftmp.csproj
 # -----------------------------------------------------------------------------
 
 msbuild_debug.log
+build.log
 *.py
 *.vssettings
 nul
