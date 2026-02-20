@@ -23,6 +23,9 @@ public:
     /// Initialize renderer.
     virtual void Initialize( unsigned int Width, unsigned int Height ) = 0;
 
+    /// Resize renderer without clearing render elements.
+    virtual void Resize( unsigned int Width, unsigned int Height ) {}
+
     /// Add render element.
     virtual CRRenderElementHandle AddRenderElement( const CRRenderElement& RenderElement ) = 0;
 

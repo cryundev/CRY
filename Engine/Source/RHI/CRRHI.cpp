@@ -103,9 +103,27 @@ bool CRRHI::Initialize( HWND hWnd, u32 Width, u32 Height )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Resize viewport without reinitializing the device or clearing render elements.
+//---------------------------------------------------------------------------------------------------------------------
+void CRRHI::Resize( u32 Width, u32 Height ) const
+{
+    if ( !bInitialized ) return;
+    if ( !Renderer     ) return;
+    
+    if ( IDXGISwapChain* swapChain = GD11.GetSwapChain() ) 
+    {
+        HRESULT hr = swapChain->ResizeBuffers( 0, Width, Height, DXGI_FORMAT_UNKNOWN, 0 );
+        
+        if ( !CRGeneric::CheckError( hr ) ) return;
+    }
+
+    Renderer->Resize( Width, Height );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Initialize shaders.
 //---------------------------------------------------------------------------------------------------------------------
-void CRRHI::InitializeShaders()
+void CRRHI::InitializeShaders() const
 {
     std::filesystem::path hlslFilePath = std::filesystem::path( __FILE__ ).parent_path() / "DX11/HLSL/shader.hlsl";
     if ( !std::filesystem::exists( hlslFilePath ) )

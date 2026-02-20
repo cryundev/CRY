@@ -30,8 +30,11 @@ public:
     /// Initialize RHI.
     bool Initialize( HWND hWnd, u32 Width, u32 Height );
 
+    /// Resize viewport without reinitializing the device or clearing render elements.
+    void Resize( u32 Width, u32 Height ) const;
+
     /// Initialize shaders.
-    void InitializeShaders();
+    void InitializeShaders() const;
 
     /// Render frame RHI.
     void RenderFrame() const;

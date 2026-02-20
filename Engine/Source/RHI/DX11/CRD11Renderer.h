@@ -45,6 +45,9 @@ public:
     /// Initialize renderer.
     virtual void Initialize( u32 Width, u32 Height ) override;
 
+    /// Resize renderer without clearing render elements.
+    virtual void Resize( u32 Width, u32 Height ) override;
+
     /// Add render element.
     virtual CRRenderElementHandle AddRenderElement( const CRRenderElement& RenderElement ) override;
 

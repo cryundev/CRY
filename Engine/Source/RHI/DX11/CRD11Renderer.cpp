@@ -89,6 +89,25 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Resize renderer without clearing render elements.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::Resize( u32 Width, u32 Height )
+{
+    ViewportWidth  = Width;
+    ViewportHeight = Height;
+
+    for ( const CRRenderPassPtr& renderPass : RenderPasses )
+    {
+        if ( renderPass )
+        {
+            renderPass->Resize( Width, Height );
+        }
+    }
+
+    _InitializeViewport( (f32)Width, (f32)Height );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Add render element.
 //---------------------------------------------------------------------------------------------------------------------
 CRRenderElementHandle CRD11Renderer::AddRenderElement( const CRRenderElement& RenderElement )
