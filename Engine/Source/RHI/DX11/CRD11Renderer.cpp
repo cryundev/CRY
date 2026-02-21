@@ -55,17 +55,10 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
     LightsBuffer.Create( "LightsBuffer", (u32)( EConstBufferSlotPS::LightProperties ), ED11RenderingPipelineStage::PS );
     LightsBuffer.SetInRenderingPipeline();
 
-    CRDirectionalLightData sun;
-    CRVector sunDir( 1.0f, -1.0f, 1.0f );
-    sunDir.Normalize();
-    sun.Direction = CRVector4D( sunDir.x, sunDir.y, sunDir.z, 0.0f );
-    sun.Color     = CRVector4D( 1.0f, 1.0f, 1.0f, 1.0f );
-
-    LightsData.AmbientColor           = CRVector4D( 0.1f, 0.1f, 0.1f, 1.0f );
-    LightsData.DirectionalCount       = 1;
-    LightsData.PointCount             = 0;
-    LightsData.SpotCount              = 0;
-    LightsData.DirectionalLights[ 0 ] = sun;
+    LightsData.AmbientColor     = CRVector4D( 0.1f, 0.1f, 0.1f, 1.0f );
+    LightsData.DirectionalCount = 0;
+    LightsData.PointCount       = 0;
+    LightsData.SpotCount        = 0;
 
     _FlushLightsBuffer();
 

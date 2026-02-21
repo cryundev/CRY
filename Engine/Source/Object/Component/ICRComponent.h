@@ -31,4 +31,7 @@ public:
 
     /// Update component.
     virtual void UpdateComponent( float DeltaSeconds ) {}
+
+    /// Pre-render component.
+    virtual void PreRenderComponent( float DeltaSeconds ) {}
 };

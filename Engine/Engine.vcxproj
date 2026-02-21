@@ -256,8 +256,11 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Source\Object\Component\CRComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRComponentRegistry.cpp" />
+    <ClCompile Include="Source\Object\Component\CRDirectionalLightComponent.cpp" />
+    <ClCompile Include="Source\Object\Component\CRPointLightComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRPrimitiveComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRScriptComponent.cpp" />
+    <ClCompile Include="Source\Object\Component\CRSpotLightComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRTransformComponent.cpp" />
     <ClCompile Include="Source\Object\CRActor.cpp" />
     <ClCompile Include="Source\Object\CRObject.cpp" />
@@ -331,8 +334,11 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />
     <ClInclude Include="Source\Object\Component\CRComponent.h" />
     <ClInclude Include="Source\Object\Component\CRComponentRegistry.h" />
+    <ClInclude Include="Source\Object\Component\CRDirectionalLightComponent.h" />
+    <ClInclude Include="Source\Object\Component\CRPointLightComponent.h" />
     <ClInclude Include="Source\Object\Component\CRPrimitiveComponent.h" />
     <ClInclude Include="Source\Object\Component\CRScriptComponent.h" />
+    <ClInclude Include="Source\Object\Component\CRSpotLightComponent.h" />
     <ClInclude Include="Source\Object\Component\CRTransformComponent.h" />
     <ClInclude Include="Source\Object\Component\ICRComponent.h" />
     <ClInclude Include="Source\Object\CRActor.h" />

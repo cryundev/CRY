@@ -38,6 +38,12 @@ public:
 
     /// Update components.
     static void UpdateComponents( float DeltaSeconds );
+
+    /// Pre-render components.
+    static void PreRenderComponents( float DeltaSeconds );
+
+    /// Get components array.
+    static CRArray< T >& GetComponents() { return Components; }
 };
 
 
@@ -58,7 +64,7 @@ T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
     
     CRComponentRegistry::RegisterPreRender( [] ( float DeltaSeconds )
     {
-        CRComponent< T >::UpdateComponents( DeltaSeconds );
+        CRComponent< T >::PreRenderComponents( DeltaSeconds );
     }, T::Priority );
     
     assert( CRIdentity::IsValid( Id ) );
@@ -166,5 +172,30 @@ void CRComponent< T >::UpdateComponents( float DeltaSeconds )
 
         component.bWasEnabled = true;
         component.UpdateComponent( DeltaSeconds );
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Pre-render components.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+void CRComponent< T >::PreRenderComponents( float DeltaSeconds )
+{
+    for ( auto& component : Components )
+    {
+        if ( !component.IsValid() ) continue;
+
+        if ( !component.IsEnabled() )
+        {
+            if ( component.bWasEnabled )
+            {
+                component.OnDisabled();
+                component.bWasEnabled = false;
+            }
+            continue;
+        }
+
+        component.bWasEnabled = true;
+        component.PreRenderComponent( DeltaSeconds );
     }
 }
