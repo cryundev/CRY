@@ -12,6 +12,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRPrimitiveComponent : public CRComponent< CRPrimitiveComponent >
 {
+public:
+    static constexpr ECRComponentPriority Priority = ECRComponentPriority::Primitive; /// Component priority.
+
 private:
     CRString              AssetPath;
     

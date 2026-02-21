@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "CRComponentRegistry.h"
 #include "ICRComponent.h"
 #include "Source/Core/CRGeneric.h"
 #include "Source/Object/CRObject.h"
@@ -15,13 +16,16 @@ class CRComponent : public CRObject, public ICRComponent
 public:
     friend class CRActor;
 
+    /// Component priority.
+    static constexpr ECRComponentPriority Priority = ECRComponentPriority::None;
+
 private:
     /// Components.
     inline static CRArray< T > Components = {};
 
     /// Id map.
     inline static CRArray< CRIdentity::id_t > IdMap = {};
-    
+
 public:
     /// Add component.
     static T* Add( const CRIdentity::id_t& Id );
@@ -47,6 +51,16 @@ concept ComponentType = std::is_base_of_v< CRComponent< T >, T >;
 template < typename T >
 T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
 {
+    CRComponentRegistry::RegisterTick( [] ( float DeltaSeconds )
+    {
+        CRComponent< T >::UpdateComponents( DeltaSeconds );
+    }, T::Priority );
+    
+    CRComponentRegistry::RegisterPreRender( [] ( float DeltaSeconds )
+    {
+        CRComponent< T >::UpdateComponents( DeltaSeconds );
+    }, T::Priority );
+    
     assert( CRIdentity::IsValid( Id ) );
 
     CRIdentity::id_t index = CRIdentity::IndexOf( Id );

@@ -255,6 +255,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\Core\Identify\CRIdentity.cpp" />
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Source\Object\Component\CRComponent.cpp" />
+    <ClCompile Include="Source\Object\Component\CRComponentRegistry.cpp" />
     <ClCompile Include="Source\Object\Component\CRPrimitiveComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRScriptComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRTransformComponent.cpp" />
@@ -329,6 +330,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />
     <ClInclude Include="Source\Object\Component\CRComponent.h" />
+    <ClInclude Include="Source\Object\Component\CRComponentRegistry.h" />
     <ClInclude Include="Source\Object\Component\CRPrimitiveComponent.h" />
     <ClInclude Include="Source\Object\Component\CRScriptComponent.h" />
     <ClInclude Include="Source\Object\Component\CRTransformComponent.h" />

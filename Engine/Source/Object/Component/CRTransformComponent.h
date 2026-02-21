@@ -13,6 +13,9 @@ DECLARE_TYPE_ID( CRTransformId );
 class CRTransformComponent : public CRComponent< CRTransformComponent >
 {
 public:
+    static constexpr ECRComponentPriority Priority = ECRComponentPriority::Primitive; /// Component priority.
+    
+public:
     CRVector     Location = CRVector::Zero;
     CRQuaternion Rotation = CRQuaternion::Identity;
     CRVector     Scale    = CRVector::One;

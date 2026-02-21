@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/Object/Camera/CRCamera.h"
+#include "Source/Object/Component/CRComponentRegistry.h"
 #include "Source/Object/Component/CRPrimitiveComponent.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIRenderer.h"
@@ -117,8 +118,7 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
 //---------------------------------------------------------------------------------------------------------------------
 void CREngine::Tick( float DeltaSeconds )
 {
-    CRTransformComponent::UpdateComponents( DeltaSeconds );
-    CRPrimitiveComponent::UpdateComponents( DeltaSeconds );
+    CRComponentRegistry::Tick( DeltaSeconds );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -127,6 +127,11 @@ void CREngine::Tick( float DeltaSeconds )
 bool CREngine::PreRender( float DeltaSeconds )
 {
     bool bRender = GFrameUpdator.Update( DeltaSeconds );
+
+    if ( bRender )
+    {
+        CRComponentRegistry::PreRender( DeltaSeconds );
+    }
 
     return bRender;
 }
