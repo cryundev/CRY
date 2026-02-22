@@ -34,6 +34,9 @@ public:
 
     /// Despawn actor.
     void DespawnActor( const CRObjectId& ActorId );
+
+    /// Get actor by id.
+    CRActor* GetActor( const CRObjectId& ActorId ) const;
 };
 
 

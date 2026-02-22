@@ -49,3 +49,21 @@ void CRWorld::DespawnActor( const CRObjectId& ActorId )
         Actors.erase( itr );
     }
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get actor by id.
+//---------------------------------------------------------------------------------------------------------------------
+CRActor* CRWorld::GetActor( const CRObjectId& ActorId ) const
+{
+    auto itr = std::ranges::find_if( Actors, [ ActorId ] ( const CRActor* Actor )
+    {
+        return Actor && Actor->GetObjectId() == ActorId;
+    } );
+
+    if ( itr == Actors.end() )
+    {
+        return nullptr;
+    }
+
+    return *itr;
+}
