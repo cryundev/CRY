@@ -173,10 +173,14 @@
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="EngineAPI.cpp" />
     <ClCompile Include="ViewportAPI.cpp" />
-    <ClCompile Include="WorldAPI.cpp" />
+    <ClCompile Include="WorldAPI.Actor.cpp" />
+    <ClCompile Include="WorldAPI.Transform.cpp" />
+    <ClCompile Include="WorldAPI.World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EngineDLL.h" />
+    <ClInclude Include="WorldAPI.ActorInternal.h" />
+    <ClInclude Include="WorldAPI.TransformInternal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

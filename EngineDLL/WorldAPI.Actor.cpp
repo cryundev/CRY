@@ -1,26 +1,26 @@
-#include "Engine.h"
 #include "EngineDLL.h"
-#include "Source/Core/Identify/CRIdentity.h"
-#include "Source/World/CRWorld.h"
+#include "WorldAPI.ActorInternal.h"
 
 
-//---------------------------------------------------------------------------------------------------------------------
-/// SpawnActor
-//---------------------------------------------------------------------------------------------------------------------
-CR_ENGINE_API CRIdentity::id_t SpawnActor()
+namespace CRActorApiInternal
 {
-    if ( CRActor* actor = GWorld.get()->SpawnActor< CRActor >() )
-    {
-        return actor->GetObjectId();
-    }
+//---------------------------------------------------------------------------------------------------------------------
+/// Get actor by id.
+//---------------------------------------------------------------------------------------------------------------------
+CRActor* GetActorById( CRIdentity::id_t Id )
+{
+    if ( !GWorld || !CRIdentity::IsValid( Id ) ) return nullptr;
 
-    return CRIdentity::IdMask;
+    return GWorld->GetActor( CRObjectId( Id ) );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// DespawnActor
+/// Get transform by actor id.
 //---------------------------------------------------------------------------------------------------------------------
-CR_ENGINE_API void DespawnActor( CRIdentity::id_t Id )
+CRTransformComponent* GetTransform( CRIdentity::id_t Id )
 {
-    GWorld.get()->DespawnActor( CRObjectId( Id ) );
+    if ( CRActor* actor = GetActorById( Id ) ) return actor->GetTransform();
+
+    return nullptr;
+}
 }
