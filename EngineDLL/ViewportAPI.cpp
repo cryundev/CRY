@@ -1,6 +1,7 @@
 #include "Engine.h"
 #include "EngineDLL.h"
 #include "Source/RHI/CRRHI.h"
+#include "Source/World/CRWorld.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -25,6 +26,14 @@ CR_ENGINE_API void ShutdownViewport()
 CR_ENGINE_API void ResizeViewport( i32 Width, i32 Height )
 {
     if ( !GRHI.IsInitialized() ) return;
+
+    if ( GWorld )
+    {
+        if ( CRCamera* camera = GWorld->GetCamera() )
+        {
+            camera->SetViewSize( (f32)Width, (f32)Height );
+        }
+    }
 
     GRHI.Resize( (u32)Width, (u32)Height );
 }

@@ -37,6 +37,51 @@ CRMatrix CRCamera::GetProjectionMatrix() const
         case EProjectionType::Orthographic: return DirectX::XMMatrixOrthographicLH  ( ViewWidth, ViewHeight, NearDistance, FarDistance );
         case EProjectionType::Perspective:  return DirectX::XMMatrixPerspectiveFovLH( DirectX::XMConvertToRadians( FieldOfView ), ViewWidth / ViewHeight, NearDistance, FarDistance );
     }
-    
+
     return CRMatrix::Identity;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Try unproject NDC coordinate to world position at clip-space z.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRCamera::TryConvertNdcToWorld( f32 NdcX, f32 NdcY, f32 ClipZ, CRVector& OutWorldPosition ) const
+{
+    CRMatrix inverseViewProjection;
+    if ( !_TryCreateInverseViewProjection( inverseViewProjection ) ) return false;
+    
+    CRVector4D clipPoint( NdcX, NdcY, ClipZ, 1.0f );
+    CRVector4D worldPoint = CRVector4D::Transform( clipPoint, inverseViewProjection );
+
+    if ( CRIsNearlyZero( worldPoint.w ) ) return false;
+
+    f32 inverseW = 1.0f / worldPoint.w;
+    OutWorldPosition = CRVector( worldPoint.x * inverseW, worldPoint.y * inverseW, worldPoint.z * inverseW );
+
+    return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set view size.
+//---------------------------------------------------------------------------------------------------------------------
+void CRCamera::SetViewSize( f32 InViewWidth, f32 InViewHeight )
+{
+    ViewWidth  = InViewWidth;
+    ViewHeight = InViewHeight;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Try create inverse view-projection matrix.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRCamera::_TryCreateInverseViewProjection( CRMatrix& OutInverseViewProjection ) const
+{
+    CRMatrix viewProjection = GetViewMatrix() * GetProjectionMatrix();
+
+    DirectX::XMVECTOR determinant = DirectX::XMMatrixDeterminant( viewProjection );
+    
+    f32 determinantValue = DirectX::XMVectorGetX( determinant );
+    if ( CRIsNearlyZero( determinantValue ) ) return false;
+
+    OutInverseViewProjection = viewProjection.Invert();
+    
+    return true;
 }

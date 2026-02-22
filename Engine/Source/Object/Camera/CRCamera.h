@@ -40,10 +40,20 @@ public:
 
     /// Get projection matrix.
     CRMatrix GetProjectionMatrix() const;
+    
+    /// Try unproject NDC coordinate to world position at clip-space z.
+    bool TryConvertNdcToWorld( f32 NdcX, f32 NdcY, f32 ClipZ, CRVector& OutWorldPosition ) const;
+
+    /// Set view size.
+    void SetViewSize( f32 InViewWidth, f32 InViewHeight );
 
     /// Set look at direction.
     void SetLookAtDirection( const CRVector& InLookAtDirection ) { LookAtDirection = InLookAtDirection; }
 
     /// Set look at direction.
     void SetLookAtDirection( f32 X, f32 Y, f32 Z ) { LookAtDirection = CRVector( X, Y, Z ); }
+    
+private:
+    /// Try create inverse view-projection matrix.
+    bool _TryCreateInverseViewProjection( CRMatrix& OutInverseViewProjection ) const;
 };

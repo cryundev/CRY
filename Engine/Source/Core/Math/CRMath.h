@@ -1,10 +1,23 @@
 #pragma once
 
 
+#include "Source/Core/CRTypes.h"
 #include "Extras/DirectXTK/Inc/SimpleMath.h"
 
 
 #pragma comment ( lib, "DirectXTK.lib" )
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Common math epsilon and helpers.
+//---------------------------------------------------------------------------------------------------------------------
+static constexpr f32 CRMathEpsilon = 1.0e-6f;
+
+
+inline bool CRIsNearlyZero( f32 Value, f32 Epsilon = CRMathEpsilon )
+{
+    return Value > -Epsilon && Value < Epsilon;
+}
 
 
 //---------------------------------------------------------------------------------------------------------------------

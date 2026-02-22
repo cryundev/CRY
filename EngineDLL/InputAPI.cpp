@@ -1,5 +1,9 @@
+#include "Engine.h"
 #include "EngineDLL.h"
+#include "Source/Core/Math/CRRay.h"
 #include "Source/Core/CRTypes.h"
+#include "Source/Utility/UtilRay.h"
+#include "Source/World/CRWorld.h"
 
 
 namespace
@@ -17,12 +21,17 @@ struct CRViewportMouseState
 
     f32 NdcX = 0.0f;
     f32 NdcY = 0.0f;
-
+    
     bool bLeftPressed = false;
+
+    CRRay Ray;
+    bool  bHasRay = false;
 };
 
+    
 CRViewportMouseState GViewportMouseState;
 
+    
 //---------------------------------------------------------------------------------------------------------------------
 /// Convert pixel coordinates to NDC.
 //---------------------------------------------------------------------------------------------------------------------
@@ -50,6 +59,26 @@ void StorePointerState( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH, f3
     GViewportMouseState.NdcX = NdcX;
     GViewportMouseState.NdcY = NdcY;
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Update cached mouse ray from current NDC coordinates.
+//---------------------------------------------------------------------------------------------------------------------
+bool TryUpdateMouseRay( f32 NdcX, f32 NdcY )
+{
+    GViewportMouseState.bHasRay = false;
+    
+    if ( !GWorld ) return false;
+    if ( !GWorld->GetCamera() ) return false;
+
+    CRRay ray;
+    
+    if ( !UtilRay::TryCreateRayFromNDC( NdcX, NdcY, ray ) ) return false;
+
+    GViewportMouseState.Ray     = ray;
+    GViewportMouseState.bHasRay = true;
+
+    return true;
+}
 }
 
 
@@ -64,6 +93,7 @@ CR_ENGINE_API void OnViewportMouseMove( i32 PixelX, i32 PixelY, i32 ViewportW, i
     if ( !TryConvertToNdc( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY ) ) return;
 
     StorePointerState( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY );
+    TryUpdateMouseRay( ndcX, ndcY );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -77,6 +107,7 @@ CR_ENGINE_API void OnViewportMouseButton( i32 PixelX, i32 PixelY, i32 ViewportW,
     if ( !TryConvertToNdc( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY ) ) return;
 
     StorePointerState( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY );
+    TryUpdateMouseRay( ndcX, ndcY );
 
     if ( Button == 0 )
     {
