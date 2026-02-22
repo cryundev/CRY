@@ -27,16 +27,16 @@ aliases:
 ## TODO
 ---
 
-- [ ] `Engine/Source/Core/Math/CRRay.h` 신규 파일 생성
+- [x] `Engine/Source/Core/Math/CRRay.h` 신규 파일 생성
     - `struct CRRay { CRVector Origin; CRVector Direction; };`
-- [ ] `Engine/Source/Core/Math/CRRayUtil.h` / `.cpp` 신규 파일 생성
+- [x] `Engine/Source/Core/Math/CRRayUtil.h` / `.cpp` 신규 파일 생성
     - `CRRay CreateRayFromNDC(f32 NdcX, f32 NdcY, const CRMatrix& View, const CRMatrix& Projection)` 선언
     - Near/Far 클립 포인트 `(ndcX, ndcY, 0, 1)`, `(ndcX, ndcY, 1, 1)`를 각각 역변환
     - `origin = nearWorld`, `direction = normalize(farWorld - nearWorld)` 방식으로 계산
-- [ ] `EngineDLL/InputAPI.cpp`에 좌표 변환 헬퍼 추가
+- [x] `EngineDLL/InputAPI.cpp`에 좌표 변환 헬퍼 추가
     - `PixelToNDC(PixelX, PixelY, ViewportW, ViewportH, OutNdcX, OutNdcY)` 구현
     - `GRHI.GetRenderer()->GetViewportWidth/Height()`와 인자 뷰포트 크기 불일치 시 보정/가드
-- [ ] `OnViewportMouseMove` / `OnViewportMouseButton`에서 `CreateRayFromNDC` 호출
+- [x] `OnViewportMouseMove` / `OnViewportMouseButton`에서 `CreateRayFromNDC` 호출
     - `GWorld->GetCamera()`에서 View/Projection 획득
     - 카메라/월드 부재 시 early-out
     - 결과 `CRRay`를 `CRGizmoSystem`의 현재 입력 레이로 갱신

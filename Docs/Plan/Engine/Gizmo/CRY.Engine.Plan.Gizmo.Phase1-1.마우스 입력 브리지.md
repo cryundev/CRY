@@ -28,23 +28,23 @@ aliases:
 ## TODO
 ---
 
-- [ ] `EngineViewportHost.cs`에 `WndProc` 오버라이드 추가
+- [x] `EngineViewportHost.cs`에 `WndProc` 오버라이드 추가
     - `WM_MOUSEMOVE(0x0200)`, `WM_LBUTTONDOWN(0x0201)`, `WM_LBUTTONUP(0x0202)` 처리
     - 좌표는 `GET_X_LPARAM`/`GET_Y_LPARAM` 규칙(부호 보존)으로 추출
     - 드래그 시작 시 `SetCapture`, 종료 시 `ReleaseCapture`, 커서 이탈 시 `WM_MOUSELEAVE` 처리
-- [ ] `Editor_WPF/DllWrappers/EngineAPI.Input.cs` 신규 파일 생성
+- [x] `Editor_WPF/DllWrappers/EngineAPI.Input.cs` 신규 파일 생성
     - `[DllImport("EngineDLL.dll", EntryPoint = "OnViewportMouseMove")] static extern void OnViewportMouseMove(int pixelX, int pixelY, int viewportW, int viewportH);`
     - `[DllImport("EngineDLL.dll", EntryPoint = "OnViewportMouseButton")] static extern void OnViewportMouseButton(int pixelX, int pixelY, int viewportW, int viewportH, int button, bool pressed);`
     - `button`은 좌/우/중 enum 값을 C++과 동일한 정수 값으로 고정
-- [ ] `WndProc`에서 엔진 호출 전 뷰포트 크기 확보 로직 정리
+- [x] `WndProc`에서 엔진 호출 전 뷰포트 크기 확보 로직 정리
     - `GetClientRect(_hwnd)` 기반 실제 클라이언트 픽셀 크기 사용
     - 0 크기 가드(초기화 전/리사이즈 중) 처리
-- [ ] `EngineDLL/InputAPI.cpp` 신규 파일 생성
+- [x] `EngineDLL/InputAPI.cpp` 신규 파일 생성
     - `CR_ENGINE_API void OnViewportMouseMove(i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH)` 구현
     - `CR_ENGINE_API void OnViewportMouseButton(i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH, i32 Button, bool bPressed)` 구현
     - 입력 좌표를 공통 유틸에서 NDC로 변환한 뒤 기즈모 시스템으로 전달
-- [ ] `EngineDLL/EngineDLL.vcxproj`에 `InputAPI.cpp` 빌드 포함 추가
-- [ ] 성능 방어선 추가
+- [x] `EngineDLL/EngineDLL.vcxproj`에 `InputAPI.cpp` 빌드 포함 추가
+- [x] 성능 방어선 추가
     - `WM_MOUSEMOVE` 과다 호출 시 이전 좌표와 동일하면 early-out
     - 기즈모 비활성/선택 없음 상태에서는 입력 처리 최소화
 
