@@ -1,3 +1,9 @@
 CreateWindowEx
 DestroyWindow
 SetWindowPos
+GetClientRect
+SetCapture
+ReleaseCapture
+WM_MOUSEMOVE
+WM_LBUTTONDOWN
+WM_LBUTTONUP

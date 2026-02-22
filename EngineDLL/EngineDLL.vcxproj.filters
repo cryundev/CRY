@@ -21,6 +21,9 @@
     <ClCompile Include="EngineAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InputAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ViewportAPI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
