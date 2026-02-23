@@ -37,6 +37,9 @@ public:
 
     /// Get actor by id.
     CRActor* GetActor( const CRObjectId& ActorId ) const;
+
+    /// Get all actors.
+    const CRList< CRActor* >& GetAllActors() const { return Actors; }
 };
 
 
