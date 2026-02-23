@@ -2,6 +2,7 @@
 #include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/Object/Camera/CRCamera.h"
 #include "Source/Object/Component/CRComponentRegistry.h"
+#include "Source/Object/Component/CRCollisionComponent.h"
 #include "Source/Object/Component/CRDirectionalLightComponent.h"
 #include "Source/Object/Component/CRPointLightComponent.h"
 #include "Source/Object/Component/CRPrimitiveComponent.h"
@@ -91,6 +92,8 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
     if ( CRActor* minion = GWorld->SpawnActor< CRActor >() )
     {
         minion->SetName( CRName( "Minion" ) );
+
+        CRCollisionComponent* collision = minion->AddComponent< CRCollisionComponent >();
         
         if ( CRPrimitiveComponent* primitive = minion->AddComponent< CRPrimitiveComponent >() )
         {
@@ -102,7 +105,22 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
 
             if ( std::filesystem::exists( assetPath ) )
             {
-                primitive->LoadAsset( assetPath.lexically_normal().string() );
+                const CRString normalizedAssetPath = assetPath.lexically_normal().string();
+
+                if ( collision )
+                {
+                    CRPrimitiveAsset primitiveAsset;
+                    primitiveAsset.Load( normalizedAssetPath );
+
+                    const CRAABB localBounds = primitiveAsset.CalculateBounds();
+                    if ( localBounds.IsValid() )
+                    {
+                        collision->SetLocalCenter( localBounds.GetCenter() );
+                        collision->SetLocalHalfExtents( localBounds.GetExtents() * 0.5f );
+                    }
+                }
+                
+                primitive->LoadAsset( normalizedAssetPath );
             }
             else
             {
