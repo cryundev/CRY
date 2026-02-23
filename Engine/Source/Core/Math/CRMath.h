@@ -13,6 +13,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 namespace CRMath
 {
+    static constexpr f32 f32_min = -3.402823466e+38f;
+    static constexpr f32 f32_max =  3.402823466e+38f;
     static constexpr f32 Epsilon = 1.0e-6f;
 
 

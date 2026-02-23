@@ -4,6 +4,9 @@
 #include "CRMath.h"
 
 
+struct CRRay;
+
+
 //---------------------------------------------------------------------------------------------------------------------
 /// CRAABB
 //---------------------------------------------------------------------------------------------------------------------
@@ -25,4 +28,7 @@ public:
 
     /// Check whether min/max ordering is valid.
     bool IsValid() const;
+
+    /// Ray intersection test.
+    bool Intersects( const CRRay& Ray, f32& OutT ) const;
 };
