@@ -15,6 +15,6 @@ aliases:
 ---
 #### TODO
 ---
-![[CRY.Engine.Plan.Gizmo.Phase1-1.마우스 입력 브리지#^todo]]
+![[CRY.Engine.Plan.Gizmo.Phase2-1.기즈모 렌더 패스#^todo]]
 
 

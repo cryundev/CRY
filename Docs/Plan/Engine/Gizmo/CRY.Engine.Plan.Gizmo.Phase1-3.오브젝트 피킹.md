@@ -28,24 +28,24 @@ aliases:
 ## TODO
 ---
 
-- [ ] `Engine/Source/Core/Math/CRAABB.h` 신규 파일 생성
+- [x] `Engine/Source/Core/Math/CRAABB.h` 신규 파일 생성
     - `struct CRAABB { CRVector Min; CRVector Max; };`
     - `static CRAABB FromCenterExtents(const CRVector& Center, const CRVector& HalfExtents)`
     - `bool Intersects(const CRRay& Ray, f32& OutT) const` — 슬래브법 구현
-- [ ] `Engine/Source/World/CRWorld.h`에 월드 액터 순회 접근자 추가
+- [x] `Engine/Source/World/CRWorld.h`에 월드 액터 순회 접근자 추가
     - `const CRList<CRActor*>& GetAllActors() const`
     - 구현은 기존 `Actors` 컨테이너를 직접 노출하되 const 제한 유지
-- [ ] 1차 피킹용 AABB 정책 정의
+- [x] 1차 피킹용 AABB 정책 정의
     - 기본: `Transform.Location + Transform.Scale` 기반 축정렬 박스
     - 예외: 카메라 액터는 피킹 후보에서 제외
     - 확장: 추후 `CRPrimitiveComponent` 메시 bounds 기반으로 교체
-- [ ] `EngineDLL/WorldAPI.Picking.cpp` 신규 파일 생성
+- [x] `EngineDLL/WorldAPI.Picking.cpp` 신규 파일 생성
     - `CR_ENGINE_API CRIdentity::id_t PickActorAtScreen(i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH)` 구현
     - 스크린 좌표 → 레이 생성 → 액터 순회 → `AABB.Intersects()` → 최소 t 액터 반환
     - 히트 없을 경우 `CRIdentity::IdMask` 반환
-- [ ] `Editor_WPF/DllWrappers/EngineAPI.Input.cs`에 `PickActor` P/Invoke 추가
+- [x] `Editor_WPF/DllWrappers/EngineAPI.Input.cs`에 `PickActor` P/Invoke 추가
     - `[DllImport("EngineDLL.dll", EntryPoint = "PickActorAtScreen")] static extern long PickActor(int pixelX, int pixelY, int viewportW, int viewportH);`
-- [ ] `EngineViewportHost.cs`의 `WM_LBUTTONDOWN`에서 `PickActor` 호출 후 선택 동기화
+- [x] `EngineViewportHost.cs`의 `WM_LBUTTONDOWN`에서 `PickActor` 호출 후 선택 동기화
     - `WorldViewModel.SelectedActor` 같은 단일 선택 프로퍼티는 현재 없으므로 사용하지 않음
     - `ProjectLayoutView`/`ActorView`와 연결 가능한 선택 유틸(예: `ProjectViewModel.SelectActorById`)을 도입해 멀티 선택 모델과 일치시킴
 - [ ] 후속 최적화(옵션)
