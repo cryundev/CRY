@@ -48,6 +48,9 @@
     <ClCompile Include="Source\Asset\ICRAsset.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Math\CRAABB.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Core\CRVertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -58,6 +61,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Object\Component\CRComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Object\Component\CRCollisionComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Object\Component\CRDirectionalLightComponent.cpp">
@@ -272,6 +278,9 @@
     <ClInclude Include="Source\Core\Math\CRMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\Math\CRAABB.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Core\Math\CRRay.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -282,6 +291,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Object\Component\CRComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Object\Component\CRCollisionComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Object\Component\CRDirectionalLightComponent.h">

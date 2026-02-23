@@ -13,6 +13,7 @@ enum class ECRComponentPriority : i32
 {
     None,
     Transform,
+    Collision,
     Light,
     Primitive,
 };

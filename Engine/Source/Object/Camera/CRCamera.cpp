@@ -24,6 +24,7 @@ CRMatrix CRCamera::GetViewMatrix() const
 
     const CRVector& location = transform->GetLocation();
     const CRVector& lookAt   = CRVector::Transform( LookAtDirection, transform->GetRotation() );
+    
     return DirectX::XMMatrixLookAtLH( location, location + lookAt, Up );
 }
 
@@ -52,7 +53,7 @@ bool CRCamera::TryConvertNdcToWorld( f32 NdcX, f32 NdcY, f32 ClipZ, CRVector& Ou
     CRVector4D clipPoint( NdcX, NdcY, ClipZ, 1.0f );
     CRVector4D worldPoint = CRVector4D::Transform( clipPoint, inverseViewProjection );
 
-    if ( CRIsNearlyZero( worldPoint.w ) ) return false;
+    if ( CRMath::IsNearlyZero( worldPoint.w ) ) return false;
 
     f32 inverseW = 1.0f / worldPoint.w;
     OutWorldPosition = CRVector( worldPoint.x * inverseW, worldPoint.y * inverseW, worldPoint.z * inverseW );
@@ -79,7 +80,7 @@ bool CRCamera::_TryCreateInverseViewProjection( CRMatrix& OutInverseViewProjecti
     DirectX::XMVECTOR determinant = DirectX::XMMatrixDeterminant( viewProjection );
     
     f32 determinantValue = DirectX::XMVectorGetX( determinant );
-    if ( CRIsNearlyZero( determinantValue ) ) return false;
+    if ( CRMath::IsNearlyZero( determinantValue ) ) return false;
 
     OutInverseViewProjection = viewProjection.Invert();
     

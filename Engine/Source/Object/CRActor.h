@@ -2,6 +2,7 @@
 
 
 #include "CRObject.h"
+#include "Source/Object/Component/CRCollisionComponent.h"
 #include "Source/Object/Component/CRTransformComponent.h"
 #include <algorithm>
 #include <functional>
@@ -37,6 +38,9 @@ public:
 
     /// Get transform.
     inline CRTransformComponent* GetTransform() const { return GetComponent< CRTransformComponent >(); }
+
+    /// Get collision.
+    inline CRCollisionComponent* GetCollision() const { return GetComponent< CRCollisionComponent >(); }
 
     /// Set world.
     inline CRWorld* GetWorld() const { return World; }

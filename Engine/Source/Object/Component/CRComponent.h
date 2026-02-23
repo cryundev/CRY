@@ -26,6 +26,9 @@ private:
     /// Id map.
     inline static CRArray< CRIdentity::id_t > IdMap = {};
 
+    /// Whether stage functions have been registered.
+    inline static bool bStageRegistered = false;
+
 public:
     /// Add component.
     static T* Add( const CRIdentity::id_t& Id );
@@ -57,15 +60,20 @@ concept ComponentType = std::is_base_of_v< CRComponent< T >, T >;
 template < typename T >
 T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
 {
-    CRComponentRegistry::RegisterTick( [] ( float DeltaSeconds )
+    if ( !bStageRegistered )
     {
-        CRComponent< T >::UpdateComponents( DeltaSeconds );
-    }, T::Priority );
-    
-    CRComponentRegistry::RegisterPreRender( [] ( float DeltaSeconds )
-    {
-        CRComponent< T >::PreRenderComponents( DeltaSeconds );
-    }, T::Priority );
+        CRComponentRegistry::RegisterTick( [] ( float DeltaSeconds )
+        {
+            CRComponent< T >::UpdateComponents( DeltaSeconds );
+        }, T::Priority );
+        
+        CRComponentRegistry::RegisterPreRender( [] ( float DeltaSeconds )
+        {
+            CRComponent< T >::PreRenderComponents( DeltaSeconds );
+        }, T::Priority );
+
+        bStageRegistered = true;
+    }
     
     assert( CRIdentity::IsValid( Id ) );
 

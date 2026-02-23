@@ -11,7 +11,7 @@ bool UtilRay::TryCreateRayFromPoints( const CRVector& OriginPoint, const CRVecto
 {
     CRVector direction = TargetPoint - OriginPoint;
     
-    if ( direction.LengthSquared() <= CRMathEpsilon ) return false;
+    if ( direction.LengthSquared() <= CRMath::Epsilon ) return false;
     direction.Normalize();
 
     OutRay.Origin    = OriginPoint;

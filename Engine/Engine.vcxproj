@@ -251,10 +251,12 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Extras\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\Asset\CRPrimitiveAsset.cpp" />
     <ClCompile Include="Source\Asset\ICRAsset.cpp" />
+    <ClCompile Include="Source\Core\Math\CRAABB.cpp" />
     <ClCompile Include="Source\Core\CRVertex.cpp" />
     <ClCompile Include="Source\Core\Identify\CRIdentity.cpp" />
     <ClCompile Include="Source\Object\Camera\CRCamera.cpp" />
     <ClCompile Include="Source\Object\Component\CRComponent.cpp" />
+    <ClCompile Include="Source\Object\Component\CRCollisionComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRComponentRegistry.cpp" />
     <ClCompile Include="Source\Object\Component\CRDirectionalLightComponent.cpp" />
     <ClCompile Include="Source\Object\Component\CRPointLightComponent.cpp" />
@@ -407,10 +409,12 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Core\CRVertex.h" />
     <ClInclude Include="Source\Core\Identify\CRIdentity.h" />
     <ClInclude Include="Source\Core\Math\CRMath.h" />
+    <ClInclude Include="Source\Core\Math\CRAABB.h" />
     <ClInclude Include="Source\Core\Math\CRRay.h" />
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
     <ClInclude Include="Source\Object\Camera\CRCamera.h" />
     <ClInclude Include="Source\Object\Component\CRComponent.h" />
+    <ClInclude Include="Source\Object\Component\CRCollisionComponent.h" />
     <ClInclude Include="Source\Object\Component\CRComponentRegistry.h" />
     <ClInclude Include="Source\Object\Component\CRDirectionalLightComponent.h" />
     <ClInclude Include="Source\Object\Component\CRPointLightComponent.h" />

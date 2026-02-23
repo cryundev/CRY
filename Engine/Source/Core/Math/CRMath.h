@@ -11,12 +11,39 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Common math epsilon and helpers.
 //---------------------------------------------------------------------------------------------------------------------
-static constexpr f32 CRMathEpsilon = 1.0e-6f;
-
-
-inline bool CRIsNearlyZero( f32 Value, f32 Epsilon = CRMathEpsilon )
+namespace CRMath
 {
-    return Value > -Epsilon && Value < Epsilon;
+    static constexpr f32 Epsilon = 1.0e-6f;
+
+
+    inline bool IsNearlyZero( f32 Value, f32 Tolerance = Epsilon )
+    {
+        return Value > -Tolerance && Value < Tolerance;
+    }
+
+    template< typename T >
+    constexpr T Abs( const T& Value )
+    {
+        return ( Value < static_cast< T >( 0 ) ) ? -Value : Value;
+    }
+
+    template< typename T >
+    constexpr T Min( const T& A, const T& B )
+    {
+        return ( B < A ) ? B : A;
+    }
+
+    template< typename T >
+    constexpr T Max( const T& A, const T& B )
+    {
+        return ( A < B ) ? B : A;
+    }
+
+    template< typename T >
+    constexpr T Clamp( const T& Value, const T& MinValue, const T& MaxValue )
+    {
+        return Min( Max( Value, MinValue ), MaxValue );
+    }
 }
 
 
