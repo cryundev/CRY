@@ -30,6 +30,9 @@
     <ClCompile Include="WorldAPI.Actor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WorldAPI.Picking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="WorldAPI.Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

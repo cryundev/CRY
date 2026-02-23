@@ -32,5 +32,8 @@ public static partial class EngineAPI
             int button,
             [MarshalAs( UnmanagedType.I1 )] bool pressed
         );
+
+        [DllImport( EngineDllName, EntryPoint = "PickActorAtScreen" )]
+        public static extern long PickActor( int pixelX, int pixelY, int viewportW, int viewportH );
     }
 }
