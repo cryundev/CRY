@@ -4,6 +4,7 @@
 #include "ICRAsset.h"
 #include "Source/Core/CRTypes.h"
 #include "Source/Core/Containers/CRContainerInc.h"
+#include "Source/Core/Math/CRAABB.h"
 #include "Source/Core/Math/CRMath.h"
 #include "Source/Core/Strings/CRStringInc.h"
 
@@ -37,6 +38,9 @@ public:
     /// Load from file.
     virtual void Load( const CRString& Path ) override;
     
+    /// Calculate local-space bounds from positions.
+    CRAABB CalculateBounds() const;
+
     /// Initialize.
     void Initialize( u32 InVertexCount );
 };
