@@ -1,6 +1,7 @@
 #include "framework.h"
 #include "Editor_Win32.h"
 #include "Input/CRInputProcessorCamera.h"
+#include "Input/CRInputProcessorPicking.h"
 #include "UI/CREditorUI.h"
 #include "UI/CRUIManager.h"
 #include <Extras/ImGUI/imgui.h>
@@ -22,8 +23,10 @@ WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니�
 DirectX::Keyboard GKeyboard;
 DirectX::Mouse    GMouse;
 
-CRUIManager GUIManager;
-CRInputProcessorCamera GInputProcessorCamera;
+CRUIManager             GUIManager;
+CRInputProcessorCamera  GInputProcessorCamera;
+CRInputProcessorPicking GInputProcessorPicking;
+
 
 //---------------------------------------------------------------------------------------------------------------------
 /// function forward declaration
@@ -134,6 +137,7 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     }
 
     GUIManager.AddUI( new CREditorUI() );
+    GInputProcessorPicking.Initialize();
 
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );
@@ -176,6 +180,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     case WM_MOUSEHOVER:
         {
             DirectX::Mouse::ProcessMessage( message, wParam, lParam );
+            GInputProcessorPicking.OnMouseMessage( hWnd, message, wParam, lParam );
         }
         break;
     case WM_MOUSEACTIVATE:
