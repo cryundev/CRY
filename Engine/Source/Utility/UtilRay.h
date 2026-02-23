@@ -2,6 +2,7 @@
 
 
 #include "Source/Core/CRTypes.h"
+#include "Source/Core/Identify/CRIdentity.h"
 #include "Source/Core/Math/CRMath.h"
 
 
@@ -15,4 +16,7 @@ namespace UtilRay
 
     /// TryCreateRayFromNDC
     bool TryCreateRayFromNDC( f32 NdcX, f32 NdcY, CRRay& OutRay );
+
+    /// Pick actor at screen pixel position.
+    CRIdentity::id_t PickActorAtScreen( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH );
 }
