@@ -165,6 +165,9 @@
     <ClCompile Include="Source\RHI\DX11\Passes\CRD11CompositePass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RHI\DX11\Passes\CRD11GizmoPass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\RHI\DX11\Passes\CRD11ScenePass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -416,6 +419,9 @@
     <ClInclude Include="Source\RHI\DX11\Passes\CRD11CompositePass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\Passes\CRD11GizmoPass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\RHI\DX11\Passes\CRD11RenderPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -482,6 +488,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Source\RHI\DX11\HLSL\composite.hlsl" />
+    <None Include="Source\RHI\DX11\HLSL\gizmo.hlsl" />
     <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
   </ItemGroup>
 </Project>

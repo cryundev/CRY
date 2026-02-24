@@ -43,6 +43,7 @@ enum class EConstBufferSlotVS
 {
     Transform,
     ViewProjection,
+    Gizmo,
     Max,
 };
 

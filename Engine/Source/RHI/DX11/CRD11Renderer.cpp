@@ -4,6 +4,7 @@
 #include "CRD11ResourceManager.h"
 #include "Engine.h"
 #include "Passes/CRD11CompositePass.h"
+#include "Passes/CRD11GizmoPass.h"
 #include "Passes/CRD11ScenePass.h"
 #include "Resource/CRD11Device.h"
 #include "Resource/CRD11RasterizerState.h"
@@ -34,6 +35,12 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
     {
         scenePass->Initialize( Width, Height );
         RenderPasses.push_back( std::move( scenePass ) );
+    }
+
+    if ( CRRenderPassPtr gizmoPass = CRMakeUnique( new CRD11GizmoPass() ) )
+    {
+        gizmoPass->Initialize( Width, Height );
+        RenderPasses.push_back( std::move( gizmoPass ) );
     }
 
     if ( CRRenderPassPtr compositePass = CRMakeUnique( new CRD11CompositePass() ) )
@@ -252,13 +259,6 @@ void CRD11Renderer::ClearLights()
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11Renderer::Draw()
 {
-    for ( const CRUniquePtr< ICRRHIRenderPass >& renderPass : RenderPasses )
-    {
-        if ( !renderPass ) continue;
-        
-        renderPass->OnPreDraw();
-    }
-
     _UpdateCameraBuffers();    
     _FlushLightsBuffer();
     _RemoveStaleRenderElements();
@@ -267,13 +267,8 @@ void CRD11Renderer::Draw()
     {
         if ( !renderPass ) continue;
 
+        renderPass->OnPreDraw();
         renderPass->OnDrawRenderElements( RenderElements );
-    }
-
-    for ( const CRUniquePtr< ICRRHIRenderPass >& renderPass : RenderPasses )
-    {
-        if ( !renderPass ) continue;
-        
         renderPass->OnPostDraw();
     }
 }
