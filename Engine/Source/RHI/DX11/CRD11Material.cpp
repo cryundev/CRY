@@ -49,7 +49,7 @@ void CRD11Material::SetInRenderingPipeline() const
 {
     if ( !InputLayout.expired() )
     {
-        GD11RP.SetInputLayout( InputLayout.lock()->GetObjectPtr(), 0 );
+        GD11RP.SetInputLayout( InputLayout.lock()->GetObjectPtr() );
     }
 
     for ( int i = 0; i < Textures.size(); ++i )

@@ -65,9 +65,9 @@ void CRD11CompositePass::OnPostDraw()
     if ( !compositeVS || !compositePS || !compositeSS ) return;
 
     GD11RP.SetRenderTargetView( BackBufferRenderTargetView->GetObjectPtr(), nullptr );
-    GD11RP.SetInputLayout( nullptr, 0 );
+    GD11RP.SetInputLayout( nullptr );
     
-    GD11.GetDeviceContext()->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+    GD11RP.SetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
 
     GD11RP.SetVertexShader( compositeVS );
     GD11RP.SetPixelShader ( compositePS );
