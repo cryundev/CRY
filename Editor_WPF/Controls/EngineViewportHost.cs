@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using Editor_WPF.DllWrappers;
+using Editor_WPF.Editors;
 using Editor_WPF.Utilities;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -136,6 +137,7 @@ public class EngineViewportHost : HwndHost
                 _leftButtonDown = true;
                 _CaptureMouse();
 
+                _TryPickActor( lParam );
                 _ForwardMouseButton( lParam, EngineAPI.Input.MouseButton.Left, true );
 
                 handled = true;
@@ -254,6 +256,20 @@ public class EngineViewportHost : HwndHost
         int pixelY = _GetYFromLParam( lParam );
 
         EngineAPI.Input.OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, button, pressed );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// _TryPickActor
+    //-----------------------------------------------------------------------------------------------------------------
+    private void _TryPickActor( IntPtr lParam )
+    {
+        if ( !_engineInitialized ) return;
+        if ( !_TryGetClientSize( out int viewportW, out int viewportH ) ) return;
+
+        int pixelX = _GetXFromLParam( lParam );
+        int pixelY = _GetYFromLParam( lParam );
+
+        EngineAPI.Input.PickActor( pixelX, pixelY, viewportW, viewportH );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
