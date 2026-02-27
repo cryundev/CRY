@@ -91,23 +91,12 @@ void OnMouseMessage( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam )
 
     switch ( Message )
     {
-        case WM_MOUSEMOVE:
-            CREditorRuntime::OnViewportMouseMove( pixelX, pixelY, viewportW, viewportH );
-            break;
-        case WM_LBUTTONDOWN:
-            CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, LeftMouseButton, true );
-            break;
-        case WM_LBUTTONUP:
-            CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, LeftMouseButton, false );
-            break;
-        case WM_RBUTTONDOWN:
-            CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, RightMouseButton, true );
-            break;
-        case WM_RBUTTONUP:
-            CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, RightMouseButton, false );
-            break;
-        default:
-            break;
+        case WM_MOUSEMOVE:   CREditorRuntime::OnViewportMouseMove  ( pixelX, pixelY, viewportW, viewportH ); break;
+        case WM_LBUTTONDOWN: CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, LeftMouseButton,  true  ); break;
+        case WM_LBUTTONUP:   CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, LeftMouseButton,  false ); break;
+        case WM_RBUTTONDOWN: CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, RightMouseButton, true  ); break;
+        case WM_RBUTTONUP:   CREditorRuntime::OnViewportMouseButton( pixelX, pixelY, viewportW, viewportH, RightMouseButton, false ); break;
+        default: break;
     }
 }
 
@@ -132,10 +121,12 @@ void OnKillFocus( HWND hWnd )
 {
     i32 viewportW = 1;
     i32 viewportH = 1;
+   
     _TryGetViewportSize( hWnd, viewportW, viewportH );
 
-    CREditorRuntime::OnViewportMouseButton( 0, 0, viewportW, viewportH, LeftMouseButton, false );
+    CREditorRuntime::OnViewportMouseButton( 0, 0, viewportW, viewportH, LeftMouseButton,  false );
     CREditorRuntime::OnViewportMouseButton( 0, 0, viewportW, viewportH, RightMouseButton, false );
+    
     _ReleaseMovementKeys();
 }
 
