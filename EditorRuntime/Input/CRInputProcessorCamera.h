@@ -2,23 +2,23 @@
 
 
 #include "Source/Core/CRTypes.h"
-#include "Source/Core/Identify/CRIdentity.h"
 #include <Windows.h>
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRInputProcessorPicking
+/// Win32 viewport input bridge (camera).
 //---------------------------------------------------------------------------------------------------------------------
-class CRInputProcessorPicking
+namespace CREditorRuntimeWin32Input
 {
-public:
-    /// Initialize.
-    void Initialize();
-
-    /// Handle mouse message.
+    /// Handle mouse-related window message.
     void OnMouseMessage( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam );
 
-private:
-    /// Log pick result.
-    static void _LogPickResult( i32 PixelX, i32 PixelY, const CRIdentity::id_t& PickedActorId );
-};
+    /// Handle keyboard-related window message.
+    void OnKeyboardMessage( WPARAM wParam, LPARAM lParam, bool bPressed );
+
+    /// Release cached input states on focus loss.
+    void OnKillFocus( HWND hWnd );
+
+    /// Tick.
+    void TickCamera( f32 DeltaTime );
+}

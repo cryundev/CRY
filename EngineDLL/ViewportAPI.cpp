@@ -1,5 +1,6 @@
 #include "Engine.h"
 #include "EngineDLL.h"
+#include "../EditorRuntime/EditorRuntime.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/World/CRWorld.h"
 
@@ -43,6 +44,8 @@ CR_ENGINE_API void ResizeViewport( i32 Width, i32 Height )
 //---------------------------------------------------------------------------------------------------------------------
 CR_ENGINE_API void TickViewport( f32 DeltaSeconds )
 {
+    CREditorRuntime::ApplyViewportCameraInput( DeltaSeconds );
+    
     CREngine::Tick( DeltaSeconds );
 }
 
@@ -53,7 +56,7 @@ CR_ENGINE_API void RenderViewport( f32 DeltaSeconds )
 {
     if ( CREngine::PreRender( DeltaSeconds ) )
     {
-        CREngine::Render( DeltaSeconds );
+        CREngine::Render    ( DeltaSeconds );
         CREngine::PostRender( DeltaSeconds );
     }
 }

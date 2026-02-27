@@ -1,7 +1,7 @@
 #include "framework.h"
 #include "Editor_Win32.h"
-#include "Input/CRInputProcessorCamera.h"
-#include "Input/CRInputProcessorPicking.h"
+#include "../EditorRuntime/Input/CRInputProcessorCamera.h"
+#include "../EditorRuntime/Input/CRInputProcessorPicking.h"
 #include "UI/CREditorUI.h"
 #include "UI/CRUIManager.h"
 #include <Extras/ImGUI/imgui.h>
@@ -20,12 +20,7 @@ WCHAR     szTitle      [ MAX_LOADSTRING ]; // 제목 표시줄 텍스트입니�
 WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니다.
 
 
-DirectX::Keyboard GKeyboard;
-DirectX::Mouse    GMouse;
-
-CRUIManager             GUIManager;
-CRInputProcessorCamera  GInputProcessorCamera;
-CRInputProcessorPicking GInputProcessorPicking;
+CRUIManager GUIManager;
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -71,9 +66,9 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
         
         GFrameTime.Start();
 
+        CREditorRuntimeWin32Input::TickCamera( deltaSeconds );
+        
         CREngine::Tick( deltaSeconds );
-
-        GInputProcessorCamera.Tick( deltaSeconds );
 
         if ( CREngine::PreRender( deltaSeconds ) )
         {
@@ -127,8 +122,6 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     HWND hWnd = CreateWindowW( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, width, height, nullptr, nullptr, hInstance, nullptr );
     if ( !hWnd ) return false;
 
-    GMouse.SetWindow( hWnd );
-
     if ( !CREngine::Initialize( hWnd, width, height ) )
     {
         MessageBoxW( hWnd, L"엔진 초기화에 실패했습니다.", L"CRY Engine", MB_OK | MB_ICONERROR );
@@ -137,7 +130,6 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     }
 
     GUIManager.AddUI( new CREditorUI() );
-    GInputProcessorPicking.Initialize();
 
     ShowWindow( hWnd, nCmdShow );
     UpdateWindow( hWnd );
@@ -147,6 +139,132 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam );
+
+
+namespace
+{
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_ACTIVATEAPP
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnActivateApp( HWND hWnd, WPARAM wParam )
+{
+    if ( !wParam )
+    {
+        CREditorRuntimeWin32Input::OnKillFocus( hWnd );
+    }
+
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Mouse related messages.
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnMouseMessage( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+{
+    CREditorRuntimeWin32Input::OnMouseMessage       ( hWnd, message, wParam, lParam );
+    CREditorRuntimeWin32Input::OnPickingMouseMessage( hWnd, message, wParam, lParam );
+
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_MOUSEACTIVATE
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnMouseActivate()
+{
+    return MA_ACTIVATEANDEAT;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_KEYDOWN
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnKeyDown( WPARAM wParam, LPARAM lParam )
+{
+    CREditorRuntimeWin32Input::OnKeyboardMessage( wParam, lParam, true );
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_KEYUP
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnKeyUp( WPARAM wParam, LPARAM lParam )
+{
+    CREditorRuntimeWin32Input::OnKeyboardMessage( wParam, lParam, false );
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_SYSKEYDOWN
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnSysKeyDown( WPARAM wParam, LPARAM lParam )
+{
+    CREditorRuntimeWin32Input::OnKeyboardMessage( wParam, lParam, true );
+
+    if ( wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000 )
+    {
+    }
+
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_SYSKEYUP
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnSysKeyUp( WPARAM wParam, LPARAM lParam )
+{
+    CREditorRuntimeWin32Input::OnKeyboardMessage( wParam, lParam, false );
+    
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_KILLFOCUS
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnKillFocus( HWND hWnd )
+{
+    CREditorRuntimeWin32Input::OnKillFocus( hWnd );
+    
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_COMMAND
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnCommand( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
+{
+    switch ( LOWORD( wParam ) )
+    {
+    case IDM_ABOUT: DialogBox( hInst, MAKEINTRESOURCE( IDD_ABOUTBOX ), hWnd, About ); return 0;
+    case IDM_EXIT:  DestroyWindow( hWnd ); return 0;
+    default:        return DefWindowProc( hWnd, message, wParam, lParam );
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_PAINT
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnPaint( HWND hWnd )
+{
+    PAINTSTRUCT ps;
+    
+    BeginPaint( hWnd, &ps );    
+    EndPaint  ( hWnd, &ps );
+
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_DESTROY
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnDestroy( HWND hWnd )
+{
+    CREditorRuntimeWin32Input::OnKillFocus( hWnd );
+    CREngine::Shutdown();
+    PostQuitMessage( 0 );
+
+    return 0;
+}
+}
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -159,12 +277,7 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     
     switch ( message )
     {
-    case WM_ACTIVATEAPP:
-        {
-            DirectX::Keyboard::ProcessMessage( message, wParam, lParam );
-            DirectX::Mouse   ::ProcessMessage( message, wParam, lParam );
-        }
-        break;
+    case WM_ACTIVATEAPP:   return _OnActivateApp   ( hWnd, wParam );
     case WM_ACTIVATE:
     case WM_INPUT:
     case WM_MOUSEMOVE:
@@ -177,58 +290,18 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     case WM_MOUSEWHEEL:
     case WM_XBUTTONDOWN:
     case WM_XBUTTONUP:
-    case WM_MOUSEHOVER:
-        {
-            DirectX::Mouse::ProcessMessage( message, wParam, lParam );
-            GInputProcessorPicking.OnMouseMessage( hWnd, message, wParam, lParam );
-        }
-        break;
-    case WM_MOUSEACTIVATE:
-        return MA_ACTIVATEANDEAT;
-    case WM_KEYDOWN:
-    case WM_KEYUP:
-    case WM_SYSKEYUP:
-        {
-            DirectX::Keyboard::ProcessMessage( message, wParam, lParam );
-        }
-        break;
-    case WM_SYSKEYDOWN:
-        {
-            DirectX::Keyboard::ProcessMessage( message, wParam, lParam );
-    
-            if ( wParam == VK_RETURN && (lParam & 0x60000000) == 0x20000000 )
-            {
-            }
-        }
-        break;
-    case WM_COMMAND:
-	    {
-		    switch ( LOWORD( wParam ) )
-		    {
-		    case IDM_ABOUT: DialogBox( hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About ); break;
-		    case IDM_EXIT:  DestroyWindow( hWnd ); break;
-		    default:        return DefWindowProc( hWnd, message, wParam, lParam );
-		    }
-	    }
-	    break;
-    case WM_PAINT:
-	    {
-		    PAINTSTRUCT ps;
-		    HDC hdc = BeginPaint( hWnd, &ps );
-		    
-		    EndPaint( hWnd, &ps );
-	    }
-	    break;
-    case WM_DESTROY:
-        {
-            CREngine::Shutdown();
-            PostQuitMessage( 0 );
-        }
-        break;
-    default:         return DefWindowProc( hWnd, message, wParam, lParam );
+    case WM_MOUSEHOVER:    return _OnMouseMessage  ( hWnd, message, wParam, lParam );
+    case WM_MOUSEACTIVATE: return _OnMouseActivate ();
+    case WM_KEYDOWN:       return _OnKeyDown       ( wParam, lParam );
+    case WM_KEYUP:         return _OnKeyUp         ( wParam, lParam );
+    case WM_SYSKEYDOWN:    return _OnSysKeyDown    ( wParam, lParam );
+    case WM_SYSKEYUP:      return _OnSysKeyUp      ( wParam, lParam );
+    case WM_KILLFOCUS:     return _OnKillFocus     ( hWnd );
+    case WM_COMMAND:       return _OnCommand       ( hWnd, message, wParam, lParam );
+    case WM_PAINT:         return _OnPaint         ( hWnd );
+    case WM_DESTROY:       return _OnDestroy       ( hWnd );
+    default:               return DefWindowProc    ( hWnd, message, wParam, lParam );
     }
-    
-    return 0;
 }
 
 //---------------------------------------------------------------------------------------------------------------------

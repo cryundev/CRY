@@ -19,6 +19,8 @@ Editor_Win32/x64/
 Editor_Win32/Editor_Win32/
 EngineDLL/EngineDLL/
 EngineTest/EngineTest/
+EditorRuntime/x64/
+EditorRuntime/EditorRuntime/
 
 # C# build output
 Editor_WPF/bin/

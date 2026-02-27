@@ -171,8 +171,6 @@
   <ItemGroup>
     <ClInclude Include="Editor_Win32.h" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="Input\CRInputProcessorCamera.h" />
-    <ClInclude Include="Input\CRInputProcessorPicking.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="UI\CRCameraUI.h" />
@@ -183,8 +181,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Editor_Win32.cpp" />
-    <ClCompile Include="Input\CRInputProcessorCamera.cpp" />
-    <ClCompile Include="Input\CRInputProcessorPicking.cpp" />
     <ClCompile Include="UI\CRCameraUI.cpp" />
     <ClCompile Include="UI\CREditorUI.cpp" />
     <ClCompile Include="UI\CRLogUI.cpp" />
@@ -196,6 +192,11 @@
   <ItemGroup>
     <Image Include="Engine.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EditorRuntime\EditorRuntime.vcxproj">
+      <Project>{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -12,6 +12,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor_WPF", "Editor_WPF\Ed
 	ProjectSection(ProjectDependencies) = postProject
 		{8B4D84D6-CB03-431C-B087-C4DDC291477F} = {8B4D84D6-CB03-431C-B087-C4DDC291477F}
 		{551865EF-4101-4F6C-915B-53A0D0481182} = {551865EF-4101-4F6C-915B-53A0D0481182}
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76} = {D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{8B4D84D6-CB03-431C-B087-C4DDC291477F}"
@@ -30,6 +31,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EngineDLL", "EngineDLL\Engi
 	ProjectSection(ProjectDependencies) = postProject
 		{8B4D84D6-CB03-431C-B087-C4DDC291477F} = {8B4D84D6-CB03-431C-B087-C4DDC291477F}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "EditorRuntime", "EditorRuntime\EditorRuntime.vcxproj", "{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}"
 EndProject
 
 Global
@@ -88,6 +91,14 @@ Global
 		{551865EF-4101-4F6C-915B-53A0D0481182}.DebugEditor|x64.Build.0 = DebugEditor|x64
 		{551865EF-4101-4F6C-915B-53A0D0481182}.ReleaseEditor|x64.ActiveCfg = ReleaseEditor|x64
 		{551865EF-4101-4F6C-915B-53A0D0481182}.ReleaseEditor|x64.Build.0 = ReleaseEditor|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.Debug|x64.ActiveCfg = Debug|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.Debug|x64.Build.0 = Debug|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.Release|x64.ActiveCfg = Release|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.Release|x64.Build.0 = Release|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.DebugEditor|x64.ActiveCfg = DebugEditor|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.DebugEditor|x64.Build.0 = DebugEditor|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.ReleaseEditor|x64.ActiveCfg = ReleaseEditor|x64
+		{D4D88F52-3A89-4CA1-9F14-38DD6A0F6A76}.ReleaseEditor|x64.Build.0 = ReleaseEditor|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
