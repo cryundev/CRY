@@ -33,27 +33,23 @@ void CRPrimitiveAsset::Load( const CRString& Path )
     if ( !ifs ) return;
 
     ifs.read( (char*)( &VertexCount ), sizeof( VertexCount ) );
+    
+    Positions .resize( VertexCount );
+    Normals   .resize( VertexCount );
+    Tangents  .resize( VertexCount );
+    Binormals .resize( VertexCount );
+    Colors    .resize( VertexCount );
+    UVs       .resize( VertexCount );
+    Indices   .resize( VertexCount );
 
-    Positions.resize( VertexCount );
-    ifs.read( (char*)( Positions.data() ), Positions.size() * sizeof( CRVector ) );
+    ifs.read( (char*)( Positions.data() ), Positions .size() * sizeof( CRVector   ) );
+    ifs.read( (char*)( Normals  .data() ), Normals   .size() * sizeof( CRVector   ) );
+    ifs.read( (char*)( Tangents .data() ), Tangents  .size() * sizeof( CRVector   ) );
+    ifs.read( (char*)( Binormals.data() ), Binormals .size() * sizeof( CRVector   ) );
+    ifs.read( (char*)( Colors   .data() ), Colors    .size() * sizeof( CRVector   ) );
+    ifs.read( (char*)( UVs      .data() ), UVs       .size() * sizeof( CRVector2D ) );
+    ifs.read( (char*)( Indices  .data() ), Indices   .size() * sizeof( u32        ) );
 
-    Normals.resize(VertexCount);
-    ifs.read( (char*)( Normals.data() ), Normals.size() * sizeof( CRVector ) );
-
-    Tangents.resize(VertexCount);
-    ifs.read( (char*)( Tangents.data() ), Tangents.size() * sizeof( CRVector ) );
-
-    Binormals.resize(VertexCount);
-    ifs.read( (char*)( Binormals.data() ), Binormals.size() * sizeof( CRVector ) );
-
-    Colors.resize(VertexCount);
-    ifs.read( (char*)( Colors.data() ), Colors.size() * sizeof( CRVector ) );
-
-    UVs.resize(VertexCount);
-    ifs.read( (char*)( UVs.data() ), UVs.size() * sizeof( CRVector2D ) );
-
-    Indices.resize(VertexCount);
-    ifs.read( (char*)( Indices.data() ), Indices.size() * sizeof( u32 ) );
 
     ifs.close();
 }
