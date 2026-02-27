@@ -23,9 +23,10 @@ CRMatrix CRCamera::GetViewMatrix() const
     if ( !transform ) return CRMatrix::Identity;
 
     const CRVector& location = transform->GetLocation();
-    const CRVector& lookAt   = CRVector::Transform( LookAtDirection, transform->GetRotation() );
+    const CRVector& lookAt   = GetLookDirection();
+    const CRVector& up       = GetUpDirection();
     
-    return DirectX::XMMatrixLookAtLH( location, location + lookAt, Up );
+    return DirectX::XMMatrixLookAtLH( location, location + lookAt, up );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -40,6 +41,75 @@ CRMatrix CRCamera::GetProjectionMatrix() const
     }
 
     return CRMatrix::Identity;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get normalized world-space look direction.
+//---------------------------------------------------------------------------------------------------------------------
+CRVector CRCamera::GetLookDirection() const
+{
+    if ( CRTransformComponent* transform = GetTransform() )
+    {
+        CRVector lookDirection = CRVector::Transform( LookAtDirection, transform->GetRotation() );
+        if ( lookDirection.LengthSquared() > CRMath::Epsilon )
+        {
+            lookDirection.Normalize();
+            return lookDirection;
+        }
+    }
+
+    CRVector fallbackLook = LookAtDirection;
+    if ( fallbackLook.LengthSquared() <= CRMath::Epsilon )
+    {
+        fallbackLook = CRVector::Backward;
+    }
+    fallbackLook.Normalize();
+    return fallbackLook;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get normalized world-space right direction.
+//---------------------------------------------------------------------------------------------------------------------
+CRVector CRCamera::GetRightDirection() const
+{
+    CRVector upDirection = Up;
+    if ( upDirection.LengthSquared() <= CRMath::Epsilon )
+    {
+        upDirection = CRVector::Up;
+    }
+    upDirection.Normalize();
+
+    CRVector rightDirection = upDirection.Cross( GetLookDirection() );
+    if ( rightDirection.LengthSquared() <= CRMath::Epsilon )
+    {
+        if ( CRTransformComponent* transform = GetTransform() )
+        {
+            rightDirection = transform->GetRight();
+        }
+    }
+
+    if ( rightDirection.LengthSquared() <= CRMath::Epsilon )
+    {
+        rightDirection = CRVector::Right;
+    }
+
+    rightDirection.Normalize();
+    return rightDirection;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get normalized world-space up direction.
+//---------------------------------------------------------------------------------------------------------------------
+CRVector CRCamera::GetUpDirection() const
+{
+    CRVector upDirection = GetLookDirection().Cross( GetRightDirection() );
+    if ( upDirection.LengthSquared() <= CRMath::Epsilon )
+    {
+        upDirection = CRVector::Up;
+    }
+
+    upDirection.Normalize();
+    return upDirection;
 }
 
 //---------------------------------------------------------------------------------------------------------------------

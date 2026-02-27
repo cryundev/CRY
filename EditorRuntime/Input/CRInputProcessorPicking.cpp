@@ -1,27 +1,6 @@
 #include "CRInputProcessorPicking.h"
-#include "Source/Core/Identify/CRIdentity.h"
-#include "Source/Utility/Log/CRLog.h"
+#include "../EditorRuntime.h"
 #include "Source/Utility/UtilRay.h"
-#include <string>
-
-
-namespace
-{
-//---------------------------------------------------------------------------------------------------------------------
-/// Log pick result.
-//---------------------------------------------------------------------------------------------------------------------
-void _LogPickResult( i32 PixelX, i32 PixelY, const CRIdentity::id_t& PickedActorId )
-{
-    if ( CRIdentity::IsValid( PickedActorId ) )
-    {
-        GLog.AddLog( "Win32 pick hit: Id=" + std::to_string( (u64)PickedActorId ) + " | Pixel=(" + std::to_string( PixelX ) + "," + std::to_string( PixelY ) + ")" );
-    }
-    else
-    {
-        GLog.AddLog( "Win32 pick miss | Pixel=(" + std::to_string( PixelX ) + "," + std::to_string( PixelY ) + ")" );
-    }
-}
-}
 
 namespace CREditorRuntimeWin32Input
 {
@@ -46,6 +25,6 @@ void OnPickingMouseMessage( HWND hWnd, UINT Message, WPARAM wParam, LPARAM lPara
 
     const CRIdentity::id_t pickedActorId = UtilRay::PickActorAtScreen( pixelX, pixelY, viewportW, viewportH );
     
-    _LogPickResult( pixelX, pixelY, pickedActorId );
+    CREditorRuntime::OnActorPicked( pickedActorId );
 }
 }

@@ -102,6 +102,9 @@
     <ClCompile Include="Source\RHI\CRRHI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RHI\Gizmo\CRGizmoSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11CompiledShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -336,6 +339,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\CRRHI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\Gizmo\CRGizmoSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\CRRenderElement.h">

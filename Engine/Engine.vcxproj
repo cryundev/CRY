@@ -251,6 +251,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Extras\ImGUI\imgui_widgets.cpp" />
     <ClCompile Include="Source\Asset\CRPrimitiveAsset.cpp" />
     <ClCompile Include="Source\Asset\ICRAsset.cpp" />
+    <ClCompile Include="Source\Core\CRTransform.cpp" />
     <ClCompile Include="Source\Core\Math\CRAABB.cpp" />
     <ClCompile Include="Source\Core\CRVertex.cpp" />
     <ClCompile Include="Source\Core\Identify\CRIdentity.cpp" />
@@ -270,6 +271,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\Object\Game\CRGameInstance.cpp" />
     <ClCompile Include="Source\Object\Game\CRGameMode.cpp" />
     <ClCompile Include="Source\RHI\CRRHI.cpp" />
+    <ClCompile Include="Source\RHI\Gizmo\CRGizmoSystem.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11CompiledShader.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.cpp" />
@@ -331,6 +333,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Core\CRGeneric.h" />
     <ClInclude Include="Source\Core\CRNumeric.h" />
     <ClInclude Include="Source\Core\CRSmartPtrMacro.h" />
+    <ClInclude Include="Source\Core\CRTransform.h" />
     <ClInclude Include="Source\Core\CRTypes.h" />
     <ClInclude Include="Source\Core\CRVertex.h" />
     <ClInclude Include="Source\Core\Identify\CRIdentity.h" />
@@ -355,6 +358,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Object\Game\CRGameInstance.h" />
     <ClInclude Include="Source\Object\Game\CRGameMode.h" />
     <ClInclude Include="Source\RHI\CRRHI.h" />
+    <ClInclude Include="Source\RHI\Gizmo\CRGizmoSystem.h" />
     <ClInclude Include="Source\RHI\CRRenderElement.h" />
     <ClInclude Include="Source\RHI\CRRHITypes.h" />
     <ClInclude Include="Source\RHI\CRConstBufferStructures.h" />

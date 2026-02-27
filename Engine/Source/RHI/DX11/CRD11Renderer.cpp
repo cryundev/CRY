@@ -37,16 +37,17 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
         RenderPasses.push_back( std::move( scenePass ) );
     }
 
-    if ( CRRenderPassPtr gizmoPass = CRMakeUnique( new CRD11GizmoPass() ) )
-    {
-        gizmoPass->Initialize( Width, Height );
-        RenderPasses.push_back( std::move( gizmoPass ) );
-    }
-
     if ( CRRenderPassPtr compositePass = CRMakeUnique( new CRD11CompositePass() ) )
     {
         compositePass->Initialize( Width, Height );
         RenderPasses.push_back( std::move( compositePass ) );
+    }
+
+    // Draw gizmo after compositing so it is guaranteed as final back-buffer overlay.
+    if ( CRRenderPassPtr gizmoPass = CRMakeUnique( new CRD11GizmoPass() ) )
+    {
+        gizmoPass->Initialize( Width, Height );
+        RenderPasses.push_back( std::move( gizmoPass ) );
     }
 
     _InitializeViewport( (f32)( Width ), (f32)( Height ) );

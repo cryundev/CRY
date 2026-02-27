@@ -20,7 +20,7 @@ public:
 
 private:
     EProjectionType ProjectionType  = EProjectionType::Perspective;
-    CRVector        LookAtDirection = CRVector::Forward;
+    CRVector        LookAtDirection = CRVector( 0.f, 0.f, 1.f );
     CRVector        Up              = CRVector::Up;
     f32             FieldOfView     = 90.0f;
     f32             ViewWidth       = 1920.f;
@@ -40,6 +40,15 @@ public:
 
     /// Get projection matrix.
     CRMatrix GetProjectionMatrix() const;
+
+    /// Get normalized world-space look direction.
+    CRVector GetLookDirection() const;
+
+    /// Get normalized world-space right direction.
+    CRVector GetRightDirection() const;
+
+    /// Get normalized world-space up direction.
+    CRVector GetUpDirection() const;
     
     /// Try unproject NDC coordinate to world position at clip-space z.
     bool TryConvertNdcToWorld( f32 NdcX, f32 NdcY, f32 ClipZ, CRVector& OutWorldPosition ) const;

@@ -8,6 +8,7 @@
 #include "Source/Object/Component/CRPrimitiveComponent.h"
 #include "Source/Object/Component/CRSpotLightComponent.h"
 #include "Source/RHI/CRRHI.h"
+#include "Source/RHI/Gizmo/CRGizmoSystem.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/Utility/FBX/CRFbxLoader.h"
 #include "Source/Utility/Log/CRLog.h"
@@ -47,7 +48,7 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
     }
     
     camera->Initialize( CRCamera::EProjectionType::Perspective, 90.0f, (f32)Width, (f32)Height, 0.1f, 1000.0f );
-    camera->SetLookAtDirection( 0.f, 0.f, -1.f );
+    camera->SetLookAtDirection( 0.f, 0.f, 1.f );
 
     CRTransformComponent* cameraTransform = camera->GetTransform();
     if ( !cameraTransform )
@@ -56,7 +57,7 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
         return false;
     }
 
-    cameraTransform->SetLocation( 0.f, 0.f, 15.0f );
+    cameraTransform->SetLocation( 0.f, 0.f, -15.0f );
     
     ICRRHIRenderer* renderer = GRHI.GetRenderer();
     if ( !renderer )
@@ -66,6 +67,11 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
     }
 
     renderer->UpdateViewProjectionBuffer( camera->GetViewMatrix(), camera->GetProjectionMatrix() );
+
+    if ( !GGizmoSystem.Initialize() )
+    {
+        GLog.AddLog( "[CREngine::Initialize] Gizmo system disabled (missing or invalid Asset/Gizmo/Arrow.cra)." );
+    }
 
     // const CRString& loadFbxPaht = "../Asset/Minion";
     // CRFbxLoader fbxLoader;
@@ -224,6 +230,8 @@ void CREngine::PostRender( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 void CREngine::Shutdown()
 {
+    GGizmoSystem.Shutdown();
+
     if ( GWorld )
     {
         GWorld.reset();

@@ -19,7 +19,7 @@ CRMatrix CRTransform::ToLocalMatrix() const
 //---------------------------------------------------------------------------------------------------------------------
 CRVector CRTransform::GetForward() const
 {
-    return CRVector::Transform( CRVector::Forward, Rotation );
+    return CRVector::Transform( CRVector( 0.f, 0.f, 1.f ), Rotation );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ CRVector CRTransform::GetForward() const
 //---------------------------------------------------------------------------------------------------------------------
 CRVector CRTransform::GetRight() const
 {
-    return CRVector::Transform( CRVector::Right, Rotation );
+    return CRVector::Transform( CRVector( 1.f, 0.f, 0.f ), Rotation );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -35,5 +35,5 @@ CRVector CRTransform::GetRight() const
 //---------------------------------------------------------------------------------------------------------------------
 CRVector CRTransform::GetUp() const
 {
-    return CRVector::Transform( CRVector::Up, Rotation );
+    return CRVector::Transform( CRVector( 0.f, 1.f, 0.f ), Rotation );
 }

@@ -1,16 +1,22 @@
 #include "CRD11GizmoPass.h"
+#include "Engine.h"
 #include "../CRD11.h"
 #include "../CRD11RenderingPipeline.h"
 #include "../CRD11ResourceManager.h"
 #include "../Resource/CRD11CompiledShader.h"
 #include "../Resource/CRD11DepthStencilState.h"
-#include "../Resource/CRD11DepthStencilView.h"
 #include "../Resource/CRD11InputLayout.h"
 #include "../Resource/CRD11PixelShader.h"
 #include "../Resource/CRD11RasterizerState.h"
 #include "../Resource/CRD11RenderTargetView.h"
 #include "../Resource/CRD11VertexShader.h"
+#include "Source/Object/Camera/CRCamera.h"
+#include "Source/RHI/CRRHI.h"
+#include "Source/RHI/ICRRHIMesh.h"
+#include "Source/RHI/ICRRHIRenderer.h"
+#include "Source/RHI/Gizmo/CRGizmoSystem.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/World/CRWorld.h"
 #include <filesystem>
 
 
@@ -34,9 +40,14 @@ void CRD11GizmoPass::Resize( u32 /*Width*/, u32 /*Height*/ )
 
     Buffer.Create( "GizmoBuffer", (u32)( EConstBufferSlotVS::Gizmo ), ED11RenderingPipelineStage::VS );
 
-    CRGizmoVSData gizmoData;
+    CRGizmoVSConstants gizmoData;
     gizmoData.GizmoTransform = CRMatrix::Identity.Transpose();
     gizmoData.GizmoColor     = CRVector4D( 1.0f, 1.0f, 0.0f, 1.0f );
+    gizmoData.GizmoPivot     = CRVector4D( 0.0f, 0.0f, 0.0f, 1.0f );
+    gizmoData.GizmoPixelSize = 96.0f;
+    gizmoData.ViewportHeight = 1080.0f;
+    gizmoData.ProjectionCotHalfFovY = 1.0f;
+    gizmoData.AxisType       = 0.0f;
 
     Buffer.Update( gizmoData );
 }
@@ -52,11 +63,11 @@ void CRD11GizmoPass::OnPreDraw()
     GD11RP.CapturePipelineStates();
     bHasCapturedPipelineState = true;
 
-    if ( !DepthState  .expired() ) GD11RP.SetDepthStencilState( DepthState  .lock()->GetObjectPtr()    );
-    if ( !RasterState .expired() ) GD11RP.SetRasterizerState  ( RasterState .lock()->GetObjectPtr()    );
+    if ( !DepthState  .expired() ) GD11RP.SetDepthStencilState( DepthState  .lock()->GetObjectPtr() );
+    if ( !RasterState .expired() ) GD11RP.SetRasterizerState  ( RasterState .lock()->GetObjectPtr() );
     if ( !InputLayout .expired() ) GD11RP.SetInputLayout      ( InputLayout .lock()->GetObjectPtr() );
-    if ( !VertexShader.expired() ) GD11RP.SetVertexShader     ( VertexShader.lock()->GetObjectPtr()    );
-    if ( !PixelShader .expired() ) GD11RP.SetPixelShader      ( PixelShader .lock()->GetObjectPtr()    );
+    if ( !VertexShader.expired() ) GD11RP.SetVertexShader     ( VertexShader.lock()->GetObjectPtr() );
+    if ( !PixelShader .expired() ) GD11RP.SetPixelShader      ( PixelShader .lock()->GetObjectPtr() );
 
     Buffer.SetInRenderingPipeline();
 }
@@ -80,6 +91,7 @@ void CRD11GizmoPass::OnPostDraw()
 
     GD11RP.SetShaderResourceView( nullptr, 0, ED11RenderingPipelineStage::PS );
     GD11RP.RestorePipelineStates();
+    
     bHasCapturedPipelineState = false;
 }
 
@@ -108,27 +120,19 @@ void CRD11GizmoPass::Release()
 bool CRD11GizmoPass::_CreateStates()
 {
     DepthState = GD11RM.GetDepthStencilState( "GizmoDepth" );
-    if ( DepthState.expired() )
-    {
-        GLog.AddLog( "[CRD11GizmoPass] Failed to get gizmo depth state resource." );
-        return false;
-    }
+    if ( DepthState.expired() ) return false;
 
     D3D11_DEPTH_STENCIL_DESC dsd;
     ZeroMemory( &dsd, sizeof( D3D11_DEPTH_STENCIL_DESC ) );
 
-    dsd.DepthEnable    = true;
+    dsd.DepthEnable    = false;
     dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-    dsd.DepthFunc      = D3D11_COMPARISON_LESS_EQUAL;
+    dsd.DepthFunc      = D3D11_COMPARISON_ALWAYS;
 
     DepthState.lock()->Create( dsd );
 
     RasterState = GD11RM.GetRasterizerState( "GizmoCullNone" );
-    if ( RasterState.expired() )
-    {
-        GLog.AddLog( "[CRD11GizmoPass] Failed to get gizmo rasterizer state resource." );
-        return false;
-    }
+    if ( RasterState.expired() ) return false;
 
     D3D11_RASTERIZER_DESC rd;
     ZeroMemory( &rd, sizeof( D3D11_RASTERIZER_DESC ) );
@@ -156,6 +160,7 @@ bool CRD11GizmoPass::_CreateShadersAndLayout()
 
     CRD11CompiledShader compiledVS;
     CRD11CompiledShader compiledPS;
+    
     compiledVS.Create( shaderPath.wstring(), "VS", "vs_5_0" );
     compiledPS.Create( shaderPath.wstring(), "PS", "ps_5_0" );
 
@@ -195,15 +200,10 @@ bool CRD11GizmoPass::_CreateShadersAndLayout()
 //---------------------------------------------------------------------------------------------------------------------
 bool CRD11GizmoPass::_BindSceneTargets() const
 {
-    CRD11RenderTargetViewSPtr sceneRTV = GD11RM.GetRenderTargetView( "SceneColor_RTV" );
-    if ( !sceneRTV || !sceneRTV->GetObjectPtr() )
-    {
-        return false;
-    }
+    CRD11RenderTargetViewSPtr backBufferRTV = GD11RM.GetRenderTargetView( "BackBuffer" );
+    if ( !backBufferRTV || !backBufferRTV->GetObjectPtr() ) return false;
 
-    CRD11DepthStencilViewSPtr sceneDSV = GD11RM.GetDepthStencilView( "DepthStencilView" );
-
-    GD11RP.SetRenderTargetView( sceneRTV->GetObjectPtr(), sceneDSV ? sceneDSV->GetObjectPtr() : nullptr );
+    GD11RP.SetRenderTargetView( backBufferRTV->GetObjectPtr(), nullptr );
 
     return true;
 }
@@ -213,4 +213,50 @@ bool CRD11GizmoPass::_BindSceneTargets() const
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11GizmoPass::_DrawGizmoElementsFromSystem()
 {
+    if ( !GGizmoSystem.IsVisible() ) return;
+
+    ICRRHIMeshSPtr gizmoMesh = GGizmoSystem.GetArrowMesh();
+    if ( !gizmoMesh ) return;
+
+    f32 viewportHeight = 1080.0f;
+    if ( ICRRHIRenderer* renderer = GRHI.GetRenderer() )
+    {
+        viewportHeight = CRMath::Max( 1.0f, (f32)renderer->GetViewportHeight() );
+    }
+
+    f32 projectionCotHalfFovY = 1.0f;
+    if ( GWorld )
+    {
+        if ( CRCamera* camera = GWorld->GetCamera() )
+        {
+            projectionCotHalfFovY = camera->GetProjectionMatrix()._22;
+        }
+    }
+
+    if ( CRMath::IsNearlyZero( projectionCotHalfFovY ) )
+    {
+        projectionCotHalfFovY = 1.0f;
+    }
+
+    const CRVector&   pivot      = GGizmoSystem.GetPivot();
+    const CRVector4D& gizmoPivot = CRVector4D( pivot.x, pivot.y, pivot.z, 1.0f );
+
+    for ( u32 axisIndex = 0; axisIndex < (u32)ECRGizmoAxis::Max; ++axisIndex )
+    {
+        const ECRGizmoAxis axis = (ECRGizmoAxis)axisIndex;
+
+        CRGizmoVSConstants gizmoData;
+        gizmoData.GizmoTransform        = GGizmoSystem.CreateAxisTransform( axis ).Transpose();
+        gizmoData.GizmoColor            = GGizmoSystem.GetAxisColor( axis );
+        gizmoData.GizmoPivot            = gizmoPivot;
+        gizmoData.GizmoPixelSize        = 96.0f;
+        gizmoData.ViewportHeight        = viewportHeight;
+        gizmoData.ProjectionCotHalfFovY = projectionCotHalfFovY;
+        gizmoData.AxisType              = (f32)axisIndex;
+
+        Buffer.Update( gizmoData );
+
+        gizmoMesh->SetInRenderingPipeline();
+        gizmoMesh->Draw();
+    }
 }

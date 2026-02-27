@@ -1,7 +1,10 @@
 #include "EditorRuntime.h"
 #include "Engine.h"
 #include "Source/Core/Math/CRRay.h"
+#include "Source/Object/CRActor.h"
+#include "Source/Object/Camera/CRCamera.h"
 #include "Source/Object/Component/CRTransformComponent.h"
+#include "Source/RHI/Gizmo/CRGizmoSystem.h"
 #include "Source/Utility/UtilRay.h"
 #include "Source/World/CRWorld.h"
 
@@ -50,9 +53,18 @@ struct CRViewportKeyboardState
     bool bMoveUp       = false;
 };
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Editor selection state shared by viewport input bridges.
+//---------------------------------------------------------------------------------------------------------------------
+struct CRViewportSelectionState
+{
+    CRIdentity::id_t SelectedActorId = CRIdentity::InvalidId;
+};
+
     
-CRViewportMouseState    GViewportMouseState;
-CRViewportKeyboardState GViewportKeyboardState;
+CRViewportMouseState     GViewportMouseState;
+CRViewportKeyboardState  GViewportKeyboardState;
+CRViewportSelectionState GViewportSelectionState;
 
 static constexpr f32 CameraMoveSpeed       = 50.0f;
 static constexpr f32 CameraLookSensitivity = 0.0025f;
@@ -136,16 +148,17 @@ void SetMovementKeyState( i32 VirtualKey, bool bPressed )
 //---------------------------------------------------------------------------------------------------------------------
 /// Apply keyboard movement from WASD/QE state.
 //---------------------------------------------------------------------------------------------------------------------
-void ApplyViewportMove( CRTransformComponent* Transform, f32 DeltaSeconds )
+void ApplyViewportMove( CRCamera* Camera, CRTransformComponent* Transform, f32 DeltaSeconds )
 {
+    if ( !Camera ) return;
     if ( !Transform ) return;
     if ( DeltaSeconds <= 0.0f ) return;
 
     CRVector movement = CRVector::Zero;
 
-    const CRVector forward = Transform->GetForward();
-    const CRVector right   = Transform->GetRight();
-    const CRVector up      = Transform->GetUp();
+    const CRVector& forward = Camera->GetLookDirection();
+    const CRVector& right   = Camera->GetRightDirection();
+    const CRVector& up      = Camera->GetUpDirection();
 
     if ( GViewportKeyboardState.bMoveForward  ) movement += forward;
     if ( GViewportKeyboardState.bMoveBackward ) movement -= forward;
@@ -195,6 +208,32 @@ void ApplyViewportLook( CRTransformComponent* Transform )
     {
         Transform->Rotate( Transform->GetRight(), (f32)deltaY * CameraLookSensitivity );
     }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Update gizmo pivot from selected actor state.
+//---------------------------------------------------------------------------------------------------------------------
+void UpdateSelectionGizmoState()
+{
+    if ( !GGizmoSystem.IsReady() ) return;
+    
+    GGizmoSystem.SetVisible( false );
+
+    if ( !GWorld ) return;
+    if ( !CRIdentity::IsValid( GViewportSelectionState.SelectedActorId ) ) return;
+
+    CRActor* selectedActor = GWorld->GetActor( CRObjectId( GViewportSelectionState.SelectedActorId ) );
+    if ( !selectedActor )
+    {
+        GViewportSelectionState.SelectedActorId = CRIdentity::InvalidId;        
+        return;
+    }
+
+    CRTransformComponent* selectedTransform = selectedActor->GetTransform();
+    if ( !selectedTransform ) return;
+
+    GGizmoSystem.SetPivot( selectedTransform->GetLocation() );
+    GGizmoSystem.SetVisible( true );
 }
 }
 
@@ -264,23 +303,37 @@ void OnViewportMouseWheel( i32 WheelDelta )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// OnActorPicked
+//---------------------------------------------------------------------------------------------------------------------
+void OnActorPicked( CRIdentity::id_t ActorId )
+{
+    GViewportSelectionState.SelectedActorId = ActorId;
+
+    UpdateSelectionGizmoState();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// ApplyViewportCameraInput
 //---------------------------------------------------------------------------------------------------------------------
 void ApplyViewportCameraInput( f32 DeltaSeconds )
 {
-    if ( DeltaSeconds <= 0.0f ) return;
-    if ( !GWorld ) return;
+    if ( GWorld )
+    {
+        if ( CRCamera* camera = GWorld->GetCamera() )
+        {
+            if ( CRTransformComponent* transform = camera->GetTransform() )
+            {
+                ApplyViewportLook( transform );
 
-    CRCamera* camera = GWorld->GetCamera();
-    if ( !camera ) return;
-
-    CRTransformComponent* transform = camera->GetTransform();
-    if ( !transform ) return;
-
-    ApplyViewportLook( transform );
-    ApplyViewportMove( transform, DeltaSeconds );
+                if ( DeltaSeconds > 0.0f )
+                {
+                    ApplyViewportMove( camera, transform, DeltaSeconds );
+                }
+            }
+        }
+    }
 
     GViewportMouseState.WheelDelta = 0;
+    UpdateSelectionGizmoState();
 }
 }
-
