@@ -26,7 +26,7 @@ CRVector ToCRVector( const CRDllVector3& Value )
 //---------------------------------------------------------------------------------------------------------------------
 CRVector ToEulerDegrees( const CRQuaternion& Rotation )
 {
-    const CRVector eulerRadians = Rotation.ToEuler();
+    const CRVector& eulerRadians = Rotation.ToEuler();
 
     return CRVector
     (
