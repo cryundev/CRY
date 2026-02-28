@@ -7,6 +7,7 @@
 #include "Source/RHI/Gizmo/CRGizmoSystem.h"
 #include "Source/Utility/UtilRay.h"
 #include "Source/World/CRWorld.h"
+#include "Gizmo/CRGizmoInteraction.h"
 
 
 namespace
@@ -61,13 +62,13 @@ struct CRViewportSelectionState
     CRIdentity::id_t SelectedActorId = CRIdentity::InvalidId;
 };
 
-    
 CRViewportMouseState     GViewportMouseState;
 CRViewportKeyboardState  GViewportKeyboardState;
 CRViewportSelectionState GViewportSelectionState;
+CREditorRuntimeGizmo::CRGizmoDragState GViewportGizmoDragState;
 
-static constexpr f32 CameraMoveSpeed       = 50.0f;
-static constexpr f32 CameraLookSensitivity = 0.0025f;
+static constexpr f32 CameraMoveSpeed              = 50.0f;
+static constexpr f32 CameraLookSensitivity        = 0.0025f;
 
     
 //---------------------------------------------------------------------------------------------------------------------
@@ -225,7 +226,8 @@ void UpdateSelectionGizmoState()
     CRActor* selectedActor = GWorld->GetActor( CRObjectId( GViewportSelectionState.SelectedActorId ) );
     if ( !selectedActor )
     {
-        GViewportSelectionState.SelectedActorId = CRIdentity::InvalidId;        
+        GViewportSelectionState.SelectedActorId = CRIdentity::InvalidId;
+        CREditorRuntimeGizmo::EndDrag( GViewportGizmoDragState );
         return;
     }
 
@@ -252,6 +254,19 @@ void OnViewportMouseMove( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH )
 
     StorePointerState( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY );
     TryUpdateMouseRay( ndcX, ndcY );
+
+    if ( GViewportGizmoDragState.bDragging )
+    {
+        CREditorRuntimeGizmo::ApplyDrag(
+            GViewportGizmoDragState,
+            CREditorRuntimeGizmo::CRGizmoInteractionContext
+            {
+                GViewportSelectionState.SelectedActorId,
+                GViewportMouseState.bHasRay,
+                GViewportMouseState.Ray
+            }
+        );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -269,7 +284,32 @@ void OnViewportMouseButton( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH
     
     switch ( Button )
     {
-    case 0: GViewportMouseState.bLeftPressed  = bPressed; break;
+    case 0:
+        GViewportMouseState.bLeftPressed = bPressed;
+
+        if ( bPressed )
+        {
+            bool bConsumedByGizmo = CREditorRuntimeGizmo::TryBeginDrag(
+                GViewportGizmoDragState,
+                CREditorRuntimeGizmo::CRGizmoInteractionContext
+                {
+                    GViewportSelectionState.SelectedActorId,
+                    GViewportMouseState.bHasRay,
+                    GViewportMouseState.Ray
+                }
+            );
+            if ( !bConsumedByGizmo )
+            {
+                const CRIdentity::id_t pickedActorId = UtilRay::PickActorAtScreen( PixelX, PixelY, ViewportW, ViewportH );
+                OnActorPicked( pickedActorId );
+            }
+        }
+        else
+        {
+            CREditorRuntimeGizmo::EndDrag( GViewportGizmoDragState );
+        }
+        break;
+
     case 1: GViewportMouseState.bRightPressed = bPressed;
         {
             if ( bPressed )
@@ -308,6 +348,7 @@ void OnViewportMouseWheel( i32 WheelDelta )
 void OnActorPicked( CRIdentity::id_t ActorId )
 {
     GViewportSelectionState.SelectedActorId = ActorId;
+    CREditorRuntimeGizmo::EndDrag( GViewportGizmoDragState );
 
     UpdateSelectionGizmoState();
 }

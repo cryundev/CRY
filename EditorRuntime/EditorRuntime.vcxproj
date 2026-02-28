@@ -144,12 +144,12 @@
   <ItemGroup>
     <ClCompile Include="EditorRuntime.cpp" />
     <ClCompile Include="Input\CRInputProcessorCamera.cpp" />
-    <ClCompile Include="Input\CRInputProcessorPicking.cpp" />
+    <ClCompile Include="Gizmo\CRGizmoInteraction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorRuntime.h" />
     <ClInclude Include="Input\CRInputProcessorCamera.h" />
-    <ClInclude Include="Input\CRInputProcessorPicking.h" />
+    <ClInclude Include="Gizmo\CRGizmoInteraction.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

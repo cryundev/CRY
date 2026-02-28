@@ -40,7 +40,5 @@ public static partial class EngineAPI
         [DllImport( EngineDllName, EntryPoint = "OnViewportMouseWheel" )]
         public static extern void OnViewportMouseWheel( int wheelDelta );
 
-        [DllImport( EngineDllName, EntryPoint = "PickActorAtScreen" )]
-        public static extern long PickActor( int pixelX, int pixelY, int viewportW, int viewportH );
     }
 }

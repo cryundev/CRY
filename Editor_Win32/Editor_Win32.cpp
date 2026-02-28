@@ -1,7 +1,6 @@
 #include "framework.h"
 #include "Editor_Win32.h"
 #include "../EditorRuntime/Input/CRInputProcessorCamera.h"
-#include "../EditorRuntime/Input/CRInputProcessorPicking.h"
 #include "UI/CREditorUI.h"
 #include "UI/CRUIManager.h"
 #include <Extras/ImGUI/imgui.h>
@@ -161,8 +160,7 @@ LRESULT _OnActivateApp( HWND hWnd, WPARAM wParam )
 //---------------------------------------------------------------------------------------------------------------------
 LRESULT _OnMouseMessage( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
-    CREditorRuntimeWin32Input::OnMouseMessage       ( hWnd, message, wParam, lParam );
-    CREditorRuntimeWin32Input::OnPickingMouseMessage( hWnd, message, wParam, lParam );
+    CREditorRuntimeWin32Input::OnMouseMessage( hWnd, message, wParam, lParam );
 
     return 0;
 }

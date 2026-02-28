@@ -17,7 +17,7 @@
     <ClCompile Include="Input\CRInputProcessorCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Input\CRInputProcessorPicking.cpp">
+    <ClCompile Include="Gizmo\CRGizmoInteraction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -28,7 +28,7 @@
     <ClInclude Include="Input\CRInputProcessorCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Input\CRInputProcessorPicking.h">
+    <ClInclude Include="Gizmo\CRGizmoInteraction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

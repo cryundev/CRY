@@ -160,7 +160,6 @@ public class EngineViewportHost : HwndHost
         _CaptureMouse();
         _FocusViewport();
 
-        _TryPickActor( lParam );
         _ForwardMouseButton( lParam, EngineAPI.Input.MouseButton.Left, true );
 
         handled = true;
@@ -480,20 +479,6 @@ public class EngineViewportHost : HwndHost
         command.Execute( parameter );
         
         return true;
-    }
-
-    //-----------------------------------------------------------------------------------------------------------------
-    /// _TryPickActor
-    //-----------------------------------------------------------------------------------------------------------------
-    private void _TryPickActor( IntPtr lParam )
-    {
-        if ( !_engineInitialized ) return;
-        if ( !_TryGetClientSize( out int viewportW, out int viewportH ) ) return;
-
-        int pixelX = _GetXFromLParam( lParam );
-        int pixelY = _GetYFromLParam( lParam );
-
-        EngineAPI.Input.PickActor( pixelX, pixelY, viewportW, viewportH );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
