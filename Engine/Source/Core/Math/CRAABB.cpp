@@ -1,5 +1,6 @@
 #include "CRAABB.h"
 #include "CRRay.h"
+#include "Source/Core/CRGeneric.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -47,7 +48,7 @@ bool CRAABB::Intersects( const CRRay& Ray, f32& OutT ) const
     f32 tMin = CRMath::f32_min;
     f32 tMax = CRMath::f32_max;
 
-    auto testAxis = [&] ( f32 Origin, f32 Direction, f32 AxisMin, f32 AxisMax ) -> bool
+    auto testAxis = [ & ] ( f32 Origin, f32 Direction, f32 AxisMin, f32 AxisMax ) -> bool
     {
         if ( CRMath::IsNearlyZero( Direction ) )
         {
@@ -60,9 +61,7 @@ bool CRAABB::Intersects( const CRRay& Ray, f32& OutT ) const
 
         if ( t1 > t2 )
         {
-            f32 temp = t1;
-            t1 = t2;
-            t2 = temp;
+            CRSwap( t1, t2 );
         }
 
         tMin = CRMath::Max( tMin, t1 );

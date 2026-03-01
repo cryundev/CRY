@@ -143,13 +143,29 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EditorRuntime.cpp" />
+    <ClCompile Include="Actor\CRAxisGizmoActor.cpp" />
+    <ClCompile Include="Actor\CRGizmoActor.cpp" />
+    <ClCompile Include="Actor\CRGizmoSystem.cpp" />
+    <ClCompile Include="Render\CRD11GizmoPass.cpp" />
     <ClCompile Include="Input\CRInputProcessorCamera.cpp" />
     <ClCompile Include="Input\CRInputProcessorPicking.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorRuntime.h" />
+    <ClInclude Include="Actor\CRAxisGizmoActor.h" />
+    <ClInclude Include="Actor\CRGizmoActor.h" />
+    <ClInclude Include="Actor\CRGizmoSystem.h" />
+    <ClInclude Include="Render\CRD11GizmoPass.h" />
     <ClInclude Include="Input\CRInputProcessorCamera.h" />
     <ClInclude Include="Input\CRInputProcessorPicking.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Render\Shader\gizmo.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Actor\" />
+    <Folder Include="Render\" />
+    <Folder Include="Render\Shader\" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

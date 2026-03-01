@@ -10,6 +10,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 namespace CREditorRuntime
 {
+    bool InitializeRuntime();
+    void ShutdownRuntime();
+
     void OnViewportMouseMove  ( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH );
     void OnViewportMouseButton( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH, i32 Button, bool bPressed );
     void OnViewportKeyState   ( i32 VirtualKey, bool bPressed );

@@ -4,7 +4,6 @@
 #include "CRD11ResourceManager.h"
 #include "Engine.h"
 #include "Passes/CRD11CompositePass.h"
-#include "Passes/CRD11GizmoPass.h"
 #include "Passes/CRD11ScenePass.h"
 #include "Resource/CRD11Device.h"
 #include "Resource/CRD11RasterizerState.h"
@@ -41,13 +40,6 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
     {
         compositePass->Initialize( Width, Height );
         RenderPasses.push_back( std::move( compositePass ) );
-    }
-
-    // Draw gizmo after compositing so it is guaranteed as final back-buffer overlay.
-    if ( CRRenderPassPtr gizmoPass = CRMakeUnique( new CRD11GizmoPass() ) )
-    {
-        gizmoPass->Initialize( Width, Height );
-        RenderPasses.push_back( std::move( gizmoPass ) );
     }
 
     _InitializeViewport( (f32)( Width ), (f32)( Height ) );
@@ -87,6 +79,18 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
 
         GD11RP.SetRasterizerState( RasterizerState.lock()->GetObjectPtr() );
     }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Add render pass.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11Renderer::AddRenderPass( CRUniquePtr< ICRRHIRenderPass > Pass )
+{
+    if ( !Pass ) return;
+
+    Pass->Initialize( ViewportWidth, ViewportHeight );
+    
+    RenderPasses.push_back( std::move( Pass ) );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

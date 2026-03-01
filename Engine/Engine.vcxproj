@@ -271,7 +271,6 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\Object\Game\CRGameInstance.cpp" />
     <ClCompile Include="Source\Object\Game\CRGameMode.cpp" />
     <ClCompile Include="Source\RHI\CRRHI.cpp" />
-    <ClCompile Include="Source\RHI\Gizmo\CRGizmoSystem.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11CompiledShader.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11ConstantBuffer.cpp" />
     <ClCompile Include="Source\RHI\DX11\Resource\CRD11DepthStencilState.cpp" />
@@ -293,7 +292,6 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\RHI\DX11\CRD11Material.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Mesh.cpp" />
     <ClCompile Include="Source\RHI\DX11\Passes\CRD11CompositePass.cpp" />
-    <ClCompile Include="Source\RHI\DX11\Passes\CRD11GizmoPass.cpp" />
     <ClCompile Include="Source\RHI\DX11\Passes\CRD11ScenePass.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11RenderTarget2D.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp" />
@@ -303,7 +301,6 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\Utility\UtilRay.cpp" />
     <ClCompile Include="Source\World\CRWorld.cpp" />
     <None Include="Source\RHI\DX11\HLSL\composite.hlsl" />
-    <None Include="Source\RHI\DX11\HLSL\gizmo.hlsl" />
     <None Include="Source\RHI\DX11\HLSL\shader.hlsl" />
     <ClCompile Include="Source\Utility\FBX\CRFbxLoader.cpp" />
     <ClCompile Include="Source\Utility\Generic\CRGeneric.cpp" />
@@ -338,6 +335,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Core\CRVertex.h" />
     <ClInclude Include="Source\Core\Identify\CRIdentity.h" />
     <ClInclude Include="Source\Core\Math\CRMath.h" />
+    <ClInclude Include="Source\Core\Math\CRAxis.h" />
     <ClInclude Include="Source\Core\Math\CRAABB.h" />
     <ClInclude Include="Source\Core\Math\CRRay.h" />
     <ClInclude Include="Source\Core\Strings\CRStringInc.h" />
@@ -358,7 +356,6 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Object\Game\CRGameInstance.h" />
     <ClInclude Include="Source\Object\Game\CRGameMode.h" />
     <ClInclude Include="Source\RHI\CRRHI.h" />
-    <ClInclude Include="Source\RHI\Gizmo\CRGizmoSystem.h" />
     <ClInclude Include="Source\RHI\CRRenderElement.h" />
     <ClInclude Include="Source\RHI\CRRHITypes.h" />
     <ClInclude Include="Source\RHI\CRConstBufferStructures.h" />
@@ -387,7 +384,6 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\DX11\CRD11Material.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Mesh.h" />
     <ClInclude Include="Source\RHI\DX11\Passes\CRD11CompositePass.h" />
-    <ClInclude Include="Source\RHI\DX11\Passes\CRD11GizmoPass.h" />
     <ClInclude Include="Source\RHI\DX11\Passes\CRD11RenderPass.h" />
     <ClInclude Include="Source\RHI\DX11\Passes\CRD11ScenePass.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11RenderTarget2D.h" />

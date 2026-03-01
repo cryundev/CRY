@@ -30,7 +30,7 @@ public:
     /// Constructor.
     CRActor() = default;
 
-    /// Destory
+    /// Destroy.
     virtual void Destroy() override;
 
     /// Initialize components.
@@ -46,30 +46,37 @@ public:
     inline CRWorld* GetWorld() const { return World; }
 
     /// Add component.
-    template< ComponentType T >
-    T* AddComponent();
+    template < ComponentType T >
+    T* Add();
 
     /// Remove component.
-    template< ComponentType T >
+    template < ComponentType T >
     void RemoveComponent();
 
     /// Get component.
-    template< ComponentType T >
+    template < ComponentType T >
     T* GetComponent() const
     {
         return T::Get( ObjectId );
     }
 
+    /// Get all components.
+    template < ComponentType T >
+    CRArray< T* > GetComponents() const
+    {
+        return T::GetAll( ObjectId );
+    }
+
 private:
-    template< ComponentType T >
+    template < ComponentType T >
     void _RegisterComponentRemover();
 
-    template< ComponentType T >
+    template < ComponentType T >
     void _UnregisterComponentRemover();
 };
 
 
-template< typename T >
+template < typename T >
 concept ActorType = std::is_base_of_v< CRActor, T >;
 
 
@@ -77,7 +84,7 @@ concept ActorType = std::is_base_of_v< CRActor, T >;
 /// Add component.
 //---------------------------------------------------------------------------------------------------------------------
 template < ComponentType T >
-T* CRActor::AddComponent()
+T* CRActor::Add()
 {
     T* component = T::Add( ObjectId );
     if ( !component ) return nullptr;
@@ -129,7 +136,10 @@ void CRActor::_UnregisterComponentRemover()
     size_t removeIndex = ComponentRemoverTypes.size();
     for ( size_t i = 0; i < ComponentRemoverTypes.size(); ++i )
     {
-        if ( ComponentRemoverTypes[ i ] != typeHash ) continue;
+        if ( ComponentRemoverTypes[ i ] != typeHash )
+        {
+            continue;
+        }
 
         removeIndex = i;
         break;
@@ -140,5 +150,6 @@ void CRActor::_UnregisterComponentRemover()
     ComponentRemoverTypes.erase( ComponentRemoverTypes.begin() + removeIndex );
 
     if ( removeIndex >= ComponentRemovers.size() ) return;
+
     ComponentRemovers.erase( ComponentRemovers.begin() + removeIndex );
 }

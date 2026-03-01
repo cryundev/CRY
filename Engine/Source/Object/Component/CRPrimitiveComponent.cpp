@@ -4,6 +4,7 @@
 #include "Source/RHI/ICRRHIMaterial.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/RHI/ICRRHIRenderer.h"
+#include <filesystem>
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -80,15 +81,26 @@ void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
     CRPrimitiveAsset asset;
     asset.Load( AssetPath );
 
+    CRName resourceName = ObjectName;
+    if ( !AssetPath.empty() )
+    {
+        resourceName = std::filesystem::path( AssetPath ).lexically_normal().string();
+    }
+
+    if ( resourceName.empty() )
+    {
+        resourceName = "Primitive";
+    }
+
     Mesh = GRHI.CreateMesh();
     if ( Mesh.expired() ) return;
 
-    Mesh.lock()->InitializePrimitive( ObjectName, asset );
+    Mesh.lock()->InitializePrimitive( resourceName, asset );
 
     Material = GRHI.CreateMaterial();
     if ( Material.expired() ) return;
 
-    Material.lock()->Initialize( ObjectName );
+    Material.lock()->Initialize( resourceName );
 
     if ( bRender )
     {
@@ -100,6 +112,22 @@ void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
     }
 
     bPrevRender = bRender && RenderElementHandle.IsValid();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Set render enabled.
+//---------------------------------------------------------------------------------------------------------------------
+void CRPrimitiveComponent::SetRenderEnabled( bool bInRender )
+{
+    if ( bRender == bInRender ) return;
+
+    bRender = bInRender;
+
+    if ( !bRender )
+    {
+        _UnregisterRenderElement();
+        bPrevRender = false;
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------

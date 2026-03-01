@@ -3,6 +3,7 @@
 
 #include "CRConstBufferStructures.h"
 #include "CRRenderElement.h"
+#include "ICRRHIRenderPass.h"
 #include "Source/Core/Containers/CRContainerInc.h"
 #include "Source/Core/Math/CRMath.h"
 
@@ -77,4 +78,7 @@ public:
 
     /// Clear all active lights (keeps ambient).
     virtual void ClearLights() {}
+
+    /// Add render pass.
+    virtual void AddRenderPass( CRUniquePtr< ICRRHIRenderPass > Pass ) {}
 };

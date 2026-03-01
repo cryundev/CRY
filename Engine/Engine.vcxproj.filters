@@ -284,6 +284,9 @@
     <ClInclude Include="Source\Core\Math\CRMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\Math\CRAxis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Core\Math\CRAABB.h">
       <Filter>Header Files</Filter>
     </ClInclude>

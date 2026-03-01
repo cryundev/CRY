@@ -1,10 +1,15 @@
 #include "EditorRuntime.h"
 #include "Engine.h"
+#include "Render/CRD11GizmoPass.h"
 #include "Source/Core/Math/CRRay.h"
+#include "Source/Core/CRSmartPtrMacro.h"
 #include "Source/Object/CRActor.h"
 #include "Source/Object/Camera/CRCamera.h"
 #include "Source/Object/Component/CRTransformComponent.h"
-#include "Source/RHI/Gizmo/CRGizmoSystem.h"
+#include "Actor/CRGizmoSystem.h"
+#include "Source/RHI/CRRHI.h"
+#include "Source/RHI/ICRRHIRenderer.h"
+#include "Source/Utility/Log/CRLog.h"
 #include "Source/Utility/UtilRay.h"
 #include "Source/World/CRWorld.h"
 
@@ -240,6 +245,32 @@ void UpdateSelectionGizmoState()
 
 namespace CREditorRuntime
 {
+//---------------------------------------------------------------------------------------------------------------------
+/// Initialize runtime.
+//---------------------------------------------------------------------------------------------------------------------
+bool InitializeRuntime()
+{
+    if ( !GGizmoSystem.Initialize() )
+    {
+        GLog.AddLog( "[InitializeRuntime] Gizmo system disabled (missing or invalid Asset/Gizmo/Arrow.cra)." );
+    }
+
+    if ( ICRRHIRenderer* renderer = GRHI.GetRenderer() )
+    {
+        renderer->AddRenderPass( CRMakeUnique( new CRD11GizmoPass() ) );
+    }
+
+    return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Shutdown runtime.
+//---------------------------------------------------------------------------------------------------------------------
+void ShutdownRuntime()
+{
+    GGizmoSystem.Shutdown();
+}
+
 //---------------------------------------------------------------------------------------------------------------------
 /// OnViewportMouseMove
 //---------------------------------------------------------------------------------------------------------------------

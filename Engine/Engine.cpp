@@ -8,7 +8,6 @@
 #include "Source/Object/Component/CRPrimitiveComponent.h"
 #include "Source/Object/Component/CRSpotLightComponent.h"
 #include "Source/RHI/CRRHI.h"
-#include "Source/RHI/Gizmo/CRGizmoSystem.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/Utility/FBX/CRFbxLoader.h"
 #include "Source/Utility/Log/CRLog.h"
@@ -68,11 +67,6 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
 
     renderer->UpdateViewProjectionBuffer( camera->GetViewMatrix(), camera->GetProjectionMatrix() );
 
-    if ( !GGizmoSystem.Initialize() )
-    {
-        GLog.AddLog( "[CREngine::Initialize] Gizmo system disabled (missing or invalid Asset/Gizmo/Arrow.cra)." );
-    }
-
     // const CRString& loadFbxPaht = "../Asset/Minion";
     // CRFbxLoader fbxLoader;
     // fbxLoader.Load( loadFbxPaht + ".fbx" );
@@ -99,9 +93,9 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
     {
         minion->SetName( CRName( "Minion" ) );
 
-        CRCollisionComponent* collision = minion->AddComponent< CRCollisionComponent >();
+        CRCollisionComponent* collision = minion->Add< CRCollisionComponent >();
         
-        if ( CRPrimitiveComponent* primitive = minion->AddComponent< CRPrimitiveComponent >() )
+        if ( CRPrimitiveComponent* primitive = minion->Add< CRPrimitiveComponent >() )
         {
             std::filesystem::path assetPath = std::filesystem::path( __FILE__ ).parent_path() / "../Asset/Minion.cra";
             if ( !std::filesystem::exists( assetPath ) )
@@ -139,7 +133,7 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
     {
         directionalLightActor->SetName( CRName( "TestDirectionalLight" ) );
 
-        if ( CRDirectionalLightComponent* directionalLight = directionalLightActor->AddComponent< CRDirectionalLightComponent >() )
+        if ( CRDirectionalLightComponent* directionalLight = directionalLightActor->Add< CRDirectionalLightComponent >() )
         {
             directionalLight->Direction = CRVector4D( 0.35f, -0.80f, 0.48f, 0.0f );
             directionalLight->Color     = CRVector4D( 1.0f, 1.0f, 1.0f, 1.0f );
@@ -155,7 +149,7 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
             pointTransform->SetLocation( -3.0f, 2.0f, 3.0f );
         }
 
-        if ( CRPointLightComponent* pointLight = pointLightActor->AddComponent< CRPointLightComponent >() )
+        if ( CRPointLightComponent* pointLight = pointLightActor->Add< CRPointLightComponent >() )
         {
             pointLight->Range = 180.0f;
             pointLight->Color = CRVector4D( 1.0f, 0.85f, 0.70f, 2.0f );
@@ -172,7 +166,7 @@ bool CREngine::Initialize( HWND hWnd, u32 Width, u32 Height )
             spotTransform->Rotate( CRVector( 1.0f, 0.0f, 0.0f ), -0.75f );
         }
 
-        if ( CRSpotLightComponent* spotLight = spotLightActor->AddComponent< CRSpotLightComponent >() )
+        if ( CRSpotLightComponent* spotLight = spotLightActor->Add< CRSpotLightComponent >() )
         {
             spotLight->Range      = 200.0f;
             spotLight->InnerAngle = 16.0f;
@@ -230,8 +224,6 @@ void CREngine::PostRender( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 void CREngine::Shutdown()
 {
-    GGizmoSystem.Shutdown();
-
     if ( GWorld )
     {
         GWorld.reset();

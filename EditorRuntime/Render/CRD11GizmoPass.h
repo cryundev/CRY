@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "CRD11RenderPass.h"
-#include "../CRD11BindingConstantBuffer.h"
-#include "../CRD11Types.h"
+#include "Source/RHI/DX11/Passes/CRD11RenderPass.h"
+#include "Source/RHI/DX11/CRD11BindingConstantBuffer.h"
+#include "Source/RHI/DX11/CRD11Types.h"
 #include "Source/Core/Math/CRMath.h"
 
 
@@ -36,7 +36,7 @@ private:
     CRD11VertexShaderWPtr      VertexShader;
     CRD11PixelShaderWPtr       PixelShader;
     CRD11InputLayoutWPtr       InputLayout;
-    
+
     CRD11BindingConstantBuffer< CRGizmoVSConstants > Buffer;
     bool bHasCapturedPipelineState = false;
 
@@ -75,7 +75,7 @@ private:
     /// Bind scene render/depth targets for overlay drawing.
     bool _BindSceneTargets() const;
 
-    /// Draw gizmo elements from gizmo system (Phase2-1 stub).
+    /// Draw gizmo elements from gizmo system.
     void _DrawGizmoElementsFromSystem();
 
 };

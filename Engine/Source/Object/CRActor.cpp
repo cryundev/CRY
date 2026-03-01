@@ -25,5 +25,5 @@ void CRActor::InitializeComponents()
 {
     if ( !CRIdentity::IsValid( ObjectId ) ) return;
 
-    AddComponent< CRTransformComponent >();
+    Add< CRTransformComponent >();
 }

@@ -63,6 +63,9 @@ public:
     /// Present.
     virtual void Present() const override;
 
+    /// Add render pass.
+    virtual void AddRenderPass( CRUniquePtr< ICRRHIRenderPass > Pass ) override;
+
     /// Get viewport width.
     virtual unsigned int GetViewportWidth() const override { return ViewportWidth; }
 

@@ -5,12 +5,13 @@
 #include "ICRComponent.h"
 #include "Source/Core/CRGeneric.h"
 #include "Source/Object/CRObject.h"
+#include <algorithm>
 
 
 //---------------------------------------------------------------------------------------------------------------------
 /// CRComponent
 //---------------------------------------------------------------------------------------------------------------------
-template< typename T >
+template < typename T >
 class CRComponent : public CRObject, public ICRComponent
 {
 public:
@@ -20,14 +21,11 @@ public:
     static constexpr ECRComponentPriority Priority = ECRComponentPriority::None;
 
 private:
-    /// Components.
-    inline static CRArray< T > Components = {};
+    inline static CRArray< T >                Components        = {}; /// Components.
+    inline static CRArray< CRIdentity::id_t > IdMap             = {}; /// Id map.
+    inline static CRArray< CRIdentity::id_t > NextInstanceLinks = {}; /// Next instance links.
 
-    /// Id map.
-    inline static CRArray< CRIdentity::id_t > IdMap = {};
-
-    /// Whether stage functions have been registered.
-    inline static bool bStageRegistered = false;
+    inline static bool bStageRegistered = false; /// Whether stage functions have been registered.
 
 public:
     /// Add component.
@@ -39,6 +37,9 @@ public:
     /// Get component.
     static T* Get( const CRIdentity::id_t& Id );
 
+    /// Get all components.
+    static CRArray< T* > GetAll( const CRIdentity::id_t& Id );
+
     /// Update components.
     static void UpdateComponents( float DeltaSeconds );
 
@@ -47,41 +48,99 @@ public:
 
     /// Get components array.
     static CRArray< T >& GetComponents() { return Components; }
+
+private:
+    /// Ensure stage registered.
+    static void _EnsureStageRegistered();
+
+    /// Is exclusive.
+    static constexpr bool _IsExclusive();
+
+    /// Ensure actor slot in id map.
+    static void _EnsureActorSlot( CRIdentity::id_t actorIdx );
+
+    /// Add internal.
+    static T* _AddInternal( const CRIdentity::id_t& Id );
+
+    /// Fix moved element links.
+    static void _FixupMovedElement( CRIdentity::id_t compIdx );
 };
 
 
-template< typename T >
+template < typename T >
 concept ComponentType = std::is_base_of_v< CRComponent< T >, T >;
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Add component.
+/// Ensure stage registered.
 //---------------------------------------------------------------------------------------------------------------------
 template < typename T >
-T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
+void CRComponent< T >::_EnsureStageRegistered()
 {
-    if ( !bStageRegistered )
-    {
-        CRComponentRegistry::RegisterTick( [] ( float DeltaSeconds )
-        {
-            CRComponent< T >::UpdateComponents( DeltaSeconds );
-        }, T::Priority );
-        
-        CRComponentRegistry::RegisterPreRender( [] ( float DeltaSeconds )
-        {
-            CRComponent< T >::PreRenderComponents( DeltaSeconds );
-        }, T::Priority );
+    if ( bStageRegistered ) return;
 
-        bStageRegistered = true;
+    CRComponentRegistry::RegisterTick( [] ( float DeltaSeconds )
+    {
+        CRComponent< T >::UpdateComponents( DeltaSeconds );
+    }, T::Priority );
+
+    CRComponentRegistry::RegisterPreRender( [] ( float DeltaSeconds )
+    {
+        CRComponent< T >::PreRenderComponents( DeltaSeconds );
+    }, T::Priority );
+
+    bStageRegistered = true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Is exclusive.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+constexpr bool CRComponent< T >::_IsExclusive()
+{
+    if constexpr ( requires { T::IsExclusive; } )
+    {
+        return (bool)T::IsExclusive;
     }
-    
+
+    return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Ensure actor slot in id map.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+void CRComponent< T >::_EnsureActorSlot( CRIdentity::id_t actorIdx )
+{
+    if ( actorIdx < IdMap.size() ) return;
+
+    const size_t oldSize = IdMap.size();
+    IdMap.resize( actorIdx + 1 );
+
+    for ( size_t i = oldSize; i < IdMap.size(); ++i )
+    {
+        IdMap[ i ] = CRIdentity::InvalidId;
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Add internal.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+T* CRComponent< T >::_AddInternal( const CRIdentity::id_t& Id )
+{
+    _EnsureStageRegistered();
+
     assert( CRIdentity::IsValid( Id ) );
 
-    CRIdentity::id_t index = CRIdentity::IndexOf( Id );
+    const CRIdentity::id_t actorIdx = CRIdentity::IndexOf( Id );
+    const bool bReuseExisting = _IsExclusive();
 
-    if ( index < IdMap.size() )
+    _EnsureActorSlot( actorIdx );
+
+    if ( bReuseExisting )
     {
-        const CRIdentity::id_t componentIndex = IdMap[ index ];
+        const CRIdentity::id_t componentIndex = IdMap[ actorIdx ];
         if ( componentIndex != CRIdentity::InvalidId )
         {
             if ( componentIndex < Components.size() )
@@ -95,21 +154,68 @@ T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
     }
 
     Components.emplace_back();
+    NextInstanceLinks.push_back( CRIdentity::InvalidId );
 
-    if ( index >= IdMap.size() )
+    const CRIdentity::id_t newComponentIndex = (CRIdentity::id_t)( Components.size() - 1 );
+
+    if ( IdMap[ actorIdx ] == CRIdentity::InvalidId )
     {
-        const size_t oldSize = IdMap.size();
-        IdMap.resize( index + 1 );
-
-        for ( size_t i = oldSize; i < IdMap.size(); ++i )
-        {
-            IdMap[ i ] = CRIdentity::InvalidId;
-        }
+        IdMap[ actorIdx ] = newComponentIndex;
+        return CRCast< T >( &Components[ newComponentIndex ] );
     }
 
-    IdMap[ index ] = Components.size() - 1;
+    CRIdentity::id_t cursor = IdMap[ actorIdx ];
+    while ( NextInstanceLinks[ cursor ] != CRIdentity::InvalidId )
+    {
+        cursor = NextInstanceLinks[ cursor ];
+    }
 
-    return CRCast< T >( &Components[ IdMap[ index ] ] );
+    NextInstanceLinks[ cursor ] = newComponentIndex;
+
+    return CRCast< T >( &Components[ newComponentIndex ] );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Fix moved element links.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+void CRComponent< T >::_FixupMovedElement( CRIdentity::id_t compIdx )
+{
+    if ( compIdx >= (CRIdentity::id_t)Components.size() ) return;
+
+    const CRIdentity::id_t oldLastIdx = (CRIdentity::id_t)Components.size();
+    const CRIdentity::id_t actorIdx   = CRIdentity::IndexOf( Components[ compIdx ].GetObjectId() );
+
+    if ( actorIdx < IdMap.size() && IdMap[ actorIdx ] == oldLastIdx )
+    {
+        IdMap[ actorIdx ] = compIdx;
+        return;
+    }
+
+    if ( actorIdx < IdMap.size() && IdMap[ actorIdx ] != CRIdentity::InvalidId )
+    {
+        CRIdentity::id_t cursor = IdMap[ actorIdx ];
+       
+        while ( cursor != CRIdentity::InvalidId )
+        {
+            if ( NextInstanceLinks[ cursor ] == oldLastIdx )
+            {
+                NextInstanceLinks[ cursor ] = compIdx;
+                return;
+            }
+            cursor = NextInstanceLinks[ cursor ];
+        }
+    }
+}
+
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Add component.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
+{
+    return _AddInternal( Id );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -118,23 +224,37 @@ T* CRComponent< T >::Add( const CRIdentity::id_t& Id )
 template < typename T >
 bool CRComponent< T >::Remove( const CRIdentity::id_t& Id )
 {
-    CRIdentity::id_t index = CRIdentity::IndexOf( Id );
+    const CRIdentity::id_t actorIdx = CRIdentity::IndexOf( Id );
 
-    if ( index >= IdMap.size() ) return false;
-    if ( IdMap[ index ] == CRIdentity::InvalidId ) return false;
-    if ( IdMap[ index ] >= Components.size() ) return false;
+    if ( actorIdx >= IdMap.size() ) return false;
+    if ( IdMap[ actorIdx ] == CRIdentity::InvalidId ) return false;
 
-    const CRIdentity::id_t removedComponentIndex = IdMap[ index ];
+    CRArray< CRIdentity::id_t > toRemove;
+    {
+        CRIdentity::id_t cursor = IdMap[ actorIdx ];
+        while ( cursor != CRIdentity::InvalidId )
+        {
+            assert( cursor < Components.size() );
+            toRemove.push_back( cursor );
+            cursor = NextInstanceLinks[ cursor ];
+        }
+    }
 
-    Components[ removedComponentIndex ].DestroyComponent();
+    for ( CRIdentity::id_t compIdx : toRemove )
+    {
+        Components[ compIdx ].DestroyComponent();
+    }
 
-    CRIdentity::id_t lastedIndex = CRIdentity::IndexOf( Components.back().GetObjectId() );
+    std::sort( toRemove.begin(), toRemove.end(), std::greater< CRIdentity::id_t >() );
 
-    IdMap[ lastedIndex ] = removedComponentIndex;
+    for ( CRIdentity::id_t compIdx : toRemove )
+    {
+        UtilContainer::EraseUnordered( Components,        compIdx );
+        UtilContainer::EraseUnordered( NextInstanceLinks, compIdx );
+        _FixupMovedElement( compIdx );
+    }
 
-    UtilContainer::EraseUnordered( Components, removedComponentIndex );
-
-    IdMap[ index ] = CRIdentity::InvalidId;
+    IdMap[ actorIdx ] = CRIdentity::InvalidId;
 
     return true;
 }
@@ -146,7 +266,7 @@ template < typename T >
 T* CRComponent< T >::Get( const CRIdentity::id_t& Id )
 {
     assert( CRIdentity::IsValid( Id ) );
-    
+
     CRIdentity::id_t index = CRIdentity::IndexOf( Id );
 
     if ( index >= IdMap.size() ) return nullptr;
@@ -156,6 +276,28 @@ T* CRComponent< T >::Get( const CRIdentity::id_t& Id )
     if ( IdMap[ index ] >= Components.size() ) return nullptr;
 
     return CRCast< T >( &Components[ IdMap[ index ] ] );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get all components.
+//---------------------------------------------------------------------------------------------------------------------
+template < typename T >
+CRArray< T* > CRComponent< T >::GetAll( const CRIdentity::id_t& Id )
+{
+    CRArray< T* > result;
+    const CRIdentity::id_t actorIdx = CRIdentity::IndexOf( Id );
+
+    if ( actorIdx >= IdMap.size() ) return result;
+
+    CRIdentity::id_t cursor = IdMap[ actorIdx ];
+    while ( cursor != CRIdentity::InvalidId )
+    {
+        assert( cursor < Components.size() );
+        result.push_back( CRCast< T >( &Components[ cursor ] ) );
+        cursor = NextInstanceLinks[ cursor ];
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -175,6 +317,7 @@ void CRComponent< T >::UpdateComponents( float DeltaSeconds )
                 component.OnDisabled();
                 component.bWasEnabled = false;
             }
+
             continue;
         }
 
@@ -200,6 +343,7 @@ void CRComponent< T >::PreRenderComponents( float DeltaSeconds )
                 component.OnDisabled();
                 component.bWasEnabled = false;
             }
+
             continue;
         }
 

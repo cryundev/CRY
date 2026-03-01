@@ -13,7 +13,8 @@
 class CRPrimitiveComponent : public CRComponent< CRPrimitiveComponent >
 {
 public:
-    static constexpr ECRComponentPriority Priority = ECRComponentPriority::Primitive; /// Component priority.
+    static constexpr ECRComponentPriority Priority    = ECRComponentPriority::Primitive; /// Component priority.
+    static constexpr bool                 IsExclusive = false;                           /// Allows multiple primitive components per actor.
 
 private:
     CRString              AssetPath;
@@ -41,6 +42,15 @@ public:
 
     /// Load asset.
     void LoadAsset( const CRString& InAssetPath );
+
+    /// Set render enabled.
+    void SetRenderEnabled( bool bInRender );
+
+    /// Is render enabled.
+    bool IsRenderEnabled() const { return bRender; }
+
+    /// Get mesh.
+    ICRRHIMeshSPtr GetMesh() const { return Mesh.lock(); }
 
     /// Get material.
     ICRRHIMaterialSPtr GetMaterial() const;

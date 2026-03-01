@@ -1,20 +1,20 @@
 #include "CRD11GizmoPass.h"
+#include "../Actor/CRGizmoSystem.h"
 #include "Engine.h"
-#include "../CRD11.h"
-#include "../CRD11RenderingPipeline.h"
-#include "../CRD11ResourceManager.h"
-#include "../Resource/CRD11CompiledShader.h"
-#include "../Resource/CRD11DepthStencilState.h"
-#include "../Resource/CRD11InputLayout.h"
-#include "../Resource/CRD11PixelShader.h"
-#include "../Resource/CRD11RasterizerState.h"
-#include "../Resource/CRD11RenderTargetView.h"
-#include "../Resource/CRD11VertexShader.h"
+#include "Source/RHI/DX11/CRD11.h"
+#include "Source/RHI/DX11/CRD11RenderingPipeline.h"
+#include "Source/RHI/DX11/CRD11ResourceManager.h"
+#include "Source/RHI/DX11/Resource/CRD11CompiledShader.h"
+#include "Source/RHI/DX11/Resource/CRD11DepthStencilState.h"
+#include "Source/RHI/DX11/Resource/CRD11InputLayout.h"
+#include "Source/RHI/DX11/Resource/CRD11PixelShader.h"
+#include "Source/RHI/DX11/Resource/CRD11RasterizerState.h"
+#include "Source/RHI/DX11/Resource/CRD11RenderTargetView.h"
+#include "Source/RHI/DX11/Resource/CRD11VertexShader.h"
 #include "Source/Object/Camera/CRCamera.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/RHI/ICRRHIRenderer.h"
-#include "Source/RHI/Gizmo/CRGizmoSystem.h"
 #include "Source/Utility/Log/CRLog.h"
 #include "Source/World/CRWorld.h"
 #include <filesystem>
@@ -41,13 +41,13 @@ void CRD11GizmoPass::Resize( u32 /*Width*/, u32 /*Height*/ )
     Buffer.Create( "GizmoBuffer", (u32)( EConstBufferSlotVS::Gizmo ), ED11RenderingPipelineStage::VS );
 
     CRGizmoVSConstants gizmoData;
-    gizmoData.GizmoTransform = CRMatrix::Identity.Transpose();
-    gizmoData.GizmoColor     = CRVector4D( 1.0f, 1.0f, 0.0f, 1.0f );
-    gizmoData.GizmoPivot     = CRVector4D( 0.0f, 0.0f, 0.0f, 1.0f );
-    gizmoData.GizmoPixelSize = 96.0f;
-    gizmoData.ViewportHeight = 1080.0f;
+    gizmoData.GizmoTransform        = CRMatrix::Identity.Transpose();
+    gizmoData.GizmoColor            = CRVector4D( 1.0f, 1.0f, 0.0f, 1.0f );
+    gizmoData.GizmoPivot            = CRVector4D( 0.0f, 0.0f, 0.0f, 1.0f );
+    gizmoData.GizmoPixelSize        = 96.0f;
+    gizmoData.ViewportHeight        = 1080.0f;
     gizmoData.ProjectionCotHalfFovY = 1.0f;
-    gizmoData.AxisType       = 0.0f;
+    gizmoData.AxisType              = 0.0f;
 
     Buffer.Update( gizmoData );
 }
@@ -59,7 +59,7 @@ void CRD11GizmoPass::OnPreDraw()
 {
     bHasCapturedPipelineState = false;
     if ( !_BindSceneTargets() ) return;
-    
+
     GD11RP.CapturePipelineStates();
     bHasCapturedPipelineState = true;
 
@@ -91,7 +91,7 @@ void CRD11GizmoPass::OnPostDraw()
 
     GD11RP.SetShaderResourceView( nullptr, 0, ED11RenderingPipelineStage::PS );
     GD11RP.RestorePipelineStates();
-    
+
     bHasCapturedPipelineState = false;
 }
 
@@ -151,7 +151,7 @@ bool CRD11GizmoPass::_CreateStates()
 //---------------------------------------------------------------------------------------------------------------------
 bool CRD11GizmoPass::_CreateShadersAndLayout()
 {
-    std::filesystem::path shaderPath = std::filesystem::path( __FILE__ ).parent_path() / "../HLSL/gizmo.hlsl";
+    std::filesystem::path shaderPath = std::filesystem::path( __FILE__ ).parent_path() / "Shader/gizmo.hlsl";
     if ( !std::filesystem::exists( shaderPath ) )
     {
         GLog.AddLog( "[CRD11GizmoPass] Failed to find gizmo shader file." );
@@ -160,7 +160,7 @@ bool CRD11GizmoPass::_CreateShadersAndLayout()
 
     CRD11CompiledShader compiledVS;
     CRD11CompiledShader compiledPS;
-    
+
     compiledVS.Create( shaderPath.wstring(), "VS", "vs_5_0" );
     compiledPS.Create( shaderPath.wstring(), "PS", "ps_5_0" );
 
@@ -209,14 +209,13 @@ bool CRD11GizmoPass::_BindSceneTargets() const
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Draw gizmo elements from gizmo system (Phase2-1 stub).
+/// Draw gizmo elements from gizmo system.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11GizmoPass::_DrawGizmoElementsFromSystem()
 {
     if ( !GGizmoSystem.IsVisible() ) return;
-
-    ICRRHIMeshSPtr gizmoMesh = GGizmoSystem.GetArrowMesh();
-    if ( !gizmoMesh ) return;
+    CRGizmoActor* gizmoActor = GGizmoSystem.GetGizmoActor();
+    if ( !gizmoActor ) return;
 
     f32 viewportHeight = 1080.0f;
     if ( ICRRHIRenderer* renderer = GRHI.GetRenderer() )
@@ -238,21 +237,26 @@ void CRD11GizmoPass::_DrawGizmoElementsFromSystem()
         projectionCotHalfFovY = 1.0f;
     }
 
-    const CRVector&   pivot      = GGizmoSystem.GetPivot();
+    const CRVector&   pivot      = gizmoActor->GetPivot();
     const CRVector4D& gizmoPivot = CRVector4D( pivot.x, pivot.y, pivot.z, 1.0f );
 
-    for ( u32 axisIndex = 0; axisIndex < (u32)ECRGizmoAxis::Max; ++axisIndex )
+    const u32 renderElementCount = gizmoActor->GetRenderElementCount();
+    for ( u32 elementIndex = 0; elementIndex < renderElementCount; ++elementIndex )
     {
-        const ECRGizmoAxis axis = (ECRGizmoAxis)axisIndex;
+        CRGizmoRenderElement renderElement;
+        if ( !gizmoActor->GetRenderElement( elementIndex, renderElement ) ) continue;
+
+        ICRRHIMeshSPtr gizmoMesh = renderElement.Mesh;
+        if ( !gizmoMesh ) continue;
 
         CRGizmoVSConstants gizmoData;
-        gizmoData.GizmoTransform        = GGizmoSystem.CreateAxisTransform( axis ).Transpose();
-        gizmoData.GizmoColor            = GGizmoSystem.GetAxisColor( axis );
+        gizmoData.GizmoTransform        = renderElement.Transform.Transpose();
+        gizmoData.GizmoColor            = renderElement.Color;
         gizmoData.GizmoPivot            = gizmoPivot;
         gizmoData.GizmoPixelSize        = 96.0f;
         gizmoData.ViewportHeight        = viewportHeight;
         gizmoData.ProjectionCotHalfFovY = projectionCotHalfFovY;
-        gizmoData.AxisType              = (f32)axisIndex;
+        gizmoData.AxisType              = renderElement.Type;
 
         Buffer.Update( gizmoData );
 

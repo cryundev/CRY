@@ -10,7 +10,14 @@
 //---------------------------------------------------------------------------------------------------------------------
 CR_ENGINE_API bool InitializeViewport( HWND hWnd, i32 Width, i32 Height )
 {
-    return CREngine::Initialize( hWnd, (u32)Width, (u32)Height );
+    const bool bResult = CREngine::Initialize( hWnd, (u32)Width, (u32)Height );
+
+    if ( bResult )
+    {
+        CREditorRuntime::InitializeRuntime();
+    }
+
+    return bResult;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -18,6 +25,7 @@ CR_ENGINE_API bool InitializeViewport( HWND hWnd, i32 Width, i32 Height )
 //---------------------------------------------------------------------------------------------------------------------
 CR_ENGINE_API void ShutdownViewport()
 {
+    CREditorRuntime::ShutdownRuntime();
     CREngine::Shutdown();
 }
 

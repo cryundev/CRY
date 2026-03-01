@@ -12,7 +12,8 @@
 class CRCollisionComponent : public CRComponent< CRCollisionComponent >
 {
 public:
-    static constexpr ECRComponentPriority Priority = ECRComponentPriority::Collision; /// Component priority.
+    static constexpr ECRComponentPriority Priority    = ECRComponentPriority::Collision; /// Component priority.
+    static constexpr bool                 IsExclusive = false;                           /// Allows multiple collision components per actor.
 
 private:
     bool     bQueryEnabled     = true;

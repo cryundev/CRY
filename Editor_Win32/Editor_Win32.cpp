@@ -15,9 +15,9 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// global variables
 //---------------------------------------------------------------------------------------------------------------------
-HINSTANCE hInst;                           // 현재 인스턴스입니다.
-WCHAR     szTitle      [ MAX_LOADSTRING ]; // 제목 표시줄 텍스트입니다.
-WCHAR     szWindowClass[ MAX_LOADSTRING ]; // 기본 창 클래스 이름입니다.
+HINSTANCE hInst;                           // Current instance.
+WCHAR     szTitle      [ MAX_LOADSTRING ]; // Title bar text.
+WCHAR     szWindowClass[ MAX_LOADSTRING ]; // Main window class name.
 
 
 CRUIManager GUIManager;
@@ -114,7 +114,7 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 //---------------------------------------------------------------------------------------------------------------------
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
-    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
+    hInst = hInstance; // Store the instance handle in the global variable.
 
     constexpr int width  = 1400;
     constexpr int height = 900;
@@ -124,7 +124,7 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 
     if ( !CREngine::Initialize( hWnd, width, height ) )
     {
-        MessageBoxW( hWnd, L"엔진 초기화에 실패했습니다.", L"CRY Engine", MB_OK | MB_ICONERROR );
+        MessageBoxW( hWnd, L"Engine initialization failed.", L"CRY Engine", MB_OK | MB_ICONERROR );
         DestroyWindow( hWnd );
         return FALSE;
     }

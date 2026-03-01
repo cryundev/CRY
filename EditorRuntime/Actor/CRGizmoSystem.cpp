@@ -1,8 +1,9 @@
 #include "CRGizmoSystem.h"
+#include "CRAxisGizmoActor.h"
+#include "Engine.h"
 #include "Source/Asset/CRPrimitiveAsset.h"
-#include "Source/RHI/CRRHI.h"
-#include "Source/RHI/ICRRHIMesh.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/World/CRWorld.h"
 #include <filesystem>
 
 
@@ -16,16 +17,14 @@ namespace
 //---------------------------------------------------------------------------------------------------------------------
 std::filesystem::path _ResolveGizmoArrowAssetPath()
 {
-    std::filesystem::path assetPath = std::filesystem::path( __FILE__ ).parent_path() / "../../../../Asset/Gizmo/Arrow.cra";
+    std::filesystem::path assetPath = std::filesystem::path( __FILE__ ).parent_path() / "../../Asset/Gizmo/Arrow.cra";
     if ( std::filesystem::exists( assetPath ) )
     {
         return assetPath.lexically_normal();
     }
 
-    // Runtime working directory can be x64/DebugEditor or Editor_WPF/bin/... .
-    // Search current directory and parent hierarchy for Asset/Gizmo/Arrow.cra.
     std::filesystem::path currentPath = std::filesystem::current_path();
-    for ( i32 i = 0; i < 8; ++i )
+    for ( i32 pathDepth = 0; pathDepth < 8; ++pathDepth )
     {
         const std::filesystem::path candidate = currentPath / "Asset/Gizmo/Arrow.cra";
         if ( std::filesystem::exists( candidate ) )
@@ -33,7 +32,11 @@ std::filesystem::path _ResolveGizmoArrowAssetPath()
             return candidate.lexically_normal();
         }
 
-        if ( !currentPath.has_parent_path() ) break;
+        if ( !currentPath.has_parent_path() )
+        {
+            break;
+        }
+
         currentPath = currentPath.parent_path();
     }
 
@@ -43,7 +46,7 @@ std::filesystem::path _ResolveGizmoArrowAssetPath()
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Initialize gizmo resources (loads prebuilt CRA asset).
+/// Initialize.
 //---------------------------------------------------------------------------------------------------------------------
 bool CRGizmoSystem::Initialize()
 {
@@ -69,43 +72,72 @@ bool CRGizmoSystem::Initialize()
         return false;
     }
 
-    ICRRHIMeshSPtr arrowMesh = GRHI.CreateMesh();
-    if ( !arrowMesh ) return false;
+    if ( !GWorld )
+    {
+        GLog.AddLog( "[CRGizmoSystem] GWorld is not available. Gizmo actor not spawned." );
+        return true;
+    }
 
-    arrowMesh->InitializePrimitive( "GizmoArrowMesh", primitiveAsset );
-    ArrowMesh = arrowMesh;
+    GizmoActor = GWorld->SpawnActor< CRAxisGizmoActor >();
+    if ( !GizmoActor )
+    {
+        GLog.AddLog( "[CRGizmoSystem] Failed to spawn CRAxisGizmoActor." );
+        return true;
+    }
 
-    Pivot    = CRVector::Zero;
+    if ( !GizmoActor->InitializeGizmo( assetPath.string(), primitiveAsset ) )
+    {
+        GLog.AddLog( "[CRGizmoSystem] Failed to initialize gizmo actor resources." );
+    }
+
     bVisible = false;
 
     return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Release gizmo resources.
+/// Shutdown.
 //---------------------------------------------------------------------------------------------------------------------
 void CRGizmoSystem::Shutdown()
 {
-    ArrowMesh.reset();
+    if ( GizmoActor && GWorld )
+    {
+        GWorld->DespawnActor( GizmoActor->GetObjectId() );
+        GizmoActor = nullptr;
+    }
 
-    Pivot    = CRVector::Zero;
     bVisible = false;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Get gizmo arrow mesh.
+/// Is ready.
 //---------------------------------------------------------------------------------------------------------------------
-ICRRHIMeshSPtr CRGizmoSystem::GetArrowMesh() const
+bool CRGizmoSystem::IsReady() const
 {
-    return ArrowMesh.lock();
+    if ( !GizmoActor ) return false;
+
+    const u32 renderElementCount = GizmoActor->GetRenderElementCount();
+    if ( renderElementCount == 0 ) return false;
+
+    for ( u32 elementIndex = 0; elementIndex < renderElementCount; ++elementIndex )
+    {
+        CRGizmoRenderElement renderElement;
+        if ( !GizmoActor->GetRenderElement( elementIndex, renderElement ) ) return false;
+        if ( !renderElement.Mesh ) return false;
+    }
+
+    return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Set pivot and make gizmo visible.
+/// Set pivot.
 //---------------------------------------------------------------------------------------------------------------------
 void CRGizmoSystem::SetPivot( const CRVector& InPivot )
 {
-    Pivot = InPivot;
+    if ( GizmoActor )
+    {
+        GizmoActor->SetPivot( InPivot );
+    }
 
     if ( IsReady() )
     {
@@ -114,34 +146,9 @@ void CRGizmoSystem::SetPivot( const CRVector& InPivot )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Create axis world transform.
+/// Get pivot.
 //---------------------------------------------------------------------------------------------------------------------
-CRMatrix CRGizmoSystem::CreateAxisTransform( ECRGizmoAxis Axis ) const
+CRVector CRGizmoSystem::GetPivot() const
 {
-    CRMatrix rotation = CRMatrix::Identity;
-
-    switch ( Axis )
-    {
-        case ECRGizmoAxis::X: rotation = CRMatrix::Identity; break;
-        case ECRGizmoAxis::Y: rotation = CRMatrix::CreateFromAxisAngle( CRVector( 0.f,  0.f, 1.f ), DirectX::XM_PIDIV2 ); break;
-        case ECRGizmoAxis::Z: rotation = CRMatrix::CreateFromAxisAngle( CRVector( 0.f, -1.f, 0.f ), DirectX::XM_PIDIV2 ); break;
-        default: break;
-    }
-
-    return rotation * CRMatrix::CreateTranslation( Pivot );
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Get axis render color.
-//---------------------------------------------------------------------------------------------------------------------
-CRVector4D CRGizmoSystem::GetAxisColor( ECRGizmoAxis Axis ) const
-{
-    switch ( Axis )
-    {
-        case ECRGizmoAxis::X: return CRVector4D( 1.0f, 0.25f, 0.25f, 1.0f );
-        case ECRGizmoAxis::Y: return CRVector4D( 0.30f, 1.0f, 0.30f, 1.0f );
-        case ECRGizmoAxis::Z: return CRVector4D( 0.30f, 0.55f, 1.0f, 1.0f );
-    }
-
-    return CRVector4D( 1.0f, 1.0f, 1.0f, 1.0f );
+    return GizmoActor ? GizmoActor->GetPivot() : CRVector::Zero;
 }
