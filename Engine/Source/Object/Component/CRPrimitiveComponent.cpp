@@ -55,6 +55,7 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
                 CRRenderElement renderElement;
                 renderElement.Mesh     = Mesh;
                 renderElement.Material = Material;
+                renderElement.OwnerId  = ObjectId;
                 
                 RenderElementHandle = GRHI.GetRenderer()->AddRenderElement( renderElement );
             }
@@ -107,6 +108,7 @@ void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
         CRRenderElement renderElement;
         renderElement.Mesh     = Mesh;
         renderElement.Material = Material;
+        renderElement.OwnerId  = ObjectId;
         
         RenderElementHandle = GRHI.GetRenderer()->AddRenderElement( renderElement );
     }

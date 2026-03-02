@@ -4,6 +4,7 @@
 #include "CRRHITypes.h"
 #include "Source/Core/Containers/CRPackedArray.h"
 #include "Source/Core/CRTypes.h"
+#include "Source/Core/Identify/CRIdentity.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -19,4 +20,5 @@ struct CRRenderElement
 {
     ICRRHIMeshWPtr     Mesh;
     ICRRHIMaterialWPtr Material;
+    CRIdentity::id_t   OwnerId = CRIdentity::InvalidId;
 };

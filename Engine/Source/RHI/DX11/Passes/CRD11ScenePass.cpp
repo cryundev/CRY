@@ -4,6 +4,9 @@
 #include "../Resource/CRD11Device.h"
 #include "Source/RHI/ICRRHIMaterial.h"
 #include "Source/RHI/ICRRHIMesh.h"
+#include "Source/Object/Component/CRTransformComponent.h"
+#include "Source/RHI/CRRHI.h"
+#include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/Utility/Generic/CRGeneric.h"
 
 
@@ -69,12 +72,25 @@ void CRD11ScenePass::OnPreDraw()
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11ScenePass::OnDrawRenderElements( const CRPackedArray< CRRenderElement >& RenderElements )
 {
-    RenderElements.ForEachActive( [] ( const CRRenderElementHandle&, const CRRenderElement& Element )
+    ICRRHIRenderer* renderer = GRHI.GetRenderer();
+    if ( !renderer ) return;
+
+    RenderElements.ForEachActive( [ renderer ] ( const CRRenderElementHandle&, const CRRenderElement& Element )
     {
         ICRRHIMeshSPtr     mesh     = Element.Mesh    .lock();
         ICRRHIMaterialSPtr material = Element.Material.lock();
         
         if ( !mesh || !material ) return;
+
+        CRMatrix worldMatrix = CRMatrix::Identity;
+
+        if ( CRTransformComponent* transform = CRTransformComponent::Get( Element.OwnerId ) )
+        {
+            transform->UpdateComponent( 0.0f );
+            worldMatrix = transform->GetLocalMatrix();
+        }
+
+        renderer->UpdateTransformBuffer( worldMatrix );
 
         mesh    ->SetInRenderingPipeline();
         material->SetInRenderingPipeline();
