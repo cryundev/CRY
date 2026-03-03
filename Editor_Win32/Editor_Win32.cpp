@@ -1,11 +1,14 @@
 #include "framework.h"
 #include "Editor_Win32.h"
+#include "../EditorRuntime/EditorRuntime.h"
 #include "../EditorRuntime/Input/CRInputProcessorCamera.h"
 #include "../EditorRuntime/Input/CRInputProcessorPicking.h"
 #include "UI/CREditorUI.h"
 #include "UI/CRUIManager.h"
 #include <Extras/ImGUI/imgui.h>
+#include <Source/Core/Math/CRMath.h>
 #include <Source/RHI/CRRHI.h>
+#include <Source/World/CRWorld.h>
 #include <Engine.h>
 
 
@@ -52,7 +55,7 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
     MSG    msg;
 
     float deltaSeconds = 0.f;
-    
+
     while( true )
     {
         if ( PeekMessage( &msg, nullptr, 0, 0, PM_REMOVE ) )
@@ -63,11 +66,11 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		    if ( msg.message == WM_QUIT || msg.message == WM_DESTROY ) break;
 	    }
 
-        
+
         GFrameTime.Start();
 
         CREditorRuntimeWin32Input::TickCamera( deltaSeconds );
-        
+
         CREngine::Tick( deltaSeconds );
 
         if ( CREngine::PreRender( deltaSeconds ) )
@@ -75,10 +78,10 @@ int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
             CREngine::Render( deltaSeconds );
 
             GUIManager.Draw();
-            
+
             CREngine::PostRender( deltaSeconds );
         }
-        
+
         deltaSeconds = GFrameTime.Finish();
     }
 
@@ -122,12 +125,20 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
     HWND hWnd = CreateWindowW( szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, width, height, nullptr, nullptr, hInstance, nullptr );
     if ( !hWnd ) return false;
 
-    if ( !CREngine::Initialize( hWnd, width, height ) )
+    RECT clientRect = {};
+    GetClientRect( hWnd, &clientRect );
+
+    const i32 viewportW = CRMath::Max< i32 >( 1, (i32)( clientRect.right  - clientRect.left ) );
+    const i32 viewportH = CRMath::Max< i32 >( 1, (i32)( clientRect.bottom - clientRect.top  ) );
+
+    if ( !CREngine::Initialize( hWnd, (u32)viewportW, (u32)viewportH ) )
     {
         MessageBoxW( hWnd, L"Engine initialization failed.", L"CRY Engine", MB_OK | MB_ICONERROR );
         DestroyWindow( hWnd );
         return FALSE;
     }
+
+    CREditorRuntime::InitializeRuntime();
 
     GUIManager.AddUI( new CREditorUI() );
 
@@ -144,6 +155,30 @@ extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler( HWND hWnd, UINT ms
 namespace
 {
 //---------------------------------------------------------------------------------------------------------------------
+/// Resize camera and renderer viewport to current client size.
+//---------------------------------------------------------------------------------------------------------------------
+void _ResizeViewportToClientRect( HWND hWnd )
+{
+    if ( !GRHI.IsInitialized() ) return;
+
+    RECT clientRect = {};
+    if ( !GetClientRect( hWnd, &clientRect ) ) return;
+
+    const i32 viewportW = CRMath::Max< i32 >( 1, (i32)( clientRect.right  - clientRect.left ) );
+    const i32 viewportH = CRMath::Max< i32 >( 1, (i32)( clientRect.bottom - clientRect.top  ) );
+
+    if ( GWorld )
+    {
+        if ( CRCamera* camera = GWorld->GetCamera() )
+        {
+            camera->SetViewSize( (f32)viewportW, (f32)viewportH );
+        }
+    }
+
+    GRHI.Resize( (u32)viewportW, (u32)viewportH );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// WM_ACTIVATEAPP
 //---------------------------------------------------------------------------------------------------------------------
 LRESULT _OnActivateApp( HWND hWnd, WPARAM wParam )
@@ -152,6 +187,18 @@ LRESULT _OnActivateApp( HWND hWnd, WPARAM wParam )
     {
         CREditorRuntimeWin32Input::OnKillFocus( hWnd );
     }
+
+    return 0;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// WM_SIZE
+//---------------------------------------------------------------------------------------------------------------------
+LRESULT _OnSize( HWND hWnd, WPARAM wParam )
+{
+    if ( wParam == SIZE_MINIMIZED ) return 0;
+
+    _ResizeViewportToClientRect( hWnd );
 
     return 0;
 }
@@ -172,7 +219,7 @@ LRESULT _OnMouseMessage( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 //---------------------------------------------------------------------------------------------------------------------
 LRESULT _OnMouseActivate()
 {
-    return MA_ACTIVATEANDEAT;
+    return MA_ACTIVATE;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -213,7 +260,7 @@ LRESULT _OnSysKeyDown( WPARAM wParam, LPARAM lParam )
 LRESULT _OnSysKeyUp( WPARAM wParam, LPARAM lParam )
 {
     CREditorRuntimeWin32Input::OnKeyboardMessage( wParam, lParam, false );
-    
+
     return 0;
 }
 
@@ -223,7 +270,7 @@ LRESULT _OnSysKeyUp( WPARAM wParam, LPARAM lParam )
 LRESULT _OnKillFocus( HWND hWnd )
 {
     CREditorRuntimeWin32Input::OnKillFocus( hWnd );
-    
+
     return 0;
 }
 
@@ -246,8 +293,8 @@ LRESULT _OnCommand( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 LRESULT _OnPaint( HWND hWnd )
 {
     PAINTSTRUCT ps;
-    
-    BeginPaint( hWnd, &ps );    
+
+    BeginPaint( hWnd, &ps );
     EndPaint  ( hWnd, &ps );
 
     return 0;
@@ -259,7 +306,9 @@ LRESULT _OnPaint( HWND hWnd )
 LRESULT _OnDestroy( HWND hWnd )
 {
     CREditorRuntimeWin32Input::OnKillFocus( hWnd );
+    CREditorRuntime::ShutdownRuntime();
     CREngine::Shutdown();
+
     PostQuitMessage( 0 );
 
     return 0;
@@ -274,10 +323,11 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 {
     if ( ImGui_ImplWin32_WndProcHandler( hWnd, message, wParam, lParam ) )
         return true;
-    
+
     switch ( message )
     {
     case WM_ACTIVATEAPP:   return _OnActivateApp   ( hWnd, wParam );
+    case WM_SIZE:          return _OnSize          ( hWnd, wParam );
     case WM_ACTIVATE:
     case WM_INPUT:
     case WM_MOUSEMOVE:

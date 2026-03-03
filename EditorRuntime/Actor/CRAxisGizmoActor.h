@@ -35,6 +35,9 @@ private:
     /// Get axis collision component.
     CRCollisionComponent* _GetAxisCollision( ECRAxis Axis ) const;
 
+    /// Compute current gizmo world scale used by shader.
+    f32 _ComputeGizmoWorldScale() const;
+
     /// Get axis transform.
     CRMatrix _GetAxisTransform( ECRAxis Axis ) const;
 

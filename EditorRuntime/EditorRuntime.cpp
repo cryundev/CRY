@@ -23,21 +23,21 @@ struct CRViewportMouseState
 {
     i32 PixelX = 0;
     i32 PixelY = 0;
-    
+
     i32 PreviousPixelX = 0;
     i32 PreviousPixelY = 0;
 
     i32 ViewportWidth  = 1;
     i32 ViewportHeight = 1;
-    
+
     i32 WheelDelta     = 0;
 
     f32 NdcX = 0.0f;
     f32 NdcY = 0.0f;
-    
+
     bool bLeftPressed  = false;
     bool bRightPressed = false;
-    
+
     bool bHasPreviousPixel = false;
 
     CRRay Ray;
@@ -66,7 +66,7 @@ struct CRViewportSelectionState
     CRIdentity::id_t SelectedActorId = CRIdentity::InvalidId;
 };
 
-    
+
 CRViewportMouseState     GViewportMouseState;
 CRViewportKeyboardState  GViewportKeyboardState;
 CRViewportSelectionState GViewportSelectionState;
@@ -74,7 +74,7 @@ CRViewportSelectionState GViewportSelectionState;
 static constexpr f32 CameraMoveSpeed       = 50.0f;
 static constexpr f32 CameraLookSensitivity = 0.0025f;
 
-    
+
 //---------------------------------------------------------------------------------------------------------------------
 /// Convert pixel coordinates to NDC.
 //---------------------------------------------------------------------------------------------------------------------
@@ -119,12 +119,12 @@ void CommitPointerAsPrevious()
 bool TryUpdateMouseRay( f32 NdcX, f32 NdcY )
 {
     GViewportMouseState.bHasRay = false;
-    
+
     if ( !GWorld ) return false;
     if ( !GWorld->GetCamera() ) return false;
 
     CRRay ray;
-    
+
     if ( !UtilRay::TryCreateRayFromNDC( NdcX, NdcY, ray ) ) return false;
 
     GViewportMouseState.Ray     = ray;
@@ -221,7 +221,7 @@ void ApplyViewportLook( CRTransformComponent* Transform )
 void UpdateSelectionGizmoState()
 {
     if ( !GGizmoSystem.IsReady() ) return;
-    
+
     GGizmoSystem.SetVisible( false );
 
     if ( !GWorld ) return;
@@ -230,7 +230,7 @@ void UpdateSelectionGizmoState()
     CRActor* selectedActor = GWorld->GetActor( CRObjectId( GViewportSelectionState.SelectedActorId ) );
     if ( !selectedActor )
     {
-        GViewportSelectionState.SelectedActorId = CRIdentity::InvalidId;        
+        GViewportSelectionState.SelectedActorId = CRIdentity::InvalidId;
         return;
     }
 
@@ -239,6 +239,43 @@ void UpdateSelectionGizmoState()
 
     GGizmoSystem.SetPivot( selectedTransform->GetLocation() );
     GGizmoSystem.SetVisible( true );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Try update pointer ray from screen.
+//---------------------------------------------------------------------------------------------------------------------
+bool TryUpdatePointerRayFromScreen( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH )
+{
+    f32 ndcX = 0.0f;
+    f32 ndcY = 0.0f;
+
+    if ( !TryConvertToNdc( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY ) ) return false;
+
+    StorePointerState( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY );
+    TryUpdateMouseRay( ndcX, ndcY );
+
+    return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get selected actor.
+//---------------------------------------------------------------------------------------------------------------------
+CRActor* GetSelectedActor()
+{
+    if ( !GWorld ) return nullptr;
+    if ( !CRIdentity::IsValid( GViewportSelectionState.SelectedActorId ) ) return nullptr;
+
+    return GWorld->GetActor( CRObjectId( GViewportSelectionState.SelectedActorId ) );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Try begin gizmo drag from current ray.
+//---------------------------------------------------------------------------------------------------------------------
+bool TryBeginGizmoDragFromCurrentRay()
+{
+    if ( !GViewportMouseState.bHasRay ) return false;
+
+    return GGizmoSystem.TryBeginDragFromRay( GViewportMouseState.Ray );
 }
 }
 
@@ -276,13 +313,12 @@ void ShutdownRuntime()
 //---------------------------------------------------------------------------------------------------------------------
 void OnViewportMouseMove( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH )
 {
-    f32 ndcX = 0.0f;
-    f32 ndcY = 0.0f;
+    if ( !TryUpdatePointerRayFromScreen( PixelX, PixelY, ViewportW, ViewportH ) ) return;
 
-    if ( !TryConvertToNdc( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY ) ) return;
-
-    StorePointerState( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY );
-    TryUpdateMouseRay( ndcX, ndcY );
+    if ( GViewportMouseState.bHasRay )
+    {
+        GGizmoSystem.ApplyDragFromRay( GViewportMouseState.Ray, GetSelectedActor() );
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -290,30 +326,31 @@ void OnViewportMouseMove( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH )
 //---------------------------------------------------------------------------------------------------------------------
 void OnViewportMouseButton( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH, i32 Button, bool bPressed )
 {
-    f32 ndcX = 0.0f;
-    f32 ndcY = 0.0f;
+    if ( !TryUpdatePointerRayFromScreen( PixelX, PixelY, ViewportW, ViewportH ) ) return;
 
-    if ( !TryConvertToNdc( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY ) ) return;
-
-    StorePointerState( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY );
-    TryUpdateMouseRay( ndcX, ndcY );
-    
     switch ( Button )
     {
-    case 0: GViewportMouseState.bLeftPressed  = bPressed; break;
-    case 1: GViewportMouseState.bRightPressed = bPressed;
+    case 0:
+        GViewportMouseState.bLeftPressed = bPressed;
+        if ( !bPressed && GGizmoSystem.IsDragging() )
         {
-            if ( bPressed )
-            {
-                CommitPointerAsPrevious();
-            }
-            else
-            {
-                GViewportMouseState.bHasPreviousPixel = false;
-            }
+            GGizmoSystem.EndDrag();
         }
         break;
-    default: break; 
+
+    case 1:
+        GViewportMouseState.bRightPressed = bPressed;
+        if ( bPressed )
+        {
+            CommitPointerAsPrevious();
+        }
+        else
+        {
+            GViewportMouseState.bHasPreviousPixel = false;
+        }
+        break;
+
+    default: break;
     }
 }
 
@@ -331,6 +368,21 @@ void OnViewportKeyState( i32 VirtualKey, bool bPressed )
 void OnViewportMouseWheel( i32 WheelDelta )
 {
     GViewportMouseState.WheelDelta += WheelDelta;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Pick actor or begin gizmo drag.
+//---------------------------------------------------------------------------------------------------------------------
+CRIdentity::id_t PickActorOrBeginGizmoDrag( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH )
+{
+    if ( !TryUpdatePointerRayFromScreen( PixelX, PixelY, ViewportW, ViewportH ) ) return CRIdentity::IdMask;
+    if ( TryBeginGizmoDragFromCurrentRay() ) return GViewportSelectionState.SelectedActorId;
+
+    const CRIdentity::id_t pickedActorId = UtilRay::PickActorAtScreen( PixelX, PixelY, ViewportW, ViewportH );
+    
+    OnActorPicked( pickedActorId );
+
+    return pickedActorId;
 }
 
 //---------------------------------------------------------------------------------------------------------------------

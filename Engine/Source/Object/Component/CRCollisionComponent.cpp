@@ -14,17 +14,6 @@ void CRCollisionComponent::OnDisabled()
 void CRCollisionComponent::UpdateComponent( float DeltaSeconds )
 {
     (void)DeltaSeconds;
-
-    CRTransformComponent* transform = CRTransformComponent::Get( ObjectId );
-    if ( !transform ) return;
-
-    const CRVector& scale    = transform->GetScale();
-    const CRVector& absScale = CRVector( CRMath::Abs( scale.x ), CRMath::Abs( scale.y ), CRMath::Abs( scale.z ) );
-
-    const CRVector& worldCenter      = transform->GetLocation() + LocalCenter;
-    const CRVector& worldHalfExtents = CRVector( LocalHalfExtents.x * absScale.x, LocalHalfExtents.y * absScale.y, LocalHalfExtents.z * absScale.z );
-
-    CachedWorldBounds = CRAABB::FromCenterExtents( worldCenter, worldHalfExtents );
 }
 
 //---------------------------------------------------------------------------------------------------------------------

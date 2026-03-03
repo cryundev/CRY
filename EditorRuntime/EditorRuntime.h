@@ -6,7 +6,7 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Editor runtime shared between editor frontends (WPF/Win32 bridge layers).
+/// CREditorRuntime
 //---------------------------------------------------------------------------------------------------------------------
 namespace CREditorRuntime
 {
@@ -18,6 +18,8 @@ namespace CREditorRuntime
     void OnViewportKeyState   ( i32 VirtualKey, bool bPressed );
     void OnViewportMouseWheel ( i32 WheelDelta );
     void OnActorPicked        ( CRIdentity::id_t ActorId );
-    
+
+    CRIdentity::id_t PickActorOrBeginGizmoDrag( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH );
+
     void ApplyViewportCameraInput( f32 DeltaSeconds );
 }

@@ -29,7 +29,7 @@ bool TryConvertToNdc( i32 PixelX, i32 PixelY, i32 ViewportW, i32 ViewportH, f32&
 bool UtilRay::TryCreateRayFromPoints( const CRVector& OriginPoint, const CRVector& TargetPoint, CRRay& OutRay )
 {
     CRVector direction = TargetPoint - OriginPoint;
-    
+
     if ( direction.LengthSquared() <= CRMath::Epsilon ) return false;
     direction.Normalize();
 
@@ -51,7 +51,7 @@ bool UtilRay::TryCreateRayFromNDC( f32 NdcX, f32 NdcY, CRRay& OutRay )
 
     CRVector nearWorldPoint;
     CRVector farWorldPoint;
-    
+
     if ( !camera->TryConvertNdcToWorld( NdcX, NdcY, 0.0f, nearWorldPoint ) ) return false;
     if ( !camera->TryConvertNdcToWorld( NdcX, NdcY, 1.0f, farWorldPoint  ) ) return false;
 
@@ -67,11 +67,11 @@ CRIdentity::id_t UtilRay::PickActorAtScreen( i32 PixelX, i32 PixelY, i32 Viewpor
 
     f32 ndcX = 0.0f;
     f32 ndcY = 0.0f;
-    
+
     if ( !TryConvertToNdc( PixelX, PixelY, ViewportW, ViewportH, ndcX, ndcY ) ) return CRIdentity::IdMask;
 
     CRRay ray;
-    
+
     if ( !UtilRay::TryCreateRayFromNDC( ndcX, ndcY, ray ) ) return CRIdentity::IdMask;
 
     const CRActor* cameraActor = GWorld->GetCamera();
@@ -90,8 +90,9 @@ CRIdentity::id_t UtilRay::PickActorAtScreen( i32 PixelX, i32 PixelY, i32 Viewpor
         if ( !collision->IsEnabled() ) continue;
         if ( !collision->IsQueryEnabled() ) continue;
 
+        const CRAABB worldBounds = collision->CalculateWorldBounds();
         f32 hitT = 0.0f;
-        if ( !collision->GetWorldBounds().Intersects( ray, hitT ) ) continue;
+        if ( !worldBounds.Intersects( ray, hitT ) ) continue;
 
         if ( !bHasHit || hitT < nearestT )
         {
