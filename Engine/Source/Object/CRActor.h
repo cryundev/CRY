@@ -22,9 +22,10 @@ protected:
     using CRComponentTypeHash = size_t;
 
 protected:
-    CRArray< CRComponentRemover > ComponentRemovers;
+    CRArray< CRComponentRemover  > ComponentRemovers;
     CRArray< CRComponentTypeHash > ComponentRemoverTypes;
-    CRWorld*                      World = nullptr;
+    
+    CRWorld* World = nullptr;
     
 public:
     /// Constructor.
