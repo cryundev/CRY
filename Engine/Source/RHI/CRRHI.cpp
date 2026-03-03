@@ -114,7 +114,7 @@ void CRRHI::Resize( u32 Width, u32 Height ) const
     {
         HRESULT hr = swapChain->ResizeBuffers( 0, Width, Height, DXGI_FORMAT_UNKNOWN, 0 );
         
-        if ( !CRGeneric::CheckError( hr ) ) return;
+        if ( CRGeneric::CheckError( hr ) ) return;
     }
 
     Renderer->Resize( Width, Height );
