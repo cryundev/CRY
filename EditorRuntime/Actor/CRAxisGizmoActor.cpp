@@ -127,6 +127,8 @@ bool CRAxisGizmoActor::GetRenderElement( u32 ElementIndex, CRGizmoRenderElement&
     OutRenderElement.Mesh      = mesh;
     OutRenderElement.Transform = _GetAxisTransform( axis );
     OutRenderElement.Color     = _GetAxisColor( axis );
+    OutRenderElement.Pivot     = GetPivot();
+    OutRenderElement.PixelSize = GizmoPixelSize;
     OutRenderElement.Type      = (f32)ElementIndex;
 
     return true;

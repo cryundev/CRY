@@ -143,19 +143,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EditorRuntime.cpp" />
+    <ClCompile Include="Actor\CRActorMarkerSystem.cpp" />
     <ClCompile Include="Actor\CRAxisGizmoActor.cpp" />
     <ClCompile Include="Actor\CRGizmoActor.cpp" />
     <ClCompile Include="Actor\CRGizmoSystem.cpp" />
+    <ClCompile Include="Actor\CRLightActorMarkerProvider.cpp" />
+    <ClCompile Include="Render\CRD11ActorMarkerPass.cpp" />
     <ClCompile Include="Render\CRD11GizmoPass.cpp" />
+    <ClCompile Include="Render\CRD11OverlayPass.cpp" />
     <ClCompile Include="Input\CRInputProcessorCamera.cpp" />
     <ClCompile Include="Input\CRInputProcessorPicking.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorRuntime.h" />
+    <ClInclude Include="Actor\CRActorMarkerProvider.h" />
+    <ClInclude Include="Actor\CRActorMarkerSystem.h" />
     <ClInclude Include="Actor\CRAxisGizmoActor.h" />
     <ClInclude Include="Actor\CRGizmoActor.h" />
     <ClInclude Include="Actor\CRGizmoSystem.h" />
+    <ClInclude Include="Actor\CRLightActorMarkerProvider.h" />
+    <ClInclude Include="Render\CRD11ActorMarkerPass.h" />
     <ClInclude Include="Render\CRD11GizmoPass.h" />
+    <ClInclude Include="Render\CRD11OverlayPass.h" />
     <ClInclude Include="Input\CRInputProcessorCamera.h" />
     <ClInclude Include="Input\CRInputProcessorPicking.h" />
   </ItemGroup>

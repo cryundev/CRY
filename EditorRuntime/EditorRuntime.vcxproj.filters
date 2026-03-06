@@ -14,6 +14,9 @@
     <ClCompile Include="EditorRuntime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Actor\CRActorMarkerSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Actor\CRAxisGizmoActor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -21,6 +24,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Actor\CRGizmoSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Actor\CRLightActorMarkerProvider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Render\CRD11ActorMarkerPass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Render\CRD11GizmoPass.cpp">
@@ -37,6 +46,12 @@
     <ClInclude Include="EditorRuntime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Actor\CRActorMarkerProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\CRActorMarkerSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Actor\CRAxisGizmoActor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -44,6 +59,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actor\CRGizmoSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Actor\CRLightActorMarkerProvider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Render\CRD11ActorMarkerPass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Render\CRD11GizmoPass.h">

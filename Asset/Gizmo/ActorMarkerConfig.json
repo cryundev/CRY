@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "marker_assets": [
+    {
+      "marker_type": "light_directional",
+      "asset_path": "Asset/Gizmo/DirectionalLight.cra"
+    },
+    {
+      "marker_type": "light_spot",
+      "asset_path": "Asset/Gizmo/SpotLight.cra"
+    },
+    {
+      "marker_type": "light_point",
+      "asset_path": "Asset/Gizmo/PointLight.cra"
+    }
+  ],
+  "light_rules": [
+    {
+      "component": "directional_light",
+      "marker_type": "light_directional",
+      "color": [1.0, 0.95, 0.60, 1.0],
+      "pixel_size": 76.0,
+      "pick_radius_pixels": 18.0,
+      "priority": 30,
+      "use_actor_rotation": true
+    },
+    {
+      "component": "spot_light",
+      "marker_type": "light_spot",
+      "color": [0.65, 0.85, 1.0, 1.0],
+      "pixel_size": 72.0,
+      "pick_radius_pixels": 18.0,
+      "priority": 20,
+      "use_actor_rotation": true
+    },
+    {
+      "component": "point_light",
+      "marker_type": "light_point",
+      "color": [1.0, 0.75, 0.45, 1.0],
+      "pixel_size": 68.0,
+      "pick_radius_pixels": 18.0,
+      "priority": 10,
+      "use_actor_rotation": false
+    }
+  ]
+}

@@ -1,11 +1,13 @@
 #include "EditorRuntime.h"
 #include "Engine.h"
+#include "Render/CRD11ActorMarkerPass.h"
 #include "Render/CRD11GizmoPass.h"
 #include "Source/Core/Math/CRRay.h"
 #include "Source/Core/CRSmartPtrMacro.h"
 #include "Source/Object/CRActor.h"
 #include "Source/Object/Camera/CRCamera.h"
 #include "Source/Object/Component/CRTransformComponent.h"
+#include "Actor/CRActorMarkerSystem.h"
 #include "Actor/CRGizmoSystem.h"
 #include "Source/RHI/CRRHI.h"
 #include "Source/RHI/ICRRHIRenderer.h"
@@ -291,9 +293,14 @@ bool InitializeRuntime()
     {
         GLog.AddLog( "[InitializeRuntime] Gizmo system disabled (missing or invalid Asset/Gizmo/Arrow.cra)." );
     }
+    if ( !GActorMarkerSystem.Initialize() )
+    {
+        GLog.AddLog( "[InitializeRuntime] Actor marker system disabled." );
+    }
 
     if ( ICRRHIRenderer* renderer = GRHI.GetRenderer() )
     {
+        renderer->AddRenderPass( CRMakeUnique( new CRD11ActorMarkerPass() ) );
         renderer->AddRenderPass( CRMakeUnique( new CRD11GizmoPass() ) );
     }
 
@@ -305,6 +312,7 @@ bool InitializeRuntime()
 //---------------------------------------------------------------------------------------------------------------------
 void ShutdownRuntime()
 {
+    GActorMarkerSystem.Shutdown();
     GGizmoSystem.Shutdown();
 }
 
@@ -378,7 +386,11 @@ CRIdentity::id_t PickActorOrBeginGizmoDrag( i32 PixelX, i32 PixelY, i32 Viewport
     if ( !TryUpdatePointerRayFromScreen( PixelX, PixelY, ViewportW, ViewportH ) ) return CRIdentity::IdMask;
     if ( TryBeginGizmoDragFromCurrentRay() ) return GViewportSelectionState.SelectedActorId;
 
-    const CRIdentity::id_t pickedActorId = UtilRay::PickActorAtScreen( PixelX, PixelY, ViewportW, ViewportH );
+    CRIdentity::id_t pickedActorId = UtilRay::PickActorAtScreen( PixelX, PixelY, ViewportW, ViewportH );
+    if ( !CRIdentity::IsValid( pickedActorId ) && GViewportMouseState.bHasRay )
+    {
+        pickedActorId = GActorMarkerSystem.TryPickActorByRay( GViewportMouseState.Ray );
+    }
     
     OnActorPicked( pickedActorId );
 

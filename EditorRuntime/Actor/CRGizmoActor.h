@@ -17,6 +17,8 @@ struct CRGizmoRenderElement
     ICRRHIMeshSPtr Mesh      = nullptr;
     CRMatrix       Transform = CRMatrix::Identity;
     CRVector4D     Color     = CRVector4D( 1.0f, 1.0f, 1.0f, 1.0f );
+    CRVector       Pivot     = CRVector::Zero;
+    f32            PixelSize = 96.0f;
     f32            Type      = 0.0f;
 };
 

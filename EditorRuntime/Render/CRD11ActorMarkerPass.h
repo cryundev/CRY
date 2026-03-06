@@ -5,21 +5,21 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRD11GizmoPass
+/// CRD11ActorMarkerPass
 //---------------------------------------------------------------------------------------------------------------------
-class CRD11GizmoPass : public CRD11OverlayPass
+class CRD11ActorMarkerPass : public CRD11OverlayPass
 {
 public:
     /// Get pass name.
-    virtual CRName GetPassName() const override { return "GizmoPass"; }
+    virtual CRName GetPassName() const override { return "ActorMarkerPass"; }
 
 protected:
-    /// Get overlay render config for gizmo pass.
+    /// Get overlay render config for actor marker pass.
     virtual CROverlayPassConfig GetOverlayConfig() const override;
 
-    /// Check whether gizmo draw should run.
+    /// Check whether actor marker draw should run.
     virtual bool CanDrawOverlay() const override;
 
-    /// Draw gizmo elements from gizmo system.
+    /// Draw marker elements from actor marker system.
     virtual void DrawOverlayElements() override;
 };
