@@ -80,7 +80,7 @@ public class ProjectViewModel : ViewModelBase
 
 
     /// Script Management Properties
-    private string[] _availableScripts;
+    private string[] _availableScripts = [];
 
     public string[] AvailableScripts
     {
@@ -126,6 +126,7 @@ public class ProjectViewModel : ViewModelBase
         Debug.Assert( _worlds.Contains( world ) );
         _worlds.Remove( world );
     }
+
 
     //-----------------------------------------------------------------------------------------------------------------
     /// Load
@@ -174,10 +175,18 @@ public class ProjectViewModel : ViewModelBase
             {
                 UnloadGameCodeDll();
 
-                // Subscribe to build completion event
+                CodeEditorManager.BuildCompleted -= OnBuildCompleted;
                 CodeEditorManager.BuildCompleted += OnBuildCompleted;
-                
-                CodeEditorManager.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
+
+                try
+                {
+                    CodeEditorManager.BuildSolution( this, GetConfigurationName( DllBuildConfig ), showWindow );
+                }
+                catch
+                {
+                    CodeEditorManager.BuildCompleted -= OnBuildCompleted;
+                    throw;
+                }
             } );
         }
         catch ( Exception exception )
@@ -193,7 +202,6 @@ public class ProjectViewModel : ViewModelBase
     {
         try
         {
-            // Unsubscribe from the event to avoid multiple calls
             CodeEditorManager.BuildCompleted -= OnBuildCompleted;
             
             if ( success )
@@ -243,6 +251,13 @@ public class ProjectViewModel : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     private void Initialize()
     {
+        _worlds ??= [];
+
+        foreach ( WorldViewModel world in _worlds )
+        {
+            world.Project = this;
+        }
+
         Worlds = new ReadOnlyObservableCollection< WorldViewModel >( _worlds );
         OnPropertyChanged( nameof( Worlds ) );
 

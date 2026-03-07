@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -298,6 +299,22 @@ public class EngineViewportHost : HwndHost
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// ApplyWorldCamera
+    //-----------------------------------------------------------------------------------------------------------------
+    public void ApplyWorldCamera( WorldViewModel? world = null )
+    {
+        if ( !_engineInitialized ) return;
+
+        WorldViewModel? cameraWorld = world ?? ProjectViewModel.Current?.ActiveWorld;
+        if ( cameraWorld == null ) return;
+
+        Vector3 position  = cameraWorld.ViewportCameraPosition;
+        Vector3 direction = cameraWorld.ViewportCameraDirection;
+
+        EngineAPI.Viewport.SetCamera( new EngineAPI.CrVector3Native( position ), new EngineAPI.CrVector3Native( direction ) );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// _TryInitialize
     //-----------------------------------------------------------------------------------------------------------------
     private void _TryInitialize( int width, int height )
@@ -311,6 +328,7 @@ public class EngineViewportHost : HwndHost
 
             if ( _engineInitialized )
             {
+                ApplyWorldCamera();
                 Logger.Log( MessageType.Info, "Engine viewport initialized." );
             }
             else

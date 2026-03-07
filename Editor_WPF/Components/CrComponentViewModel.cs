@@ -24,6 +24,14 @@ public abstract class CrComponentViewModel : CrObjectViewModel
     public abstract IMultiSelectionComponent GetMultiSelectionComponent( MultiSelectionActor multiSelectionActor );
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// SetOwner
+    //-----------------------------------------------------------------------------------------------------------------
+    internal void SetOwner( CrObjectViewModel? owner )
+    {
+        Owner = owner;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// Component
     //-----------------------------------------------------------------------------------------------------------------
     public CrComponentViewModel( CrObjectViewModel? owner )

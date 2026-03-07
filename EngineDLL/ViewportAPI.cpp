@@ -2,7 +2,9 @@
 #include "EngineDLL.h"
 #include "../EditorRuntime/EditorRuntime.h"
 #include "Source/RHI/CRRHI.h"
+#include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/World/CRWorld.h"
+#include "WorldAPI.TransformInternal.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -66,5 +68,39 @@ CR_ENGINE_API void RenderViewport( f32 DeltaSeconds )
     {
         CREngine::Render    ( DeltaSeconds );
         CREngine::PostRender( DeltaSeconds );
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// SetViewportCamera
+//---------------------------------------------------------------------------------------------------------------------
+CR_ENGINE_API void SetViewportCamera( const CRDllVector3* Position, const CRDllVector3* Direction )
+{
+    if ( !Position || !Direction ) return;
+    if ( !GWorld ) return;
+
+    CRCamera* camera = GWorld->GetCamera();
+    if ( !camera ) return;
+
+    CRTransformComponent* cameraTransform = camera->GetTransform();
+    if ( !cameraTransform ) return;
+
+    CRVector lookDirection( Direction->X, Direction->Y, Direction->Z );
+    if ( lookDirection.LengthSquared() <= CRMath::Epsilon )
+    {
+        lookDirection = CRVector( 0.0f, 0.0f, 1.0f );
+    }
+    else
+    {
+        lookDirection.Normalize();
+    }
+
+    cameraTransform->SetLocation( Position->X, Position->Y, Position->Z );
+    cameraTransform->SetRotation( CRQuaternion::Identity );
+    camera->SetLookAtDirection( lookDirection );
+
+    if ( ICRRHIRenderer* renderer = GRHI.GetRenderer() )
+    {
+        renderer->UpdateViewProjectionBuffer( camera->GetViewMatrix(), camera->GetProjectionMatrix() );
     }
 }

@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.InteropServices;
+using Editor_WPF.Components;
 using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
 
@@ -61,11 +62,25 @@ public static partial class EngineAPI
 
         public static Int64 SpawnActor( CrActorViewModel actor )
         {
-            return SpawnActorNative();
+            Int64 actorId = SpawnActorNative();
+            if ( !ID.IsValid( actorId ) ) return actorId;
+
+            Actor.TrySetName( actorId, actor.Name );
+
+            if ( actor.GetComponent< CrTransformComponentViewModel >() is CrTransformComponentViewModel transform )
+            {
+                Actor.TrySetTransform( actorId, transform.Position, transform.Rotation, transform.Scale );
+            }
+
+            Actor.TryApplyNamedActorDefaults( actorId, actor.Name, actor.ParentWorld?.Project?.Path );
+
+            return actorId;
         }
 
         public static void DespawnActor( CrActorViewModel actor )
         {
+            if ( !ID.IsValid( actor.ActorId ) ) return;
+
             DespawnActorNative( actor.ActorId );
         }
     }

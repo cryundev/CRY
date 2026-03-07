@@ -1,5 +1,6 @@
 using System.Numerics;
 using System.Runtime.Serialization;
+using Editor_WPF.DllWrappers;
 using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
 
@@ -13,19 +14,20 @@ namespace Editor_WPF.Components;
 [DataContract]
 class CrTransformComponentViewModel : CrComponentViewModel
 {
-    private Vector3 _positionn;
+    private Vector3 _position;
     [DataMember] public Vector3 Position
     {
-        get => _positionn;
+        get => _position;
         set
         {
-            if ( _positionn == value )
+            if ( _position == value )
             {
                 return;
             }
 
-            _positionn = value;
+            _position = value;
             OnPropertyChanged( nameof( Position ) );
+            SyncActorTransform();
         }
     }
     
@@ -42,10 +44,11 @@ class CrTransformComponentViewModel : CrComponentViewModel
 
             _rotation = value;
             OnPropertyChanged( nameof( Rotation ) );
+            SyncActorTransform();
         }
     }
     
-    private Vector3 _scale;
+    private Vector3 _scale = Vector3.One;
     [DataMember] public Vector3 Scale
     {
         get => _scale;
@@ -58,11 +61,22 @@ class CrTransformComponentViewModel : CrComponentViewModel
 
             _scale = value;
             OnPropertyChanged( nameof( Scale ) );
+            SyncActorTransform();
         }
     }
 
     public override IMultiSelectionComponent GetMultiSelectionComponent( MultiSelectionActor multiSelectionActor )
         => new MultiSelectionTransform( multiSelectionActor );
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// SyncActorTransform
+    //-----------------------------------------------------------------------------------------------------------------
+    private void SyncActorTransform()
+    {
+        if ( Owner is not CrActorViewModel actor || !ID.IsValid( actor.ActorId ) ) return;
+
+        EngineAPI.Actor.TrySetTransform( actor.ActorId, Position, Rotation, Scale );
+    }
 
     //-----------------------------------------------------------------------------------------------------------------
     /// CrTransformComponentViewModel

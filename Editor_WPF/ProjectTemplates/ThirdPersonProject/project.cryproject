@@ -3,10 +3,129 @@
     <Path>{1}</Path>
     <Worlds>
         <World z:Id="i2">
-            <Actors xmlns:a="http://schemas.datacontract.org/2004/07/Editor_WPF.Components" />
+            <Actors xmlns:a="http://schemas.datacontract.org/2004/07/Editor_WPF.Objects">
+                <a:CrActorViewModel z:Id="i3">
+                    <a:Name>Minion</a:Name>
+                    <a:Owner i:nil="true" />
+                    <a:Components xmlns:b="http://schemas.datacontract.org/2004/07/Editor_WPF.Components">
+                        <b:CrComponentViewModel z:Id="i4" i:type="b:CrTransformComponentViewModel">
+                            <a:Name>Transform</a:Name>
+                            <a:Owner z:Ref="i3" />
+                            <b:Position xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>0</c:X>
+                                <c:Y>0</c:Y>
+                                <c:Z>0</c:Z>
+                            </b:Position>
+                            <b:Rotation xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>0</c:X>
+                                <c:Y>0</c:Y>
+                                <c:Z>0</c:Z>
+                            </b:Rotation>
+                            <b:Scale xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>1</c:X>
+                                <c:Y>1</c:Y>
+                                <c:Z>1</c:Z>
+                            </b:Scale>
+                        </b:CrComponentViewModel>
+                    </a:Components>
+                    <a:IsEnabled>true</a:IsEnabled>
+                    <a:ParentWorld z:Ref="i2" />
+                </a:CrActorViewModel>
+                <a:CrActorViewModel z:Id="i5">
+                    <a:Name>TestDirectionalLight</a:Name>
+                    <a:Owner i:nil="true" />
+                    <a:Components xmlns:b="http://schemas.datacontract.org/2004/07/Editor_WPF.Components">
+                        <b:CrComponentViewModel z:Id="i6" i:type="b:CrTransformComponentViewModel">
+                            <a:Name>Transform</a:Name>
+                            <a:Owner z:Ref="i5" />
+                            <b:Position xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>0</c:X>
+                                <c:Y>0</c:Y>
+                                <c:Z>0</c:Z>
+                            </b:Position>
+                            <b:Rotation xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>0</c:X>
+                                <c:Y>0</c:Y>
+                                <c:Z>0</c:Z>
+                            </b:Rotation>
+                            <b:Scale xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>1</c:X>
+                                <c:Y>1</c:Y>
+                                <c:Z>1</c:Z>
+                            </b:Scale>
+                        </b:CrComponentViewModel>
+                    </a:Components>
+                    <a:IsEnabled>true</a:IsEnabled>
+                    <a:ParentWorld z:Ref="i2" />
+                </a:CrActorViewModel>
+                <a:CrActorViewModel z:Id="i7">
+                    <a:Name>TestPointLight</a:Name>
+                    <a:Owner i:nil="true" />
+                    <a:Components xmlns:b="http://schemas.datacontract.org/2004/07/Editor_WPF.Components">
+                        <b:CrComponentViewModel z:Id="i8" i:type="b:CrTransformComponentViewModel">
+                            <a:Name>Transform</a:Name>
+                            <a:Owner z:Ref="i7" />
+                            <b:Position xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>-3</c:X>
+                                <c:Y>2</c:Y>
+                                <c:Z>3</c:Z>
+                            </b:Position>
+                            <b:Rotation xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>0</c:X>
+                                <c:Y>0</c:Y>
+                                <c:Z>0</c:Z>
+                            </b:Rotation>
+                            <b:Scale xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>1</c:X>
+                                <c:Y>1</c:Y>
+                                <c:Z>1</c:Z>
+                            </b:Scale>
+                        </b:CrComponentViewModel>
+                    </a:Components>
+                    <a:IsEnabled>true</a:IsEnabled>
+                    <a:ParentWorld z:Ref="i2" />
+                </a:CrActorViewModel>
+                <a:CrActorViewModel z:Id="i9">
+                    <a:Name>TestSpotLight</a:Name>
+                    <a:Owner i:nil="true" />
+                    <a:Components xmlns:b="http://schemas.datacontract.org/2004/07/Editor_WPF.Components">
+                        <b:CrComponentViewModel z:Id="i10" i:type="b:CrTransformComponentViewModel">
+                            <a:Name>Transform</a:Name>
+                            <a:Owner z:Ref="i9" />
+                            <b:Position xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>3</c:X>
+                                <c:Y>3</c:Y>
+                                <c:Z>3</c:Z>
+                            </b:Position>
+                            <b:Rotation xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>-42.97</c:X>
+                                <c:Y>0</c:Y>
+                                <c:Z>0</c:Z>
+                            </b:Rotation>
+                            <b:Scale xmlns:c="http://schemas.datacontract.org/2004/07/System.Numerics">
+                                <c:X>1</c:X>
+                                <c:Y>1</c:Y>
+                                <c:Z>1</c:Z>
+                            </b:Scale>
+                        </b:CrComponentViewModel>
+                    </a:Components>
+                    <a:IsEnabled>true</a:IsEnabled>
+                    <a:ParentWorld z:Ref="i2" />
+                </a:CrActorViewModel>
+            </Actors>
             <IsActive>true</IsActive>
             <Name>Default World</Name>
-            <Project z:Ref="i1"/>
+            <ViewportCameraDirection xmlns:a="http://schemas.datacontract.org/2004/07/System.Numerics">
+                <a:X>0</a:X>
+                <a:Y>0</a:Y>
+                <a:Z>1</a:Z>
+            </ViewportCameraDirection>
+            <ViewportCameraPosition xmlns:a="http://schemas.datacontract.org/2004/07/System.Numerics">
+                <a:X>0</a:X>
+                <a:Y>0</a:Y>
+                <a:Z>-15</a:Z>
+            </ViewportCameraPosition>
+            <Project z:Ref="i1" />
         </World>
     </Worlds>
 </Game>

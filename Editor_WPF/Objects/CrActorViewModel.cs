@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using Editor_WPF.Common;
@@ -19,6 +20,8 @@ namespace Editor_WPF.Objects;
 [KnownType( typeof( CrScriptComponentViewModel    ) )]
 public class CrActorViewModel : CrObjectViewModel
 {
+    private bool _runtimeBindingsInitialized;
+
     private Int64 _actorId = ID.INVALID_ID;
     public Int64 ActorId
     {
@@ -71,21 +74,27 @@ public class CrActorViewModel : CrObjectViewModel
         }
     }
 
-    [DataMember] public WorldViewModel ParentWorld { get; private set; }
+    [DataMember] public WorldViewModel? ParentWorld { get; internal set; }
     
     [DataMember( Name = nameof( Components ) )] private readonly ObservableCollection< CrComponentViewModel > _components = [];
     public ReadOnlyObservableCollection< CrComponentViewModel >? Components { get; private set; }
 
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// GetComponent
+    //-----------------------------------------------------------------------------------------------------------------
+    public CrComponentViewModel? GetComponent( Type type ) => Components?.FirstOrDefault( x => x.GetType() == type );
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// GetCompnent
     //-----------------------------------------------------------------------------------------------------------------
-    public CrComponentViewModel? GetCompnent( Type type ) => Components?.FirstOrDefault( x => x.GetType() == type ); 
+    [Obsolete( "Use GetComponent(Type)." )]
+    public CrComponentViewModel? GetCompnent( Type type ) => GetComponent( type );
 
     //-----------------------------------------------------------------------------------------------------------------
     /// GetComponent
     //-----------------------------------------------------------------------------------------------------------------
-    public T? GetComponent< T >() where T : CrComponentViewModel => GetCompnent( typeof( T ) ) as T;
+    public T? GetComponent< T >() where T : CrComponentViewModel => GetComponent( typeof( T ) ) as T;
 
     //-----------------------------------------------------------------------------------------------------------------
     /// AddComponent
@@ -94,11 +103,13 @@ public class CrActorViewModel : CrObjectViewModel
     {
         Debug.Assert( component != null );
         
-        if ( Components.Any( x => x.GetType() == component.GetType() ) )
+        if ( Components?.Any( x => x.GetType() == component.GetType() ) == true )
         {
             Logger.Log( MessageType.Warning, $"Entity {Name} already has a {component.GetType().Name} component" );
             return false;
         }
+
+        component.SetOwner( this );
 
         IsActive = false;
         _components.Add( component );
@@ -126,13 +137,52 @@ public class CrActorViewModel : CrObjectViewModel
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// InitializeRuntimeBindings
+    //-----------------------------------------------------------------------------------------------------------------
+    private void InitializeRuntimeBindings()
+    {
+        if ( _runtimeBindingsInitialized ) return;
+
+        PropertyChanged += OnActorPropertyChanged;
+        _runtimeBindingsInitialized = true;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnActorPropertyChanged
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnActorPropertyChanged( object? sender, PropertyChangedEventArgs e )
+    {
+        if ( e.PropertyName != nameof( Name ) || !ID.IsValid( ActorId ) ) return;
+
+        EngineAPI.Actor.TrySetName( ActorId, Name );
+        EngineAPI.Actor.TryApplyNamedActorDefaults( ActorId, Name, ParentWorld?.Project?.Path );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnDeserializing
+    //-----------------------------------------------------------------------------------------------------------------
+    [OnDeserializing]
+    void OnDeserializing( StreamingContext context )
+    {
+        _actorId                    = ID.INVALID_ID;
+        _runtimeBindingsInitialized = false;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// OnDeserialized
     //-----------------------------------------------------------------------------------------------------------------
     [OnDeserialized]
     void OnDeserialized( StreamingContext context )
     {
+        foreach ( CrComponentViewModel component in _components )
+        {
+            component.SetOwner( this );
+        }
+
         Components = new ReadOnlyObservableCollection< CrComponentViewModel >( _components );
         OnPropertyChanged( nameof( Components ) );
+
+        InitializeRuntimeBindings();
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -215,7 +265,7 @@ public abstract class MultiSelectionActor : ViewModelBase
             {
                 Type type = component.GetType();
 
-                if ( SelectedActors.Skip( 1 ).All( actor => actor.GetCompnent( type ) != null ) )
+                if ( SelectedActors.Skip( 1 ).All( actor => actor.GetComponent( type ) != null ) )
                 {
                     Debug.Assert( Components.FirstOrDefault( x => x.GetType() == type ) == null );
 

@@ -22,6 +22,12 @@ public static partial class EngineAPI
         [DllImport( EngineDllName, EntryPoint = "SetActorTransform" )]
         private static extern bool SetTransformNative( Int64 id, ref CrTransformNative inTransform );
 
+        [DllImport( EngineDllName, EntryPoint = "SetActorName", CharSet = CharSet.Ansi )]
+        private static extern bool SetActorNameNative( Int64 id, string name );
+
+        [DllImport( EngineDllName, EntryPoint = "ApplyNamedActorDefaults", CharSet = CharSet.Ansi )]
+        private static extern bool ApplyNamedActorDefaultsNative( Int64 id, string name, string? projectPath );
+
         public static bool TryGetTransform( Int64 actorId, out CrTransformNative transform )
         {
             transform = default;
@@ -36,6 +42,20 @@ public static partial class EngineAPI
 
             CrTransformNative transform = new CrTransformNative( position, rotationEuler, scale );
             return SetTransformNative( actorId, ref transform );
+        }
+
+        public static bool TrySetName( Int64 actorId, string name )
+        {
+            if ( !ID.IsValid( actorId ) ) return false;
+
+            return SetActorNameNative( actorId, name ?? string.Empty );
+        }
+
+        public static bool TryApplyNamedActorDefaults( Int64 actorId, string name, string? projectPath )
+        {
+            if ( !ID.IsValid( actorId ) ) return false;
+
+            return ApplyNamedActorDefaultsNative( actorId, name ?? string.Empty, projectPath );
         }
     }
 }

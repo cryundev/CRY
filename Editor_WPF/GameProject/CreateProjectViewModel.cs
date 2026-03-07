@@ -33,6 +33,16 @@ public class ProjectTemplate
 //---------------------------------------------------------------------------------------------------------------------
 public class CreateProjectViewModel : ViewModelBase
 {
+    private static readonly HashSet< string > _templateFilesToSkip = new HashSet< string >( StringComparer.OrdinalIgnoreCase )
+    {
+        "template.xml",
+        "project.cryproject",
+        "MSVCSolution",
+        "MSVCProject",
+        "Icon.png",
+        "Preview.png",
+    };
+
     private readonly string _templatePath = @"../../Editor_WPF/ProjectTemplates";
 
     private string _projectName = "CreateProject";
@@ -99,7 +109,7 @@ public class CreateProjectViewModel : ViewModelBase
     private bool ValidateProjectPath()
     {
         string path = ProjectPath;
-        if ( Path.EndsInDirectorySeparator( path ) )
+        if ( !Path.EndsInDirectorySeparator( path ) )
         {
             path += @"\";
         }
@@ -138,6 +148,49 @@ public class CreateProjectViewModel : ViewModelBase
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// WriteProjectFile
+    //-----------------------------------------------------------------------------------------------------------------
+    private void WriteProjectFile( ProjectTemplate template, string path )
+    {
+        string projectXml = File.ReadAllText( template.ProjectFilePath );
+        projectXml = string.Format( projectXml, ProjectName, path );
+
+        string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{ProjectViewModel.Extension}" ) );
+        File.WriteAllText( projectPath, projectXml );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// CopyTemplateFiles
+    //-----------------------------------------------------------------------------------------------------------------
+    private static void CopyTemplateFiles( ProjectTemplate template, string path )
+    {
+        foreach ( string sourceFile in Directory.GetFiles( template.TemplatePath, "*", SearchOption.AllDirectories ) )
+        {
+            string relativePath = Path.GetRelativePath( template.TemplatePath, sourceFile );
+            if ( _templateFilesToSkip.Contains( relativePath ) ) continue;
+
+            string destinationPath = Path.GetFullPath( Path.Combine( path, relativePath ) );
+            Directory.CreateDirectory( Path.GetDirectoryName( destinationPath ) ?? throw new InvalidOperationException() );
+            File.Copy( sourceFile, destinationPath, true );
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// CopyDefaultAssets
+    //-----------------------------------------------------------------------------------------------------------------
+    private static void CopyDefaultAssets( string path )
+    {
+        string sourceAssetPath = Path.Combine( MainWindow.EnginePath, "Asset", "Minion.cra" );
+        if ( !File.Exists( sourceAssetPath ) )
+        {
+            throw new FileNotFoundException( "Failed to find Minion.cra template asset.", sourceAssetPath );
+        }
+
+        string destinationAssetPath = Path.GetFullPath( Path.Combine( path, "Content", "Minion.cra" ) );
+        File.Copy( sourceAssetPath, destinationAssetPath, true );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// CreateNewProject
     //-----------------------------------------------------------------------------------------------------------------
     public string CreateNewProject( ProjectTemplate template )
@@ -162,8 +215,6 @@ public class CreateProjectViewModel : ViewModelBase
             {
                 Directory.CreateDirectory( path );
             }
-            
-            string pathName = Path.GetDirectoryName( path ) ?? throw new InvalidOperationException();
 
             foreach ( string folder in template.Folders )
             {
@@ -171,17 +222,15 @@ public class CreateProjectViewModel : ViewModelBase
             }
             
             DirectoryInfo dirInfo = new DirectoryInfo( path + @".cryproject\" );
+            dirInfo.Create();
             dirInfo.Attributes |= FileAttributes.Hidden;
             
-            File.Copy( template.IconFilePath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Icon.png" ) ) );
-            File.Copy( template.PreviewPath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Preview.png" ) ) );
-            
-            string projectXml = File.ReadAllText( template.ProjectFilePath );
-            projectXml = string.Format( projectXml, ProjectName, path );
+            File.Copy( template.IconFilePath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Icon.png" ) ), true );
+            File.Copy( template.PreviewPath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Preview.png" ) ), true );
 
-            string projectPath = Path.GetFullPath( Path.Combine( path, $"{ProjectName}{ProjectViewModel.Extension}" ) );
-            File.WriteAllText( projectPath, projectXml );
-
+            CopyTemplateFiles( template, path );
+            CopyDefaultAssets( path );
+            WriteProjectFile( template, path );
             CreateMSVCSolution( template, path );
 
             return path;
@@ -190,7 +239,7 @@ public class CreateProjectViewModel : ViewModelBase
         {
             Debug.WriteLine( e.Message );
             
-            Logger.Log( MessageType.Error, $"Failed to create {ProjectName}" );
+            Logger.Log( MessageType.Error, $"Failed to create {ProjectName}: {e.Message}" );
 
             throw;
         }
@@ -247,7 +296,7 @@ public class CreateProjectViewModel : ViewModelBase
 
                 template.TemplatePath    = filePathName;
                 template.IconFilePath    = Path.GetFullPath( Path.Combine( filePathName, "Icon.png"    ) );
-                template.PreviewPath     = Path.GetFullPath( Path.Combine( filePathName, "Preview.png" ) );;
+                template.PreviewPath     = Path.GetFullPath( Path.Combine( filePathName, "Preview.png" ) );
                 template.ProjectFilePath = Path.GetFullPath( Path.Combine( filePathName, template.ProjectFile ) );
                 
                 

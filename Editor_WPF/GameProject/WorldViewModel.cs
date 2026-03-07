@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.Serialization;
 using System.Windows.Input;
 using Editor_WPF.Common;
@@ -17,6 +18,9 @@ namespace Editor_WPF.GameProject;
 [DataContract( Name = "World" )]
 public class WorldViewModel : ViewModelBase
 {
+    private static readonly Vector3 _defaultViewportCameraPosition  = new Vector3( 0.0f, 0.0f, -15.0f );
+    private static readonly Vector3 _defaultViewportCameraDirection = new Vector3( 0.0f, 0.0f, 1.0f );
+
     [DataMember( Name = "Name" )] private string _name;
     public string Name
     {
@@ -49,6 +53,43 @@ public class WorldViewModel : ViewModelBase
     private ObservableCollection< CrActorViewModel > _actors = [];
     public ReadOnlyObservableCollection< CrActorViewModel > Actors { get; private set; }
 
+    [DataMember( Name = nameof( ViewportCameraPosition ), EmitDefaultValue = false )]
+    private Vector3? _viewportCameraPosition;
+    public Vector3 ViewportCameraPosition
+    {
+        get => _viewportCameraPosition ?? _defaultViewportCameraPosition;
+        set
+        {
+            if ( _viewportCameraPosition == value ) return;
+
+            _viewportCameraPosition = value;
+            OnPropertyChanged( nameof( ViewportCameraPosition ) );
+        }
+    }
+
+    [DataMember( Name = nameof( ViewportCameraDirection ), EmitDefaultValue = false )]
+    private Vector3? _viewportCameraDirection;
+    public Vector3 ViewportCameraDirection
+    {
+        get
+        {
+            if ( !_viewportCameraDirection.HasValue || _viewportCameraDirection.Value.LengthSquared() <= MathUtil.Epsilon )
+            {
+                return _defaultViewportCameraDirection;
+            }
+
+            return Vector3.Normalize( _viewportCameraDirection.Value );
+        }
+        set
+        {
+            Vector3 normalizedValue = value.LengthSquared() <= MathUtil.Epsilon ? _defaultViewportCameraDirection : Vector3.Normalize( value );
+            if ( _viewportCameraDirection == normalizedValue ) return;
+
+            _viewportCameraDirection = normalizedValue;
+            OnPropertyChanged( nameof( ViewportCameraDirection ) );
+        }
+    }
+
     public ICommand? AddActorCommand    { get; private set; }
     public ICommand? RemoveActorCommand { get; private set; }
     
@@ -58,8 +99,9 @@ public class WorldViewModel : ViewModelBase
     private void AddActorInternal( CrActorViewModel actor, int index = -1 )
     {
         Debug.Assert( !_actors.Contains( actor ) );
-        
-        actor.IsActive = IsActive;
+
+        actor.ParentWorld = this;
+        actor.IsActive    = IsActive;
 
         if ( index == -1 )
         {
@@ -77,6 +119,9 @@ public class WorldViewModel : ViewModelBase
     private void RemoveActorInternal( CrActorViewModel actor )
     {
         Debug.Assert( _actors.Contains( actor ) );
+
+        actor.IsActive    = false;
+        actor.ParentWorld = null;
         
         _actors.Remove( actor );
     }
@@ -93,7 +138,8 @@ public class WorldViewModel : ViewModelBase
 
         foreach ( CrActorViewModel actor in _actors )
         {
-            actor.IsActive = IsActive;
+            actor.ParentWorld = this;
+            actor.IsActive    = IsActive;
         }
 
         InitializeCommands();
@@ -120,13 +166,12 @@ public class WorldViewModel : ViewModelBase
 
         RemoveActorCommand = new RelayCommand< CrActorViewModel >( x =>
         {
+            int actorIndex = _actors.IndexOf( x );
             RemoveActorInternal( x );
-
-            int actorsCount = _actors.Count;
 
             ProjectViewModel.UndoRedo.Add( new UndoRedoAction
             (
-                () => _actors.Insert( actorsCount, x ),
+                () => AddActorInternal( x, actorIndex ),
                 () => RemoveActorInternal( x ),
                 $"Remove {x.Name} from {Name}"
             ) );
@@ -145,11 +190,11 @@ public class WorldViewModel : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     /// WorldViewModel
     //-----------------------------------------------------------------------------------------------------------------
-    public WorldViewModel( ProjectViewModel poject, string name )
+    public WorldViewModel( ProjectViewModel project, string name )
     {
-        Debug.Assert( poject != null );
+        Debug.Assert( project != null );
 
-        Project = poject;
+        Project = project;
         _name   = name;
 
         Initialize();
