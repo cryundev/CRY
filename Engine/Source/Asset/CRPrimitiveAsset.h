@@ -33,10 +33,10 @@ public:
     virtual ~CRPrimitiveAsset() override {}
 
     /// Save to file.
-    virtual void Save( const CRString& Path ) override;
+    virtual void Save( const CRPath& Path ) override;
 
     /// Load from file.
-    virtual void Load( const CRString& Path ) override;
+    virtual void Load( const CRPath& Path ) override;
     
     /// Calculate local-space bounds from positions.
     CRAABB CalculateBounds() const;

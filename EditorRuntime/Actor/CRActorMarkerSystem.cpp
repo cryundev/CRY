@@ -9,6 +9,7 @@
 #include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/Utility/UtilJson.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/Utility/UtilPath.h"
 #include "Source/World/CRWorld.h"
 #include <filesystem>
 #include <fstream>
@@ -21,7 +22,7 @@ CRActorMarkerSystem GActorMarkerSystem;
 
 namespace
 {
-static const CRString MarkerConfigPath = "Asset/Gizmo/ActorMarkerConfig.json";
+static const CRPath   MarkerConfigPath = CRPath( "Asset/Gizmo/ActorMarkerConfig.json" );
 static const CRString LogPrefix        = "[CRActorMarkerSystem] ";
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -201,7 +202,7 @@ void CRActorMarkerSystem::RegisterProvider( CRUniquePtr< ICRActorMarkerProvider 
 //---------------------------------------------------------------------------------------------------------------------
 /// Register marker mesh asset path.
 //---------------------------------------------------------------------------------------------------------------------
-bool CRActorMarkerSystem::RegisterMarkerAsset( const CRName& MarkerType, const CRString& AssetPath )
+bool CRActorMarkerSystem::RegisterMarkerAsset( const CRName& MarkerType, const CRPath& AssetPath )
 {
     if ( MarkerType.empty() ) return false;
     if ( AssetPath .empty() ) return false;
@@ -348,14 +349,14 @@ bool CRActorMarkerSystem::_LoadConfigFromJson( CRMarkerSystemConfig& OutConfig )
     OutConfig.MarkerAssets.clear();
     OutConfig.LightRules  .clear();
 
-    const CRString configPath = _ResolveAssetPath( MarkerConfigPath );
-    if ( configPath.empty() ) return _Fail( "Missing required config file: " + MarkerConfigPath );
+    const CRPath configPath = _ResolveAssetPath( MarkerConfigPath );
+    if ( configPath.empty() ) return _Fail( "Missing required config file: " + MarkerConfigPath.string() );
 
     std::ifstream ifs( configPath );
-    if ( !ifs ) return _Fail( "Failed to open config file: " + configPath );
+    if ( !ifs ) return _Fail( "Failed to open config file: " + configPath.string() );
 
     nlohmann::json root = nlohmann::json::parse( ifs, nullptr, false );
-    if ( root.is_discarded() ) return _Fail( "Failed to parse json: " + configPath );
+    if ( root.is_discarded() ) return _Fail( "Failed to parse json: " + configPath.string() );
 
     if ( !UtilJson::IsObject      ( root            ) ) return _Fail( "Config root must be a json object."           );
     if ( !UtilJson::IsIntegerField( root, "version" ) ) return _Fail( "Config must contain integer field 'version'." );
@@ -388,8 +389,11 @@ bool CRActorMarkerSystem::_ParseMarkerAssets( const nlohmann::json& Root, CRMark
 
         CRMarkerAssetConfig parsedAsset;
         if ( !_GetRequiredStringField( asset, "marker_type", parsedAsset.MarkerType, context ) ) return false;
-        if ( !_GetRequiredStringField( asset, "asset_path",  parsedAsset.AssetPath,  context ) ) return false;
 
+        CRString assetPath;
+        if ( !_GetRequiredStringField( asset, "asset_path", assetPath, context ) ) return false;
+
+        parsedAsset.AssetPath = CRPath( assetPath );
         OutConfig.MarkerAssets.push_back( parsedAsset );
     }
 
@@ -508,40 +512,11 @@ bool CRActorMarkerSystem::_ApplyConfig( const CRMarkerSystemConfig& Config )
 //---------------------------------------------------------------------------------------------------------------------
 /// Resolve marker asset path.
 //---------------------------------------------------------------------------------------------------------------------
-CRString CRActorMarkerSystem::_ResolveAssetPath( const CRString& AssetPath )
+CRPath CRActorMarkerSystem::_ResolveAssetPath( const CRPath& AssetPath )
 {
     if ( AssetPath.empty() ) return {};
 
-    std::filesystem::path candidatePath = std::filesystem::path( AssetPath );
-    if ( candidatePath.is_absolute() && std::filesystem::exists( candidatePath ) )
-    {
-        return candidatePath.lexically_normal().string();
-    }
-
-    candidatePath = std::filesystem::path( __FILE__ ).parent_path() / "../../" / AssetPath;
-    if ( std::filesystem::exists( candidatePath ) )
-    {
-        return candidatePath.lexically_normal().string();
-    }
-
-    std::filesystem::path currentPath = std::filesystem::current_path();
-    for ( i32 pathDepth = 0; pathDepth < 8; ++pathDepth )
-    {
-        const std::filesystem::path currentCandidate = currentPath / AssetPath;
-        if ( std::filesystem::exists( currentCandidate ) )
-        {
-            return currentCandidate.lexically_normal().string();
-        }
-
-        if ( !currentPath.has_parent_path() )
-        {
-            break;
-        }
-
-        currentPath = currentPath.parent_path();
-    }
-
-    return {};
+    return UtilPath::ResolveExistingEnginePath( AssetPath );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -553,10 +528,10 @@ bool CRActorMarkerSystem::_LoadMarkerMeshResource( CRMarkerMeshResource& Resourc
     Resource.ResolvedPath.clear();
     Resource.bReady = false;
 
-    const CRString resolvedPath = _ResolveAssetPath( Resource.AssetPath );
+    const CRPath resolvedPath = _ResolveAssetPath( Resource.AssetPath );
     if ( resolvedPath.empty() )
     {
-        return _Fail( "Failed to resolve marker asset path: " + Resource.AssetPath );
+        return _Fail( "Failed to resolve marker asset path: " + Resource.AssetPath.string() );
     }
 
     CRPrimitiveAsset primitiveAsset;
@@ -564,23 +539,23 @@ bool CRActorMarkerSystem::_LoadMarkerMeshResource( CRMarkerMeshResource& Resourc
 
     if ( primitiveAsset.VertexCount == 0 )
     {
-        return _Fail( "Marker asset has no vertices: " + resolvedPath );
+        return _Fail( "Marker asset has no vertices: " + resolvedPath.string() );
     }
 
     if ( primitiveAsset.Positions.size() != primitiveAsset.VertexCount ||
          primitiveAsset.Normals  .size() != primitiveAsset.VertexCount ||
          primitiveAsset.UVs      .size() != primitiveAsset.VertexCount )
     {
-        return _Fail( "Marker asset channel size mismatch: " + resolvedPath );
+        return _Fail( "Marker asset channel size mismatch: " + resolvedPath.string() );
     }
 
     ICRRHIMeshSPtr mesh = GRHI.CreateMesh();
     if ( !mesh )
     {
-        return _Fail( "Failed to create marker mesh resource: " + resolvedPath );
+        return _Fail( "Failed to create marker mesh resource: " + resolvedPath.string() );
     }
 
-    mesh->InitializePrimitive( resolvedPath, primitiveAsset );
+    mesh->InitializePrimitive( resolvedPath.string(), primitiveAsset );
 
     Resource.Mesh         = mesh;
     Resource.ResolvedPath = resolvedPath;

@@ -21,7 +21,7 @@ void CRFbxLoader::Clear()
 //---------------------------------------------------------------------------------------------------------------------
 /// Load fbx file.
 //---------------------------------------------------------------------------------------------------------------------
-bool CRFbxLoader::Load( const CRString& Path )
+bool CRFbxLoader::Load( const CRPath& Path )
 {
     Clear();
 
@@ -37,7 +37,7 @@ bool CRFbxLoader::Load( const CRString& Path )
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize.
 //---------------------------------------------------------------------------------------------------------------------
-bool CRFbxLoader::_Initialize( const CRString& Path )
+bool CRFbxLoader::_Initialize( const CRPath& Path )
 {
     FbxManagerPtr    = FbxManager::Create();
     FbxIOSettingsPtr = FbxIOSettings::Create( FbxManagerPtr, IOSROOT );
@@ -52,7 +52,8 @@ bool CRFbxLoader::_Initialize( const CRString& Path )
 
     FbxManagerPtr->SetIOSettings( FbxIOSettingsPtr );
     
-    if ( !FbxImporterPtr->Initialize( Path.c_str(), -1, FbxIOSettingsPtr ) )
+    const CRString importPath = Path.lexically_normal().string();
+    if ( !FbxImporterPtr->Initialize( importPath.c_str(), -1, FbxIOSettingsPtr ) )
     {
         GLog.AddLog( FbxImporterPtr->GetStatus().GetErrorString() );
         return false;

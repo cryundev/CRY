@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "Source/Core/CRTypes.h"
 #include "Source/Core/Strings/CRStringInc.h"
 
 
@@ -17,8 +17,8 @@ public:
     virtual ~ICRAsset() = 0 {}
 
     /// Save.
-    virtual void Save( const CRString& Path ) {}
+    virtual void Save( const CRPath& Path ) {}
 
     /// Load.
-    virtual void Load( const CRString& Path ) {}
+    virtual void Load( const CRPath& Path ) {}
 };

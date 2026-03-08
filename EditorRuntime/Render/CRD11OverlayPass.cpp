@@ -15,6 +15,7 @@
 #include "Source/RHI/ICRRHIMesh.h"
 #include "Source/RHI/ICRRHIRenderer.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/Utility/UtilPath.h"
 #include "Source/World/CRWorld.h"
 #include <filesystem>
 
@@ -218,8 +219,8 @@ bool CRD11OverlayPass::_CreateStates( const CROverlayPassConfig& Config )
 //---------------------------------------------------------------------------------------------------------------------
 bool CRD11OverlayPass::_CreateShadersAndLayout( const CROverlayPassConfig& Config )
 {
-    const std::filesystem::path shaderPath = std::filesystem::path( __FILE__ ).parent_path() / "Shader" / Config.ShaderFileName;
-    if ( !std::filesystem::exists( shaderPath ) )
+    const CRPath shaderPath = UtilPath::ResolveExistingEnginePath( CRPath( "EditorRuntime/Render/Shader" ) / Config.ShaderFileName );
+    if ( shaderPath.empty() )
     {
         GLog.AddLog( Config.LogPrefix + " Failed to find shader file." );
         return false;

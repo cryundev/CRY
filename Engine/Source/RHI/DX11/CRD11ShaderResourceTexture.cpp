@@ -12,11 +12,13 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Create from file.
 //---------------------------------------------------------------------------------------------------------------------
-void CRD11ShaderResourceTexture::Create( const CRString& Path )
+void CRD11ShaderResourceTexture::Create( const CRPath& Path )
 {
-    Texture2D          = GD11RM.GetTexture2D         ( Path );
-	ShaderResourceView = GD11RM.GetShaderResourceView( Path );
-	SamplerState       = GD11RM.GetSamplerState      ( Path );
+    const CRString resourceName = Path.lexically_normal().string();
+    
+	Texture2D          = GD11RM.GetTexture2D         ( resourceName );
+    ShaderResourceView = GD11RM.GetShaderResourceView( resourceName );
+    SamplerState       = GD11RM.GetSamplerState      ( resourceName );
 	
 	if ( Texture2D.expired() || ShaderResourceView.expired() || SamplerState.expired() ) return;
 

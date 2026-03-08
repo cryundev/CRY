@@ -11,7 +11,7 @@
 #include "../Resource/CRD11VertexShader.h"
 #include "Source/Utility/Generic/CRGeneric.h"
 #include "Source/Utility/Log/CRLog.h"
-#include <filesystem>
+#include "Source/Utility/UtilPath.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -120,8 +120,8 @@ bool CRD11CompositePass::_CreateBackBufferRenderTargetView()
 //---------------------------------------------------------------------------------------------------------------------
 bool CRD11CompositePass::_CreateCompositeShaders()
 {
-    std::filesystem::path shaderPath = std::filesystem::path( __FILE__ ).parent_path() / "../HLSL/composite.hlsl";
-    if ( !std::filesystem::exists( shaderPath ) )
+    const CRPath shaderPath = UtilPath::ResolveExistingEnginePath( "Engine/Source/RHI/DX11/HLSL/composite.hlsl" );
+    if ( shaderPath.empty() )
     {
         GLog.AddLog( "[CRD11CompositePass] Failed to find composite shader file." );
         

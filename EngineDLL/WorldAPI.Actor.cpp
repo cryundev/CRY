@@ -34,14 +34,14 @@ void ClearNamedActorDefaults( CRActor& Actor )
 //---------------------------------------------------------------------------------------------------------------------
 /// Resolve project asset path.
 //---------------------------------------------------------------------------------------------------------------------
-std::filesystem::path ResolveProjectAssetPath( const char* ProjectPath, const char* AssetName )
+CRPath ResolveProjectAssetPath( const char* ProjectPath, const char* AssetName )
 {
     if ( !ProjectPath || !AssetName || !ProjectPath[ 0 ] || !AssetName[ 0 ] )
     {
         return {};
     }
 
-    std::filesystem::path assetPath = std::filesystem::path( ProjectPath ) / "Content" / AssetName;
+    CRPath assetPath = CRPath( ProjectPath ) / "Content" / AssetName;
     return assetPath.lexically_normal();
 }
 
@@ -50,7 +50,7 @@ std::filesystem::path ResolveProjectAssetPath( const char* ProjectPath, const ch
 //---------------------------------------------------------------------------------------------------------------------
 bool ApplyMinionDefault( CRActor& Actor, const char* ProjectPath )
 {
-    const std::filesystem::path assetPath = ResolveProjectAssetPath( ProjectPath, "Minion.cra" );
+    const CRPath assetPath = ResolveProjectAssetPath( ProjectPath, "Minion.cra" );
     if ( assetPath.empty() || !std::filesystem::exists( assetPath ) )
     {
         GLog.AddLog( "[ApplyNamedActorDefaults] Failed to find Content/Minion.cra." );
@@ -62,11 +62,10 @@ bool ApplyMinionDefault( CRActor& Actor, const char* ProjectPath )
 
     CRCollisionComponent* collision = Actor.Add< CRCollisionComponent >();
 
-    const CRString normalizedAssetPath = assetPath.string();
     if ( collision )
     {
         CRPrimitiveAsset primitiveAsset;
-        primitiveAsset.Load( normalizedAssetPath );
+        primitiveAsset.Load( assetPath );
 
         const CRAABB localBounds = primitiveAsset.CalculateBounds();
         if ( localBounds.IsValid() )
@@ -76,7 +75,7 @@ bool ApplyMinionDefault( CRActor& Actor, const char* ProjectPath )
         }
     }
 
-    primitive->LoadAsset( normalizedAssetPath );
+    primitive->LoadAsset( assetPath );
     return true;
 }
 

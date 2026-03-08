@@ -6,7 +6,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Save to file.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveAsset::Save( const CRString& Path )
+void CRPrimitiveAsset::Save( const CRPath& Path )
 {
     std::ofstream ofs( Path, std::ios::binary );
     if ( !ofs ) return;
@@ -27,7 +27,7 @@ void CRPrimitiveAsset::Save( const CRString& Path )
 //---------------------------------------------------------------------------------------------------------------------
 /// Load from file.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveAsset::Load( const CRString& Path )
+void CRPrimitiveAsset::Load( const CRPath& Path )
 {
     std::ifstream ifs( Path, std::ios::binary );
     if ( !ifs ) return;

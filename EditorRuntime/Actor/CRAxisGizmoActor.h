@@ -14,7 +14,7 @@ class CRAxisGizmoActor : public CRGizmoActor
 {
 public:
     /// Initialize gizmo actor.
-    virtual bool InitializeGizmo( const CRString& AssetPath, const CRPrimitiveAsset& PrimitiveAsset ) override;
+    virtual bool InitializeGizmo( const CRPath& AssetPath, const CRPrimitiveAsset& PrimitiveAsset ) override;
 
     /// Get render element count.
     virtual u32 GetRenderElementCount() const override { return (u32)ECRAxis::Max; }

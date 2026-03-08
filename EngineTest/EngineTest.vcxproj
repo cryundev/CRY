@@ -170,6 +170,14 @@
     <ClInclude Include="CRTest.h" />
     <ClInclude Include="TestActor.h" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.vcxproj">
+      <Project>{8B4D84D6-CB03-431C-B087-C4DDC291477F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Engine\Extras\DirectXTK\DirectXTK_Desktop_2022_Win10.vcxproj">
+      <Project>{E0B52AE7-E160-4D32-BF3F-910B785E5A8E}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

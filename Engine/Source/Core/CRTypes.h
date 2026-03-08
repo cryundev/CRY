@@ -1,5 +1,7 @@
 #pragma once
 
+#include <filesystem>
+
 
 using i8  = char;
 using i16 = short;
@@ -13,3 +15,5 @@ using u64 = unsigned long long;
 
 using f32 = float;
 using f64 = double;
+
+using CRPath = std::filesystem::path;

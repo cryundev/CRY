@@ -1,11 +1,11 @@
 #pragma once
 
-
 #include "../Actor/CRGizmoActor.h"
 #include "Source/RHI/DX11/Passes/CRD11RenderPass.h"
 #include "Source/RHI/DX11/CRD11BindingConstantBuffer.h"
 #include "Source/RHI/DX11/CRD11Types.h"
 #include "Source/Core/Math/CRMath.h"
+#include "Source/Core/CRTypes.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ struct CROverlayPassConfig
     CRName     RasterStateName   = {};
     CRName     ShaderName        = {};
     CRString   ConstantBufferName;
-    CRString   ShaderFileName    = "gizmo.hlsl";
+    CRPath     ShaderFileName    = CRPath( "gizmo.hlsl" );
     CRString   LogPrefix;
     CRVector4D DefaultColor      = CRVector4D( 1.0f, 1.0f, 1.0f, 1.0f );
     f32        DefaultPixelSize  = 96.0f;

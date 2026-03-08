@@ -1,10 +1,10 @@
 #pragma once
 
-
 #include "CRActorMarkerProvider.h"
 #include "CRGizmoActor.h"
 #include "Extras/nlohmann/json.hpp" // nlohmann/json v3.11.x (pinned)
 #include "Source/Core/CRSmartPtrMacro.h"
+#include "Source/Core/CRTypes.h"
 #include "Source/RHI/CRRHITypes.h"
 
 
@@ -20,8 +20,8 @@ class CRActorMarkerSystem
 private:
     struct CRMarkerAssetConfig
     {
-        CRName   MarkerType = {};
-        CRString AssetPath  = {};
+        CRName MarkerType = {};
+        CRPath AssetPath  = {};
     };
 
     struct CRMarkerSystemConfig
@@ -34,15 +34,15 @@ private:
     struct CRMarkerMeshResource
     {
         CRName         MarkerType   = {};
-        CRString       AssetPath    = {};
-        CRString       ResolvedPath = {};
+        CRPath         AssetPath    = {};
+        CRPath         ResolvedPath = {};
         ICRRHIMeshSPtr Mesh         = nullptr;
         bool           bReady       = false;
     };
 
 private:
-    bool                                          bVisible = true;
-    CRMap< CRName, CRMarkerMeshResource >         MarkerResources;
+    bool                                             bVisible = true;
+    CRMap< CRName, CRMarkerMeshResource >            MarkerResources;
     CRArray< CRUniquePtr< ICRActorMarkerProvider > > Providers;
 
 public:
@@ -62,7 +62,7 @@ public:
     void RegisterProvider( CRUniquePtr< ICRActorMarkerProvider > Provider );
 
     /// Register marker mesh asset path.
-    bool RegisterMarkerAsset( const CRName& MarkerType, const CRString& AssetPath );
+    bool RegisterMarkerAsset( const CRName& MarkerType, const CRPath& AssetPath );
 
     /// Gather marker render elements.
     void GatherRenderElements( CRArray< CRGizmoRenderElement >& OutRenderElements ) const;
@@ -90,7 +90,7 @@ private:
     bool _ApplyConfig( const CRMarkerSystemConfig& Config );
 
     /// Resolve marker asset path.
-    static CRString _ResolveAssetPath( const CRString& AssetPath );
+    static CRPath _ResolveAssetPath( const CRPath& AssetPath );
 
     /// Load marker mesh resource.
     bool _LoadMarkerMeshResource( CRMarkerMeshResource& Resource );

@@ -7,6 +7,7 @@
 #include "Source/Object/Camera/CRCamera.h"
 #include "Source/Object/Component/CRTransformComponent.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/Utility/UtilPath.h"
 #include "Source/World/CRWorld.h"
 #include <filesystem>
 
@@ -19,32 +20,9 @@ namespace
 //---------------------------------------------------------------------------------------------------------------------
 /// Resolve gizmo arrow asset path.
 //---------------------------------------------------------------------------------------------------------------------
-std::filesystem::path _ResolveGizmoArrowAssetPath()
+CRPath _ResolveGizmoArrowAssetPath()
 {
-    std::filesystem::path assetPath = std::filesystem::path( __FILE__ ).parent_path() / "../../Asset/Gizmo/Arrow.cra";
-    if ( std::filesystem::exists( assetPath ) )
-    {
-        return assetPath.lexically_normal();
-    }
-
-    std::filesystem::path currentPath = std::filesystem::current_path();
-    for ( i32 pathDepth = 0; pathDepth < 8; ++pathDepth )
-    {
-        const std::filesystem::path candidate = currentPath / "Asset/Gizmo/Arrow.cra";
-        if ( std::filesystem::exists( candidate ) )
-        {
-            return candidate.lexically_normal();
-        }
-
-        if ( !currentPath.has_parent_path() )
-        {
-            break;
-        }
-
-        currentPath = currentPath.parent_path();
-    }
-
-    return {};
+    return UtilPath::ResolveExistingEnginePath( "Asset/Gizmo/Arrow.cra" );
 }
 }
 
@@ -56,11 +34,11 @@ bool CRGizmoSystem::Initialize()
 {
     Shutdown();
 
-    const std::filesystem::path assetPath = _ResolveGizmoArrowAssetPath();
+    const CRPath assetPath = _ResolveGizmoArrowAssetPath();
     if ( assetPath.empty() ) return false;
 
     CRPrimitiveAsset primitiveAsset;
-    primitiveAsset.Load( assetPath.string() );
+    primitiveAsset.Load( assetPath );
 
     if ( primitiveAsset.VertexCount == 0 )
     {
@@ -89,7 +67,7 @@ bool CRGizmoSystem::Initialize()
         return true;
     }
 
-    if ( !GizmoActor->InitializeGizmo( assetPath.string(), primitiveAsset ) )
+    if ( !GizmoActor->InitializeGizmo( assetPath, primitiveAsset ) )
     {
         GLog.AddLog( "[CRGizmoSystem] Failed to initialize gizmo actor resources." );
     }

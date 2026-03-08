@@ -64,7 +64,7 @@ void _BuildRotatedAABBPreset( const CRAABB& SourceBounds, ECRAxis Axis, CRVector
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize gizmo actor.
 //---------------------------------------------------------------------------------------------------------------------
-bool CRAxisGizmoActor::InitializeGizmo( const CRString& AssetPath, const CRPrimitiveAsset& PrimitiveAsset )
+bool CRAxisGizmoActor::InitializeGizmo( const CRPath& AssetPath, const CRPrimitiveAsset& PrimitiveAsset )
 {
     bool bInitialized = true;
 

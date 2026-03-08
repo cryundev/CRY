@@ -29,14 +29,14 @@ public:
     void Clear();
     
     /// Load fbx file.
-    bool Load( const CRString& Path );
+    bool Load( const CRPath& Path );
 
     /// Get primitive data array.
     CRArray< CRPrimitiveAsset >& GetPrimitives() { return Primitives; }
 
 private:
     /// Initialize.
-    bool _Initialize( const CRString& Path );
+    bool _Initialize( const CRPath& Path );
 
     /// Load node.
     void _LoadNode( FbxNode* Node );

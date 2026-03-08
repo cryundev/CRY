@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 
 namespace Editor_WPF.Utilities;
@@ -8,8 +9,7 @@ namespace Editor_WPF.Utilities;
 //---------------------------------------------------------------------------------------------------------------------
 public static class EnginePathManager
 {
-    private const string RegistryKeyPath = @"SOFTWARE\CRY Engine";
-    private const string InstallPathValueName = "InstallPath";
+    private const string EnginePathVariableName = "CRYE_PATH";
 
     private static string _cachedEnginePath = null;
 
@@ -24,16 +24,14 @@ public static class EnginePathManager
             return _cachedEnginePath;
         }
 
-        string path = RegistryHelper.GetString( RegistryKeyPath, InstallPathValueName );
-
-        if ( !string.IsNullOrEmpty( path ) && Directory.Exists( path ) )
+        string path = Environment.GetEnvironmentVariable( EnginePathVariableName, EnvironmentVariableTarget.User );
+        if ( string.IsNullOrEmpty( path ) || !Directory.Exists( Path.Combine( path, @"Engine\Source" ) ) )
         {
-            _cachedEnginePath = NormalizePath( path );
-
-            return _cachedEnginePath;
+            return null;
         }
 
-        return null;
+        _cachedEnginePath = NormalizePath( path );
+        return _cachedEnginePath;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -44,29 +42,22 @@ public static class EnginePathManager
         if ( string.IsNullOrWhiteSpace( enginePath ) )
         {
             Logger.Log( MessageType.Error, "Engine path is empty" );
-
             return false;
         }
 
-        if ( !Directory.Exists( enginePath ) )
+        if ( !Directory.Exists( Path.Combine( enginePath, @"Engine\Source" ) ) )
         {
             Logger.Log( MessageType.Error, $"Engine path does not exist: {enginePath}" );
-
             return false;
         }
 
         string normalizedPath = NormalizePath( enginePath );
+        Environment.SetEnvironmentVariable( EnginePathVariableName, normalizedPath, EnvironmentVariableTarget.User );
 
-        if ( RegistryHelper.SetString( RegistryKeyPath, InstallPathValueName, normalizedPath ) )
-        {
-            _cachedEnginePath = normalizedPath;
+        _cachedEnginePath = normalizedPath;
+        Logger.Log( MessageType.Info, $"Engine path registered: {normalizedPath}" );
 
-            Logger.Log( MessageType.Info, $"Engine path registered: {normalizedPath}" );
-
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -82,16 +73,11 @@ public static class EnginePathManager
     //-----------------------------------------------------------------------------------------------------------------
     public static bool Unregister()
     {
-        if ( RegistryHelper.DeleteValue( RegistryKeyPath, InstallPathValueName ) )
-        {
-            _cachedEnginePath = null;
+        Environment.SetEnvironmentVariable( EnginePathVariableName, null, EnvironmentVariableTarget.User );
+        _cachedEnginePath = null;
 
-            Logger.Log( MessageType.Info, "Engine path unregistered" );
-
-            return true;
-        }
-
-        return false;
+        Logger.Log( MessageType.Info, "Engine path unregistered" );
+        return true;
     }
 
     //-----------------------------------------------------------------------------------------------------------------

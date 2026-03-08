@@ -227,7 +227,7 @@ CRWICTextureLoader::~CRWICTextureLoader()
 //---------------------------------------------------------------------------------------------------------------------
 /// Load texture from file.
 //---------------------------------------------------------------------------------------------------------------------
-bool CRWICTextureLoader::LoadFromFile( const CRString& Path )
+bool CRWICTextureLoader::LoadFromFile( const CRPath& Path )
 {
     IWICImagingFactory* wic = GetWICFactory();
 
@@ -237,7 +237,7 @@ bool CRWICTextureLoader::LoadFromFile( const CRString& Path )
 		return false;
 	}
 
-    ImagePath = UtilString::ToWString( Path );
+    ImagePath = Path.wstring();
 
     if ( !_CreateDecoder()   ) return false;
     if ( !_GetTextureSize()  ) return false;

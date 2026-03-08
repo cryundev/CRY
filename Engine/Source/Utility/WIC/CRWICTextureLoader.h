@@ -51,7 +51,7 @@ public:
     ~CRWICTextureLoader();
     
     /// Load texture from file.
-    bool LoadFromFile( const CRString& Path );
+    bool LoadFromFile( const CRPath& Path );
 
     /// Get pixels.
     const unsigned char* GetPixels() const { return Pixels; }

@@ -5,7 +5,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// Initialize gizmo actor.
 //---------------------------------------------------------------------------------------------------------------------
-bool CRGizmoActor::InitializeGizmo( const CRString& AssetPath, const CRPrimitiveAsset& PrimitiveAsset )
+bool CRGizmoActor::InitializeGizmo( const CRPath& AssetPath, const CRPrimitiveAsset& PrimitiveAsset )
 {
     (void)AssetPath;
     (void)PrimitiveAsset;

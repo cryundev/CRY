@@ -13,7 +13,7 @@
 #include "Extras/ImGUI/imgui_impl_dx11.h"
 #include "Extras/ImGUI/imgui_impl_win32.h"
 #include "Source/Utility/Log/CRLog.h"
-#include <filesystem>
+#include "Source/Utility/UtilPath.h"
 
 
 CRRHI GRHI( ECRRHIType::DirectX11 );
@@ -125,8 +125,8 @@ void CRRHI::Resize( u32 Width, u32 Height ) const
 //---------------------------------------------------------------------------------------------------------------------
 void CRRHI::InitializeShaders() const
 {
-    std::filesystem::path hlslFilePath = std::filesystem::path( __FILE__ ).parent_path() / "DX11/HLSL/shader.hlsl";
-    if ( !std::filesystem::exists( hlslFilePath ) )
+    const CRPath hlslFilePath = UtilPath::ResolveExistingEnginePath( "Engine/Source/RHI/DX11/HLSL/shader.hlsl" );
+    if ( hlslFilePath.empty() )
     {
         GLog.AddLog( "[CRRHI::InitializeShaders] Failed to find shader file." );
         

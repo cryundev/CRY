@@ -68,7 +68,7 @@ void CRPrimitiveComponent::UpdateComponent( float DeltaSeconds )
 //---------------------------------------------------------------------------------------------------------------------
 /// Load asset.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
+void CRPrimitiveComponent::LoadAsset( const CRPath& InAssetPath )
 {
     _UnregisterRenderElement();
 
@@ -85,7 +85,7 @@ void CRPrimitiveComponent::LoadAsset( const CRString& InAssetPath )
     CRName resourceName = ObjectName;
     if ( !AssetPath.empty() )
     {
-        resourceName = std::filesystem::path( AssetPath ).lexically_normal().string();
+        resourceName = CRPath( AssetPath ).lexically_normal().string();
     }
 
     if ( resourceName.empty() )

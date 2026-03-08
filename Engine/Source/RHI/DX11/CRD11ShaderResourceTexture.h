@@ -1,7 +1,7 @@
 #pragma once
 
-
 #include "CRD11Types.h"
+#include "Source/Core/CRTypes.h"
 #include "Source/Core/Strings/CRStringInc.h"
 
 
@@ -11,25 +11,25 @@
 class CRD11ShaderResourceTexture
 {
 private:
-	CRD11Texture2DWPtr          Texture2D;
-	CRD11ShaderResourceViewWPtr ShaderResourceView;
-	CRD11SamplerStateWPtr       SamplerState;
-	
+    CRD11Texture2DWPtr          Texture2D;
+    CRD11ShaderResourceViewWPtr ShaderResourceView;
+    CRD11SamplerStateWPtr       SamplerState;
+    
 public:
-	/// Constructor
-	CRD11ShaderResourceTexture() = default;
+    /// Constructor
+    CRD11ShaderResourceTexture() = default;
 
-	/// Destructor
-	virtual ~CRD11ShaderResourceTexture() {}
+    /// Destructor
+    virtual ~CRD11ShaderResourceTexture() {}
 
-	/// Create from file.
-	void Create( const CRString& Path );
+    /// Create from file.
+    void Create( const CRPath& Path );
 
-	/// Get shader resource view.
-	const CRD11ShaderResourceViewWPtr& GetShaderResourceView() const { return ShaderResourceView; }
+    /// Get shader resource view.
+    const CRD11ShaderResourceViewWPtr& GetShaderResourceView() const { return ShaderResourceView; }
 
-	/// Get sampler state.
-	const CRD11SamplerStateWPtr& GetSamplerState() const { return SamplerState; }
+    /// Get sampler state.
+    const CRD11SamplerStateWPtr& GetSamplerState() const { return SamplerState; }
 
 private:
     /// Create sampler state.

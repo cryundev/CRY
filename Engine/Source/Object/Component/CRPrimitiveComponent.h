@@ -17,7 +17,7 @@ public:
     static constexpr bool                 IsExclusive = false;                           /// Allows multiple primitive components per actor.
 
 private:
-    CRString              AssetPath;
+    CRPath                AssetPath;
     
     bool                  bPrevRender = false;
     bool                  bRender     = true;
@@ -41,7 +41,7 @@ public:
     virtual void UpdateComponent( float DeltaSeconds ) override;
 
     /// Load asset.
-    void LoadAsset( const CRString& InAssetPath );
+    void LoadAsset( const CRPath& InAssetPath );
 
     /// Set render enabled.
     void SetRenderEnabled( bool bInRender );
