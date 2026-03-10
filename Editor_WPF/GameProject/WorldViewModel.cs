@@ -139,10 +139,26 @@ public class WorldViewModel : ViewModelBase
         foreach ( CrActorViewModel actor in _actors )
         {
             actor.ParentWorld = this;
-            actor.IsActive    = IsActive;
+
+            if ( Project != null )
+            {
+                actor.IsActive = IsActive;
+            }
         }
 
         InitializeCommands();
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// RestoreRuntimeActors
+    //-----------------------------------------------------------------------------------------------------------------
+    internal void RestoreRuntimeActors()
+    {
+        foreach ( CrActorViewModel actor in _actors )
+        {
+            actor.ParentWorld = this;
+            actor.IsActive    = IsActive;
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------

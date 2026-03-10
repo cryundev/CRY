@@ -60,19 +60,25 @@ public static partial class EngineAPI
         [DllImport( EngineDllName, EntryPoint = "DespawnActor" )]
         private static extern void DespawnActorNative( Int64 actorId );
 
-        public static Int64 SpawnActor( CrActorViewModel actor )
+        public static void ApplyActorRuntimeState( Int64 actorId, CrActorViewModel actor )
         {
-            Int64 actorId = SpawnActorNative();
-            if ( !ID.IsValid( actorId ) ) return actorId;
+            if ( !ID.IsValid( actorId ) ) return;
 
             Actor.TrySetName( actorId, actor.Name );
+            Actor.TryApplyNamedActorDefaults( actorId, actor.Name, actor.ParentWorld?.Project?.Path );
 
             if ( actor.GetComponent< CrTransformComponentViewModel >() is CrTransformComponentViewModel transform )
             {
                 Actor.TrySetTransform( actorId, transform.Position, transform.Rotation, transform.Scale );
             }
+        }
 
-            Actor.TryApplyNamedActorDefaults( actorId, actor.Name, actor.ParentWorld?.Project?.Path );
+        public static Int64 SpawnActor( CrActorViewModel actor )
+        {
+            Int64 actorId = SpawnActorNative();
+            if ( !ID.IsValid( actorId ) ) return actorId;
+
+            ApplyActorRuntimeState( actorId, actor );
 
             return actorId;
         }

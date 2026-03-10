@@ -35,7 +35,8 @@
                                     </StackPanel>
                                 </Grid>
                             </Expander.Header>
-                            <ListBox ItemsSource="{Binding Actors}" IsEnabled="{Binding IsActive}" SelectionMode="Extended" SelectionChanged="OnActorsSelectionChanged">
+                            <ListBox ItemsSource="{Binding Actors}" IsEnabled="{Binding IsActive}" SelectionMode="Extended"
+                                     Loaded="OnActorListLoaded" Unloaded="OnActorListUnloaded" SelectionChanged="OnActorsSelectionChanged">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">

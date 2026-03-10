@@ -256,6 +256,7 @@ public class ProjectViewModel : ViewModelBase
         foreach ( WorldViewModel world in _worlds )
         {
             world.Project = this;
+            world.RestoreRuntimeActors();
         }
 
         Worlds = new ReadOnlyObservableCollection< WorldViewModel >( _worlds );

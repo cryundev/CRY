@@ -224,7 +224,7 @@ public class CreateProjectViewModel : ViewModelBase
             DirectoryInfo dirInfo = new DirectoryInfo( path + @".cryproject\" );
             dirInfo.Create();
             dirInfo.Attributes |= FileAttributes.Hidden;
-            
+
             File.Copy( template.IconFilePath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Icon.png" ) ), true );
             File.Copy( template.PreviewPath, Path.GetFullPath( Path.Combine( dirInfo.FullName, "Preview.png" ) ), true );
 

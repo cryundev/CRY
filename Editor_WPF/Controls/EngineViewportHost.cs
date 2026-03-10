@@ -5,7 +5,9 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Input;
 using Editor_WPF.DllWrappers;
+using Editor_WPF.Editors;
 using Editor_WPF.GameProject;
+using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -328,6 +330,7 @@ public class EngineViewportHost : HwndHost
 
             if ( _engineInitialized )
             {
+                _ReloadActiveWorldActors();
                 ApplyWorldCamera();
                 Logger.Log( MessageType.Info, "Engine viewport initialized." );
             }
@@ -501,6 +504,22 @@ public class EngineViewportHost : HwndHost
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// _ReloadActiveWorldActors
+    //-----------------------------------------------------------------------------------------------------------------
+    private static void _ReloadActiveWorldActors()
+    {
+        WorldViewModel? activeWorld = ProjectViewModel.Current?.ActiveWorld;
+        if ( activeWorld == null ) return;
+
+        foreach ( CrActorViewModel actor in activeWorld.Actors )
+        {
+            if ( !ID.IsValid( actor.ActorId ) ) continue;
+
+            EngineAPI.World.ApplyActorRuntimeState( actor.ActorId, actor );
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// _TryPickActor
     //-----------------------------------------------------------------------------------------------------------------
     private void _TryPickActor( IntPtr lParam )
@@ -510,8 +529,10 @@ public class EngineViewportHost : HwndHost
 
         int pixelX = _GetXFromLParam( lParam );
         int pixelY = _GetYFromLParam( lParam );
+        
+        long actorId = EngineAPI.Input.PickActor( pixelX, pixelY, viewportW, viewportH );
 
-        EngineAPI.Input.PickActor( pixelX, pixelY, viewportW, viewportH );
+        _ = Dispatcher.BeginInvoke( () => ProjectLayoutView.Instance?.SelectActorFromViewport( actorId ) );
     }
 
     //-----------------------------------------------------------------------------------------------------------------
