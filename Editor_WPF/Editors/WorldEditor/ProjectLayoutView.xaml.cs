@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Controls;
+using Editor_WPF.DllWrappers;
 using Editor_WPF.GameProject;
 using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
@@ -17,7 +18,9 @@ public partial class ProjectLayoutView : UserControl
     private sealed record ActorSelection( ListBox ListBox, List< CrActorViewModel > SelectedActors );
 
     private readonly Dictionary< WorldViewModel, ListBox > _actorListsByWorld = [];
+    
     private bool _suppressSelectionUndo;
+    private bool _suppressViewportSelectionSync;
 
     public static ProjectLayoutView? Instance { get; private set; }
 
@@ -46,7 +49,17 @@ public partial class ProjectLayoutView : UserControl
         List< ActorSelection > previousSelection = _CaptureSelectionState();
         List< ActorSelection > nextSelection     = _CreateViewportSelectionState( activeWorldListBox, actor );
 
-        _ApplySelectionState( nextSelection );
+        _suppressViewportSelectionSync = true;
+
+        try
+        {
+            _ApplySelectionState( nextSelection );
+        }
+        finally
+        {
+            _suppressViewportSelectionSync = false;
+        }
+
         _AddSelectionUndo( previousSelection, nextSelection );
     }
 
@@ -197,6 +210,19 @@ public partial class ProjectLayoutView : UserControl
     }
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// _SyncViewportSelection
+    //-----------------------------------------------------------------------------------------------------------------
+    private static void _SyncViewportSelection( ListBox? listBox, List< CrActorViewModel > newSelection )
+    {
+        if ( listBox?.DataContext is not WorldViewModel world ) return;
+        if ( !ReferenceEquals( world, ProjectViewModel.Current?.ActiveWorld ) ) return;
+
+        long actorId = newSelection.Count == 1 ? newSelection[ 0 ].ActorId : ID.INVALID_ID;
+        
+        EngineAPI.Viewport.SetSelectedActor( actorId );
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// _AddSelectionUndo
     //-----------------------------------------------------------------------------------------------------------------
     private void _AddSelectionUndo( List< ActorSelection > previousSelection, List< ActorSelection > nextSelection )
@@ -236,5 +262,10 @@ public partial class ProjectLayoutView : UserControl
         }
 
         _UpdateSelectedActorView( newSelection );
+
+        if ( !_suppressViewportSelectionSync )
+        {
+            _SyncViewportSelection( listBox, newSelection );
+        }
     }
 }

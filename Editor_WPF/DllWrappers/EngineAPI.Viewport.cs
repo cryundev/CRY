@@ -33,9 +33,17 @@ public static partial class EngineAPI
         [ DllImport( EngineDllName, EntryPoint = "SetViewportCamera" ) ]
         private static extern void SetViewportCameraNative( ref CrVector3Native position, ref CrVector3Native direction );
 
+        [ DllImport( EngineDllName, EntryPoint = "SetViewportSelectedActor" ) ]
+        private static extern void SetViewportSelectedActorNative( long actorId );
+
         public static void SetCamera( CrVector3Native position, CrVector3Native direction )
         {
             SetViewportCameraNative( ref position, ref direction );
+        }
+
+        public static void SetSelectedActor( long actorId )
+        {
+            SetViewportSelectedActorNative( actorId );
         }
     }
 }
