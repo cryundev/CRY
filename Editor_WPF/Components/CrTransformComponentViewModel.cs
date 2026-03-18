@@ -69,6 +69,50 @@ class CrTransformComponentViewModel : CrComponentViewModel
         => new MultiSelectionTransform( multiSelectionActor );
 
     //-----------------------------------------------------------------------------------------------------------------
+    /// RefreshFromEngine
+    //-----------------------------------------------------------------------------------------------------------------
+    public bool RefreshFromEngine()
+    {
+        if ( Owner is not CrActorViewModel actor || !ID.IsValid( actor.ActorId ) )
+        {
+            return false;
+        }
+
+        if ( !EngineAPI.Actor.TryGetTransform( actor.ActorId, out EngineAPI.CrTransformNative transform ) )
+        {
+            return false;
+        }
+
+        bool changed = false;
+
+        Vector3 position = transform.Position.ToVector3();
+        if ( _position != position )
+        {
+            _position = position;
+            OnPropertyChanged( nameof( Position ) );
+            changed = true;
+        }
+
+        Vector3 rotation = transform.RotationEuler.ToVector3();
+        if ( _rotation != rotation )
+        {
+            _rotation = rotation;
+            OnPropertyChanged( nameof( Rotation ) );
+            changed = true;
+        }
+
+        Vector3 scale = transform.Scale.ToVector3();
+        if ( _scale != scale )
+        {
+            _scale = scale;
+            OnPropertyChanged( nameof( Scale ) );
+            changed = true;
+        }
+
+        return changed;
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
     /// SyncActorTransform
     //-----------------------------------------------------------------------------------------------------------------
     private void SyncActorTransform()

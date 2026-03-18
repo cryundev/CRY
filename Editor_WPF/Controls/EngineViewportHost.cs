@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Input;
+using Editor_WPF.Components;
 using Editor_WPF.DllWrappers;
 using Editor_WPF.Editors;
 using Editor_WPF.GameProject;
@@ -298,6 +299,7 @@ public class EngineViewportHost : HwndHost
 
         EngineAPI.Viewport.Tick  ( deltaSeconds );
         EngineAPI.Viewport.Render( deltaSeconds );
+        _SyncSelectedActorTransformFromEngine();
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -517,6 +519,24 @@ public class EngineViewportHost : HwndHost
 
             EngineAPI.World.ApplyActorRuntimeState( actor.ActorId, actor );
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// _SyncSelectedActorTransformFromEngine
+    //-----------------------------------------------------------------------------------------------------------------
+    private static void _SyncSelectedActorTransformFromEngine()
+    {
+        if ( ActorView.Instance?.DataContext is not MultiSelectionActor selection ) return;
+        if ( selection.SelectedActors.Count != 1 ) return;
+
+        CrActorViewModel actor = selection.SelectedActors[ 0 ];
+        if ( !ID.IsValid( actor.ActorId ) ) return;
+
+        CrTransformComponentViewModel? transform = actor.GetComponent< CrTransformComponentViewModel >();
+        if ( transform == null ) return;
+        if ( !transform.RefreshFromEngine() ) return;
+
+        selection.GetComponent< MultiSelectionTransform >()?.Refresh();
     }
 
     //-----------------------------------------------------------------------------------------------------------------
