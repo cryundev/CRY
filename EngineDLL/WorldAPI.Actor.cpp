@@ -7,6 +7,7 @@
 #include "Source/Object/Component/CRPointLightComponent.h"
 #include "Source/Object/Component/CRPrimitiveComponent.h"
 #include "Source/Object/Component/CRSpotLightComponent.h"
+#include "Source/RHI/ICRRHIMaterial.h"
 #include "Source/Utility/Log/CRLog.h"
 #include <cstring>
 #include <filesystem>
@@ -76,6 +77,17 @@ bool ApplyMinionDefault( CRActor& Actor, const char* ProjectPath )
     }
 
     primitive->LoadAsset( assetPath );
+
+    if ( ICRRHIMaterialSPtr material = primitive->GetMaterial() )
+    {
+        material->SetTexture( ECRMaterialTextureSlot::Normal, CRPath( "Asset/debug_normal.png" ) );
+        
+        material->SetDiffuseColor ( CRVector4D( 0.85f, 0.85f, 0.85f,  1.0f ) );
+        material->SetSpecularColor( CRVector4D( 0.35f, 0.35f, 0.35f, 12.0f ) );
+
+        GLog.AddLog( "[ApplyNamedActorDefaults] Applied Minion debug normal map: Asset/debug_normal.png" );
+    }
+
     return true;
 }
 

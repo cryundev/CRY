@@ -56,7 +56,11 @@ public partial class MainWindow : Window
     {
         Loaded -= OnMainWindowLoaded;
         GetEnginePath();
-        OpenProjectBrowserDialog();
+
+        if ( !TryAutoOpenProject() )
+        {
+            OpenProjectBrowserDialog();
+        }
     }
 
     //-----------------------------------------------------------------------------------------------------------------
@@ -84,5 +88,56 @@ public partial class MainWindow : Window
             ProjectViewModel.Current?.Unload();
             DataContext = projectBrowserDialog.DataContext;
         }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// TryAutoOpenProject
+    //-----------------------------------------------------------------------------------------------------------------
+    private bool TryAutoOpenProject()
+    {
+        const string autoOpenProjectEnv = "CRYE_AUTO_OPEN_PROJECT";
+
+        string? requestedProject = Environment.GetEnvironmentVariable( autoOpenProjectEnv );
+        if ( string.IsNullOrWhiteSpace( requestedProject ) )
+        {
+            return false;
+        }
+
+        ProjectData? projectData = null;
+        if ( string.Equals( requestedProject, "recent", StringComparison.OrdinalIgnoreCase ) )
+        {
+            projectData = OpenProject.Projects?.FirstOrDefault();
+        }
+        else
+        {
+            projectData = OpenProject.Projects?.FirstOrDefault
+            (
+                x => string.Equals( x.FullPath, requestedProject, StringComparison.OrdinalIgnoreCase )
+            );
+
+            if ( projectData == null && File.Exists( requestedProject ) )
+            {
+                string? projectDirectory = Path.GetDirectoryName( requestedProject );
+                if ( !string.IsNullOrWhiteSpace( projectDirectory ) )
+                {
+                    if ( !Path.EndsInDirectorySeparator( projectDirectory ) )
+                    {
+                        projectDirectory += Path.DirectorySeparatorChar;
+                    }
+
+                    projectData = new ProjectData()
+                    {
+                        ProjectName = Path.GetFileNameWithoutExtension( requestedProject ),
+                        ProjectPath = projectDirectory,
+                    };
+                }
+            }
+        }
+
+        if ( projectData == null ) return false;
+
+        ProjectViewModel.Current?.Unload();
+        DataContext = OpenProject.Open( projectData );
+        return true;
     }
 }

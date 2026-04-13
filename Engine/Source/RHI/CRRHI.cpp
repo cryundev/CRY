@@ -2,6 +2,7 @@
 #include "ICRRHIRenderer.h"
 #include "DX11/CRD11.h"
 #include "DX11/CRD11Material.h"
+#include "DX11/CRD11MaterialShader.h"
 #include "DX11/CRD11Mesh.h"
 #include "DX11/CRD11Renderer.h"
 #include "DX11/Resource/CRD11CompiledShader.h"
@@ -142,10 +143,10 @@ void CRRHI::InitializeShaders() const
         return;
     }
 
-    CRD11VertexShaderWPtr vertexShader = GD11RM.GetVertexShader( "Diffuse" );
-    if ( !vertexShader.expired() )
+    CRD11VertexShaderSPtr vertexShader = GD11RM.GetVertexShader( "Diffuse" );
+    if ( vertexShader )
     {
-        vertexShader.lock()->Create( compiledVS.GetObjectPtr() );
+        vertexShader->Create( compiledVS.GetObjectPtr() );
     }
 
     D3D11_INPUT_ELEMENT_DESC elements[] =
@@ -153,12 +154,14 @@ void CRRHI::InitializeShaders() const
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,                            D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "BITANGENT",0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    CRD11InputLayoutWPtr inputLayout = GD11RM.GetInputLayout( "Diffuse" );
-    if ( !inputLayout.expired() )
+    CRD11InputLayoutSPtr inputLayout = GD11RM.GetInputLayout( "Diffuse" );
+    if ( inputLayout )
     {
-        inputLayout.lock()->Create( elements, ARRAYSIZE( elements ), compiledVS.GetObjectPtr() );
+        inputLayout->Create( elements, ARRAYSIZE( elements ), compiledVS.GetObjectPtr() );
     }
     
     CRD11CompiledShader compiledPS;
@@ -170,10 +173,19 @@ void CRRHI::InitializeShaders() const
         return;
     }
 
-    CRD11PixelShaderWPtr pixelShader = GD11RM.GetPixelShader( "Diffuse" );
-    if ( !pixelShader.expired() )
+    CRD11PixelShaderSPtr pixelShader = GD11RM.GetPixelShader( "Diffuse" );
+    if ( pixelShader )
     {
-        pixelShader.lock()->Create( compiledPS.GetObjectPtr() );
+        pixelShader->Create( compiledPS.GetObjectPtr() );
+    }
+
+    CRD11MaterialShaderSPtr materialShader = GD11RM.GetMaterialShader( "Diffuse" );
+    if ( materialShader )
+    {
+        materialShader->SetShaders( vertexShader, pixelShader, inputLayout );
+        materialShader->ClearTextureBindings();
+        materialShader->SetTextureBinding( ECRMaterialTextureSemantic::Diffuse, 0, 0 );
+        materialShader->SetTextureBinding( ECRMaterialTextureSemantic::Normal,  1, 0 );
     }
 }
 

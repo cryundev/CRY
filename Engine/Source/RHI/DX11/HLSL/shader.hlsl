@@ -8,6 +8,8 @@ struct PixelIn
     float2 texCoord    : TEXCOORD0;
     float3 worldPos    : TEXCOORD1;
     float3 worldNormal : NORMAL;
+    float3 worldTangent   : TEXCOORD2;
+    float3 worldBitangent : TEXCOORD3;
 };
 
 
@@ -31,7 +33,18 @@ cbuffer ViewProjectionBuffer : register( b1 )
 // Vertex Shader
 // =============================================================================
 
-PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 normal : NORMAL )
+float3 NormalizeSafe( float3 value, float3 fallback )
+{
+    float lengthSquared = dot( value, value );
+    if ( lengthSquared <= 1e-8f )
+    {
+        return fallback;
+    }
+
+    return value * rsqrt( lengthSquared );
+}
+
+PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 normal : NORMAL, float3 tangent : TANGENT, float3 bitangent : BITANGENT )
 {
     PixelIn output;
 
@@ -42,7 +55,26 @@ PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 norma
     output.clipPos  = mul( output.clipPos, projection );
     output.texCoord = texCoord;
 
-    output.worldNormal = normalize( mul( normal, (float3x3)transform ) );
+    output.worldNormal = NormalizeSafe( mul( normal, (float3x3)transform ), float3( 0.0f, 0.0f, 1.0f ) );
+
+    float3 transformedTangent   = mul( tangent,   (float3x3)transform );
+    float3 transformedBitangent = mul( bitangent, (float3x3)transform );
+
+    output.worldTangent = NormalizeSafe
+    (
+        transformedTangent - output.worldNormal * dot( transformedTangent, output.worldNormal ),
+        float3( 1.0f, 0.0f, 0.0f )
+    );
+
+    float3 orthogonalBitangent = transformedBitangent
+                               - output.worldNormal * dot( transformedBitangent, output.worldNormal )
+                               - output.worldTangent * dot( transformedBitangent, output.worldTangent );
+
+    output.worldBitangent = NormalizeSafe
+    (
+        orthogonalBitangent,
+        NormalizeSafe( cross( output.worldNormal, output.worldTangent ), float3( 0.0f, 1.0f, 0.0f ) )
+    );
 
     return output;
 }
@@ -52,8 +84,10 @@ PixelIn VS( float4 position : POSITION, float2 texCoord : TEXCOORD, float3 norma
 // Pixel Shader Resources
 // =============================================================================
 
-Texture2D    psTexture  : register( t0 );
-SamplerState SampleType : register( s0 );
+// Material semantic bindings for the default lit surface shader.
+Texture2D    psTexture       : register( t0 );
+Texture2D    psNormalTexture : register( t1 );
+SamplerState SampleType      : register( s0 );
 
 
 // =============================================================================
@@ -199,26 +233,38 @@ float3 EvaluateSpotLight( SpotLightData light,
 float4 PS( PixelIn input ) : SV_TARGET
 {
     float4 textureColor = psTexture.Sample( SampleType, input.texCoord );
+    float3 normalSample = psNormalTexture.Sample( SampleType, input.texCoord ).xyz * 2.0f - 1.0f;
 
-    float3 N = normalize( input.worldNormal );
+    float3 N = NormalizeSafe( input.worldNormal, float3( 0.0f, 0.0f, 1.0f ) );
+    float3 T = NormalizeSafe( input.worldTangent - N * dot( input.worldTangent, N ), float3( 1.0f, 0.0f, 0.0f ) );
+    float3 rawB = input.worldBitangent
+                - N * dot( input.worldBitangent, N )
+                - T * dot( input.worldBitangent, T );
+    float3 crossB = cross( N, T );
+    float  handedness = ( dot( crossB, rawB ) < 0.0f ) ? -1.0f : 1.0f;
+    float3 B = NormalizeSafe( crossB * handedness, NormalizeSafe( rawB, float3( 0.0f, 1.0f, 0.0f ) ) );
+
+    float3x3 tbn = float3x3( T, B, N );
+    N = NormalizeSafe( mul( normalSample, tbn ), N );
+
     float3 V = normalize( cameraPosition.xyz - input.worldPos );
 
     float3 litDiffuse = materialDiffuse.rgb * textureColor.rgb;
     float3 result = ambientColor.rgb * ambientColor.w * materialDiffuse.rgb;
 
-    for ( uint i = 0u; i < directionalCount; ++i )
+    for ( uint directionalIndex = 0u; directionalIndex < directionalCount; ++directionalIndex )
     {
-        result += EvaluateDirectionalLight( directionalLights[ i ], input.worldPos, N, V, litDiffuse, materialSpecular );
+        result += EvaluateDirectionalLight( directionalLights[ directionalIndex ], input.worldPos, N, V, litDiffuse, materialSpecular );
     }
 
-    for ( uint i = 0u; i < pointCount; ++i )
+    for ( uint pointIndex = 0u; pointIndex < pointCount; ++pointIndex )
     {
-        result += EvaluatePointLight( pointLights[ i ], input.worldPos, N, V, litDiffuse, materialSpecular );
+        result += EvaluatePointLight( pointLights[ pointIndex ], input.worldPos, N, V, litDiffuse, materialSpecular );
     }
 
-    for ( uint i = 0u; i < spotCount; ++i )
+    for ( uint spotIndex = 0u; spotIndex < spotCount; ++spotIndex )
     {
-        result += EvaluateSpotLight( spotLights[ i ], input.worldPos, N, V, litDiffuse, materialSpecular );
+        result += EvaluateSpotLight( spotLights[ spotIndex ], input.worldPos, N, V, litDiffuse, materialSpecular );
     }
 
     return float4( saturate( result ), textureColor.a * materialDiffuse.w );

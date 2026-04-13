@@ -64,6 +64,57 @@ void CRD11ShaderResourceTexture::Create( const CRPath& Path )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Create a 1x1 solid-color texture.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11ShaderResourceTexture::CreateSolidColor( const CRName& ResourceName, u8 R, u8 G, u8 B, u8 A )
+{
+	Texture2D          = GD11RM.GetTexture2D         ( ResourceName );
+    ShaderResourceView = GD11RM.GetShaderResourceView( ResourceName );
+    SamplerState       = GD11RM.GetSamplerState      ( ResourceName );
+
+	if ( Texture2D.expired() || ShaderResourceView.expired() || SamplerState.expired() ) return;
+
+    _CreateSamplerState();
+
+    const u8 pixel[ 4 ] = { R, G, B, A };
+
+    D3D11_TEXTURE2D_DESC td;
+    ZeroMemory( &td, sizeof( D3D11_TEXTURE2D_DESC ) );
+
+    td.Width              = 1;
+    td.Height             = 1;
+    td.MipLevels          = 1;
+    td.ArraySize          = 1;
+    td.Format             = DXGI_FORMAT_R8G8B8A8_UNORM;
+    td.SampleDesc.Count   = 1;
+    td.SampleDesc.Quality = 0;
+    td.Usage              = D3D11_USAGE_DEFAULT;
+    td.BindFlags          = D3D11_BIND_SHADER_RESOURCE;
+    td.CPUAccessFlags     = 0;
+    td.MiscFlags          = 0;
+
+    D3D11_SUBRESOURCE_DATA data;
+    ZeroMemory( &data, sizeof( D3D11_SUBRESOURCE_DATA ) );
+
+    data.pSysMem          = pixel;
+    data.SysMemPitch      = sizeof( pixel );
+    data.SysMemSlicePitch = sizeof( pixel );
+
+    Texture2D.lock()->Create( td, &data );
+
+    D3D11_SHADER_RESOURCE_VIEW_DESC srvd;
+    ZeroMemory( &srvd, sizeof( D3D11_SHADER_RESOURCE_VIEW_DESC ) );
+
+    srvd.Format                    = td.Format;
+    srvd.ViewDimension             = D3D11_SRV_DIMENSION_TEXTURE2D;
+    srvd.Texture2D.MostDetailedMip = 0;
+    srvd.Texture2D.MipLevels       = 1;
+
+    ID3D11Resource* texture2D = Texture2D.lock()->GetObjectPtr();
+    ShaderResourceView.lock()->Create( texture2D, srvd );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Create sampler state.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11ShaderResourceTexture::_CreateSamplerState() const

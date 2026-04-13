@@ -7,6 +7,21 @@
 
 
 //---------------------------------------------------------------------------------------------------------------------
+/// ECRMaterialTextureSemantic
+//---------------------------------------------------------------------------------------------------------------------
+enum class ECRMaterialTextureSemantic
+{
+    Diffuse  = 0,
+    Normal   = 1,
+    Specular = 2,
+    Emissive = 3,
+    Max,
+};
+
+using ECRMaterialTextureSlot = ECRMaterialTextureSemantic;
+
+
+//---------------------------------------------------------------------------------------------------------------------
 /// ICRRHIMaterial
 //---------------------------------------------------------------------------------------------------------------------
 class ICRRHIMaterial
@@ -21,6 +36,12 @@ public:
 public:
     /// Initialize material.
     virtual void Initialize( const CRName& Name ) = 0;
+
+    /// Set the shader used by this material.
+    virtual bool SetShader( const CRName& ShaderName ) = 0;
+
+    /// Set material texture for a specific semantic.
+    virtual void SetTexture( ECRMaterialTextureSemantic Semantic, const CRPath& TexturePath ) = 0;
 
     /// Set in the rendering pipeline.
     virtual void SetInRenderingPipeline() const = 0;

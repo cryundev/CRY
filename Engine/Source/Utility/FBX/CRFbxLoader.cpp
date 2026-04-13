@@ -7,6 +7,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRFbxLoader::Clear()
 {
+    Primitives.clear();
+
     if ( FbxManagerPtr )
     {
         FbxManagerPtr->Destroy();
@@ -30,6 +32,14 @@ bool CRFbxLoader::Load( const CRPath& Path )
     Primitives.push_back( CRPrimitiveAsset() );
 
     _LoadNode( FbxScenePtr->GetRootNode() );
+
+    for ( CRPrimitiveAsset& primitive : Primitives )
+    {
+        if ( !primitive.HasValidTangentBasis() )
+        {
+            primitive.EnsureTangentBasis();
+        }
+    }
 
     return true;
 }
@@ -127,26 +137,12 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
 
     FbxAMatrix trsMatrix( t, r, s );
 
-    bool allByControlPoint = true;
-
     bool hasNormal = mesh->GetElementNormalCount() > 0;  
     bool hasUV     = mesh->GetElementUVCount()     > 0;  
-
-    FbxGeometryElement::EMappingMode normalMappingMode = FbxGeometryElement::eNone;  
-    FbxGeometryElement::EMappingMode uvMappingMode     = FbxGeometryElement::eNone;
-
-    if ( hasNormal )  
-    {  
-        normalMappingMode = mesh->GetElementNormal( 0 )->GetMappingMode();  
-        if ( normalMappingMode == FbxGeometryElement::eNone )  
-        {  
-            hasNormal = false;  
-        }  
-        if ( hasNormal && normalMappingMode != FbxGeometryElement::eByControlPoint )  
-        {  
-            allByControlPoint = false;  
-        }  
-    }
+    
+    FbxStringList uvSetNames;
+    mesh->GetUVSetNames( uvSetNames );    
+    const char* uvSetName = ( hasUV && uvSetNames.GetCount() > 0 ) ? uvSetNames[ 0 ] : nullptr;
 
     FbxAMatrix mat;
     mat.SetIdentity();
@@ -163,17 +159,32 @@ void CRFbxLoader::_LoadMeshNode( FbxNode* Node )
 
             const FbxVector4& fbxPosition = transformMatrix.MultT( fbxVertices[ index ] );
             
-            primitiveData.Positions[ vertexIndex ].x = fbxPosition.mData[ 0 ];
-            primitiveData.Positions[ vertexIndex ].y = fbxPosition.mData[ 1 ];
-            primitiveData.Positions[ vertexIndex ].z = fbxPosition.mData[ 2 ];
+            primitiveData.Positions[ vertexIndex ].x = (f32)fbxPosition.mData[ 0 ];
+            primitiveData.Positions[ vertexIndex ].y = (f32)fbxPosition.mData[ 1 ];
+            primitiveData.Positions[ vertexIndex ].z = (f32)fbxPosition.mData[ 2 ];
 
-            FbxVector4 fbxNormal;
-            mesh->GetPolygonVertexNormal( polygonIndex, t, fbxNormal );
+            FbxVector4 fbxNormal( 0.0, 0.0, 1.0, 0.0 );
+            if ( hasNormal )
+            {
+                mesh->GetPolygonVertexNormal( polygonIndex, t, fbxNormal );
+                fbxNormal.Normalize();
+            }
 
             const FbxVector4& transformedNormal = fbxNormal;
-            primitiveData.Normals[ vertexIndex ].x = transformedNormal.mData[ 0 ];
-            primitiveData.Normals[ vertexIndex ].y = transformedNormal.mData[ 1 ];
-            primitiveData.Normals[ vertexIndex ].z = transformedNormal.mData[ 2 ];
+            
+            primitiveData.Normals[ vertexIndex ].x = (f32)transformedNormal.mData[ 0 ];
+            primitiveData.Normals[ vertexIndex ].y = (f32)transformedNormal.mData[ 1 ];
+            primitiveData.Normals[ vertexIndex ].z = (f32)transformedNormal.mData[ 2 ];
+
+            FbxVector2 fbxUV( 0.0, 0.0 );
+            bool       bUnmappedUV = false;
+            if ( uvSetName )
+            {
+                mesh->GetPolygonVertexUV( polygonIndex, t, uvSetName, fbxUV, bUnmappedUV );
+            }
+
+            primitiveData.UVs[ vertexIndex ].x = (f32)fbxUV.mData[ 0 ];
+            primitiveData.UVs[ vertexIndex ].y = (f32)fbxUV.mData[ 1 ];
 
             ++vertexIndex;
         }

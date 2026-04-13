@@ -86,15 +86,19 @@
   </ItemGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugEditor|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseEditor|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(ProjectDir)..\x64\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -185,6 +189,9 @@
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ItemGroup>
+    <ClCompile Include="GameMain.cpp" />
+  </ItemGroup>
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>

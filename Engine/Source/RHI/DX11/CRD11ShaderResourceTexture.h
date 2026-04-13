@@ -25,6 +25,9 @@ public:
     /// Create from file.
     void Create( const CRPath& Path );
 
+    /// Create a 1x1 solid-color texture.
+    void CreateSolidColor( const CRName& ResourceName, u8 R, u8 G, u8 B, u8 A );
+
     /// Get shader resource view.
     const CRD11ShaderResourceViewWPtr& GetShaderResourceView() const { return ShaderResourceView; }
 

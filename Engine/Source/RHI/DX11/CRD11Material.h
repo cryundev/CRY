@@ -7,16 +7,13 @@
 #include "Source/Core/Containers/CRContainerInc.h"
 #include "Source/RHI/ICRRHIMaterial.h"
 
-
 //---------------------------------------------------------------------------------------------------------------------
 /// CRD11Material
 //---------------------------------------------------------------------------------------------------------------------
 class CRD11Material : public ICRRHIMaterial
 {
 private:
-    CRD11VertexShaderWPtr VertexShader;
-    CRD11PixelShaderWPtr  PixelShader;
-    CRD11InputLayoutWPtr  InputLayout;
+    CRD11MaterialShaderWPtr MaterialShader;
 
     CRArray< CRD11ShaderResourceTexture > Textures;
 
@@ -32,6 +29,12 @@ public:
     /// Initialize material.
     virtual void Initialize( const CRName& Name ) override;
 
+    /// Set the shader used by this material.
+    virtual bool SetShader( const CRName& ShaderName ) override;
+
+    /// Set texture for a specific material semantic.
+    virtual void SetTexture( ECRMaterialTextureSemantic Semantic, const CRPath& TexturePath ) override;
+
     /// Set in the rendering pipeline.
     virtual void SetInRenderingPipeline() const override;
 
@@ -43,4 +46,8 @@ public:
 
     /// Get material properties.
     virtual const CRMaterialProperties& GetMaterialProperties() const override { return PropertiesBuffer.Get(); }
+
+private:
+    /// Set a semantic back to its default texture.
+    void _SetDefaultTexture( ECRMaterialTextureSemantic Semantic );
 };

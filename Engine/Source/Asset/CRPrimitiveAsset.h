@@ -43,4 +43,13 @@ public:
 
     /// Initialize.
     void Initialize( u32 InVertexCount );
+
+    /// Returns true when tangent/binormal channels are present and usable for all vertices.
+    bool HasValidTangentBasis() const;
+
+    /// Rebuild tangent/binormal channels for triangle-list data.
+    void EnsureTangentBasis();
+
+    /// Build tangent/binormal channels without mutating the asset.
+    void BuildTangentBasis( CRArray< CRVector >& OutTangents, CRArray< CRVector >& OutBinormals ) const;
 };
