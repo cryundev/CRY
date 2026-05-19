@@ -1,10 +1,15 @@
 using System.Windows;
 using System.Windows.Media;
-using Editor_WPF.GameDev;
+using Editor_WPF.AssetBrowser;
+using Editor_WPF.AssetImport;
+using Editor_WPF.DllWrappers;
+using Editor_WPF.GameDev.Scripting;
 using Editor_WPF.GameProject;
+using Editor_WPF.Utilities;
+using Microsoft.Win32;
 
 
-namespace Editor_WPF.Editors;
+namespace Editor_WPF.Editors.WorldEditor;
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -77,6 +82,29 @@ public partial class WorldEditorView
     private void OnNewScriptButtonClicked( object sender, RoutedEventArgs e )
     {
         new CreateScriptDialog().ShowDialog();
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------
+    /// OnAssetImportMenuItemClicked
+    //-----------------------------------------------------------------------------------------------------------------
+    private void OnAssetImportMenuItemClicked( object sender, RoutedEventArgs e )
+    {
+        OpenFileDialog dialog = new OpenFileDialog()
+        {
+            Filter = EngineAPI.Asset.OpenFileFilter,
+        };
+
+        if ( dialog.ShowDialog() != true ) return;
+
+        if ( !AssetImportDialog.TryGetImportType( dialog.FileName, out var importType ) )
+        {
+            Logger.Log( MessageType.Warning, $"Unsupported asset import source: {dialog.FileName}" );
+            MessageBox.Show( "Unsupported asset type.", "Asset Import", MessageBoxButton.OK, MessageBoxImage.Warning );
+            return;
+        }
+
+        new AssetImportDialog( dialog.FileName, importType ).ShowDialog();
+        AssetFolderView.Instance?.Refresh();
     }
 
     //-----------------------------------------------------------------------------------------------------------------

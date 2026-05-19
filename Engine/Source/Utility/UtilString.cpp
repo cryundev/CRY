@@ -1,5 +1,6 @@
 #include "UtilString.h"
 #include <Windows.h>
+#include <cctype>
 
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -28,4 +29,18 @@ CRString UtilString::ToString( const CRWString& Str )
     WideCharToMultiByte( CP_UTF8, 0, Str.c_str(), -1, str.data(), bufferSize, nullptr, nullptr );
 
     return str;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Convert string to lower-case.
+//---------------------------------------------------------------------------------------------------------------------
+CRString UtilString::ToLower( const CRString& Str )
+{
+    CRString lowerString = Str;
+    for ( char& character : lowerString )
+    {
+        character = static_cast< char >( std::tolower( static_cast< unsigned char >( character ) ) );
+    }
+
+    return lowerString;
 }

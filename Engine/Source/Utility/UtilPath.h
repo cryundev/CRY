@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Source/Core/CRTypes.h"
+#include "Source/Utility/UtilString.h"
 #include <cstdlib>
 #include <filesystem>
 
@@ -40,5 +41,10 @@ namespace UtilPath
         if ( !std::filesystem::exists( resolvedPath ) ) return {};
 
         return resolvedPath;
+    }
+
+    inline CRString GetLowerExtension( const CRPath& Path )
+    {
+        return UtilString::ToLower( Path.extension().string() );
     }
 }

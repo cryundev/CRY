@@ -9,6 +9,7 @@
 #include "Source/Object/Component/CRSpotLightComponent.h"
 #include "Source/RHI/ICRRHIMaterial.h"
 #include "Source/Utility/Log/CRLog.h"
+#include "Source/Utility/UtilPath.h"
 #include <cstring>
 #include <filesystem>
 
@@ -19,6 +20,42 @@ constexpr const char* MinionActorName           = "Minion";
 constexpr const char* DirectionalLightActorName = "TestDirectionalLight";
 constexpr const char* PointLightActorName       = "TestPointLight";
 constexpr const char* SpotLightActorName        = "TestSpotLight";
+constexpr const char* ProjectContentDirectory   = "Content";
+constexpr const char* EngineAssetDirectory      = "Asset";
+constexpr const char* MinionAssetName           = "Minion.cra";
+constexpr const char* MinionDebugNormalMapPath  = "Asset/debug_normal.png";
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Check whether primitive asset has enough vertex channels to render.
+//---------------------------------------------------------------------------------------------------------------------
+bool IsRenderablePrimitiveAsset( const CRPrimitiveAsset& Asset )
+{
+    if ( Asset.VertexCount == 0 ) return false;
+
+    const size_t vertexCount = static_cast< size_t >( Asset.VertexCount );
+
+    if ( Asset.Positions.size() < vertexCount ) return false;
+    if ( Asset.Normals  .size() < vertexCount ) return false;
+    if ( Asset.UVs      .size() < vertexCount ) return false;
+
+    return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Try loading a renderable primitive asset.
+//---------------------------------------------------------------------------------------------------------------------
+bool TryLoadPrimitiveAsset( const CRPath& AssetPath, CRPrimitiveAsset& OutAsset )
+{
+    if ( AssetPath.empty() ) return false;
+    if ( !std::filesystem::exists( AssetPath ) ) return false;
+
+    CRPrimitiveAsset asset;
+    asset.Load( AssetPath );
+    if ( !IsRenderablePrimitiveAsset( asset ) ) return false;
+
+    OutAsset = asset;
+    return true;
+}
 
 //---------------------------------------------------------------------------------------------------------------------
 /// Remove default-managed components.
@@ -33,17 +70,41 @@ void ClearNamedActorDefaults( CRActor& Actor )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Resolve project asset path.
+/// Resolve and load default actor primitive asset.
 //---------------------------------------------------------------------------------------------------------------------
-CRPath ResolveProjectAssetPath( const char* ProjectPath, const char* AssetName )
+bool TryLoadDefaultActorPrimitiveAsset
+(
+    const char*       ProjectPath,
+    const char*       AssetName,
+    CRPath&           OutAssetPath,
+    CRPrimitiveAsset& OutAsset
+)
 {
-    if ( !ProjectPath || !AssetName || !ProjectPath[ 0 ] || !AssetName[ 0 ] )
+    if ( !AssetName || !AssetName[ 0 ] )
     {
-        return {};
+        return false;
     }
 
-    CRPath assetPath = CRPath( ProjectPath ) / "Content" / AssetName;
-    return assetPath.lexically_normal();
+    if ( ProjectPath && ProjectPath[ 0 ] )
+    {
+        const CRPath projectContentPath = CRPath( ProjectPath ) / ProjectContentDirectory;
+        const CRPath projectAssetPath   = ( projectContentPath / AssetName ).lexically_normal();
+
+        if ( TryLoadPrimitiveAsset( projectAssetPath, OutAsset ) )
+        {
+            OutAssetPath = projectAssetPath;
+            return true;
+        }
+    }
+
+    const CRPath engineAssetPath = UtilPath::ResolveExistingEnginePath( CRPath( EngineAssetDirectory ) / AssetName );
+    if ( TryLoadPrimitiveAsset( engineAssetPath, OutAsset ) )
+    {
+        OutAssetPath = engineAssetPath;
+        return true;
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -51,10 +112,11 @@ CRPath ResolveProjectAssetPath( const char* ProjectPath, const char* AssetName )
 //---------------------------------------------------------------------------------------------------------------------
 bool ApplyMinionDefault( CRActor& Actor, const char* ProjectPath )
 {
-    const CRPath assetPath = ResolveProjectAssetPath( ProjectPath, "Minion.cra" );
-    if ( assetPath.empty() || !std::filesystem::exists( assetPath ) )
+    CRPath assetPath;
+    CRPrimitiveAsset primitiveAsset;
+    if ( !TryLoadDefaultActorPrimitiveAsset( ProjectPath, MinionAssetName, assetPath, primitiveAsset ) )
     {
-        GLog.AddLog( "[ApplyNamedActorDefaults] Failed to find Content/Minion.cra." );
+        GLog.AddLog( "[ApplyNamedActorDefaults] Failed to load Minion.cra." );
         return false;
     }
 
@@ -65,9 +127,6 @@ bool ApplyMinionDefault( CRActor& Actor, const char* ProjectPath )
 
     if ( collision )
     {
-        CRPrimitiveAsset primitiveAsset;
-        primitiveAsset.Load( assetPath );
-
         const CRAABB localBounds = primitiveAsset.CalculateBounds();
         if ( localBounds.IsValid() )
         {
@@ -80,12 +139,12 @@ bool ApplyMinionDefault( CRActor& Actor, const char* ProjectPath )
 
     if ( ICRRHIMaterialSPtr material = primitive->GetMaterial() )
     {
-        material->SetTexture( ECRMaterialTextureSlot::Normal, CRPath( "Asset/debug_normal.png" ) );
+        material->SetTexture( ECRMaterialTextureSlot::Normal, CRPath( MinionDebugNormalMapPath ) );
         
         material->SetDiffuseColor ( CRVector4D( 0.85f, 0.85f, 0.85f,  1.0f ) );
         material->SetSpecularColor( CRVector4D( 0.35f, 0.35f, 0.35f, 12.0f ) );
 
-        GLog.AddLog( "[ApplyNamedActorDefaults] Applied Minion debug normal map: Asset/debug_normal.png" );
+        GLog.AddLog( "[ApplyNamedActorDefaults] Applied Minion debug normal map." );
     }
 
     return true;

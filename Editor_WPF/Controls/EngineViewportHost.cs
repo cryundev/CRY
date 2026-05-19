@@ -6,7 +6,7 @@ using System.Windows.Interop;
 using System.Windows.Input;
 using Editor_WPF.Components;
 using Editor_WPF.DllWrappers;
-using Editor_WPF.Editors;
+using Editor_WPF.Editors.WorldEditor;
 using Editor_WPF.GameProject;
 using Editor_WPF.Objects;
 using Editor_WPF.Utilities;

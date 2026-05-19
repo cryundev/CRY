@@ -8,7 +8,7 @@ using Editor_WPF.Objects;
 using Editor_WPF.Utilities;
 
 
-namespace Editor_WPF.Editors;
+namespace Editor_WPF.Editors.WorldEditor;
 
 
 //---------------------------------------------------------------------------------------------------------------------

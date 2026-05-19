@@ -14,6 +14,18 @@
     <ClCompile Include="EditorRuntime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Asset\CRAssetImportService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\CRPrimitiveAssetImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\CRTextureImportSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Asset\CRTextureImporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Actor\CRActorMarkerSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -44,6 +56,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorRuntime.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\CRAssetImportFormats.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\CRAssetImportService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\CRAssetImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\CRPrimitiveAssetImporter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\CRTextureImportSettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Asset\CRTextureImporter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Actor\CRActorMarkerProvider.h">

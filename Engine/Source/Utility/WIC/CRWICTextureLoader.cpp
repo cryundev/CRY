@@ -1,6 +1,7 @@
 #include "CRWICTextureLoader.h"
 #include "../UtilString.h"
 #include "../../RHI/DX11/CRD11.h"
+#include "../../RHI/DX11/CRD11TextureFormat.h"
 #include "../../RHI/DX11/Resource/CRD11Device.h"
 #include "../Generic/CRGeneric.h"
 #include "../Log/CRLog.h"
@@ -143,7 +144,6 @@ static DXGI_FORMAT ConvertWICToDXGI( const GUID& WicFormat )
 	return DXGI_FORMAT_UNKNOWN;
 }
 
-
 IWICImagingFactory* CRWICTextureLoader::sWICFactory = nullptr;
 bool CRWICTextureLoader::sCoInitialized = false;
 
@@ -229,6 +229,28 @@ CRWICTextureLoader::~CRWICTextureLoader()
 //---------------------------------------------------------------------------------------------------------------------
 bool CRWICTextureLoader::LoadFromFile( const CRPath& Path )
 {
+    ImagePath = Path.wstring();
+
+    return _Load();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Load texture from file using an explicit output size.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRWICTextureLoader::LoadFromFile( const CRPath& Path, u32 RequestedWidth, u32 RequestedHeight )
+{
+    ImagePath = Path.wstring();
+    TextureWidth  = RequestedWidth;
+    TextureHeight = RequestedHeight;
+
+    return _Load();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Load texture after path and optional requested size are configured.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRWICTextureLoader::_Load()
+{
     IWICImagingFactory* wic = GetWICFactory();
 
 	if ( !wic )
@@ -236,8 +258,6 @@ bool CRWICTextureLoader::LoadFromFile( const CRPath& Path )
 		GLog.AddLog( "Failed to create WIC factory" );
 		return false;
 	}
-
-    ImagePath = Path.wstring();
 
     if ( !_CreateDecoder()   ) return false;
     if ( !_GetTextureSize()  ) return false;
@@ -307,6 +327,23 @@ bool CRWICTextureLoader::_GetTextureSize()
 		return false;
 	}
 
+    if ( TextureWidth > 0 || TextureHeight > 0 )
+    {
+        if ( TextureWidth == 0 || TextureHeight == 0 )
+        {
+            GLog.AddLog( "Invalid requested texture size" );
+            return false;
+        }
+
+        if ( TextureWidth > maxSize || TextureHeight > maxSize )
+        {
+            GLog.AddLog( "Requested texture size exceeds device limit" );
+            return false;
+        }
+
+        return true;
+    }
+
 	if ( ImageWidth > maxSize || ImageHeight > maxSize )
 	{
 		float ar = (float)( ImageHeight ) / (float)( ImageWidth );
@@ -348,9 +385,9 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 
 	memcpy( &ConvertToFormat, &WicFormat, sizeof( WICPixelFormatGUID ) );
 
-	DxgiFormat = ConvertWICToDXGI( WicFormat );
+	DXGI_FORMAT dxgiFormat = ConvertWICToDXGI( WicFormat );
 
-	if ( DxgiFormat == DXGI_FORMAT_UNKNOWN )
+	if ( dxgiFormat == DXGI_FORMAT_UNKNOWN )
 	{
 		for ( size_t i = 0; i < _countof( g_WICConvert ); ++i )
 		{
@@ -358,12 +395,12 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 			{
 				memcpy( &ConvertToFormat, &g_WICConvert[ i ].target, sizeof( WICPixelFormatGUID ) );
 
-				DxgiFormat = ConvertWICToDXGI( g_WICConvert[ i ].target );
+				dxgiFormat = ConvertWICToDXGI( g_WICConvert[ i ].target );
 				break;
 			}
 		}
 
-	    if ( DxgiFormat == DXGI_FORMAT_UNKNOWN )
+	    if ( dxgiFormat == DXGI_FORMAT_UNKNOWN )
 	    {
 	        GLog.AddLog( "Invalid format" );
 	        return false;
@@ -384,14 +421,21 @@ bool CRWICTextureLoader::_GetFormatAndBPP()
 
 	u32 support = 0;
 
-	hr = GD11.GetDevice()->CheckFormatSupport( DxgiFormat, &support );
+	hr = GD11.GetDevice()->CheckFormatSupport( dxgiFormat, &support );
 
 	if ( CRGeneric::CheckError( hr ) || !( support & D3D11_FORMAT_SUPPORT_TEXTURE2D ) )
 	{
 		memcpy( &ConvertToFormat, &GUID_WICPixelFormat32bppRGBA, sizeof(WICPixelFormatGUID) );
-		DxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
+		dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 		BPP = 32;
 	}
+
+    TextureFormat = CRD11TextureFormat::FromDXGI( dxgiFormat );
+    if ( TextureFormat == ECRTextureFormat::Unknown )
+    {
+        GLog.AddLog( "Invalid CR texture format" );
+        return false;
+    }
 
     return true;
 }

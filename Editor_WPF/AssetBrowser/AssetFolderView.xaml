@@ -1,0 +1,126 @@
+<UserControl x:Class="Editor_WPF.AssetBrowser.AssetFolderView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:control="clr-namespace:Editor_WPF.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="320" d:DesignWidth="720">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Styles/AssetBrowserStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <ContextMenu x:Key="AssetBrowserContextMenu"
+                         x:Shared="False"
+                         Style="{StaticResource AssetBrowserContextMenuStyle}">
+                <MenuItem Header="New Folder"
+                          Style="{StaticResource AssetBrowserMenuItemStyle}"
+                          Click="OnCreateFolderMenuItemClicked" />
+            </ContextMenu>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Background="{StaticResource Editor.Window.GrayBrush3}"
+            ContextMenu="{StaticResource AssetBrowserContextMenu}"
+            PreviewMouseRightButtonDown="OnAssetBrowserPreviewMouseRightButtonDown">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="32" />
+                <RowDefinition />
+                <RowDefinition Height="24" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="8,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="92" />
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="80" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="Content Browser"
+                           Style="{StaticResource AssetBrowserTitleTextStyle}" />
+
+                <TextBox Grid.Column="2"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+                <Button Grid.Column="4"
+                        Content="Import..."
+                        Click="OnImportButtonClicked" />
+
+                <Button Grid.Column="6"
+                        Content="Refresh"
+                        Click="OnRefreshButtonClicked" />
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="190" />
+                    <ColumnDefinition Width="5" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Margin="8,0,0,0"
+                        Style="{StaticResource AssetBrowserPanelBorderStyle}">
+                    <TreeView x:Name="FolderTreeView"
+                              ItemsSource="{Binding RootFolders}"
+                              Background="Transparent"
+                              BorderThickness="0"
+                              ItemContainerStyle="{StaticResource AssetTreeViewItemStyle}"
+                              ContextMenu="{StaticResource AssetBrowserContextMenu}"
+                              PreviewMouseRightButtonDown="OnFolderTreePreviewMouseRightButtonDown"
+                              SelectedItemChanged="OnFolderTreeSelectedItemChanged" />
+                </Border>
+
+                <GridSplitter Grid.Column="1" Width="5"
+                              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                              ResizeDirection="Columns"
+                              ResizeBehavior="PreviousAndNext"
+                              Background="Transparent" />
+
+                <Border Grid.Column="2" Margin="0,0,8,0"
+                        Style="{StaticResource AssetBrowserPanelBorderStyle}">
+                    <ListBox ItemsSource="{Binding FilteredItems}"
+                             ItemContainerStyle="{StaticResource AssetTileListBoxItemStyle}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.CanContentScroll="True"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             ContextMenu="{StaticResource AssetBrowserContextMenu}"
+                             PreviewMouseRightButtonDown="OnAssetListPreviewMouseRightButtonDown"
+                             MouseDoubleClick="OnAssetListMouseDoubleClick">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <control:VirtualizingWrapPanel ItemWidth="120" ItemHeight="106" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                    </ListBox>
+                </Border>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="8,3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{Binding SelectedPathText}"
+                           TextTrimming="CharacterEllipsis"
+                           Style="{StaticResource AssetBrowserMutedTextStyle}" />
+
+                <TextBlock Grid.Column="1"
+                           Text="{Binding StatusText}"
+                           Margin="12,0,0,0"
+                           Style="{StaticResource AssetBrowserMutedTextStyle}" />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

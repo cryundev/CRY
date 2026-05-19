@@ -2,8 +2,8 @@
 
 
 #include "../../Core/Strings/CRStringInc.h"
+#include "Source/Core/CRTextureFormat.h"
 #include "Source/Core/CRTypes.h"
-#include <dxgiformat.h>
 #include <guiddef.h>
 #include <wincodec.h>
 
@@ -43,7 +43,7 @@ private:
     u32                    ImageSize         = 0;
     WICPixelFormatGUID     WicFormat         = GUID_WICPixelFormatDontCare;
     WICPixelFormatGUID     ConvertToFormat   = GUID_WICPixelFormatDontCare;
-    DXGI_FORMAT            DxgiFormat        = DXGI_FORMAT_UNKNOWN;
+    ECRTextureFormat       TextureFormat     = ECRTextureFormat::Unknown;
     u32                    BPP               = 0;
 
 public:
@@ -52,6 +52,9 @@ public:
     
     /// Load texture from file.
     bool LoadFromFile( const CRPath& Path );
+
+    /// Load texture from file using an explicit output size.
+    bool LoadFromFile( const CRPath& Path, u32 RequestedWidth, u32 RequestedHeight );
 
     /// Get pixels.
     const unsigned char* GetPixels() const { return Pixels; }
@@ -68,8 +71,8 @@ public:
     /// Get image size.
     u32 GetImageSize() const { return ImageSize; }
 
-    /// Get DXGI format.
-    DXGI_FORMAT GetDxgiFormat() const { return DxgiFormat; }
+    /// Get texture format.
+    ECRTextureFormat GetTextureFormat() const { return TextureFormat; }
 
 private:
     /// Create decoder.
@@ -89,4 +92,7 @@ private:
 
     /// Copy pixel from converter.
     bool _CopyPixelFromConverter( IWICBitmapSource* BitmapSource ) const;
+
+    /// Load texture after path and optional requested size are configured.
+    bool _Load();
 };

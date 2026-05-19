@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 
 
-namespace Editor_WPF.Editors;
+namespace Editor_WPF.Editors.WorldEditor;
 
 
 //---------------------------------------------------------------------------------------------------------------------

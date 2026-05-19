@@ -1,17 +1,39 @@
 #include "CRPrimitiveAsset.h"
-#include <cmath>
-#include <fstream>
-#include <ios>
 
 
 namespace
 {
+static constexpr f32 BasisReferenceAxisParallelDotThreshold = 0.999f;
+
 //---------------------------------------------------------------------------------------------------------------------
-/// Check vector component finiteness.
+/// CRPrimitiveAssetMetadata
 //---------------------------------------------------------------------------------------------------------------------
-bool _IsFiniteVector( const CRVector& Value )
+struct CRPrimitiveAssetMetadata
 {
-    return std::isfinite( Value.x ) && std::isfinite( Value.y ) && std::isfinite( Value.z );
+    u32 VertexCount   = 0;
+    u32 PositionCount = 0;
+    u32 NormalCount   = 0;
+    u32 TangentCount  = 0;
+    u32 BinormalCount = 0;
+    u32 ColorCount    = 0;
+    u32 UVCount       = 0;
+    u32 IndexCount    = 0;
+};
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Check whether a tangent-space basis vector can be normalized and used.
+//---------------------------------------------------------------------------------------------------------------------
+bool _IsUsableBasisVector( const CRVector& Value )
+{
+    return CRMath::IsFinite( Value ) && Value.LengthSquared() > CRMath::Epsilon;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Check whether tangent/binormal vectors need a fallback basis.
+//---------------------------------------------------------------------------------------------------------------------
+bool _NeedsFallbackBasis( const CRVector& Tangent, const CRVector& Binormal )
+{
+    return !_IsUsableBasisVector( Tangent ) || !_IsUsableBasisVector( Binormal );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -20,12 +42,14 @@ bool _IsFiniteVector( const CRVector& Value )
 CRVector _BuildSafeNormal( const CRVector& Normal )
 {
     CRVector safeNormal = Normal;
-    if ( !_IsFiniteVector( safeNormal ) || safeNormal.LengthSquared() <= CRMath::Epsilon )
+    
+    if ( !_IsUsableBasisVector( safeNormal ) )
     {
         safeNormal = CRVector::Forward;
     }
 
     safeNormal.Normalize();
+    
     return safeNormal;
 }
 
@@ -34,80 +58,153 @@ CRVector _BuildSafeNormal( const CRVector& Normal )
 //---------------------------------------------------------------------------------------------------------------------
 void _BuildFallbackBasis( const CRVector& Normal, CRVector& OutTangent, CRVector& OutBinormal )
 {
-    const CRVector safeNormal = _BuildSafeNormal( Normal );
-    const CRVector referenceAxis = ( CRMath::Abs( safeNormal.Dot( CRVector::Up ) ) < 0.999f ) ? CRVector::Up : CRVector::Right;
+    const CRVector safeNormal            = _BuildSafeNormal( Normal );
+    const f32      normalUpDotAbs        = CRMath::Abs( safeNormal.Dot( CRVector::Up ) );
+    const bool     bIsNearlyParallelToUp = normalUpDotAbs >= BasisReferenceAxisParallelDotThreshold;
+    const CRVector referenceAxis         = bIsNearlyParallelToUp ? CRVector::Right : CRVector::Up;
 
     OutTangent = referenceAxis.Cross( safeNormal );
-    if ( OutTangent.LengthSquared() <= CRMath::Epsilon )
+    if ( !_IsUsableBasisVector( OutTangent ) )
     {
         OutTangent = CRVector::Right;
     }
     OutTangent.Normalize();
 
     OutBinormal = safeNormal.Cross( OutTangent );
-    if ( OutBinormal.LengthSquared() <= CRMath::Epsilon )
+    if ( !_IsUsableBasisVector( OutBinormal ) )
     {
         OutBinormal = CRVector::Up;
     }
     OutBinormal.Normalize();
 }
+
 }
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// Save to file.
+/// Clear current loaded data.
 //---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveAsset::Save( const CRPath& Path )
+void CRPrimitiveAsset::ClearAsset()
 {
-    std::ofstream ofs( Path, std::ios::binary );
-    if ( !ofs ) return;
-
-    ofs.write( (const char*)( &VertexCount ), sizeof( VertexCount ) );
-
-    ofs.write( (const char*)( Positions.data()), Positions.size() * sizeof( CRVector     ) );
-    ofs.write( (const char*)( Normals  .data()), Normals  .size() * sizeof( CRVector     ) );
-    ofs.write( (const char*)( Tangents .data()), Tangents .size() * sizeof( CRVector     ) );
-    ofs.write( (const char*)( Binormals.data()), Binormals.size() * sizeof( CRVector     ) );
-    ofs.write( (const char*)( Colors   .data()), Colors   .size() * sizeof( CRVector     ) );
-    ofs.write( (const char*)( UVs      .data()), UVs      .size() * sizeof( CRVector2D   ) );
-    ofs.write( (const char*)( Indices  .data()), Indices  .size() * sizeof( unsigned int ) );
-
-    ofs.close();
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Load from file.
-//---------------------------------------------------------------------------------------------------------------------
-void CRPrimitiveAsset::Load( const CRPath& Path )
-{
-    std::ifstream ifs( Path, std::ios::binary );
-    if ( !ifs ) return;
-
-    ifs.read( (char*)( &VertexCount ), sizeof( VertexCount ) );
+    Positions.clear();
+    Normals  .clear();
+    Tangents .clear();
+    Binormals.clear();
+    Colors   .clear();
+    UVs      .clear();
+    Indices  .clear();
     
-    Positions .resize( VertexCount );
-    Normals   .resize( VertexCount );
-    Tangents  .resize( VertexCount );
-    Binormals .resize( VertexCount );
-    Colors    .resize( VertexCount );
-    UVs       .resize( VertexCount );
-    Indices   .resize( VertexCount );
+    VertexCount = 0;
+}
 
-    ifs.read( (char*)( Positions.data() ), Positions .size() * sizeof( CRVector   ) );
-    ifs.read( (char*)( Normals  .data() ), Normals   .size() * sizeof( CRVector   ) );
-    ifs.read( (char*)( Tangents .data() ), Tangents  .size() * sizeof( CRVector   ) );
-    ifs.read( (char*)( Binormals.data() ), Binormals .size() * sizeof( CRVector   ) );
-    ifs.read( (char*)( Colors   .data() ), Colors    .size() * sizeof( CRVector   ) );
-    ifs.read( (char*)( UVs      .data() ), UVs       .size() * sizeof( CRVector2D ) );
-    ifs.read( (char*)( Indices  .data() ), Indices   .size() * sizeof( u32        ) );
-
-
-    ifs.close();
-
+//---------------------------------------------------------------------------------------------------------------------
+/// Called after a successful load.
+//---------------------------------------------------------------------------------------------------------------------
+void CRPrimitiveAsset::PostLoad()
+{
     if ( !HasValidTangentBasis() )
     {
         EnsureTangentBasis();
     }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get metadata byte size.
+//---------------------------------------------------------------------------------------------------------------------
+u64 CRPrimitiveAsset::GetMetadataSize() const
+{
+    return sizeof( CRPrimitiveAssetMetadata );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Get payload byte size.
+//---------------------------------------------------------------------------------------------------------------------
+u64 CRPrimitiveAsset::GetPayloadSize() const
+{
+    return sizeof( CRVector   ) * Positions.size() +
+           sizeof( CRVector   ) * Normals  .size() +
+           sizeof( CRVector   ) * Tangents .size() +
+           sizeof( CRVector   ) * Binormals.size() +
+           sizeof( CRVector   ) * Colors   .size() +
+           sizeof( CRVector2D ) * UVs      .size() +
+           sizeof( u32        ) * Indices  .size();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Save metadata bytes.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRPrimitiveAsset::SaveMetadata( CRAssetFile::Writer& Writer ) const
+{
+    CRPrimitiveAssetMetadata metadata;
+    
+    metadata.VertexCount   = VertexCount;    
+    metadata.PositionCount = static_cast< u32 >( Positions.size() );
+    metadata.NormalCount   = static_cast< u32 >( Normals  .size() );
+    metadata.TangentCount  = static_cast< u32 >( Tangents .size() );
+    metadata.BinormalCount = static_cast< u32 >( Binormals.size() );
+    metadata.ColorCount    = static_cast< u32 >( Colors   .size() );
+    metadata.UVCount       = static_cast< u32 >( UVs      .size() );
+    metadata.IndexCount    = static_cast< u32 >( Indices  .size() );
+
+    return Writer.WriteValue( metadata );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Save payload bytes.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRPrimitiveAsset::SavePayload( CRAssetFile::Writer& Writer ) const
+{
+    if ( !Writer.WriteArray( Positions.data(), Positions.size() ) ) return false;
+    if ( !Writer.WriteArray( Normals  .data(), Normals  .size() ) ) return false;
+    if ( !Writer.WriteArray( Tangents .data(), Tangents .size() ) ) return false;
+    if ( !Writer.WriteArray( Binormals.data(), Binormals.size() ) ) return false;
+    if ( !Writer.WriteArray( Colors   .data(), Colors   .size() ) ) return false;
+    if ( !Writer.WriteArray( UVs      .data(), UVs      .size() ) ) return false;
+    if ( !Writer.WriteArray( Indices  .data(), Indices  .size() ) ) return false;
+
+    return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Load metadata bytes.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRPrimitiveAsset::LoadMetadata( CRAssetFile::Reader& Reader )
+{
+    const CRAssetFile::Header& header = Reader.GetHeader();
+    if ( header.MetadataSize != sizeof( CRPrimitiveAssetMetadata ) ) return false;
+
+    CRPrimitiveAssetMetadata metadata;
+    if ( !Reader.ReadValue( metadata ) ) return false;
+
+    VertexCount = metadata.VertexCount;
+
+    Positions .resize( metadata.PositionCount );
+    Normals   .resize( metadata.NormalCount   );
+    Tangents  .resize( metadata.TangentCount  );
+    Binormals .resize( metadata.BinormalCount );
+    Colors    .resize( metadata.ColorCount    );
+    UVs       .resize( metadata.UVCount       );
+    Indices   .resize( metadata.IndexCount    );
+
+    return true;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Load payload bytes.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRPrimitiveAsset::LoadPayload( CRAssetFile::Reader& Reader )
+{
+    if ( Reader.GetHeader().PayloadSize != GetPayloadSize() ) return false;
+
+    if ( !Reader.ReadArray( Positions.data(), Positions.size() ) ) return false;
+    if ( !Reader.ReadArray( Normals  .data(), Normals  .size() ) ) return false;
+    if ( !Reader.ReadArray( Tangents .data(), Tangents .size() ) ) return false;
+    if ( !Reader.ReadArray( Binormals.data(), Binormals.size() ) ) return false;
+    if ( !Reader.ReadArray( Colors   .data(), Colors   .size() ) ) return false;
+    if ( !Reader.ReadArray( UVs      .data(), UVs      .size() ) ) return false;
+    if ( !Reader.ReadArray( Indices  .data(), Indices  .size() ) ) return false;
+
+    return true;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -165,10 +262,7 @@ bool CRPrimitiveAsset::HasValidTangentBasis() const
 
     for ( u32 i = 0; i < VertexCount; ++i )
     {
-        if ( !_IsFiniteVector( Tangents [ i ] ) ) return false;
-        if ( !_IsFiniteVector( Binormals[ i ] ) ) return false;
-        if ( Tangents [ i ].LengthSquared() <= CRMath::Epsilon ) return false;
-        if ( Binormals[ i ].LengthSquared() <= CRMath::Epsilon ) return false;
+        if ( _NeedsFallbackBasis( Tangents[ i ], Binormals[ i ] ) ) return false;
     }
 
     return true;
@@ -190,41 +284,41 @@ void CRPrimitiveAsset::BuildTangentBasis( CRArray< CRVector >& OutTangents, CRAr
     OutTangents .assign( VertexCount, CRVector::Zero );
     OutBinormals.assign( VertexCount, CRVector::Zero );
 
-    const bool bHasTriangleChannels = Positions.size() >= VertexCount &&
-                                      Normals  .size() >= VertexCount &&
-                                      UVs      .size() >= VertexCount &&
-                                      VertexCount >= 3;
+    bool bHasTriangleChannels = true;
+    
+    bHasTriangleChannels &= Positions.size() >= VertexCount;
+    bHasTriangleChannels &= Normals  .size() >= VertexCount;
+    bHasTriangleChannels &= UVs      .size() >= VertexCount;
+    bHasTriangleChannels &= VertexCount >= 3;
 
     if ( bHasTriangleChannels )
     {
         for ( u32 vertexIndex = 0; vertexIndex + 2 < VertexCount; vertexIndex += 3 )
         {
-            const CRVector&   position0 = Positions[ vertexIndex + 0 ];
-            const CRVector&   position1 = Positions[ vertexIndex + 1 ];
-            const CRVector&   position2 = Positions[ vertexIndex + 2 ];
-            const CRVector2D& uv0       = UVs      [ vertexIndex + 0 ];
-            const CRVector2D& uv1       = UVs      [ vertexIndex + 1 ];
-            const CRVector2D& uv2       = UVs      [ vertexIndex + 2 ];
+            const CRVector& position0 = Positions[ vertexIndex + 0 ];
+            const CRVector& position1 = Positions[ vertexIndex + 1 ];
+            const CRVector& position2 = Positions[ vertexIndex + 2 ];
+            
+            const CRVector2D& uv0 = UVs[ vertexIndex + 0 ];
+            const CRVector2D& uv1 = UVs[ vertexIndex + 1 ];
+            const CRVector2D& uv2 = UVs[ vertexIndex + 2 ];
 
-            const CRVector   edge0 = position1 - position0;
-            const CRVector   edge1 = position2 - position0;
-            const CRVector2D duv0  = uv1 - uv0;
-            const CRVector2D duv1  = uv2 - uv0;
-            const f32        det   = duv0.x * duv1.y - duv0.y * duv1.x;
+            const CRVector& edge0 = position1 - position0;
+            const CRVector& edge1 = position2 - position0;
+            
+            const CRVector2D& duv0  = uv1 - uv0;
+            const CRVector2D& duv1  = uv2 - uv0;
+            
+            const f32 det = duv0.x * duv1.y - duv0.y * duv1.x;
 
-            if ( CRMath::Abs( det ) <= CRMath::Epsilon )
-            {
-                continue;
-            }
+            if ( CRMath::Abs( det ) <= CRMath::Epsilon ) continue;
 
-            const f32      invDet   = 1.0f / det;
-            const CRVector tangent  = ( edge0 * duv1.y - edge1 * duv0.y ) * invDet;
-            const CRVector binormal = ( edge1 * duv0.x - edge0 * duv1.x ) * invDet;
+            const f32 invDet = 1.0f / det;
+            
+            const CRVector& tangent  = ( edge0 * duv1.y - edge1 * duv0.y ) * invDet;
+            const CRVector& binormal = ( edge1 * duv0.x - edge0 * duv1.x ) * invDet;
 
-            if ( !_IsFiniteVector( tangent ) || !_IsFiniteVector( binormal ) )
-            {
-                continue;
-            }
+            if ( !CRMath::IsFinite( tangent ) || !CRMath::IsFinite( binormal ) ) continue;
 
             for ( u32 triangleVertex = 0; triangleVertex < 3; ++triangleVertex )
             {
@@ -241,36 +335,38 @@ void CRPrimitiveAsset::BuildTangentBasis( CRArray< CRVector >& OutTangents, CRAr
         CRVector tangent  = OutTangents [ vertexIndex ];
         CRVector binormal = OutBinormals[ vertexIndex ];
 
-        const bool bNeedsFallback = !_IsFiniteVector( tangent ) ||
-                                    !_IsFiniteVector( binormal ) ||
-                                    tangent .LengthSquared() <= CRMath::Epsilon ||
-                                    binormal.LengthSquared() <= CRMath::Epsilon;
-
-        if ( bNeedsFallback )
+        if ( _NeedsFallbackBasis( tangent, binormal ) )
         {
             _BuildFallbackBasis( safeNormal, tangent, binormal );
+            
             OutTangents [ vertexIndex ] = tangent;
             OutBinormals[ vertexIndex ] = binormal;
+            
             continue;
         }
 
         tangent -= safeNormal * tangent.Dot( safeNormal );
-        if ( tangent.LengthSquared() <= CRMath::Epsilon )
+        
+        if ( !_IsUsableBasisVector( tangent ) )
         {
             _BuildFallbackBasis( safeNormal, tangent, binormal );
+            
             OutTangents [ vertexIndex ] = tangent;
             OutBinormals[ vertexIndex ] = binormal;
+            
             continue;
         }
 
         tangent.Normalize();
 
         CRVector orthogonalBinormal = safeNormal.Cross( tangent );
-        if ( orthogonalBinormal.LengthSquared() <= CRMath::Epsilon )
+        if ( !_IsUsableBasisVector( orthogonalBinormal ) )
         {
             _BuildFallbackBasis( safeNormal, tangent, binormal );
+            
             OutTangents [ vertexIndex ] = tangent;
             OutBinormals[ vertexIndex ] = binormal;
+            
             continue;
         }
 

@@ -1,11 +1,12 @@
 #pragma once
 
+#include "CRAssetTypes.h"
 #include "Source/Core/CRTypes.h"
 #include "Source/Core/Strings/CRStringInc.h"
 
 
 //---------------------------------------------------------------------------------------------------------------------
-/// CRAsset
+/// ICRAsset
 //---------------------------------------------------------------------------------------------------------------------
 class ICRAsset
 {
@@ -14,11 +15,14 @@ public:
     ICRAsset() = default;
 
     /// Destructor.
-    virtual ~ICRAsset() = 0 {}
+    virtual ~ICRAsset() = default;
+
+    /// Get asset type.
+    virtual ECRAssetType GetAssetType() const = 0;
 
     /// Save.
-    virtual void Save( const CRPath& Path ) {}
+    virtual void Save( const CRPath& Path ) = 0;
 
     /// Load.
-    virtual void Load( const CRPath& Path ) {}
+    virtual void Load( const CRPath& Path ) = 0;
 };

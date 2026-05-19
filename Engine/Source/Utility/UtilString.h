@@ -14,4 +14,7 @@ namespace UtilString
 
     /// Convert wstring to string.
     CRString ToString( const CRWString& Str );
+
+    /// Convert string to lower-case.
+    CRString ToLower( const CRString& Str );
 };

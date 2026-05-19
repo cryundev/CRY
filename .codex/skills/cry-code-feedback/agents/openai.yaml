@@ -1,0 +1,4 @@
+interface:
+  display_name: "CRY Code Feedback"
+  short_description: "CRY-specific code review habits."
+  default_prompt: "Use $cry-code-feedback when editing CRY project code."

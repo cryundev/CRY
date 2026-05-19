@@ -3,6 +3,7 @@
 
 #include "Source/Core/CRTypes.h"
 #include "Extras/DirectXTK/Inc/SimpleMath.h"
+#include <cmath>
 
 
 #pragma comment ( lib, "DirectXTK.lib" )
@@ -23,6 +24,16 @@ namespace CRMath
     inline bool IsNearlyZero( f32 Value, f32 Tolerance = Epsilon )
     {
         return Value > -Tolerance && Value < Tolerance;
+    }
+
+    inline bool IsFinite( f32 Value )
+    {
+        return std::isfinite( Value );
+    }
+
+    inline bool IsFinite( f64 Value )
+    {
+        return std::isfinite( Value );
     }
 
     template< typename T >
@@ -59,3 +70,22 @@ using CRVector2D   = DirectX::SimpleMath::Vector2;
 using CRVector4D   = DirectX::SimpleMath::Vector4;
 using CRQuaternion = DirectX::SimpleMath::Quaternion;
 using CRMatrix     = DirectX::SimpleMath::Matrix;
+
+
+namespace CRMath
+{
+    inline bool IsFinite( const CRVector2D& Value )
+    {
+        return IsFinite( Value.x ) && IsFinite( Value.y );
+    }
+
+    inline bool IsFinite( const CRVector& Value )
+    {
+        return IsFinite( Value.x ) && IsFinite( Value.y ) && IsFinite( Value.z );
+    }
+
+    inline bool IsFinite( const CRVector4D& Value )
+    {
+        return IsFinite( Value.x ) && IsFinite( Value.y ) && IsFinite( Value.z ) && IsFinite( Value.w );
+    }
+}

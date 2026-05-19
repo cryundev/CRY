@@ -5,6 +5,8 @@
 #include "Source/Core/Strings/CRStringInc.h"
 
 
+class CRTextureAsset;
+
 //---------------------------------------------------------------------------------------------------------------------
 /// CRD11ShaderResourceTexture
 //---------------------------------------------------------------------------------------------------------------------
@@ -25,6 +27,9 @@ public:
     /// Create from file.
     void Create( const CRPath& Path );
 
+    /// Create from texture asset.
+    void CreateFromAsset( const CRName& ResourceName, const CRTextureAsset& Asset );
+
     /// Create a 1x1 solid-color texture.
     void CreateSolidColor( const CRName& ResourceName, u8 R, u8 G, u8 B, u8 A );
 
@@ -35,6 +40,9 @@ public:
     const CRD11SamplerStateWPtr& GetSamplerState() const { return SamplerState; }
 
 private:
+    /// Create D3D texture and shader resource view from texture asset data.
+    void _CreateTextureResource( const CRTextureAsset& Asset ) const;
+
     /// Create sampler state.
     void _CreateSamplerState() const;
 };

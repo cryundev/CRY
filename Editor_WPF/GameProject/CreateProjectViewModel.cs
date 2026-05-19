@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.Serialization;
 using Editor_WPF.Common;
+using Editor_WPF.Shell;
 using Editor_WPF.Utilities;
 
 
@@ -43,7 +44,7 @@ public class CreateProjectViewModel : ViewModelBase
         "Preview.png",
     };
 
-    private readonly string _templatePath = @"../../Editor_WPF/ProjectTemplates";
+    private readonly string _templatePath = Path.Combine( MainWindow.EnginePath, "Editor_WPF", "ProjectTemplates" );
 
     private string _projectName = "CreateProject";
     public  string ProjectName
@@ -108,40 +109,44 @@ public class CreateProjectViewModel : ViewModelBase
     //-----------------------------------------------------------------------------------------------------------------
     private bool ValidateProjectPath()
     {
-        string path = ProjectPath;
-        if ( !Path.EndsInDirectorySeparator( path ) )
-        {
-            path += @"\";
-        }
-        
-        path += $@"{ ProjectName }\";
-
         IsValid = false;
-        
-        if ( string.IsNullOrWhiteSpace( ProjectName.Trim() ) )
+
+        PathValidation.FileNameRequest projectNameRequest = new PathValidation.FileNameRequest()
         {
-            ErrorMsg = "Type in a project name";
-        }
-        else if ( ProjectName.IndexOfAny( Path.GetInvalidFileNameChars() ) != -1 )
+            Value                        = ProjectName,
+            EmptyErrorMessage            = "Type in a project name",
+            InvalidCharacterErrorMessage = "Invalid character(s) used in project name",
+        };
+        if ( !PathValidation.TryGetRequiredFileName( projectNameRequest, out string projectName, out string errorMessage ) )
         {
-            ErrorMsg = "Invalid character(s) used in project name";
-        }
-        else if ( string.IsNullOrWhiteSpace( ProjectPath.Trim() ) )
-        {
-            ErrorMsg = "Select a valid project folder";
-        }
-        else if ( ProjectPath.IndexOfAny( Path.GetInvalidPathChars() ) != -1 )
-        {
-            ErrorMsg = "Invalid character(s) used in project path";
-        }
-        else if ( Directory.Exists( path ) && Directory.EnumerateFileSystemEntries( path ).Any() )
-        {
-            ErrorMsg = "Select project folder already exists and is not empty";
+            ErrorMsg = errorMessage;
         }
         else
         {
-            ErrorMsg = string.Empty;
-            IsValid = true;
+            PathValidation.FullPathRequest projectPathRequest = new PathValidation.FullPathRequest()
+            {
+                Value                        = ProjectPath,
+                EmptyErrorMessage            = "Select a valid project folder",
+                InvalidCharacterErrorMessage = "Invalid character(s) used in project path",
+            };
+
+            if ( !PathValidation.TryGetRequiredFullPath( projectPathRequest, out string projectFolderPath, out errorMessage ) )
+            {
+                ErrorMsg = errorMessage;
+            }
+            else
+            {
+                string projectFullPath = Path.Combine( projectFolderPath, projectName );
+                if ( Directory.Exists( projectFullPath ) && Directory.EnumerateFileSystemEntries( projectFullPath ).Any() )
+                {
+                    ErrorMsg = "Select project folder already exists and is not empty";
+                }
+                else
+                {
+                    ErrorMsg = string.Empty;
+                    IsValid = true;
+                }
+            }
         }
 
         return IsValid;

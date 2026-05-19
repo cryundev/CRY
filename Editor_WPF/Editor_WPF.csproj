@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -57,9 +57,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Dictionaries\ControlTemplates.xaml..cs">
+      <Compile Update="Resources\Styles\ControlTemplates.xaml.cs">
         <DependentUpon>ControlTemplates.xaml</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\Icons\AssetBrowser\asset.png" />
+      <None Remove="Resources\Icons\AssetBrowser\file.png" />
+      <None Remove="Resources\Icons\AssetBrowser\folder.png" />
+
+      <Resource Include="Resources\Icons\AssetBrowser\asset.png" />
+      <Resource Include="Resources\Icons\AssetBrowser\file.png" />
+      <Resource Include="Resources\Icons\AssetBrowser\folder.png" />
     </ItemGroup>
 
     <PropertyGroup>

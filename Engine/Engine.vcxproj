@@ -249,7 +249,11 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Extras\ImGUI\imgui_impl_win32.cpp" />
     <ClCompile Include="Extras\ImGUI\imgui_tables.cpp" />
     <ClCompile Include="Extras\ImGUI\imgui_widgets.cpp" />
+    <ClCompile Include="Source\Asset\CRAsset.cpp" />
+    <ClCompile Include="Source\Asset\CRAssetFile.cpp" />
+    <ClCompile Include="Source\Asset\CRAssetLoader.cpp" />
     <ClCompile Include="Source\Asset\CRPrimitiveAsset.cpp" />
+    <ClCompile Include="Source\Asset\CRTextureAsset.cpp" />
     <ClCompile Include="Source\Asset\ICRAsset.cpp" />
     <ClCompile Include="Source\Core\CRTransform.cpp" />
     <ClCompile Include="Source\Core\Math\CRAABB.cpp" />
@@ -298,6 +302,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Source\RHI\DX11\CRD11RenderingPipeline.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ResourceManager.cpp" />
     <ClCompile Include="Source\RHI\DX11\CRD11ShaderResourceTexture.cpp" />
+    <ClCompile Include="Source\RHI\DX11\CRD11TextureFormat.cpp" />
     <ClCompile Include="Source\Utility\UtilRay.cpp" />
     <ClCompile Include="Source\World\CRWorld.cpp" />
     <None Include="Source\RHI\DX11\HLSL\composite.hlsl" />
@@ -322,7 +327,12 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Extras\ImGUI\imstb_rectpack.h" />
     <ClInclude Include="Extras\ImGUI\imstb_textedit.h" />
     <ClInclude Include="Extras\ImGUI\imstb_truetype.h" />
+    <ClInclude Include="Source\Asset\CRAsset.h" />
+    <ClInclude Include="Source\Asset\CRAssetFile.h" />
+    <ClInclude Include="Source\Asset\CRAssetLoader.h" />
+    <ClInclude Include="Source\Asset\CRAssetTypes.h" />
     <ClInclude Include="Source\Asset\CRPrimitiveAsset.h" />
+    <ClInclude Include="Source\Asset\CRTextureAsset.h" />
     <ClInclude Include="Source\Asset\ICRAsset.h" />
     <ClInclude Include="Source\Core\Containers\CRContainerInc.h" />
     <ClInclude Include="Source\Core\Containers\CRPackedArray.h" />
@@ -330,6 +340,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\Core\CRGeneric.h" />
     <ClInclude Include="Source\Core\CRNumeric.h" />
     <ClInclude Include="Source\Core\CRSmartPtrMacro.h" />
+    <ClInclude Include="Source\Core\CRTextureFormat.h" />
     <ClInclude Include="Source\Core\CRTransform.h" />
     <ClInclude Include="Source\Core\CRTypes.h" />
     <ClInclude Include="Source\Core\CRVertex.h" />
@@ -391,6 +402,7 @@ copy "$(ProjectDir)Extras\Fbx\Release\*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Source\RHI\DX11\CRD11RenderingPipeline.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11ResourceManager.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11ShaderResourceTexture.h" />
+    <ClInclude Include="Source\RHI\DX11\CRD11TextureFormat.h" />
     <ClInclude Include="Source\RHI\DX11\CRD11Types.h" />
     <ClInclude Include="Source\RHI\ICRRHIMaterial.h" />
     <ClInclude Include="Source\RHI\ICRRHIMesh.h" />

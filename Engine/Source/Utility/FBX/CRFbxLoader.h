@@ -2,7 +2,7 @@
 
 
 #include "CRFbxInclude.h"
-#include "Source/Asset//CRPrimitiveAsset.h"
+#include "Source/Asset/CRPrimitiveAsset.h"
 #include "Source/Core/Containers/CRContainerInc.h"
 #include "Source/Core/Strings/CRStringInc.h"
 #include "Source/RHI/DX11/CRD11Include.h"
@@ -24,6 +24,9 @@ private:
 public:
     /// Constructor
     CRFbxLoader() = default;
+
+    /// Destructor.
+    ~CRFbxLoader();
 
     /// Clear.
     void Clear();

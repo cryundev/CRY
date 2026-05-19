@@ -1,6 +1,7 @@
 #pragma once
 
 #include <filesystem>
+#include <fstream>
 
 
 using i8  = char;
@@ -17,3 +18,8 @@ using f32 = float;
 using f64 = double;
 
 using CRPath = std::filesystem::path;
+
+using CRInputStream      = std::istream;
+using CROutputStream     = std::ostream;
+using CRInputFileStream  = std::ifstream;
+using CROutputFileStream = std::ofstream;

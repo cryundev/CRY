@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "ICRAsset.h"
+#include "CRAsset.h"
 #include "Source/Core/CRTypes.h"
 #include "Source/Core/Containers/CRContainerInc.h"
 #include "Source/Core/Math/CRAABB.h"
@@ -12,7 +12,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 /// CRPrimitiveAsset
 //---------------------------------------------------------------------------------------------------------------------
-class CRPrimitiveAsset : public ICRAsset
+class CRPrimitiveAsset : public CRAsset
 {
 public:
     CRArray< CRVector   > Positions;
@@ -32,12 +32,9 @@ public:
     /// Destructor.
     virtual ~CRPrimitiveAsset() override {}
 
-    /// Save to file.
-    virtual void Save( const CRPath& Path ) override;
+    /// Get asset type.
+    virtual ECRAssetType GetAssetType() const override { return ECRAssetType::Primitive; }
 
-    /// Load from file.
-    virtual void Load( const CRPath& Path ) override;
-    
     /// Calculate local-space bounds from positions.
     CRAABB CalculateBounds() const;
 
@@ -52,4 +49,30 @@ public:
 
     /// Build tangent/binormal channels without mutating the asset.
     void BuildTangentBasis( CRArray< CRVector >& OutTangents, CRArray< CRVector >& OutBinormals ) const;
+
+protected:
+    /// Clear current loaded data.
+    virtual void ClearAsset() override;
+
+    /// Called after a successful load.
+    virtual void PostLoad() override;
+
+    /// Get metadata byte size.
+    virtual u64 GetMetadataSize() const override;
+
+    /// Get payload byte size.
+    virtual u64 GetPayloadSize() const override;
+
+    /// Save metadata bytes.
+    virtual bool SaveMetadata( CRAssetFile::Writer& Writer ) const override;
+
+    /// Save payload bytes.
+    virtual bool SavePayload( CRAssetFile::Writer& Writer ) const override;
+
+    /// Load metadata bytes.
+    virtual bool LoadMetadata( CRAssetFile::Reader& Reader ) override;
+
+    /// Load payload bytes.
+    virtual bool LoadPayload( CRAssetFile::Reader& Reader ) override;
+
 };
