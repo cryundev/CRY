@@ -17,6 +17,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 class CRD11ResourceManager
 {
+    DECLARE_CRD11_RESOURCE_MANAGE_TYPE( BlendState         )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( CompiledShader     )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
     DECLARE_CRD11_RESOURCE_MANAGE_TYPE( DepthStencilState  )

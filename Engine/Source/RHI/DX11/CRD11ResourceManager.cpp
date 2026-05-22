@@ -1,4 +1,5 @@
 #include "CRD11ResourceManager.h"
+#include "Resource/CRD11BlendState.h"
 #include "Resource/CRD11CompiledShader.h"
 #include "Resource/CRD11ConstantBuffer.h"
 #include "Resource/CRD11DepthStencilState.h"
@@ -32,6 +33,7 @@
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11ResourceManager::Clear()
 {
+    CLEAR_CRD11_RESOURCE_MANAGE_TYPE( BlendState         )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( CompiledShader     )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
     CLEAR_CRD11_RESOURCE_MANAGE_TYPE( DepthStencilState  )
@@ -50,6 +52,7 @@ void CRD11ResourceManager::Clear()
 }
 
 
+GET_CRD11_RESOURCE_MANAGE_TYPE( BlendState         )
 GET_CRD11_RESOURCE_MANAGE_TYPE( CompiledShader     )
 GET_CRD11_RESOURCE_MANAGE_TYPE( ConstantBuffer     )
 GET_CRD11_RESOURCE_MANAGE_TYPE( DepthStencilState  )

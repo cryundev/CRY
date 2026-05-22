@@ -2,6 +2,7 @@
 #include "../CRD11.h"
 #include "../CRD11RenderingPipeline.h"
 #include "../CRD11ResourceManager.h"
+#include "../CRD11RenderState.h"
 #include "../Resource/CRD11CompiledShader.h"
 #include "../Resource/CRD11Device.h"
 #include "../Resource/CRD11PixelShader.h"
@@ -65,6 +66,9 @@ void CRD11CompositePass::OnPostDraw()
     if ( !compositeVS || !compositePS || !compositeSS ) return;
 
     GD11RP.SetRenderTargetView( BackBufferRenderTargetView->GetObjectPtr(), nullptr );
+
+    GD11RS.ApplyPostProcess();
+
     GD11RP.SetInputLayout( nullptr );
     
     GD11RP.SetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );

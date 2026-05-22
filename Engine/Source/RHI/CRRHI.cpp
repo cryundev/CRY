@@ -242,13 +242,13 @@ void CRRHI::Shutdown()
     Meshes.clear();
     Materials.clear();
 
-    GD11RM.Clear();
-
     if ( Renderer )
     {
         delete Renderer;
         Renderer = nullptr;
     }
+
+    GD11RM.Clear();
 
     GD11.Clear();
 }

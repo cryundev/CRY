@@ -170,6 +170,22 @@ void CRD11RenderingPipeline::SetRasterizerState( ID3D11RasterizerState* State )
 }
 
 //---------------------------------------------------------------------------------------------------------------------
+/// Set blend state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::SetBlendState( ID3D11BlendState* State, const FLOAT BlendFactor[ 4 ], UINT SampleMask )
+{
+    StateBundle.BlendState = State;
+    StateBundle.SampleMask = SampleMask;
+
+    for ( u32 i = 0; i < 4; ++i )
+    {
+        StateBundle.BlendFactor[ i ] = BlendFactor ? BlendFactor[ i ] : 0.0f;
+    }
+
+    GD11.GetDeviceContext()->OMSetBlendState( State, StateBundle.BlendFactor, SampleMask );
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 /// Capture managed pipeline states.
 //---------------------------------------------------------------------------------------------------------------------
 void CRD11RenderingPipeline::CapturePipelineStates()
@@ -185,11 +201,38 @@ void CRD11RenderingPipeline::RestorePipelineStates()
 {
     if ( !bHasCapturedState ) return;
 
+    _RestorePrimitiveTopology();
+    _RestoreVertexBuffers();
+    _RestoreInputLayout();
+    _RestoreIndexBuffer();
+    _RestoreConstantBuffers();
+    _RestoreShaderResourceViews();
+    _RestoreSamplerStates();
+    _RestoreShaders();
+    _RestoreRenderTargetView();
+    _RestoreDepthStencilState();
+    _RestoreRasterizerState();
+    _RestoreBlendState();
+
+    ResetCapturedPipelineStates();
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore primitive topology.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestorePrimitiveTopology()
+{
     if ( StateBundle.PrimitiveTopology != CachedStateBundle.PrimitiveTopology )
     {
         SetPrimitiveTopology( CachedStateBundle.PrimitiveTopology );
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore vertex buffers.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreVertexBuffers()
+{
     for ( u32 slot = 0; slot < D3D11_IA_VERTEX_INPUT_RESOURCE_SLOT_COUNT; ++slot )
     {
         if ( StateBundle.VertexBuffers      [ slot ] != CachedStateBundle.VertexBuffers      [ slot ] ||
@@ -199,19 +242,37 @@ void CRD11RenderingPipeline::RestorePipelineStates()
             SetVertexBuffer( CachedStateBundle.VertexBuffers[ slot ], slot, CachedStateBundle.VertexBufferStrides[ slot ], CachedStateBundle.VertexBufferOffsets[ slot ], CachedStateBundle.PrimitiveTopology, false );
         }
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore input layout.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreInputLayout()
+{
     if ( StateBundle.InputLayout != CachedStateBundle.InputLayout )
     {
         SetInputLayout( CachedStateBundle.InputLayout );
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore index buffer.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreIndexBuffer()
+{
     if ( StateBundle.IndexBuffer       != CachedStateBundle.IndexBuffer       ||
          StateBundle.IndexBufferOffset != CachedStateBundle.IndexBufferOffset ||
          StateBundle.IndexBufferFormat != CachedStateBundle.IndexBufferFormat )
     {
         SetIndexBuffer( CachedStateBundle.IndexBuffer, CachedStateBundle.IndexBufferOffset, CachedStateBundle.IndexBufferFormat );
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore constant buffers.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreConstantBuffers()
+{
     for ( int stage = (int)( ED11RenderingPipelineStage::VS ); stage <= (int)( ED11RenderingPipelineStage::PS ); ++stage )
     {
         const ED11RenderingPipelineStage currentStage = (ED11RenderingPipelineStage)( stage );
@@ -223,6 +284,17 @@ void CRD11RenderingPipeline::RestorePipelineStates()
                 SetConstantBuffer( CachedStateBundle.ConstantBuffers[ slot ][ stage ], slot, currentStage );
             }
         }
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore shader resource views.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreShaderResourceViews()
+{
+    for ( int stage = (int)( ED11RenderingPipelineStage::VS ); stage <= (int)( ED11RenderingPipelineStage::PS ); ++stage )
+    {
+        const ED11RenderingPipelineStage currentStage = (ED11RenderingPipelineStage)( stage );
 
         for ( u32 slot = 0; slot < D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT; ++slot )
         {
@@ -232,7 +304,13 @@ void CRD11RenderingPipeline::RestorePipelineStates()
             }
         }
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore sampler states.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreSamplerStates()
+{
     for ( u32 slot = 0; slot < D3D11_COMMONSHADER_SAMPLER_SLOT_COUNT; ++slot )
     {
         if ( StateBundle.SamplerStates[ slot ] != CachedStateBundle.SamplerStates[ slot ] )
@@ -240,7 +318,13 @@ void CRD11RenderingPipeline::RestorePipelineStates()
             SetSamplerState( CachedStateBundle.SamplerStates[ slot ], slot );
         }
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore shaders.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreShaders()
+{
     if ( StateBundle.VertexShader != CachedStateBundle.VertexShader )
     {
         SetVertexShader( CachedStateBundle.VertexShader );
@@ -250,25 +334,68 @@ void CRD11RenderingPipeline::RestorePipelineStates()
     {
         SetPixelShader( CachedStateBundle.PixelShader );
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore render target view.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreRenderTargetView()
+{
     if ( StateBundle.RenderTargetView != CachedStateBundle.RenderTargetView ||
          StateBundle.DepthStencilView != CachedStateBundle.DepthStencilView )
     {
         SetRenderTargetView( CachedStateBundle.RenderTargetView, CachedStateBundle.DepthStencilView );
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore depth stencil state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreDepthStencilState()
+{
     if ( StateBundle.DepthStencilState != CachedStateBundle.DepthStencilState ||
          StateBundle.StencilRef        != CachedStateBundle.StencilRef         )
     {
         SetDepthStencilState( CachedStateBundle.DepthStencilState, CachedStateBundle.StencilRef );
     }
+}
 
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore rasterizer state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreRasterizerState()
+{
     if ( StateBundle.RasterizerState != CachedStateBundle.RasterizerState )
     {
         SetRasterizerState( CachedStateBundle.RasterizerState );
     }
+}
 
-    ResetCapturedPipelineStates();
+//---------------------------------------------------------------------------------------------------------------------
+/// Restore blend state.
+//---------------------------------------------------------------------------------------------------------------------
+void CRD11RenderingPipeline::_RestoreBlendState()
+{
+    if ( StateBundle.BlendState != CachedStateBundle.BlendState || StateBundle.SampleMask != CachedStateBundle.SampleMask || _IsBlendFactorChanged() )
+    {
+        SetBlendState( CachedStateBundle.BlendState, CachedStateBundle.BlendFactor, CachedStateBundle.SampleMask );
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/// Check blend factor changed.
+//---------------------------------------------------------------------------------------------------------------------
+bool CRD11RenderingPipeline::_IsBlendFactorChanged() const
+{
+    for ( u32 i = 0; i < 4; ++i )
+    {
+        if ( StateBundle.BlendFactor[ i ] != CachedStateBundle.BlendFactor[ i ] )
+        {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------------------------------------------------------------------

@@ -35,6 +35,9 @@ struct CRD11RPStateBundle
     ID3D11DepthStencilState* DepthStencilState = nullptr;
     UINT                     StencilRef        = 0;
     ID3D11RasterizerState*   RasterizerState   = nullptr;
+    ID3D11BlendState*        BlendState        = nullptr;
+    FLOAT                    BlendFactor[ 4 ]  = { 0.0f, 0.0f, 0.0f, 0.0f };
+    UINT                     SampleMask        = D3D11_DEFAULT_SAMPLE_MASK;
 };
 
 
@@ -89,6 +92,9 @@ public:
     /// Set rasterizer state.
     void SetRasterizerState( ID3D11RasterizerState* State );
 
+    /// Set blend state.
+    void SetBlendState( ID3D11BlendState* State, const FLOAT BlendFactor[ 4 ] = nullptr, UINT SampleMask = D3D11_DEFAULT_SAMPLE_MASK );
+
     /// Capture managed pipeline states into internal cache.
     void CapturePipelineStates();
 
@@ -97,5 +103,45 @@ public:
 
     /// Clear captured states without restoring.
     void ResetCapturedPipelineStates();
+
+private:
+    /// Restore primitive topology from captured state.
+    void _RestorePrimitiveTopology();
+
+    /// Restore vertex buffers from captured state.
+    void _RestoreVertexBuffers();
+
+    /// Restore input layout from captured state.
+    void _RestoreInputLayout();
+
+    /// Restore index buffer from captured state.
+    void _RestoreIndexBuffer();
+
+    /// Restore constant buffers from captured state.
+    void _RestoreConstantBuffers();
+
+    /// Restore shader resource views from captured state.
+    void _RestoreShaderResourceViews();
+
+    /// Restore sampler states from captured state.
+    void _RestoreSamplerStates();
+
+    /// Restore shaders from captured state.
+    void _RestoreShaders();
+
+    /// Restore render target view from captured state.
+    void _RestoreRenderTargetView();
+
+    /// Restore depth stencil state from captured state.
+    void _RestoreDepthStencilState();
+
+    /// Restore rasterizer state from captured state.
+    void _RestoreRasterizerState();
+
+    /// Restore blend state from captured state.
+    void _RestoreBlendState();
+
+    /// Check whether blend factor differs from captured state.
+    bool _IsBlendFactorChanged() const;
     
 };

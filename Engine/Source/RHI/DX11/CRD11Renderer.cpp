@@ -2,11 +2,11 @@
 #include "CRD11.h"
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
+#include "CRD11RenderState.h"
 #include "Engine.h"
 #include "Passes/CRD11CompositePass.h"
 #include "Passes/CRD11ScenePass.h"
 #include "Resource/CRD11Device.h"
-#include "Resource/CRD11RasterizerState.h"
 #include "Source/World/CRWorld.h"
 #include <utility>
 
@@ -16,6 +16,8 @@
 //---------------------------------------------------------------------------------------------------------------------
 CRD11Renderer::~CRD11Renderer()
 {
+    GD11RS.Release();
+
     _ReleaseRenderPasses();
 }
 
@@ -29,6 +31,8 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
 
     RenderElements.Clear();
     _ReleaseRenderPasses();
+
+    GD11RS.Initialize();
 
     if ( CRRenderPassPtr scenePass = CRMakeUnique( new CRD11ScenePass() ) )
     {
@@ -65,20 +69,6 @@ void CRD11Renderer::Initialize( u32 Width, u32 Height )
     CameraPropertiesBuffer.Create( "CameraProperties", (u32)( EConstBufferSlotPS::CameraProperties ), ED11RenderingPipelineStage::PS );
     CameraPropertiesBuffer.SetInRenderingPipeline();
 
-    RasterizerState = GD11RM.GetRasterizerState( "Default" );
-    if ( !RasterizerState.expired() )
-    {
-        D3D11_RASTERIZER_DESC rd;
-        ZeroMemory( &rd, sizeof( D3D11_RASTERIZER_DESC ) );
-
-        rd.CullMode = D3D11_CULL_BACK;
-        rd.FillMode = D3D11_FILL_SOLID;
-        rd.FrontCounterClockwise = false;
-
-        RasterizerState.lock()->Create( rd );
-
-        GD11RP.SetRasterizerState( RasterizerState.lock()->GetObjectPtr() );
-    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------

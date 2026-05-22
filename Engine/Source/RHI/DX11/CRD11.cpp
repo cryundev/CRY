@@ -2,8 +2,10 @@
 #include "Resource/CRD11Device.h"
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
+#include "CRD11RenderState.h"
 
 
 CRD11Device            GD11;
 CRD11RenderingPipeline GD11RP;
 CRD11ResourceManager   GD11RM;
+CRD11RenderState       GD11RS;

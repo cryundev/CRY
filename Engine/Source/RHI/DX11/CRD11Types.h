@@ -4,6 +4,7 @@
 #include "Source/Core/CRSmartPtrMacro.h"
 
 
+DECLARE_SMART_PTR( CRD11BlendState         )
 DECLARE_SMART_PTR( CRD11CompiledShader     )
 DECLARE_SMART_PTR( CRD11ConstantBuffer     )
 DECLARE_SMART_PTR( CRD11DepthStencilState  )

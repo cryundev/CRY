@@ -32,8 +32,7 @@ private:
 
     CRLightsBuffer LightsData;
 
-    CRRenderPassArray        RenderPasses;
-    CRD11RasterizerStateWPtr RasterizerState;
+    CRRenderPassArray RenderPasses;
 
 public:
     /// Constructor

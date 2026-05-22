@@ -114,6 +114,9 @@
     <ClCompile Include="Source\RHI\CRRHI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\RHI\DX11\Resource\CRD11BlendState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\RHI\Gizmo\CRGizmoSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -184,6 +187,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\RHI\DX11\Passes\CRD11ScenePass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\RHI\DX11\CRD11RenderState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\RHI\DX11\CRD11Renderer.cpp">
@@ -389,6 +395,9 @@
     <ClInclude Include="Source\RHI\CRConstBufferStructures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\Resource\CRD11BlendState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Source\RHI\DX11\Resource\CRD11CompiledShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -468,6 +477,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\DX11\Passes\CRD11ScenePass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\RHI\DX11\CRD11RenderState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\RHI\DX11\CRD11Renderer.h">

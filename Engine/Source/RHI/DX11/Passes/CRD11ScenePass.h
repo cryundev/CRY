@@ -12,7 +12,7 @@
 class CRD11ScenePass : public CRD11RenderPass
 {
 private:
-    CRD11RenderTarget2D SceneRenderTarget;
+    CRD11RenderTarget2D     SceneRenderTarget;
     CRD11DepthStencilBuffer SceneDepthStencilBuffer;
 
 public:

@@ -1,6 +1,7 @@
 #include "CRD11ScenePass.h"
 #include "../CRD11.h"
 #include "../CRD11RenderingPipeline.h"
+#include "../CRD11RenderState.h"
 #include "../Resource/CRD11Device.h"
 #include "Source/RHI/ICRRHIMaterial.h"
 #include "Source/RHI/ICRRHIMesh.h"
@@ -65,6 +66,8 @@ void CRD11ScenePass::OnClearRenderTarget( const float ClearColor[ 4 ] )
 void CRD11ScenePass::OnPreDraw()
 {
     _SetInRenderingPipeline();
+
+    GD11RS.ApplySceneOpaque();
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -118,11 +121,6 @@ void CRD11ScenePass::_SetInRenderingPipeline() const
     ID3D11DepthStencilView* depthStencilView = SceneDepthStencilBuffer.GetView();
 
     GD11RP.SetRenderTargetView( SceneRenderTarget.GetRTV(), depthStencilView );
-
-    if ( ID3D11DepthStencilState* depthStencilState = SceneDepthStencilBuffer.GetState() )
-    {
-        GD11RP.SetDepthStencilState( depthStencilState );
-    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------

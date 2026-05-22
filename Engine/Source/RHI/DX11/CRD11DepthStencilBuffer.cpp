@@ -2,7 +2,6 @@
 #include "CRD11.h"
 #include "CRD11RenderingPipeline.h"
 #include "CRD11ResourceManager.h"
-#include "Resource/CRD11DepthStencilState.h"
 #include "Resource/CRD11DepthStencilView.h"
 #include "Resource/CRD11Device.h"
 #include "Resource/CRD11Texture2D.h"
@@ -47,18 +46,6 @@ void CRD11DepthStencilBuffer::Create( u32 Width, u32 Height )
         ViewPtr.lock()->Create( BufferPtr.lock()->GetObjectPtr(), dsvd );
     }
 
-    StatePtr = GD11RM.GetDepthStencilState( "DepthStencilState" );
-    if ( !StatePtr.expired() )
-    {
-        D3D11_DEPTH_STENCIL_DESC dsd;
-        ZeroMemory( &dsd, sizeof( D3D11_DEPTH_STENCIL_DESC ) );
-
-        dsd.DepthEnable    = true;
-        dsd.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-        dsd.DepthFunc      = D3D11_COMPARISON_LESS;
-
-        StatePtr.lock()->Create( dsd );
-    }
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -68,7 +55,6 @@ void CRD11DepthStencilBuffer::Release() const
 {
     if ( !BufferPtr.expired() ) BufferPtr.lock()->SetObjectPtr( nullptr );
     if ( !ViewPtr  .expired() ) ViewPtr  .lock()->SetObjectPtr( nullptr );
-    if ( !StatePtr .expired() ) StatePtr .lock()->SetObjectPtr( nullptr );
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -81,19 +67,6 @@ ID3D11DepthStencilView* CRD11DepthStencilBuffer::GetView() const
     return ViewPtr.lock()->GetObjectPtr();
 }
 
-//---------------------------------------------------------------------------------------------------------------------
-/// Get depth stencil state.
-//---------------------------------------------------------------------------------------------------------------------
-ID3D11DepthStencilState* CRD11DepthStencilBuffer::GetState() const
-{
-    if ( StatePtr.expired() ) return nullptr;
-
-    return StatePtr.lock()->GetObjectPtr();
-}
-
-//---------------------------------------------------------------------------------------------------------------------
-/// Clear buffer.
-//---------------------------------------------------------------------------------------------------------------------
 void CRD11DepthStencilBuffer::ClearBuffer() const
 {
     if ( ViewPtr.expired() ) return;
